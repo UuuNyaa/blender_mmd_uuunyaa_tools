@@ -36,6 +36,13 @@ jobs:
           draft: true
           prerelease: false
 
+      - name: Extract Tag version
+        id: branch_name
+        run: |
+          echo ::set-output name=name::${GITHUB_REF#refs/*/}
+          echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=tag::${GITHUB_REF#refs/tags/}
+
       - name: Upload Release Asset
         id: upload-release-asset 
         uses: actions/upload-release-asset@v1
@@ -44,5 +51,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifact.zip
-          asset_name: mmd_uuunyaa_tools-${{ github.ref }}.zip
+          asset_name: mmd_uuunyaa_tools-${{ steps.branch_name.outputs.tag }}.zip
           asset_content_type: application/zip
