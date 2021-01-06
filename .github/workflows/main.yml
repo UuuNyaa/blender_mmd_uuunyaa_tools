@@ -2,9 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches:
+      - main
+    paths-ignore:
+      - '.github/workflows/**'
 
   workflow_dispatch:
 
