@@ -1,0 +1,2 @@
+mmd_uuunyaa_tools/blends/*.blend filter=lfs diff=lfs merge=lfs -text
+mmd_uuunyaa_tools/thumbnails/*.png filter=lfs diff=lfs merge=lfs -text
