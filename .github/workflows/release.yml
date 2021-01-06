@@ -44,5 +44,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifact.zip
-          asset_name: mmd_uuunyaa_tools-{{ github.ref }}.zip
+          asset_name: mmd_uuunyaa_tools-${{ github.ref }}.zip
           asset_content_type: application/zip
