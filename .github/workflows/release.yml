@@ -36,7 +36,7 @@ jobs:
           draft: true
           prerelease: false
 
-      - name: Extract Tag version
+      - name: Branch name
         id: branch_name
         run: |
           echo ::set-output name=name::${GITHUB_REF#refs/*/}
