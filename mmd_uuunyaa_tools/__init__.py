@@ -16,13 +16,16 @@ from mmd_uuunyaa_tools import auto_load
 
 bl_info = {
     "name": "mmd_uuunyaa_tools",
-    "author": "UuuNyaa",
-    "version": (0, 0, 1),
-    "blender": (2, 80, 0),
     "description": "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.",
-    "location": "View3D > Tool Shelf > MMD Tools Panel",
+    "author": "UuuNyaa",
+    "version": (0, 0, 2),
+    "blender": (2, 80, 0),
     "warning": "",
-    "category": "Generic"
+    "location": "View3D > Tool Shelf > MMD Tools Panel",
+    "wiki_url": "https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki",
+    "tracker_url": "https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/issues",
+    "support": "COMMUNITY",
+    "category": "Object"
 }
 
 auto_load.init()

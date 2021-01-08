@@ -20,8 +20,25 @@ class ObjectPanel(bpy.types.Panel):
         col.operator(operators.SetupLights.bl_idname, text=operators.SetupLights.bl_label, icon='LIGHT')
         col.operator(operators.ConvertMaterialsForEevee.bl_idname, text=operators.ConvertMaterialsForEevee.bl_label, icon='NODE_MATERIAL')
 
+class LightingPanel(bpy.types.Panel):
+    bl_idname = 'UUUNYAA_PT_lighting_panel'
+    bl_label = 'MMD UuuNyaa Lighting'
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = 'world'
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def draw(self, context):
+        material = context.active_object.active_material
+        layout = self.layout
+        layout.label(text='test')
+
+
 class MaterialPanel(bpy.types.Panel):
-    bl_idname = 'MATERIAL_PT_mmd_uuunyaa_tools_material'
+    bl_idname = 'UUUNYAA_PT_material_panel'
     bl_label = 'MMD UuuNyaa Material'
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -31,7 +48,7 @@ class MaterialPanel(bpy.types.Panel):
     def poll(cls, context):
         obj = context.active_object
         return obj.active_material and obj.mmd_type == 'NONE'
-        
+
     def draw(self, context):
         material = context.active_object.active_material
         layout = self.layout
@@ -51,12 +68,9 @@ class MaterialPanel(bpy.types.Panel):
         node_frame = mu.find_node_frame()
         if node_frame is not None:
             for node in mu.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame):
+                layout.label(text=node.label)
                 for input in node.inputs:
                     if input.is_linked:
                         continue
                     layout.prop(input, 'default_value', text=input.name)
-            
-            shader_node = mu.find_node(node_type=bpy.types.ShaderNodeBsdfPrincipled, node_frame=node_frame)
-            for node in mu.list_nodes(node_type=bpy.types.ShaderNodeRGBCurve, node_frame=node_frame):
-                layout.template_node_view(material.node_tree, shader_node, shader_node.inputs['Base Color'])
 

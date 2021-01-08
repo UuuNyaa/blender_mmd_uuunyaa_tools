@@ -8,7 +8,7 @@ import bpy
 from bpy.types import (
     Material, NodeSocket, NodeFrame,
     ShaderNode, ShaderNodeGroup, ShaderNodeOutputMaterial,
-    ShaderNodeBsdfPrincipled, ShaderNodeBsdfGlass, ShaderNodeMixShader,
+    ShaderNodeBsdfPrincipled, ShaderNodeBsdfGlass, ShaderNodeBsdfTransparent, ShaderNodeMixShader,
     ShaderNodeTexImage, ShaderNodeRGBCurve
 )
 
@@ -90,20 +90,23 @@ class MaterialUtilities:
     def get_glass_bsdf_node(self) -> ShaderNodeBsdfGlass:
         return self.get_node(ShaderNodeBsdfGlass, label='Glass BSDF')
 
+    def get_transparent_bsdf_node(self) -> ShaderNodeBsdfTransparent:
+        return self.get_node(ShaderNodeBsdfTransparent, label='Transparent BSDF')
+
     def get_mix_shader_node(self) -> ShaderNodeMixShader:
         return self.get_node(ShaderNodeMixShader, label='Mix Shader')
 
     def find_mmd_shader_node(self) -> ShaderNodeGroup:
-        node = self.find_node(ShaderNodeGroup, name='mmd_shader')
-        if (node is not None) and (node.outputs['Shader'].is_linked):
-            return node
+        return self.find_node(ShaderNodeGroup, name='mmd_shader')
+
+    def find_principled_shader_node(self) -> ShaderNodeBsdfPrincipled:
         return self.find_node(ShaderNodeBsdfPrincipled, label='', name='Principled BSDF')
-        
+
     def get_base_texture_node(self) -> ShaderNodeTexImage:
         return self.find_node(ShaderNodeTexImage, label='Mmd Base Tex')
 
     def get_skin_color_adjust_node(self) -> ShaderNodeRGBCurve:
-        return self.get_node(ShaderNodeRGBCurve, label='Skin Color Adjust')
+        return self.get_node_group('Color Red Adjust', label='Skin Color Adjust')
 
     def get_node_group(self, group_name: str, label: str=None, name: str=None) -> ShaderNodeGroup:
         self.append_node_group(group_name)
@@ -134,13 +137,13 @@ class MaterialUtilities:
 
     def get_tex_uv(self) -> ShaderNodeGroup:
         return self.get_node_group('MMDTexUV', name='mmd_tex_uv')
-    
+
     def reset(self):
         node_frame = self.find_node_frame()
         if node_frame is None:
             return
 
-        for node in self.list_nodes(node_frame = node_frame):
+        for node in self.list_nodes(node_frame=node_frame):
             self.nodes.remove(node)
         self.nodes.remove(node_frame)
 
@@ -151,7 +154,7 @@ class MaterialUtilities:
             'refraction_depth': 0.000,
         })
 
-    def edit(self, node: ShaderNode, inputs: Dict[str, Any] = {}, properties: Dict[str, Any] = {}, force=False) -> ShaderNode:
+    def edit(self, node: ShaderNode, inputs: Dict[str, Any]={}, properties: Dict[str, Any]={}, force=False) -> ShaderNode:
         if node is None:
             return None
 
@@ -192,14 +195,16 @@ class ResetMaterialTuner(MaterialTunerABC):
 
     def execute(self):
         self.reset()
-        mmd_shader_node = self.find_mmd_shader_node()
-        if mmd_shader_node is None:
+        shader_node = self.find_mmd_shader_node()
+        if shader_node is None:
+            shader_node = self.find_principled_shader_node()
+
+        if shader_node is None:
             return
 
         self.edit(self.get_output_node(), {
-            'Surface': mmd_shader_node.outputs[0],
+            'Surface': shader_node.outputs[0],
         }, force=True)
-
 
 class EyeHighlightMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -360,7 +365,6 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
                 }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
-
 
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -575,6 +579,26 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
             'refraction_depth': 0.000,
         })
 
+class TransparentMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_material_name(cls):
+        return 'Transparent'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_material_name())
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_transparent_bsdf_node(), properties={'location': self.grid_to_position(-1, -0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.set_material_properties({
+            'blend_method': 'HASHED',
+            'shadow_method': 'HASHED',
+            'use_screen_refraction': True,
+            'refraction_depth': 0.000,
+        })
+
 
 class TunerDescription(NamedTuple):
     tuner: type
@@ -597,4 +621,5 @@ TUNERS: Dict[str, TunerDescription] = {
     'MATERIAL_PLASTIC_EMISSION':TunerDescription(PlasticEmissionMaterialTuner,'MATERIAL_PLASTIC_EMISSION.png'),
     'MATERIAL_LIQUID_WATER':    TunerDescription(LiquidWaterMaterialTuner,    'MATERIAL_LIQUID_WATER.png'    ),
     'MATERIAL_LIQUID_CLOUDY':   TunerDescription(LiquidCloudyMaterialTuner,   'MATERIAL_LIQUID_CLOUDY.png'   ),
+    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'     ),
 }
