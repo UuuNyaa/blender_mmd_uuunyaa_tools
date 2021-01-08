@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from abc import ABC, abstractmethod
-from typing import Dict, Any, NamedTuple
+from typing import Dict, Any
 
 import bpy
 from bpy.types import (
@@ -11,6 +10,8 @@ from bpy.types import (
     ShaderNodeBsdfPrincipled, ShaderNodeBsdfGlass, ShaderNodeBsdfTransparent, ShaderNodeMixShader,
     ShaderNodeTexImage, ShaderNodeRGBCurve
 )
+
+from mmd_uuunyaa_tools.abstract import TunerABC, TunerDescription
 
 PATH_BLENDS_UUUNYAA_MATERIALS = 'blends/UuuNyaa_Materials.blend'
 
@@ -178,19 +179,12 @@ class MaterialUtilities:
         return node
 
 
-class MaterialTunerABC(ABC, MaterialUtilities):
-    @abstractmethod
-    def execute(self):
-        pass
-
-    @classmethod
-    @abstractmethod
-    def get_material_name(cls):
-        pass
+class MaterialTunerABC(TunerABC, MaterialUtilities):
+    pass
 
 class ResetMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Reset'
 
     def execute(self):
@@ -208,12 +202,12 @@ class ResetMaterialTuner(MaterialTunerABC):
 
 class EyeHighlightMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Eye Highlight'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -228,12 +222,12 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
 
 class EyeWhiteMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Eye White'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -248,12 +242,12 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
 
 class EyeIrisMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Eye Iris'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -270,12 +264,12 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
 
 class EyeLashMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Eye Lash'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -290,12 +284,12 @@ class EyeLashMaterialTuner(MaterialTunerABC):
 
 class HairMatteMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Hair Matte'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -310,12 +304,12 @@ class HairMatteMaterialTuner(MaterialTunerABC):
 
 class SkinMucosaMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Skin Mucosa'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -339,12 +333,12 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
 
 class SkinBumpMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Skin Bump'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -368,12 +362,12 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
 
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Fabric Bump'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -393,12 +387,12 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
 
 class FabricWaveMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Fabric Wave'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -420,12 +414,12 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
 
 class FabricKnitMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Fabric Knit'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
         knit_texture = self.edit(self.get_knit_texture_node(), {
                 'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFBAAE),
@@ -450,12 +444,12 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
 
 class FabricLeatherMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Fabric Leather'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
         leather_texture = self.edit(self.get_leather_texture_node(), {
                 'Primary Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x000000),
@@ -482,12 +476,12 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
 
 class PlasticGlossMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Plastic Gloss'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -503,12 +497,12 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
 
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Plastic Emission'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
         self.edit(self.get_output_node(), {
@@ -525,12 +519,12 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
 
 class LiquidWaterMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Liquid Water'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_liquid_bsdf_node(), {
@@ -548,12 +542,12 @@ class LiquidWaterMaterialTuner(MaterialTunerABC):
 
 class LiquidCloudyMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Liquid Cloudy'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_mix_shader_node(), {
@@ -581,12 +575,12 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
 
 class TransparentMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_material_name(cls):
+    def get_name(cls):
         return 'Transparent'
 
     def execute(self):
         self.reset()
-        node_frame = self.get_node_frame(self.get_material_name())
+        node_frame = self.get_node_frame(self.get_name())
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_transparent_bsdf_node(), properties={'location': self.grid_to_position(-1, -0), 'parent': node_frame}).outputs['BSDF'],
@@ -599,13 +593,9 @@ class TransparentMaterialTuner(MaterialTunerABC):
             'refraction_depth': 0.000,
         })
 
-
-class TunerDescription(NamedTuple):
-    tuner: type
-    icon_filename: str
-
 TUNERS: Dict[str, TunerDescription] = {
     'MATERIAL_RESET':           TunerDescription(ResetMaterialTuner,          'MATERIAL_RESET.png'           ),
+    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'     ),
     'MATERIAL_EYE_HIGHLIGHT':   TunerDescription(EyeHighlightMaterialTuner,   'MATERIAL_EYE_HIGHLIGHT.png'   ),
     'MATERIAL_EYE_WHITE':       TunerDescription(EyeWhiteMaterialTuner,       'MATERIAL_EYE_WHITE.png'       ),
     'MATERIAL_EYE_IRIS':        TunerDescription(EyeIrisMaterialTuner,        'MATERIAL_EYE_IRIS.png'        ),
@@ -621,5 +611,4 @@ TUNERS: Dict[str, TunerDescription] = {
     'MATERIAL_PLASTIC_EMISSION':TunerDescription(PlasticEmissionMaterialTuner,'MATERIAL_PLASTIC_EMISSION.png'),
     'MATERIAL_LIQUID_WATER':    TunerDescription(LiquidWaterMaterialTuner,    'MATERIAL_LIQUID_WATER.png'    ),
     'MATERIAL_LIQUID_CLOUDY':   TunerDescription(LiquidCloudyMaterialTuner,   'MATERIAL_LIQUID_CLOUDY.png'   ),
-    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'     ),
 }

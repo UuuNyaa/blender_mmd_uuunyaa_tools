@@ -32,9 +32,19 @@ class LightingPanel(bpy.types.Panel):
         return True
 
     def draw(self, context):
-        material = context.active_object.active_material
+        mmd_uuunyaa_tools_lighting = context.scene.mmd_uuunyaa_tools_lighting
+
         layout = self.layout
-        layout.label(text='test')
+        col = layout.column(align=True)
+
+        # Previews
+        row = col.row()
+        row.template_icon_view(mmd_uuunyaa_tools_lighting, 'thumbnails', show_labels=True)
+
+        # Material Name
+        row = col.row(align=True)
+        row.alignment = 'CENTER'
+        row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
 
 
 class MaterialPanel(bpy.types.Panel):
@@ -51,18 +61,19 @@ class MaterialPanel(bpy.types.Panel):
 
     def draw(self, context):
         material = context.active_object.active_material
+        mmd_uuunyaa_tools_material = bpy.context.material.mmd_uuunyaa_tools_material
+
         layout = self.layout
         col = layout.column(align=True)
-        mmd_uuunyaa_tools = bpy.context.material.mmd_uuunyaa_tools
 
         # Previews
         row = col.row()
-        row.template_icon_view(mmd_uuunyaa_tools, 'thumbnails', show_labels=True)
+        row.template_icon_view(mmd_uuunyaa_tools_material, 'thumbnails', show_labels=True)
 
         # Material Name
         row = col.row(align=True)
         row.alignment = 'CENTER'
-        row.label(text=row.enum_item_name(mmd_uuunyaa_tools, 'thumbnails', mmd_uuunyaa_tools.thumbnails))
+        row.label(text=row.enum_item_name(mmd_uuunyaa_tools_material, 'thumbnails', mmd_uuunyaa_tools_material.thumbnails))
 
         mu = material_tuner.MaterialUtilities(material)
         node_frame = mu.find_node_frame()

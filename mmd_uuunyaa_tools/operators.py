@@ -4,7 +4,6 @@ import os
 import bpy
 
 import mmd_tools
-from mmd_uuunyaa_tools import material_tuner
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_materials_for_eevee'
@@ -114,6 +113,26 @@ class SetupEevee(bpy.types.Operator):
 
         return {'FINISHED'}
 
+from mmd_uuunyaa_tools import lighting_tuner
+class TuneLighting(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.tune_lighting'
+    bl_label = 'Tune Lighting'
+    bl_description = 'Tune selected lighting.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    lighting: bpy.props.EnumProperty(
+        items=[(id, t.tuner.get_name(), '') for id, t in lighting_tuner.TUNERS.items()],
+    )
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        lighting_tuner.TUNERS[self.lighting].tuner(context.scene).execute()
+        return {'FINISHED'}
+
+from mmd_uuunyaa_tools import material_tuner
 class TuneMaterial(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.tune_material'
     bl_label = 'Tune Material'
@@ -121,7 +140,7 @@ class TuneMaterial(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     material: bpy.props.EnumProperty(
-        items=[(id, t.tuner.get_material_name(), '') for id, t in material_tuner.TUNERS.items()],
+        items=[(id, t.tuner.get_name(), '') for id, t in material_tuner.TUNERS.items()],
     )
 
     @classmethod
