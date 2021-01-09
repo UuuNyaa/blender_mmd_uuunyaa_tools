@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
 
 import os
 import glob
@@ -27,6 +28,8 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
         description='Choose the lighting you want to use',
         update=update_lighting_thumbnails,
     )
+
+    previous_collection_name: bpy.props.StringProperty()
 
     @staticmethod
     def register():

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
 
 import os
 from typing import Dict, Any

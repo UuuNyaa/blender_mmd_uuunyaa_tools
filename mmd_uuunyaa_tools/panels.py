@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
 
 import bpy
 from mmd_uuunyaa_tools import material_tuner
@@ -15,10 +16,16 @@ class ObjectPanel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
+        layout = self.layout
+
         col = layout.column(align=True)
         col.operator(operators.SetupEevee.bl_idname, text=operators.SetupEevee.bl_label, icon='SCENE')
-        col.operator(operators.SetupLights.bl_idname, text=operators.SetupLights.bl_label, icon='LIGHT')
         col.operator(operators.ConvertMaterialsForEevee.bl_idname, text=operators.ConvertMaterialsForEevee.bl_label, icon='NODE_MATERIAL')
+
+        layout.label(text='UI Panels')
+        col = layout.column(align=True)
+        col.label(text='World > MMD UuuNyaa Lighting Panel', icon='WORLD')
+        col.label(text='Material > MMD UuuNyaa Material Panel', icon='MATERIAL')
 
 class LightingPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_lighting_panel'
@@ -45,7 +52,6 @@ class LightingPanel(bpy.types.Panel):
         row = col.row(align=True)
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
-
 
 class MaterialPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_material_panel'
@@ -84,4 +90,3 @@ class MaterialPanel(bpy.types.Panel):
                     if input.is_linked:
                         continue
                     layout.prop(input, 'default_value', text=input.name)
-

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
 
 import os
-import bpy
+import importlib
 
-import mmd_tools
+import bpy
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_materials_for_eevee'
@@ -13,38 +14,18 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return next((x for x in context.selected_objects if x.type == 'MESH'), None)
+        return (
+            next((x for x in context.selected_objects if x.type == 'MESH'), None)
+            and importlib.find_loader('mmd_tools')
+        )
 
     def execute(self, context):
+        import mmd_tools
         for obj in (x for x in context.selected_objects if x.type == 'MESH'):
             mmd_tools.cycles_converter.convertToCyclesShader(obj, use_principled=True, clean_nodes=True)
 
         if context.scene.render.engine != 'BLENDER_EEVEE':
             context.scene.render.engine = 'BLENDER_EEVEE'
-
-        return {'FINISHED'}
-
-PATH_BLENDS_UUUNYAA_LIGHTS = 'blends/UuuNyaa_Lights.blend'
-
-class SetupLights(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.setup_lights_for_eevee'
-    bl_label = 'Setup Lights for Eevee'
-    bl_description = 'Setup lights for Eevee.'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    @classmethod
-    def poll(cls, context):
-        return context.view_layer.active_layer_collection.collection
-
-    def execute(self, context):
-        if 'UuuNyaa Lights' not in bpy.data.collections:
-            path = os.path.join(os.path.dirname(__file__), PATH_BLENDS_UUUNYAA_LIGHTS)
-            with bpy.data.libraries.load(path, link=False) as (_, data_to):
-                data_to.collections = ['UuuNyaa Lights']
-
-        parent = context.view_layer.active_layer_collection.collection.children
-        if 'UuuNyaa Lights' not in parent:
-            parent.link(bpy.data.collections['UuuNyaa Lights'])
 
         return {'FINISHED'}
 
@@ -129,7 +110,7 @@ class TuneLighting(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        lighting_tuner.TUNERS[self.lighting].tuner(context.scene).execute()
+        lighting_tuner.TUNERS[self.lighting].tuner().execute()
         return {'FINISHED'}
 
 from mmd_uuunyaa_tools import material_tuner
