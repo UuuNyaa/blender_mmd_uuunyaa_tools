@@ -86,12 +86,13 @@ The easiest way to install the mmd_uuunyaa_tools is to do so through directly th
 
 ## Contribution
 mmd_uuunyaa_tools needs your contribution!
-If you are interested in any of the following, please contact us.
 
 - Document writing / [#1](../../issues/1), [#4](../../issues/4)
 - Asset creation (lighting, materials, accessories, etc...) / [#3](../../issues/3)
 - Asset maintenance / [#3](../../issues/3)
 - Software development / [#all](../../issues)
+
+If you are interested in any of the above, please contact me via the [issues](../../issues).
 
 ## Credits
 Lighting thumbnail images depict the character "Hatsune Miku" of Crypton Future Media, Inc. under the [Piapro Character License](http://piapro.jp/license/pcl/summary).
