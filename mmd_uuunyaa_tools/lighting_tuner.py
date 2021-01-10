@@ -61,6 +61,20 @@ class LeftAccentLightingTuner(LightingTunerABC):
         self.add_lights(self.get_id())
 
 
+class GodRayLightingTuner(LightingTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'LIGHTING_GOD_RAY'
+
+    @classmethod
+    def get_name(cls):
+        return 'God Ray'
+
+    def execute(self):
+        self.reset()
+        self.add_lights(self.get_id())
+
+
 class BacklightLightingTuner(LightingTunerABC):
     @classmethod
     def get_id(cls):
@@ -78,5 +92,6 @@ class BacklightLightingTuner(LightingTunerABC):
 TUNERS: Dict[str, TunerDescription] = {
     ResetLightingTuner.get_id():      TunerDescription(ResetLightingTuner,      ResetLightingTuner.get_id() + '.png'),
     LeftAccentLightingTuner.get_id(): TunerDescription(LeftAccentLightingTuner, LeftAccentLightingTuner.get_id() + '.png'),
+    GodRayLightingTuner.get_id():     TunerDescription(GodRayLightingTuner,     GodRayLightingTuner.get_id() + '.png'),
     BacklightLightingTuner.get_id():  TunerDescription(BacklightLightingTuner,  BacklightLightingTuner.get_id() + '.png'),
 }
