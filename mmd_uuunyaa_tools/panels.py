@@ -62,8 +62,8 @@ class LightingPanel(bpy.types.Panel):
             if obj.type != 'EMPTY' or obj.parent is not None or not lu.object_marker.is_marked(obj):
                 continue
             layout.prop(obj, 'location')
-            layout.prop(obj, 'scale')
             layout.prop(obj, 'rotation_euler')
+            layout.prop(obj, 'scale')
             break
 
 

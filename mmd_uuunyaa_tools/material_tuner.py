@@ -189,6 +189,10 @@ class MaterialTunerABC(TunerABC, MaterialUtilities):
 
 class ResetMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_RESET'
+
+    @classmethod
     def get_name(cls):
         return 'Reset'
 
@@ -206,7 +210,36 @@ class ResetMaterialTuner(MaterialTunerABC):
         }, force=True)
 
 
+class TransparentMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_TRANSPARENT'
+
+    @classmethod
+    def get_name(cls):
+        return 'Transparent'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_transparent_bsdf_node(), properties={'location': self.grid_to_position(-1, -0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.set_material_properties({
+            'blend_method': 'HASHED',
+            'shadow_method': 'HASHED',
+            'use_screen_refraction': True,
+            'refraction_depth': 0.000,
+        })
+
+
 class EyeHighlightMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_EYE_HIGHLIGHT'
+
     @classmethod
     def get_name(cls):
         return 'Eye Highlight'
@@ -229,6 +262,10 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
 
 class EyeWhiteMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_EYE_WHITE'
+
+    @classmethod
     def get_name(cls):
         return 'Eye White'
 
@@ -249,6 +286,10 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
 
 
 class EyeIrisMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_EYE_IRIS'
+
     @classmethod
     def get_name(cls):
         return 'Eye Iris'
@@ -273,6 +314,10 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
 
 class EyeLashMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_EYE_LASH'
+
+    @classmethod
     def get_name(cls):
         return 'Eye Lash'
 
@@ -294,6 +339,10 @@ class EyeLashMaterialTuner(MaterialTunerABC):
 
 class HairMatteMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_HAIR_MATTE'
+
+    @classmethod
     def get_name(cls):
         return 'Hair Matte'
 
@@ -314,6 +363,10 @@ class HairMatteMaterialTuner(MaterialTunerABC):
 
 
 class SkinMucosaMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_SKIN_MUCOSA'
+
     @classmethod
     def get_name(cls):
         return 'Skin Mucosa'
@@ -345,6 +398,10 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
 
 class SkinBumpMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_SKIN_BUMP'
+
+    @classmethod
     def get_name(cls):
         return 'Skin Bump'
 
@@ -375,6 +432,10 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
 
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_FABRIC_BUMP'
+
+    @classmethod
     def get_name(cls):
         return 'Fabric Bump'
 
@@ -400,6 +461,10 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
 
 
 class FabricWaveMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_FABRIC_WAVE'
+
     @classmethod
     def get_name(cls):
         return 'Fabric Wave'
@@ -428,6 +493,10 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
 
 
 class FabricKnitMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_FABRIC_KNIT'
+
     @classmethod
     def get_name(cls):
         return 'Fabric Knit'
@@ -459,6 +528,10 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
 
 
 class FabricLeatherMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_FABRIC_LEATHER'
+
     @classmethod
     def get_name(cls):
         return 'Fabric Leather'
@@ -493,6 +566,10 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
 
 class PlasticGlossMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_PLASTIC_GLOSS'
+
+    @classmethod
     def get_name(cls):
         return 'Plastic Gloss'
 
@@ -514,6 +591,10 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
 
 
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_PLASTIC_EMISSION'
+
     @classmethod
     def get_name(cls):
         return 'Plastic Emission'
@@ -538,6 +619,10 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
 
 class LiquidWaterMaterialTuner(MaterialTunerABC):
     @classmethod
+    def get_id(cls):
+        return 'MATERIAL_LIQUID_WATER'
+
+    @classmethod
     def get_name(cls):
         return 'Liquid Water'
 
@@ -561,6 +646,10 @@ class LiquidWaterMaterialTuner(MaterialTunerABC):
 
 
 class LiquidCloudyMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_LIQUID_CLOUDY'
+
     @classmethod
     def get_name(cls):
         return 'Liquid Cloudy'
@@ -594,43 +683,22 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
         })
 
 
-class TransparentMaterialTuner(MaterialTunerABC):
-    @classmethod
-    def get_name(cls):
-        return 'Transparent'
-
-    def execute(self):
-        self.reset()
-        node_frame = self.get_node_frame(self.get_name())
-
-        self.edit(self.get_output_node(), {
-            'Surface': self.edit(self.get_transparent_bsdf_node(), properties={'location': self.grid_to_position(-1, -0), 'parent': node_frame}).outputs['BSDF'],
-        }, {'location': self.grid_to_position(+1, +0)}, force=True)
-
-        self.set_material_properties({
-            'blend_method': 'HASHED',
-            'shadow_method': 'HASHED',
-            'use_screen_refraction': True,
-            'refraction_depth': 0.000,
-        })
-
-
 TUNERS: Dict[str, TunerDescription] = {
-    'MATERIAL_RESET':           TunerDescription(ResetMaterialTuner,          'MATERIAL_RESET.png'),
-    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'),
-    'MATERIAL_EYE_HIGHLIGHT':   TunerDescription(EyeHighlightMaterialTuner,   'MATERIAL_EYE_HIGHLIGHT.png'),
-    'MATERIAL_EYE_WHITE':       TunerDescription(EyeWhiteMaterialTuner,       'MATERIAL_EYE_WHITE.png'),
-    'MATERIAL_EYE_IRIS':        TunerDescription(EyeIrisMaterialTuner,        'MATERIAL_EYE_IRIS.png'),
-    'MATERIAL_EYE_LASH':        TunerDescription(EyeLashMaterialTuner,        'MATERIAL_EYE_LASH.png'),
-    'MATERIAL_HAIR':            TunerDescription(HairMatteMaterialTuner,      'MATERIAL_HAIR.png'),
-    'MATERIAL_MUCOSA':          TunerDescription(SkinMucosaMaterialTuner,     'MATERIAL_SKIN_MUCOSA.png'),
-    'MATERIAL_SKIN':            TunerDescription(SkinBumpMaterialTuner,       'MATERIAL_SKIN_BUMP.png'),
-    'MATERIAL_FABRIC_BUMP':     TunerDescription(FabricBumpMaterialTuner,     'MATERIAL_FABRIC_BUMP.png'),
-    'MATERIAL_FABRIC_WAVE':     TunerDescription(FabricWaveMaterialTuner,     'MATERIAL_FABRIC_WAVE.png'),
-    'MATERIAL_FABRIC_KNIT':     TunerDescription(FabricKnitMaterialTuner,     'MATERIAL_FABRIC_KNIT.png'),
-    'MATERIAL_FABRIC_LEATHER':  TunerDescription(FabricLeatherMaterialTuner,  'MATERIAL_FABRIC_LEATHER.png'),
-    'MATERIAL_PLASTIC_GLOSS':   TunerDescription(PlasticGlossMaterialTuner,   'MATERIAL_PLASTIC_GLOSS.png'),
-    'MATERIAL_PLASTIC_EMISSION': TunerDescription(PlasticEmissionMaterialTuner, 'MATERIAL_PLASTIC_EMISSION.png'),
-    'MATERIAL_LIQUID_WATER':    TunerDescription(LiquidWaterMaterialTuner,    'MATERIAL_LIQUID_WATER.png'),
-    'MATERIAL_LIQUID_CLOUDY':   TunerDescription(LiquidCloudyMaterialTuner,   'MATERIAL_LIQUID_CLOUDY.png'),
+    ResetMaterialTuner.get_id():           TunerDescription(ResetMaterialTuner,           ResetMaterialTuner.get_id() + '.png'),
+    TransparentMaterialTuner.get_id():     TunerDescription(TransparentMaterialTuner,     TransparentMaterialTuner.get_id() + '.png'),
+    EyeHighlightMaterialTuner.get_id():    TunerDescription(EyeHighlightMaterialTuner,    EyeHighlightMaterialTuner.get_id() + '.png'),
+    EyeWhiteMaterialTuner.get_id():        TunerDescription(EyeWhiteMaterialTuner,        EyeWhiteMaterialTuner.get_id() + '.png'),
+    EyeIrisMaterialTuner.get_id():         TunerDescription(EyeIrisMaterialTuner,         EyeIrisMaterialTuner.get_id() + '.png'),
+    EyeLashMaterialTuner.get_id():         TunerDescription(EyeLashMaterialTuner,         EyeLashMaterialTuner.get_id() + '.png'),
+    HairMatteMaterialTuner.get_id():       TunerDescription(HairMatteMaterialTuner,       HairMatteMaterialTuner.get_id() + '.png'),
+    SkinMucosaMaterialTuner.get_id():      TunerDescription(SkinMucosaMaterialTuner,      SkinMucosaMaterialTuner.get_id() + '.png'),
+    SkinBumpMaterialTuner.get_id():        TunerDescription(SkinBumpMaterialTuner,        SkinBumpMaterialTuner.get_id() + '.png'),
+    FabricBumpMaterialTuner.get_id():      TunerDescription(FabricBumpMaterialTuner,      FabricBumpMaterialTuner.get_id() + '.png'),
+    FabricWaveMaterialTuner.get_id():      TunerDescription(FabricWaveMaterialTuner,      FabricWaveMaterialTuner.get_id() + '.png'),
+    FabricKnitMaterialTuner.get_id():      TunerDescription(FabricKnitMaterialTuner,      FabricKnitMaterialTuner.get_id() + '.png'),
+    FabricLeatherMaterialTuner.get_id():   TunerDescription(FabricLeatherMaterialTuner,   FabricLeatherMaterialTuner.get_id() + '.png'),
+    PlasticGlossMaterialTuner.get_id():    TunerDescription(PlasticGlossMaterialTuner,    PlasticGlossMaterialTuner.get_id() + '.png'),
+    PlasticEmissionMaterialTuner.get_id(): TunerDescription(PlasticEmissionMaterialTuner, PlasticEmissionMaterialTuner.get_id() + '.png'),
+    LiquidWaterMaterialTuner.get_id():     TunerDescription(LiquidWaterMaterialTuner,     LiquidWaterMaterialTuner.get_id() + '.png'),
+    LiquidCloudyMaterialTuner.get_id():    TunerDescription(LiquidCloudyMaterialTuner,    LiquidCloudyMaterialTuner.get_id() + '.png'),
 }
