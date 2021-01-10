@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
 
 import os
 from typing import Dict, Any
@@ -15,6 +16,7 @@ from bpy.types import (
 from mmd_uuunyaa_tools.abstract import TunerABC, TunerDescription
 
 PATH_BLENDS_UUUNYAA_MATERIALS = 'blends/UuuNyaa_Materials.blend'
+
 
 class MaterialUtilities:
     def __init__(self, material):
@@ -61,18 +63,19 @@ class MaterialUtilities:
             node_output.is_active_output = True
         return node_output
 
-    def list_nodes(self, node_type: type=None, label: str=None, name: str=None, node_frame: NodeFrame=None):
+    def list_nodes(self, node_type: type = None, label: str = None, name: str = None, node_frame: NodeFrame = None):
         for node in self.nodes:
             if ((node_type is None or isinstance(node, node_type))
-                and (label is None or node.label == label)
-                and (name is None or node.name == name)
-                and (node_frame is None or node.parent == node_frame)
-            ): yield node
+                    and (label is None or node.label == label)
+                    and (name is None or node.name == name)
+                    and (node_frame is None or node.parent == node_frame)
+                ):
+                yield node
 
-    def find_node(self, node_type: type, label: str=None, name: str=None, node_frame: NodeFrame=None) -> ShaderNode:
+    def find_node(self, node_type: type, label: str = None, name: str = None, node_frame: NodeFrame = None) -> ShaderNode:
         return next(self.list_nodes(node_type, label, name, node_frame), None)
 
-    def get_node(self, node_type: type, label: str=None, name: str=None) -> ShaderNode:
+    def get_node(self, node_type: type, label: str = None, name: str = None) -> ShaderNode:
         node = self.find_node(node_type, label, name)
         if node is None:
             node = self.nodes.new(node_type.__name__)
@@ -80,10 +83,10 @@ class MaterialUtilities:
             node.name = name if name is not None else self.to_name(label)
         return node
 
-    def get_node_frame(self, label: str=None, name: str='uuunyaa_node_frame') -> NodeFrame:
+    def get_node_frame(self, label: str = None, name: str = 'uuunyaa_node_frame') -> NodeFrame:
         return self.get_node(NodeFrame, label=label, name=name)
 
-    def find_node_frame(self, label: str=None, name: str='uuunyaa_node_frame') -> NodeFrame:
+    def find_node_frame(self, label: str = None, name: str = 'uuunyaa_node_frame') -> NodeFrame:
         return self.find_node(NodeFrame, label=label, name=name)
 
     def get_shader_node(self) -> ShaderNodeBsdfPrincipled:
@@ -110,7 +113,7 @@ class MaterialUtilities:
     def get_skin_color_adjust_node(self) -> ShaderNodeRGBCurve:
         return self.get_node_group('Color Red Adjust', label='Skin Color Adjust')
 
-    def get_node_group(self, group_name: str, label: str=None, name: str=None) -> ShaderNodeGroup:
+    def get_node_group(self, group_name: str, label: str = None, name: str = None) -> ShaderNodeGroup:
         self.append_node_group(group_name)
         node = self.get_node(ShaderNodeGroup, label, name)
         node.node_tree = bpy.data.node_groups[group_name]
@@ -156,7 +159,7 @@ class MaterialUtilities:
             'refraction_depth': 0.000,
         })
 
-    def edit(self, node: ShaderNode, inputs: Dict[str, Any]={}, properties: Dict[str, Any]={}, force=False) -> ShaderNode:
+    def edit(self, node: ShaderNode, inputs: Dict[str, Any] = {}, properties: Dict[str, Any] = {}, force=False) -> ShaderNode:
         if node is None:
             return None
 
@@ -164,7 +167,7 @@ class MaterialUtilities:
         for name, value in properties.items():
             setattr(node, name, value)
         return node
-    
+
     def set_material_properties(self, properties: Dict[str, Any] = {}):
         for name, value in properties.items():
             setattr(self.material, name, value)
@@ -183,6 +186,7 @@ class MaterialUtilities:
 class MaterialTunerABC(TunerABC, MaterialUtilities):
     pass
 
+
 class ResetMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -200,6 +204,7 @@ class ResetMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': shader_node.outputs[0],
         }, force=True)
+
 
 class EyeHighlightMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -221,6 +226,7 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class EyeWhiteMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -240,6 +246,7 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
 
 class EyeIrisMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -263,6 +270,7 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class EyeLashMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -283,6 +291,7 @@ class EyeLashMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class HairMatteMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -302,6 +311,7 @@ class HairMatteMaterialTuner(MaterialTunerABC):
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
 
 class SkinMucosaMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -332,6 +342,7 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class SkinBumpMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -361,6 +372,7 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -385,6 +397,7 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
                 }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
 
 class FabricWaveMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -413,6 +426,7 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class FabricKnitMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -423,14 +437,14 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
         node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
         knit_texture = self.edit(self.get_knit_texture_node(), {
-                'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFBAAE),
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
-                'Hole Alpha': 0.000,
-                'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
-                'Random Hue': 0.500,
-                'Scale': 30.000,
-                'X Compression': 1.500,
-            }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFBAAE),
+            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            'Hole Alpha': 0.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+            'Random Hue': 0.500,
+            'Scale': 30.000,
+            'X Compression': 1.500,
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
@@ -443,6 +457,7 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
             'Displacement': knit_texture.outputs['Displacement'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class FabricLeatherMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -453,15 +468,15 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
         node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
         leather_texture = self.edit(self.get_leather_texture_node(), {
-                'Primary Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x000000),
-                'Secondary Color': self.hex_to_rgba(0x333333),
-                'Roughness': 0.450,
-                'Old/New': 4.000,
-                'Scale': 100.000,
-                'Strength': 0.150,
-                'Tartiary Detail': 2.000,
-                'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
-            }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+            'Primary Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x000000),
+            'Secondary Color': self.hex_to_rgba(0x333333),
+            'Roughness': 0.450,
+            'Old/New': 4.000,
+            'Scale': 100.000,
+            'Strength': 0.150,
+            'Tartiary Detail': 2.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
@@ -474,6 +489,7 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
                 'Normal': leather_texture.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
 
 class PlasticGlossMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -495,6 +511,7 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
 
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -518,6 +535,7 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+
 class LiquidWaterMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -540,6 +558,7 @@ class LiquidWaterMaterialTuner(MaterialTunerABC):
             'use_screen_refraction': True,
             'refraction_depth': 0.000,
         })
+
 
 class LiquidCloudyMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -574,6 +593,7 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
             'refraction_depth': 0.000,
         })
 
+
 class TransparentMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_name(cls):
@@ -594,22 +614,23 @@ class TransparentMaterialTuner(MaterialTunerABC):
             'refraction_depth': 0.000,
         })
 
+
 TUNERS: Dict[str, TunerDescription] = {
-    'MATERIAL_RESET':           TunerDescription(ResetMaterialTuner,          'MATERIAL_RESET.png'           ),
-    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'     ),
-    'MATERIAL_EYE_HIGHLIGHT':   TunerDescription(EyeHighlightMaterialTuner,   'MATERIAL_EYE_HIGHLIGHT.png'   ),
-    'MATERIAL_EYE_WHITE':       TunerDescription(EyeWhiteMaterialTuner,       'MATERIAL_EYE_WHITE.png'       ),
-    'MATERIAL_EYE_IRIS':        TunerDescription(EyeIrisMaterialTuner,        'MATERIAL_EYE_IRIS.png'        ),
-    'MATERIAL_EYE_LASH':        TunerDescription(EyeLashMaterialTuner,        'MATERIAL_EYE_LASH.png'        ),
-    'MATERIAL_HAIR':            TunerDescription(HairMatteMaterialTuner,      'MATERIAL_HAIR.png'            ),
-    'MATERIAL_MUCOSA':          TunerDescription(SkinMucosaMaterialTuner,     'MATERIAL_SKIN_MUCOSA.png'     ),
-    'MATERIAL_SKIN':            TunerDescription(SkinBumpMaterialTuner,       'MATERIAL_SKIN_BUMP.png'       ),
-    'MATERIAL_FABRIC_BUMP':     TunerDescription(FabricBumpMaterialTuner,     'MATERIAL_FABRIC_BUMP.png'     ),
-    'MATERIAL_FABRIC_WAVE':     TunerDescription(FabricWaveMaterialTuner,     'MATERIAL_FABRIC_WAVE.png'     ),
-    'MATERIAL_FABRIC_KNIT':     TunerDescription(FabricKnitMaterialTuner,     'MATERIAL_FABRIC_KNIT.png'     ),
-    'MATERIAL_FABRIC_LEATHER':  TunerDescription(FabricLeatherMaterialTuner,  'MATERIAL_FABRIC_LEATHER.png'  ),
-    'MATERIAL_PLASTIC_GLOSS':   TunerDescription(PlasticGlossMaterialTuner,   'MATERIAL_PLASTIC_GLOSS.png'   ),
-    'MATERIAL_PLASTIC_EMISSION':TunerDescription(PlasticEmissionMaterialTuner,'MATERIAL_PLASTIC_EMISSION.png'),
-    'MATERIAL_LIQUID_WATER':    TunerDescription(LiquidWaterMaterialTuner,    'MATERIAL_LIQUID_WATER.png'    ),
-    'MATERIAL_LIQUID_CLOUDY':   TunerDescription(LiquidCloudyMaterialTuner,   'MATERIAL_LIQUID_CLOUDY.png'   ),
+    'MATERIAL_RESET':           TunerDescription(ResetMaterialTuner,          'MATERIAL_RESET.png'),
+    'MATERIAL_TRANSPARENT':     TunerDescription(TransparentMaterialTuner,    'MATERIAL_TRANSPARENT.png'),
+    'MATERIAL_EYE_HIGHLIGHT':   TunerDescription(EyeHighlightMaterialTuner,   'MATERIAL_EYE_HIGHLIGHT.png'),
+    'MATERIAL_EYE_WHITE':       TunerDescription(EyeWhiteMaterialTuner,       'MATERIAL_EYE_WHITE.png'),
+    'MATERIAL_EYE_IRIS':        TunerDescription(EyeIrisMaterialTuner,        'MATERIAL_EYE_IRIS.png'),
+    'MATERIAL_EYE_LASH':        TunerDescription(EyeLashMaterialTuner,        'MATERIAL_EYE_LASH.png'),
+    'MATERIAL_HAIR':            TunerDescription(HairMatteMaterialTuner,      'MATERIAL_HAIR.png'),
+    'MATERIAL_MUCOSA':          TunerDescription(SkinMucosaMaterialTuner,     'MATERIAL_SKIN_MUCOSA.png'),
+    'MATERIAL_SKIN':            TunerDescription(SkinBumpMaterialTuner,       'MATERIAL_SKIN_BUMP.png'),
+    'MATERIAL_FABRIC_BUMP':     TunerDescription(FabricBumpMaterialTuner,     'MATERIAL_FABRIC_BUMP.png'),
+    'MATERIAL_FABRIC_WAVE':     TunerDescription(FabricWaveMaterialTuner,     'MATERIAL_FABRIC_WAVE.png'),
+    'MATERIAL_FABRIC_KNIT':     TunerDescription(FabricKnitMaterialTuner,     'MATERIAL_FABRIC_KNIT.png'),
+    'MATERIAL_FABRIC_LEATHER':  TunerDescription(FabricLeatherMaterialTuner,  'MATERIAL_FABRIC_LEATHER.png'),
+    'MATERIAL_PLASTIC_GLOSS':   TunerDescription(PlasticGlossMaterialTuner,   'MATERIAL_PLASTIC_GLOSS.png'),
+    'MATERIAL_PLASTIC_EMISSION': TunerDescription(PlasticEmissionMaterialTuner, 'MATERIAL_PLASTIC_EMISSION.png'),
+    'MATERIAL_LIQUID_WATER':    TunerDescription(LiquidWaterMaterialTuner,    'MATERIAL_LIQUID_WATER.png'),
+    'MATERIAL_LIQUID_CLOUDY':   TunerDescription(LiquidCloudyMaterialTuner,   'MATERIAL_LIQUID_CLOUDY.png'),
 }

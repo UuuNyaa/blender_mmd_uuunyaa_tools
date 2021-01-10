@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
-# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
 
+from mmd_uuunyaa_tools import material_tuner
+from mmd_uuunyaa_tools import lighting_tuner
 import os
 import importlib
 
 import bpy
+
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_materials_for_eevee'
@@ -20,7 +24,7 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
         )
 
     def execute(self, context):
-        import mmd_tools
+        mmd_tools = importlib.import_module('mmd_tools')
         for obj in (x for x in context.selected_objects if x.type == 'MESH'):
             mmd_tools.cycles_converter.convertToCyclesShader(obj, use_principled=True, clean_nodes=True)
 
@@ -28,6 +32,7 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
             context.scene.render.engine = 'BLENDER_EEVEE'
 
         return {'FINISHED'}
+
 
 class SetupEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.setup_render_engine_for_eevee'
@@ -94,7 +99,7 @@ class SetupEevee(bpy.types.Operator):
 
         return {'FINISHED'}
 
-from mmd_uuunyaa_tools import lighting_tuner
+
 class TuneLighting(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.tune_lighting'
     bl_label = 'Tune Lighting'
@@ -110,10 +115,10 @@ class TuneLighting(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        lighting_tuner.TUNERS[self.lighting].tuner().execute()
+        lighting_tuner.TUNERS[self.lighting].tuner(context.scene).execute()
         return {'FINISHED'}
 
-from mmd_uuunyaa_tools import material_tuner
+
 class TuneMaterial(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.tune_material'
     bl_label = 'Tune Material'

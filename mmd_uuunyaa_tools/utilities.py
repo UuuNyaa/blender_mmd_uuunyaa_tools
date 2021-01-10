@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
 
 import os
 import bpy
 
-class ObjectAppender:
-    def __init__(self, mark_id: str, blend_filename: str):
+
+class ObjectMarker:
+    def __init__(self, mark_id: str):
         self.mark_id = mark_id
-        self.blend_filename = blend_filename
 
     def mark(self, obj):
         obj[self.mark_id] = True
@@ -17,6 +18,12 @@ class ObjectAppender:
 
     def is_marked(self, obj) -> bool:
         return self.mark_id in obj
+
+
+class ObjectAppender(ObjectMarker):
+    def __init__(self, mark_id: str, blend_filename: str):
+        super().__init__(mark_id)
+        self.blend_filename = blend_filename
 
     def remove_objects(self):
         for collection in bpy.data.collections.values():
@@ -36,9 +43,9 @@ class ObjectAppender:
 
         return bpy.data.collections[collection_name]
 
-    def append_objects_from_collection(self, collection_name: str):
+    def append_objects_from_collection(self, collection_name: str, target_collection: bpy.types.Collection = None):
         source = self.append_collection(collection_name)
-        target = bpy.context.view_layer.active_layer_collection.collection
+        target = target_collection if target_collection is not None else bpy.context.view_layer.active_layer_collection.collection
         self.mark(target)
         for obj in source.objects.values():
             self.mark(obj)

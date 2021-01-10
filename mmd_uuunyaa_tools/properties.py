@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# (C) 2021 UuuNyaa <UuuNyaa@gmail.com>
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
 
 import os
 import glob
@@ -16,11 +17,13 @@ def load_previews():
     for path in glob.glob(os.path.join(os.path.dirname(__file__), 'thumbnails', '*.png')):
         previews.load(os.path.basename(path), path, 'IMAGE')
 
+
 load_previews()
 
 
 def update_lighting_thumbnails(property, context):
     bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=property.thumbnails)
+
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
@@ -42,6 +45,7 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
 
 def update_material_thumbnails(property, context):
     bpy.ops.mmd_uuunyaa_tools.tune_material(material=property.thumbnails)
+
 
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
