@@ -4,9 +4,9 @@ mmd_uuunyaa_tools is a blender addon for adjust scenes, models and materials in 
 mmd_uuunyaa_toolsは[powroupi/blender_mmd_tools](https://github.com/powroupi/blender_mmd_tools)と連携してシーン、モデル、マテリアルを調整するためのBlenderアドオンです。
 
 ## Installation
-Requirements:
- - Blender 2.83 or later
- - blender_mmd_tools v0.7.0 or later
+### Requirements
+ - Blender **2.83** or later
+ - blender_mmd_tools **v0.7.0** or later
 
 ### Download
 Download mmd_uuunyaa_tools from [the github release page](https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/releases)
@@ -19,7 +19,7 @@ The easiest way to install the mmd_uuunyaa_tools is to do so through directly th
 
 1. Open the Blender User Preferences menu and select the Add-ons tab (***Edit > Preferences... > Add-ons***)
 2. Click the ***Install...*** button at the top of the Add-ons menu. This will open a file menu where you can select the mmd_uuunyaa_tools addon .zip file.
-3. After installing the addon .zip file, Blender will filter the addons list to only show the mmd_uuunyaa_tools addon. Click the checkbox next to the title to ***enable the addon***.
+3. After installing the addon .zip file, Blender will filter the addons list to only show the mmd_uuunyaa_tools addon. ***Click the checkbox*** next to the title to enable the addon.
 4. ***Restart Blender***. A Blender restart is maybe required to complete the installation.
 
 
@@ -33,11 +33,15 @@ The easiest way to install the mmd_uuunyaa_tools is to do so through directly th
 1. Goto View3D > Tool Shelf > MMD > **UuuNyaa Operator** Panel
 2. Press **Setup Render Engine for Eevee**
 
+### Setup Eevee render
+1. Goto View3D > Tool Shelf > MMD > **UuuNyaa Operator** Panel
+2. Press **Setup Render Engine for Eevee**
+
 ### Setup ligihting
 1. Goto Properties > World > **MMD UuuNyaa Lighting** Panel
 2. Choose **lighting thumbnail icon**
 
-### Available lighting presets
+#### Available lighting presets
 | <img alt="Left Accent" src="https://media.githubusercontent.com/media/UuuNyaa/blender_mmd_uuunyaa_tools/main/mmd_uuunyaa_tools/thumbnails/LIGHTING_LEFT_ACCENT.png" width="128" height="128"> | <img alt="Left Accent" src="https://media.githubusercontent.com/media/UuuNyaa/blender_mmd_uuunyaa_tools/main/mmd_uuunyaa_tools/thumbnails/LIGHTING_GOD_RAY.png" width="128" height="128"> | <img alt="Backlight" src="https://media.githubusercontent.com/media/UuuNyaa/blender_mmd_uuunyaa_tools/main/mmd_uuunyaa_tools/thumbnails/LIGHTING_BACKLIGHT.png" width="128" height="128"> |
 |:--:|:--:|:--:|
 | *Left Accent* | *God Ray* | *Backlight* |
@@ -46,7 +50,12 @@ The easiest way to install the mmd_uuunyaa_tools is to do so through directly th
 1. Goto Properties > Material > **MMD UuuNyaa Material** Panel
 2. Choose **material thumbnail icon**
 
-### Available material presets
+#### Convert shaders for Eevee
+1. Select target mesh
+2. Goto View3D > Tool Shelf > MMD > **UuuNyaa Operator** Panel
+3. Press **Convert Shaders for Eevee**
+
+#### Available material presets
 | ![Reset](mmd_uuunyaa_tools/thumbnails/MATERIAL_RESET.png) | ![Transparent](mmd_uuunyaa_tools/thumbnails/MATERIAL_TRANSPARENT.png) |
 |:--:|:--:|
 | *Reset* | *Transparent* |
@@ -75,5 +84,14 @@ The easiest way to install the mmd_uuunyaa_tools is to do so through directly th
 |:--:|:--:|
 | *Liquid Water* | *Liquid Cloudy* |
 
+## Contribution
+mmd_uuunyaa_tools needs your contribution!
+If you are interested in any of the following, please contact us.
+
+- Document writing / [#1](../../issues/1), [#4](../../issues/4)
+- Asset creation (lighting, materials, accessories, etc...) / [#3](../../issues/3)
+- Asset maintenance / [#3](../../issues/3)
+- Software development / [#all](../../issues)
+
 ## Credits
-Lighting thumbnail images depict the character "Hatsune Miku" of Crypton Future Media, Inc. under the [ピアプロ・キャラクター・ライセンス](http://piapro.jp/license/pcl/summary).
+Lighting thumbnail images depict the character "Hatsune Miku" of Crypton Future Media, Inc. under the [Piapro Character License](http://piapro.jp/license/pcl/summary).
