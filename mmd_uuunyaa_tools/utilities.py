@@ -26,7 +26,7 @@ class ObjectAppender(ObjectMarker):
         self.blend_filename = blend_filename
 
     def remove_objects(self):
-        for collection in bpy.data.collections.values():
+        for collection in [bpy.context.scene.collection] + bpy.data.collections.values():
             if not self.is_marked(collection):
                 continue
             for obj in collection.objects.values():
