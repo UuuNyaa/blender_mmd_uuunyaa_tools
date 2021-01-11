@@ -27,7 +27,7 @@ def update_lighting_thumbnails(property, context):
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=[(id, t.tuner.get_name(), '', previews[t.icon_filename].icon_id, i) for i, (id, t) in enumerate(lighting_tuner.TUNERS.items())],
+        items=lighting_tuner.TUNERS.to_enum_property_items(previews),
         description='Choose the lighting you want to use',
         update=update_lighting_thumbnails,
     )
@@ -49,7 +49,7 @@ def update_material_thumbnails(property, context):
 
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=[(id, t.tuner.get_name(), '', previews[t.icon_filename].icon_id, i) for i, (id, t) in enumerate(material_tuner.TUNERS.items())],
+        items=material_tuner.TUNERS.to_enum_property_items(previews),
         description='Choose the material you want to use',
         update=update_material_thumbnails,
     )

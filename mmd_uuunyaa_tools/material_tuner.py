@@ -13,7 +13,7 @@ from bpy.types import (
     ShaderNodeTexImage, ShaderNodeRGBCurve
 )
 
-from mmd_uuunyaa_tools.abstract import TunerABC, TunerDescription
+from mmd_uuunyaa_tools.abstract import TunerABC, TunerRegistry
 
 PATH_BLENDS_UUUNYAA_MATERIALS = 'blends/UuuNyaa_Materials.blend'
 
@@ -69,7 +69,7 @@ class MaterialUtilities:
                     and (label is None or node.label == label)
                     and (name is None or node.name == name)
                     and (node_frame is None or node.parent == node_frame)
-                ):
+                    ):
                 yield node
 
     def find_node(self, node_type: type, label: str = None, name: str = None, node_frame: NodeFrame = None) -> ShaderNode:
@@ -683,22 +683,22 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
         })
 
 
-TUNERS: Dict[str, TunerDescription] = {
-    ResetMaterialTuner.get_id():           TunerDescription(ResetMaterialTuner,           ResetMaterialTuner.get_id() + '.png'),
-    TransparentMaterialTuner.get_id():     TunerDescription(TransparentMaterialTuner,     TransparentMaterialTuner.get_id() + '.png'),
-    EyeHighlightMaterialTuner.get_id():    TunerDescription(EyeHighlightMaterialTuner,    EyeHighlightMaterialTuner.get_id() + '.png'),
-    EyeWhiteMaterialTuner.get_id():        TunerDescription(EyeWhiteMaterialTuner,        EyeWhiteMaterialTuner.get_id() + '.png'),
-    EyeIrisMaterialTuner.get_id():         TunerDescription(EyeIrisMaterialTuner,         EyeIrisMaterialTuner.get_id() + '.png'),
-    EyeLashMaterialTuner.get_id():         TunerDescription(EyeLashMaterialTuner,         EyeLashMaterialTuner.get_id() + '.png'),
-    HairMatteMaterialTuner.get_id():       TunerDescription(HairMatteMaterialTuner,       HairMatteMaterialTuner.get_id() + '.png'),
-    SkinMucosaMaterialTuner.get_id():      TunerDescription(SkinMucosaMaterialTuner,      SkinMucosaMaterialTuner.get_id() + '.png'),
-    SkinBumpMaterialTuner.get_id():        TunerDescription(SkinBumpMaterialTuner,        SkinBumpMaterialTuner.get_id() + '.png'),
-    FabricBumpMaterialTuner.get_id():      TunerDescription(FabricBumpMaterialTuner,      FabricBumpMaterialTuner.get_id() + '.png'),
-    FabricWaveMaterialTuner.get_id():      TunerDescription(FabricWaveMaterialTuner,      FabricWaveMaterialTuner.get_id() + '.png'),
-    FabricKnitMaterialTuner.get_id():      TunerDescription(FabricKnitMaterialTuner,      FabricKnitMaterialTuner.get_id() + '.png'),
-    FabricLeatherMaterialTuner.get_id():   TunerDescription(FabricLeatherMaterialTuner,   FabricLeatherMaterialTuner.get_id() + '.png'),
-    PlasticGlossMaterialTuner.get_id():    TunerDescription(PlasticGlossMaterialTuner,    PlasticGlossMaterialTuner.get_id() + '.png'),
-    PlasticEmissionMaterialTuner.get_id(): TunerDescription(PlasticEmissionMaterialTuner, PlasticEmissionMaterialTuner.get_id() + '.png'),
-    LiquidWaterMaterialTuner.get_id():     TunerDescription(LiquidWaterMaterialTuner,     LiquidWaterMaterialTuner.get_id() + '.png'),
-    LiquidCloudyMaterialTuner.get_id():    TunerDescription(LiquidCloudyMaterialTuner,    LiquidCloudyMaterialTuner.get_id() + '.png'),
-}
+TUNERS = TunerRegistry(
+    ResetMaterialTuner,
+    TransparentMaterialTuner,
+    EyeHighlightMaterialTuner,
+    EyeWhiteMaterialTuner,
+    EyeIrisMaterialTuner,
+    EyeLashMaterialTuner,
+    HairMatteMaterialTuner,
+    SkinMucosaMaterialTuner,
+    SkinBumpMaterialTuner,
+    FabricBumpMaterialTuner,
+    FabricWaveMaterialTuner,
+    FabricKnitMaterialTuner,
+    FabricLeatherMaterialTuner,
+    PlasticGlossMaterialTuner,
+    PlasticEmissionMaterialTuner,
+    LiquidWaterMaterialTuner,
+    LiquidCloudyMaterialTuner,
+)

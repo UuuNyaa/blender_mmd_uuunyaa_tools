@@ -107,7 +107,7 @@ class TuneLighting(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     lighting: bpy.props.EnumProperty(
-        items=[(id, t.tuner.get_name(), '') for id, t in lighting_tuner.TUNERS.items()],
+        items=lighting_tuner.TUNERS.to_enum_property_items(),
     )
 
     @classmethod
@@ -115,7 +115,7 @@ class TuneLighting(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        lighting_tuner.TUNERS[self.lighting].tuner(context.scene).execute()
+        lighting_tuner.TUNERS[self.lighting](context.scene).execute()
         return {'FINISHED'}
 
 
@@ -126,7 +126,7 @@ class TuneMaterial(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     material: bpy.props.EnumProperty(
-        items=[(id, t.tuner.get_name(), '') for id, t in material_tuner.TUNERS.items()],
+        items=material_tuner.TUNERS.to_enum_property_items(),
     )
 
     @classmethod
@@ -134,5 +134,5 @@ class TuneMaterial(bpy.types.Operator):
         return context.object.active_material
 
     def execute(self, context):
-        material_tuner.TUNERS[self.material].tuner(context.object.active_material).execute()
+        material_tuner.TUNERS[self.material](context.object.active_material).execute()
         return {'FINISHED'}

@@ -7,7 +7,7 @@ from typing import Dict, Any
 
 import bpy
 
-from mmd_uuunyaa_tools.abstract import TunerABC, TunerDescription
+from mmd_uuunyaa_tools.abstract import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.utilities import ObjectMarker, ObjectAppender
 
 PATH_BLENDS_UUUNYAA_LIGHTINGS = 'blends/UuuNyaa_Lightings.blend'
@@ -89,9 +89,9 @@ class BacklightLightingTuner(LightingTunerABC):
         self.add_lights(self.get_id())
 
 
-TUNERS: Dict[str, TunerDescription] = {
-    ResetLightingTuner.get_id():      TunerDescription(ResetLightingTuner,      ResetLightingTuner.get_id() + '.png'),
-    LeftAccentLightingTuner.get_id(): TunerDescription(LeftAccentLightingTuner, LeftAccentLightingTuner.get_id() + '.png'),
-    GodRayLightingTuner.get_id():     TunerDescription(GodRayLightingTuner,     GodRayLightingTuner.get_id() + '.png'),
-    BacklightLightingTuner.get_id():  TunerDescription(BacklightLightingTuner,  BacklightLightingTuner.get_id() + '.png'),
-}
+TUNERS = TunerRegistry(
+    ResetLightingTuner,
+    LeftAccentLightingTuner,
+    GodRayLightingTuner,
+    BacklightLightingTuner,
+)
