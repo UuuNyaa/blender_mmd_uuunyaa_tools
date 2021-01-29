@@ -4,7 +4,8 @@ mmd_uuunyaa_tools is a blender addon for adjust scenes, models and materials in 
 mmd_uuunyaa_toolsは[powroupi/blender_mmd_tools](https://github.com/powroupi/blender_mmd_tools)と連携してシーン、モデル、マテリアルを調整するためのBlenderアドオンです。
 
 ## Installation & Usage
-Check [the mmd_uuunyaa_tools wiki!](https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki) for details.
+- Check [the mmd_uuunyaa_tools wiki!](https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki/Home) for details.
+- 詳細は [mmd_uuunyaa_toolsのwiki! (日本語)](https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki/Home.ja) を確認してください。
 
 ### YouTube video available
 | [![How to use MMD UuuNyaa Tools](https://img.youtube.com/vi/QJqfsohDzPs/0.jpg)](https://youtu.be/QJqfsohDzPs) |
