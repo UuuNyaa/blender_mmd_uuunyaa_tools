@@ -3,14 +3,14 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import os
-from typing import Dict, Any
+from typing import Any, Dict
 
 import bpy
+from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
+from mmd_uuunyaa_tools.utilities import ObjectAppender, ObjectMarker
 
-from mmd_uuunyaa_tools.abstract import TunerABC, TunerRegistry
-from mmd_uuunyaa_tools.utilities import ObjectMarker, ObjectAppender
-
-PATH_BLENDS_UUUNYAA_LIGHTINGS = 'blends/UuuNyaa_Lightings.blend'
+PATH_BLENDS_UUUNYAA_LIGHTINGS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Lightings.blend')
 
 
 class LightingUtilities:
@@ -18,7 +18,7 @@ class LightingUtilities:
         self.scene = scene
         self.object_appender = ObjectAppender(
             'mmd_uuunyaa_tools_lighting',
-            os.path.join(os.path.dirname(__file__), PATH_BLENDS_UUUNYAA_LIGHTINGS)
+            PATH_BLENDS_UUUNYAA_LIGHTINGS
         )
 
     @property

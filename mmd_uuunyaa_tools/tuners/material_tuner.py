@@ -3,19 +3,20 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import os
-from typing import Dict, Any
+from typing import Any, Dict
 
 import bpy
 from bpy.types import (
-    Material, NodeSocket, NodeFrame,
-    ShaderNode, ShaderNodeGroup, ShaderNodeOutputMaterial,
-    ShaderNodeBsdfPrincipled, ShaderNodeBsdfGlass, ShaderNodeBsdfTransparent, ShaderNodeMixShader,
-    ShaderNodeTexImage, ShaderNodeRGBCurve
+    Material, NodeFrame, NodeSocket, ShaderNode,
+    ShaderNodeBsdfGlass, ShaderNodeBsdfPrincipled,
+    ShaderNodeBsdfTransparent, ShaderNodeGroup,
+    ShaderNodeMixShader, ShaderNodeOutputMaterial,
+    ShaderNodeRGBCurve, ShaderNodeTexImage
 )
+from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 
-from mmd_uuunyaa_tools.abstract import TunerABC, TunerRegistry
-
-PATH_BLENDS_UUUNYAA_MATERIALS = 'blends/UuuNyaa_Materials.blend'
+PATH_BLENDS_UUUNYAA_MATERIALS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Materials.blend')
 
 
 class MaterialUtilities:
@@ -52,8 +53,7 @@ class MaterialUtilities:
         if name in bpy.data.node_groups:
             return
 
-        path = os.path.join(os.path.dirname(__file__), PATH_BLENDS_UUUNYAA_MATERIALS)
-        with bpy.data.libraries.load(path, link=False) as (_, data_to):
+        with bpy.data.libraries.load(PATH_BLENDS_UUUNYAA_MATERIALS, link=False) as (_, data_to):
             data_to.node_groups = [name]
 
     def get_output_node(self) -> ShaderNodeOutputMaterial:
@@ -66,9 +66,9 @@ class MaterialUtilities:
     def list_nodes(self, node_type: type = None, label: str = None, name: str = None, node_frame: NodeFrame = None):
         for node in self.nodes:
             if ((node_type is None or isinstance(node, node_type))
-                    and (label is None or node.label == label)
-                    and (name is None or node.name == name)
-                    and (node_frame is None or node.parent == node_frame)
+                and (label is None or node.label == label)
+                and (name is None or node.name == name)
+                and (node_frame is None or node.parent == node_frame)
                 ):
                 yield node
 

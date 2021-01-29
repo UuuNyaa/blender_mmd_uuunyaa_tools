@@ -2,10 +2,8 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from mmd_uuunyaa_tools import material_tuner
-from mmd_uuunyaa_tools import lighting_tuner
-import os
 import importlib
+import os
 
 import bpy
 
@@ -34,7 +32,7 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class SetupEevee(bpy.types.Operator):
+class SetupRenderEngineForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.setup_render_engine_for_eevee'
     bl_label = 'Setup Render Engine for Eevee'
     bl_description = 'Setup render engine properties for Eevee.'
@@ -97,42 +95,4 @@ class SetupEevee(bpy.types.Operator):
         # Color Management > Look: High Contrast
         bpy.data.scenes["Scene"].view_settings.look = 'High Contrast'
 
-        return {'FINISHED'}
-
-
-class TuneLighting(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.tune_lighting'
-    bl_label = 'Tune Lighting'
-    bl_description = 'Tune selected lighting.'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    lighting: bpy.props.EnumProperty(
-        items=lighting_tuner.TUNERS.to_enum_property_items(),
-    )
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        lighting_tuner.TUNERS[self.lighting](context.scene).execute()
-        return {'FINISHED'}
-
-
-class TuneMaterial(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.tune_material'
-    bl_label = 'Tune Material'
-    bl_description = 'Tune selected material.'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    material: bpy.props.EnumProperty(
-        items=material_tuner.TUNERS.to_enum_property_items(),
-    )
-
-    @classmethod
-    def poll(cls, context):
-        return context.object.active_material
-
-    def execute(self, context):
-        material_tuner.TUNERS[self.material](context.object.active_material).execute()
         return {'FINISHED'}

@@ -2,8 +2,37 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+import hashlib
+import math
 import os
+
 import bpy
+from typing import TypeVar, Generic
+
+
+def to_int32(value: int) -> int:
+    return ((value & 0xffffffff) ^ 0x80000000) - 0x80000000
+
+
+def strict_hash(text: str) -> int:
+    return to_int32(int(hashlib.sha1(text.encode('utf-8')).hexdigest(), 16))
+
+
+SI_PREFIXES = ['', ' k', ' M', ' G', ' T']
+
+
+def to_human_friendly_text(number: float) -> str:
+    if number == 0:
+        return '0'
+
+    prefix_index = max(
+        0,
+        min(
+            len(SI_PREFIXES)-1,
+            int(math.floor(math.log10(abs(number))/3))
+        )
+    )
+    return f'{number / 10**(3 * prefix_index):.2f}{SI_PREFIXES[prefix_index]}'
 
 
 class ObjectMarker:
