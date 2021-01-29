@@ -69,7 +69,7 @@ class MaterialUtilities:
                     and (label is None or node.label == label)
                     and (name is None or node.name == name)
                     and (node_frame is None or node.parent == node_frame)
-                    ):
+                ):
                 yield node
 
     def find_node(self, node_type: type, label: str = None, name: str = None, node_frame: NodeFrame = None) -> ShaderNode:
@@ -111,7 +111,7 @@ class MaterialUtilities:
         return self.find_node(ShaderNodeTexImage, label='Mmd Base Tex')
 
     def get_skin_color_adjust_node(self) -> ShaderNodeRGBCurve:
-        return self.get_node_group('Color Red Adjust', label='Skin Color Adjust')
+        return self.get_node_group('Skin Color Adjust', label='Skin Color Adjust')
 
     def get_node_group(self, group_name: str, label: str = None, name: str = None) -> ShaderNodeGroup:
         self.append_node_group(group_name)
@@ -376,22 +376,30 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
         node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
+
+        node_skin_bump = self.edit(self.get_skin_bump_node(), {
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+            'Scale': 1.000,
+            'Strength': 1.000,
+        }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame})
+
+        node_skin_color_adjust = self.edit(self.get_skin_color_adjust_node(), {
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xEEAA99),
+            'Blood Color': self.hex_to_rgba(0xE40000),
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFF6666),
+                'Base Color': node_skin_color_adjust.outputs['Color'],
                 'Subsurface': 0.200,
-                'Subsurface Color': self.hex_to_rgba(0xE40000),
+                'Subsurface Color': node_skin_color_adjust.outputs['Blood Color'],
                 'Specular': 0.300,
                 'Roughness': 0.200,
                 'Clearcoat': 1.000,
                 'Clearcoat Roughness': 0.030,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
-                'Normal': self.edit(self.get_skin_bump_node(), {
-                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
-                    'Scale': 1.000,
-                    'Strength': 1.000,
-                }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
+                'Normal': node_skin_bump.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
@@ -410,22 +418,27 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
         node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
 
+        node_skin_bump = self.edit(self.get_skin_bump_node(), {
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+            'Scale': 1.000,
+            'Strength': 1.000,
+        }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame})
+
+        node_skin_color_adjust = self.edit(self.get_skin_color_adjust_node(), {
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xEEAA99),
+            'Blood Color': self.hex_to_rgba(0xE40000),
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': self.edit(self.get_skin_color_adjust_node(), {
-                    'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xEEAA99),
-                }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame}).outputs['Color'],
+                'Base Color': node_skin_color_adjust.outputs['Color'],
                 'Subsurface': 0.044,
-                'Subsurface Color': self.hex_to_rgba(0xE40000),
+                'Subsurface Color': node_skin_color_adjust.outputs['Blood Color'],
                 'Specular': 0.200,
                 'Roughness': 0.550,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
-                'Normal': self.edit(self.get_skin_bump_node(), {
-                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
-                    'Scale': 1.000,
-                    'Strength': 1.000,
-                }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
+                'Normal': node_skin_bump.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
