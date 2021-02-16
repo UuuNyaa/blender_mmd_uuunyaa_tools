@@ -5,7 +5,6 @@
 import bpy
 from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner
 
-
 def update_lighting_thumbnails(property, context):
     bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=property.thumbnails)
 
@@ -17,15 +16,13 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
         update=update_lighting_thumbnails,
     )
 
-    previous_collection_name: bpy.props.StringProperty()
-
     @staticmethod
     def register():
-        bpy.types.Scene.mmd_uuunyaa_tools_lighting = bpy.props.PointerProperty(type=LightingPropertyGroup)
+        bpy.types.Collection.mmd_uuunyaa_tools_lighting = bpy.props.PointerProperty(type=LightingPropertyGroup)
 
     @staticmethod
     def unregister():
-        del bpy.types.Scene.mmd_uuunyaa_tools_lighting
+        del bpy.types.Collection.mmd_uuunyaa_tools_lighting
 
 
 def update_material_thumbnails(property, context):

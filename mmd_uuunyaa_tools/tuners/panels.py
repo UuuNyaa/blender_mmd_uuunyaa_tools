@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
+
 import bpy
-from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner
+from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner, operators
 
 
 class LightingPanel(bpy.types.Panel):
@@ -14,7 +18,7 @@ class LightingPanel(bpy.types.Panel):
         return True
 
     def draw(self, context):
-        mmd_uuunyaa_tools_lighting = context.scene.mmd_uuunyaa_tools_lighting
+        mmd_uuunyaa_tools_lighting = context.collection.mmd_uuunyaa_tools_lighting
 
         layout = self.layout
         col = layout.column(align=True)
@@ -28,14 +32,17 @@ class LightingPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
 
-        lu = lighting_tuner.LightingUtilities(context.scene)
-        for obj in bpy.context.view_layer.active_layer_collection.collection.objects.values():
-            if obj.type != 'EMPTY' or obj.parent is not None or not lu.object_marker.is_marked(obj):
-                continue
-            layout.prop(obj, 'location')
-            layout.prop(obj, 'rotation_euler')
-            layout.prop(obj, 'scale')
-            break
+        lu = lighting_tuner.LightingUtilities(context.collection)
+        lighting = lu.find_active_lighting()
+        if lighting is None:
+            return
+
+        layout.prop(lighting, 'location')
+        layout.prop(lighting, 'rotation_euler')
+        layout.prop(lighting, 'scale')
+
+        row = layout.row(align=False)
+        row.operator(operators.FreezeLighting.bl_idname)
 
 
 class MaterialPanel(bpy.types.Panel):
