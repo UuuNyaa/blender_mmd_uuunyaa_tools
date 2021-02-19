@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner, operators
+from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners, operators
 
 
 class LightingPanel(bpy.types.Panel):
@@ -32,7 +32,7 @@ class LightingPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
 
-        lu = lighting_tuner.LightingUtilities(context.collection)
+        lu = lighting_tuners.LightingUtilities(context.collection)
         lighting = lu.find_active_lighting()
         if lighting is None:
             return
@@ -73,7 +73,7 @@ class MaterialPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_material, 'thumbnails', mmd_uuunyaa_tools_material.thumbnails))
 
-        mu = material_tuner.MaterialUtilities(material)
+        mu = material_tuners.MaterialUtilities(material)
         node_frame = mu.find_node_frame()
         if node_frame is not None:
             for node in mu.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame):

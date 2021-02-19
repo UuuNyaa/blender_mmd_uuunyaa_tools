@@ -3,7 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner
+from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
+
 
 def update_lighting_thumbnails(property, context):
     bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=property.thumbnails)
@@ -11,7 +12,7 @@ def update_lighting_thumbnails(property, context):
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=lighting_tuner.TUNERS.to_enum_property_items(),
+        items=lighting_tuners.TUNERS.to_enum_property_items(),
         description='Choose the lighting you want to use',
         update=update_lighting_thumbnails,
     )
@@ -31,7 +32,7 @@ def update_material_thumbnails(property, context):
 
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=material_tuner.TUNERS.to_enum_property_items(),
+        items=material_tuners.TUNERS.to_enum_property_items(),
         description='Choose the material you want to use',
         update=update_material_thumbnails,
     )

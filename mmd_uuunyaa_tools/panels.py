@@ -5,7 +5,7 @@
 import bpy
 
 from mmd_uuunyaa_tools import operators
-from mmd_uuunyaa_tools.tuners import lighting_tuner, material_tuner
+from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
 
 
 class OperatorPanel(bpy.types.Panel):

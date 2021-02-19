@@ -1,268 +1,313 @@
+# -*- coding: utf-8 -*-
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
+
+import ast
 import functools
+import glob
+import importlib
+import json
 import os
-import tempfile
-import time
-from typing import List
+import pathlib
+import shutil
+import stat
+import traceback
+import zipfile
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any, Dict, Set, Union
 
 import bpy
-import bpy.utils.previews
-from mmd_uuunyaa_tools.asset_search import AssetDescription, ASSETS, CONTENT_STORE
-from mmd_uuunyaa_tools.asset_search.store import Content, ContentStore, Task
-from mmd_uuunyaa_tools.utilities import to_human_friendly_text, to_int32
+from mmd_uuunyaa_tools import PACKAGE_PATH, REGISTER_HOOKS
+from mmd_uuunyaa_tools.utilities import get_preferences
 
 
-class AddAssetThumbnail(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.add_asset_thumbnail'
-    bl_label = 'Add Asset Item'
-    bl_options = {'UNDO_GROUPED', 'INTERNAL'}
-
-    asset_id: bpy.props.StringProperty()
-    update_time: bpy.props.IntProperty()
-
-    def execute(self, context):
-        search_result = context.scene.mmd_uuunyaa_tools_asset_search.result
-        if search_result.update_time != self.update_time:
-            return {'FINISHED'}
-
-        asset_item = search_result.asset_items.add()
-        asset_item.id = self.asset_id
-        return {'FINISHED'}
+class AssetType(Enum):
+    MODEL_MMD = 'Model (.pmx)'
+    MODEL_BLENDER = 'Model (.blend)'
+    LIGHTING = 'Lighting'
+    MATERIAL = 'Material'
 
 
-class AssetSearch(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.asset_search'
-    bl_label = 'Search Asset'
-    bl_options = {'UNDO_GROUPED', 'INTERNAL'}
+class AssetDescription:
+    def __init__(
+        self,
+        id: str,
+        type: AssetType,
+        url: str,
+        name: str,
+        tags: Dict[str, str],
+        updated_at: datetime,
+        thumbnail_url: str,
+        download_url: str,
+        import_action: str,
+        aliases: Dict[str, str],
+        note: str,
+    ):
+        self.id = id
+        self.type = type
+        self.url = url
+        self.name = name
+        self.tags = tags
+        self.updated_at = updated_at
+        self.thumbnail_url = thumbnail_url
+        self.download_url = download_url
+        self.import_action = import_action
+        self.aliases = aliases
+        self.note = note
+        self.tag_names = set(tags.values())
+        self.keywords = '^'.join(['', name, note, *self.tag_names, *aliases.values()]).lower()
 
-    def _on_thumbnail_fetched(self, context, region, update_time, asset, content):
-        print(f'done: {asset.name}, {asset.id}, {content.state}, {content.id}, {update_time}, {context.scene.mmd_uuunyaa_tools_asset_search.result.update_time}')
-        search_result = context.scene.mmd_uuunyaa_tools_asset_search.result
-        if search_result.update_time != update_time:
+    def tags_text(self) -> str:
+        return ', '.join(self.tag_names)
+
+
+class _Utilities:
+    @staticmethod
+    def unzip(zip_file_path, encoding='cp437', password=None, asset=None):
+        asset_path, asset_json = _Utilities.resolve_path(asset)
+
+        print(f'unzip({zip_file_path},{asset_path},{asset_json})')
+
+        if _Utilities.is_extracted(asset):
             return
 
-        asset_item = search_result.asset_items.add()
-        asset_item.id = asset.id
+        with zipfile.ZipFile(zip_file_path) as zip:
+            for info in zip.infolist():
+                info.filename = info.orig_filename.encode('cp437').decode(encoding)
+                if os.sep != '/' and os.sep in info.filename:
+                    info.filename = info.filename.replace(os.sep, '/')
+                zip.extract(info, path=asset_path, pwd=password)
 
-        global PREVIEWS
-        if asset.id not in PREVIEWS:
-            PREVIEWS.load(asset.id, content.filepath, 'IMAGE')
+        _Utilities.write_json(asset)
+        _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
 
-        region.tag_redraw()
+    @staticmethod
+    def unrar(rar_file_path, password=None, asset=None):
+        asset_path, asset_json = _Utilities.resolve_path(asset)
 
-    def execute(self, context):
-        query = context.scene.mmd_uuunyaa_tools_asset_search.query
-        query_type = query.type
-        query_text = query.text.lower()
-        query_tags = query.tags
-        query_is_cached = query.is_cached
+        print(f'unrar({rar_file_path},{asset_path},{asset_json})')
 
-        enabled_tag_names = {tag.name for tag in query_tags if tag.enabled}
-        enabled_tag_count = len(enabled_tag_names)
-
-        search_results: List[AssetDescription] = []
-        search_results = [
-            asset for asset in ASSETS.values() if (
-                query_type == asset.type.name
-                and enabled_tag_count == len(asset.tags & enabled_tag_names)
-                and query_text in asset.keywords
-                and (CONTENT_STORE.try_get_content(asset.download_url) is not None if query_is_cached else True)
-            )
-        ]
-
-        update_time = to_int32(time.time_ns() >> 10)
-        result = context.scene.mmd_uuunyaa_tools_asset_search.result
-        result.count = len(search_results)
-        result.asset_items.clear()
-        result.update_time = update_time
-
-        for asset in search_results:
-            CONTENT_STORE.async_get_content(asset.thumbnail_url, functools.partial(self._on_thumbnail_fetched, context, context.region, update_time, asset))
-
-        return {'FINISHED'}
-
-
-def label_multiline(layout, text='', width=0):
-    if text.strip() == '':
-        return
-
-    threshold = int(width / 5.5) if width > 0 else 35
-    for line in text.split('\n'):
-        while len(line) > threshold:
-            space_index = line.rfind(' ', 0, threshold)
-            layout.label(text=line[:space_index])
-            line = line[space_index:].lstrip()
-        layout.label(text=line)
-
-
-class AssetDownload(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.asset_download'
-    bl_label = 'Download Asset'
-    bl_options = {'REGISTER', 'INTERNAL'}
-
-    asset_id: bpy.props.StringProperty()
-
-    def __on_fetched(self, context, asset, content):
-        print(f'done: {asset.name}, {asset.id}, {content.state}, {content.id}')
-
-    def execute(self, context):
-        print(f'do: {self.bl_idname}, {self.asset_id}')
-        asset = ASSETS[self.asset_id]
-        CONTENT_STORE.async_get_content(asset.download_url, functools.partial(self.__on_fetched, context, asset))
-        return {'FINISHED'}
-
-
-class AssetImport(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.asset_import'
-    bl_label = 'Import Asset'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    asset_id: bpy.props.StringProperty()
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        print(f'do: {self.bl_idname}')
-        return {'FINISHED'}
-
-
-class AssetDetailPopup(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.asset_detail_popup'
-    bl_label = 'Popup Asset Detail'
-    bl_options = {'REGISTER', 'INTERNAL'}
-
-    asset_id: bpy.props.StringProperty()
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        print(f'do: {self.bl_idname}')
-        return {'FINISHED'}
-
-    def invoke(self, context, event):
-        return context.window_manager.invoke_popup(self, width=600)
-
-    def draw(self, context):
-        asset = ASSETS[self.asset_id]
-
-        layout = self.layout
-
-        def draw_titled_label(layout, title, text, split_factor=0.11):
-            split = layout.split(factor=split_factor)
-            split.alignment = 'RIGHT'
-            split.label(text=title)
-            label_multiline(split.column(align=True), text=text, width=int(600*(1-split_factor)))
-
-        self.asset_name = asset.name
-
-        col = layout.column(align=True)
-        draw_titled_label(col, title='Name:', text=asset.name)
-        draw_titled_label(col, title='Aliases:', text=', '.join([p for p in asset.aliases.values()]))
-        draw_titled_label(col, title='Tags:', text=asset.tags_text())
-        draw_titled_label(col, title='Updated at:', text=asset.updated_at.strftime('%Y-%m-%d %H:%M:%S %Z'))
-        draw_titled_label(col, title='Note:', text=asset.note)
-
-        content = CONTENT_STORE.try_get_content(asset.download_url)
-        if content is not None:
-            if content.state is Content.State.STORED:
-                draw_titled_label(col, title='File:', text=f'{content.filepath}\n{to_human_friendly_text(content.length)}B   ({content.type})')
-                op = layout.operator('mmd_tools.import_model', text='Import', icon='IMPORT')
-                f = op.files.add()
-                f.name = os.path.basename(content.filepath)
-                op.directory = os.path.dirname(content.filepath)
-
-            if content.state is Content.State.FAILED:
-                layout.operator(AssetDownload.bl_idname, text='Retry', icon='FILE_REFRESH').asset_id = asset.id
-        else:
-            task = CONTENT_STORE.try_get_task(asset.download_url)
-            if task is None:
-                layout.operator(AssetDownload.bl_idname, text='Download', icon='TRIA_DOWN_BAR').asset_id = asset.id
-
-            elif task.state is Task.State.QUEUING:
-                draw_titled_label(layout, title='File:', text=f'Download waiting...')
-                layout.operator(AssetDownload.bl_idname, text='Cancel', icon='CANCEL').asset_id = asset.id
-
-            elif task.state is Task.State.RUNNING:
-                draw_titled_label(layout, title='File:', text=f'Downloading {to_human_friendly_text(task.fetched_size)}B / {to_human_friendly_text(task.content_length)}B')
-                layout.operator(AssetDownload.bl_idname, text=f'Cancel', icon='CANCEL').asset_id = asset.id
-
-
-class AssetSearchQueryTags(bpy.types.UIList):
-    bl_idname = 'UUUNYAA_UL_mmd_uuunyaa_tools_asset_search_query_tags'
-
-    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
-        layout.prop(item, 'enabled', text=item.name, index=index)
-
-
-class AssetSearchPanel(bpy.types.Panel):
-    bl_idname = 'UUUNYAA_PT_mmd_uuunyaa_tools_asset_search'
-    bl_label = 'UuuNyaa Asset Search'
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_category = 'MMD'
-
-    def draw(self, context):
-        search = context.scene.mmd_uuunyaa_tools_asset_search
-        query = search.query
-        layout = self.layout
-
-        layout.prop(query, 'type', text='Asset type')
-        layout.prop(query, 'text', text='Query', icon='VIEWZOOM')
-        if query.tags is not None:
-            col = layout.column()
-            row = col.row()
-            row.label(text='Tags:')
-            row = row.row()
-            row.alignment = 'RIGHT'
-            row.prop(query, 'is_cached', text='Cached')
-            col.template_list(AssetSearchQueryTags.bl_idname, '', query, 'tags', query, 'tags_index', type='GRID', columns=3, rows=2)
-            row = col.row()
-
-        row = layout.row()
-        row.alignment = 'RIGHT'
-        row.label(text=f'{search.result.count} results')
-
-        asset_items = context.scene.mmd_uuunyaa_tools_asset_search.result.asset_items
-
-        global PREVIEWS
-
-        grid = layout.grid_flow(row_major=True)
-        for asset_item in asset_items:
-            asset = ASSETS[asset_item.id]
-
-            content = CONTENT_STORE.try_get_content(asset.download_url)
-            if content is not None:
-                if content.state is Content.State.STORED:
-                    icon = 'SOLO_ON'
-                if content.state is Content.State.FAILED:
-                    icon = 'ERROR'
-            else:
-                task = CONTENT_STORE.try_get_task(asset.download_url)
-                if task is None:
-                    icon = 'NONE'
-                else:
-                    icon = 'SOLO_OFF'
-
-            box = grid.box().column(align=True)
-            box.template_icon(PREVIEWS[asset.id].icon_id, scale=6.0)
-            box.operator(AssetDetailPopup.bl_idname, text=asset.name, icon=icon).asset_id = asset.id
-
-        if search.result.count > len(asset_items):
-            row = layout.row()
-            row.alignment = 'CENTER'
-            row.label(text='Loading...')
+        if _Utilities.is_extracted(asset):
             return
 
-    @staticmethod
-    def register():
-        global PREVIEWS
-        PREVIEWS = bpy.utils.previews.new()
+        namespace = 'rarfile'
+        loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'rarfile', 'rarfile.py'))
+        rarfile = loader.load_module(namespace)
+
+        with rarfile.RarFile(rar_file_path) as rar:
+            rar.extractall(path=asset_path, pwd=password)
+
+        _Utilities.write_json(asset)
+        _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
 
     @staticmethod
-    def unregister():
-        global PREVIEWS
-        if PREVIEWS is not None:
-            bpy.utils.previews.remove(PREVIEWS)
+    def link(from_path, to_name, asset=None):
+        asset_path, asset_json = _Utilities.resolve_path(asset)
+
+        print(f'link({from_path},{to_name},{asset_path},{asset_json})')
+
+        if _Utilities.is_extracted(asset):
+            return
+
+        os.link(from_path, os.path.join(asset_path, to_name))
+
+        _Utilities.write_json(asset)
+        _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
+
+    @staticmethod
+    def chmod_recursively(path, mode):
+        for root, dirs, files in os.walk(path):
+            for dir in dirs:
+                target = os.path.join(root, dir)
+                os.chmod(target, os.stat(target).st_mode | mode)
+
+            for file in files:
+                target = os.path.join(root, file)
+                os.chmod(target, os.stat(target).st_mode | mode)
+
+    @staticmethod
+    def import_collection(blend_file_path, collection_name, asset_path=None):
+        print(f'import_collection({blend_file_path},{collection_name},{asset_path})')
+
+    @staticmethod
+    def import_pmx(pmx_file_path, scale=0.08, asset=None):
+        asset_path, _ = _Utilities.resolve_path(asset)
+
+        print(f'import_pmx({pmx_file_path},{scale},{asset_path})')
+        bpy.ops.mmd_tools.import_model('INVOKE_DEFAULT', filepath=os.path.join(asset_path, pmx_file_path), scale=scale)
+
+    class Visitor(ast.NodeVisitor):
+        def visit(self, node: ast.AST):
+            node_name = node.__class__.__name__
+
+            if node_name not in {'Module', 'Expr', 'Call', 'Name', 'Str', 'JoinedStr', 'FormattedValue', 'Load', 'Num', 'keyword'}:
+                raise NotImplementedError(ast.dump(node))
+
+            if node_name == 'Call':
+                if node.func.id not in {'unzip', 'unrar', 'import_collection', 'import_pmx'}:
+                    raise NotImplementedError(ast.dump(node))
+
+            return self.generic_visit(node)
+
+    @staticmethod
+    def to_dict(asset: AssetDescription) -> Dict[str, Any]:
+        return {
+            'id': asset.id,
+            'type': asset.type,
+            'url': asset.url,
+            'name': asset.name,
+            'tags': asset.tags,
+            'updated_at': asset.updated_at,
+            'thumbnail_url': asset.thumbnail_url,
+            'download_url': asset.download_url,
+            'import_action': asset.import_action,
+            'aliases': asset.aliases,
+            'note': asset.note,
+        }
+
+    @staticmethod
+    def from_dict(asset: Dict[str, Any]) -> AssetDescription:
+        return AssetDescription(
+            id=asset['id'],
+            type=AssetType[asset['type']],
+            url=asset['url'],
+            name=asset['name'],
+            tags=asset['tags'],
+            updated_at=datetime.strptime(asset['updated_at'], '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=timezone.utc).astimezone(tz=None),
+            thumbnail_url=asset['thumbnail_url'],
+            download_url=asset['download_url'],
+            import_action=asset['import_action'],
+            aliases=asset['aliases'],
+            note=asset['note'],
+        )
+
+    @staticmethod
+    def to_json(asset: AssetDescription, **kwargs):
+        def encoder(obj):
+            if isinstance(obj, datetime):
+                return obj.astimezone(tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+            elif isinstance(obj, Enum):
+                return obj.name
+            elif isinstance(obj, set):
+                return list(obj)
+
+            raise TypeError(repr(obj) + ' is not JSON serializable')
+
+        return json.dumps({
+            'format': 'blender_mmd_assets:1',
+            'description': 'This file is a mmd_uuunyaa_tools marking',
+            'license': 'CC-BY-4.0 License',
+            'created_at': datetime.now(),
+            'assets': [_Utilities.to_dict(asset)]
+        }, default=encoder, **kwargs)
+
+    @staticmethod
+    def to_context(asset: AssetDescription) -> Dict[str, str]:
+        return {
+            'id': asset.id,
+            'type': asset.type.name,
+            'name': asset.name,
+            'aliases': asset.aliases,
+        }
+
+    @staticmethod
+    def resolve_path(asset: AssetDescription) -> (str, str):
+        preferences = get_preferences()
+        asset_extract_root_folder = preferences.asset_extract_root_folder
+        asset_extract_folder = preferences.asset_extract_folder
+        asset_extract_json = preferences.asset_extract_json
+
+        context = _Utilities.to_context(asset)
+        asset_path = os.path.join(
+            asset_extract_root_folder,
+            asset_extract_folder.format(**context)
+        )
+
+        asset_json = os.path.join(
+            asset_path,
+            asset_extract_json.format(**context)
+        )
+
+        return (asset_path, asset_json)
+
+    @staticmethod
+    def is_extracted(asset: AssetDescription) -> bool:
+        _, asset_json = _Utilities.resolve_path(asset)
+        return os.path.exists(asset_json)
+
+    @staticmethod
+    def write_json(asset: AssetDescription):
+        _, asset_json = _Utilities.resolve_path(asset)
+        try:
+            with open(asset_json, mode='wt', encoding='utf-8') as f:
+                f.write(_Utilities.to_json(asset, indent=2, ensure_ascii=False))
+        except:
+            os.remove(asset_json)
+            raise
+
+    @staticmethod
+    def execute_import_action(asset: AssetDescription, target_file: Union[str, None]):
+        tree = ast.parse(asset.import_action)
+
+        _Utilities.Visitor().visit(tree)
+        exec(compile(tree, '<source>', 'exec'), {'__builtins__': {}}, {
+            'unzip': functools.partial(_Utilities.unzip, asset=asset),
+            'unrar': functools.partial(_Utilities.unrar, asset=asset),
+            'import_pmx': functools.partial(_Utilities.import_pmx, asset=asset),
+            'file': target_file,
+        })
+
+
+class AssetRegistry:
+
+    def __init__(self, *assets: AssetDescription):
+        self.assets: Dict[str, AssetDescription] = {}
+        for asset in assets:
+            self.add(asset)
+
+    def add(self, asset: AssetDescription):
+        self.assets[asset.id] = asset
+
+    def __getitem__(self, id: str):
+        return self.assets[id]
+
+    def items(self):
+        return self.assets.items()
+
+    def values(self):
+        return self.assets.values()
+
+    def reload(self, asset_jsons_folder: str):
+        self.assets.clear()
+
+        for json_path in glob.glob(os.path.join(asset_jsons_folder, '*.json')):
+            try:
+                with open(json_path) as f:
+                    for asset in json.load(f)['assets']:
+                        self.add(_Utilities.from_dict(asset))
+            except:
+                traceback.print_exc()
+
+    def is_extracted(self, id: str) -> bool:
+        # TODO cache
+        return _Utilities.is_extracted(self[id])
+
+    def resolve_path(self, id: str) -> str:
+        # TODO cache
+        asset_dir, _ = _Utilities.resolve_path(self[id])
+        return asset_dir
+
+    def execute_import_action(self, id: str, target_file: Union[str, None]):
+        _Utilities.execute_import_action(self[id], target_file)
+
+
+ASSETS = AssetRegistry()
+
+
+def initialize_asset_registory():
+    preferences = get_preferences()
+    ASSETS.reload(preferences.asset_jsons_folder)
+
+
+REGISTER_HOOKS.append(initialize_asset_registory)

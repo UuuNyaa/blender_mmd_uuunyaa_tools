@@ -41,7 +41,7 @@ class TunerRegistry:
             self.add(t)
 
     def __del__(self):
-        bpy.utils.previews.remove(self.previews)
+        del self.previews
 
     def __getitem__(self, tuner_id: str) -> TunerABC:
         return self.tuners[tuner_id].tuner

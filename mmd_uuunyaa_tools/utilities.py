@@ -5,6 +5,7 @@
 import hashlib
 import math
 import os
+import re
 
 import bpy
 from typing import TypeVar, Generic
@@ -33,6 +34,35 @@ def to_human_friendly_text(number: float) -> str:
         )
     )
     return f'{number / 10**(3 * prefix_index):.2f}{SI_PREFIXES[prefix_index]}'
+
+
+def get_preferences():
+    return bpy.context.preferences.addons[__package__].preferences
+
+
+def sanitize_path_fragment(path_fragment: str) -> str:
+    illegalRe = r'[\/\?<>\\:\*\|"]'
+    controlRe = r'[\x00-\x1f\x80-\x9f]'
+    reservedRe = r'^\.+$'
+    windowsReservedRe = r'^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$'
+    windowsTrailingRe = r'[\. ]+$'
+
+    return re.sub(
+        windowsTrailingRe, '',
+        re.sub(
+            windowsReservedRe, '',
+            re.sub(
+                reservedRe, '',
+                re.sub(
+                    controlRe, '',
+                    re.sub(
+                        illegalRe, '',
+                        path_fragment
+                    )
+                )
+            )
+        )
+    )
 
 
 class ObjectMarker:

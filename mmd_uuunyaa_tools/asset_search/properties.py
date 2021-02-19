@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+# Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
+# This file is part of MMD UuuNyaa Tools.
+
 from typing import Dict
 
 import bpy
-from mmd_uuunyaa_tools.asset_search import ASSETS, AssetType
+from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetType
 
 
 def update_search_query(property, context):
@@ -22,7 +26,7 @@ def update_search_query(property, context):
         if query_text not in asset.keywords:
             continue
 
-        for tag_name in asset.tags:
+        for tag_name in asset.tag_names:
             tags[tag_name] = query_tags[tag_name].enabled if tag_name in query_tags else False
 
     query.is_updating = True
@@ -51,6 +55,7 @@ class AssetItem(bpy.types.PropertyGroup):
 
 class AssetSearchResult(bpy.types.PropertyGroup):
     count: bpy.props.IntProperty(options={'SKIP_SAVE'})
+    hit_count: bpy.props.IntProperty(options={'SKIP_SAVE'})
     asset_items: bpy.props.CollectionProperty(type=AssetItem, options={'SKIP_SAVE'})
     update_time: bpy.props.IntProperty(options={'SKIP_SAVE'})
 
@@ -68,10 +73,10 @@ class AssetSearchProperties(bpy.types.PropertyGroup):
     query: bpy.props.PointerProperty(type=AssetSearchQuery, options={'SKIP_SAVE'})
     result: bpy.props.PointerProperty(type=AssetSearchResult, options={'SKIP_SAVE'})
 
-    @ staticmethod
+    @staticmethod
     def register():
         bpy.types.Scene.mmd_uuunyaa_tools_asset_search = bpy.props.PointerProperty(type=AssetSearchProperties)
 
-    @ staticmethod
+    @staticmethod
     def unregister():
         del bpy.types.Scene.mmd_uuunyaa_tools_asset_search
