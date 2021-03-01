@@ -21,6 +21,17 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
+      - name: Checkout blender_mmd_assets
+        uses: actions/checkout@v2
+        with:
+          repository: UuuNyaa/blender_mmd_assets
+          path: blender_mmd_assets
+
+      - name: Build asset
+        run: |
+          mkdir mmd_uuunyaa_tools/asset_jsons
+          python blender_mmd_assets/cat_asset_json.py UuuNyaa/blender_mmd_assets "{'state': 'open', 'labels':'Official'}" > mmd_uuunyaa_tools/asset_jsons/official_assets.json
+
       - name: Copy LICENSE file
         run: cp -p LICENSE mmd_uuunyaa_tools/
 
