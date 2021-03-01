@@ -8,6 +8,7 @@ from enum import Enum
 from typing import List, Set, Union
 
 import bpy
+import bpy.utils.previews
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.utilities import to_human_friendly_text, to_int32

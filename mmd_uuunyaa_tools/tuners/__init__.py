@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, NamedTuple
 
 import bpy
+import bpy.utils.previews
 from mmd_uuunyaa_tools import PACKAGE_PATH
 
 
