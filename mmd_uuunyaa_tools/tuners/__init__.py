@@ -41,9 +41,6 @@ class TunerRegistry:
         for t in tuners:
             self.add(t)
 
-    def __del__(self):
-        del self.previews
-
     def __getitem__(self, tuner_id: str) -> TunerABC:
         return self.tuners[tuner_id].tuner
 

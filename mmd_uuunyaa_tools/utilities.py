@@ -65,6 +65,19 @@ def sanitize_path_fragment(path_fragment: str) -> str:
     )
 
 
+def label_multiline(layout, text='', width=0):
+    if text.strip() == '':
+        return
+
+    threshold = int(width / 5.5) if width > 0 else 35
+    for line in text.split('\n'):
+        while len(line) > threshold:
+            space_index = line.rfind(' ', 0, threshold)
+            layout.label(text=line[:space_index])
+            line = line[space_index:].lstrip()
+        layout.label(text=line)
+
+
 class ObjectMarker:
     def __init__(self, mark_id: str):
         self.mark_id = mark_id
