@@ -20,8 +20,8 @@ jobs:
           python-version: '3.x'
 
       - uses: actions/checkout@v2
-          with:
-            lfs: true
+        with:
+          lfs: true
 
       - name: Checkout LFS objects
         run: git lfs checkout
