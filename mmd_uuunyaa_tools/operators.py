@@ -6,6 +6,7 @@ import importlib
 import os
 
 import bpy
+from mmd_uuunyaa_tools.utilities import label_multiline
 
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
@@ -90,9 +91,31 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
         eevee.gi_irradiance_smoothing = 0.50
 
         # Film > Transparent
-        bpy.data.scenes["Scene"].render.film_transparent = self.film_transparent
+        bpy.data.scenes['Scene'].render.film_transparent = self.film_transparent
 
         # Color Management > Look: High Contrast
-        bpy.data.scenes["Scene"].view_settings.look = 'High Contrast'
+        bpy.data.scenes['Scene'].view_settings.look = 'High Contrast'
 
         return {'FINISHED'}
+
+
+class ShowMessageBox(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.show_message_box'
+    bl_label = 'Show Message Box'
+    bl_description = 'Show message box.'
+    bl_options = {'INTERNAL'}
+
+    icon: bpy.props.StringProperty(default='INFO')
+    title: bpy.props.StringProperty(default='')
+    message: bpy.props.StringProperty(default='')
+    width: bpy.props.IntProperty(default=400)
+
+    def execute(self, context):
+        self.report({'INFO'}, message=self.message)
+        return context.window_manager.invoke_popup(self, width=self.width)
+
+    def draw(self, context):
+        layout = self.layout
+        layout.label(text=self.title, icon=self.icon)
+        col = layout.column(align=True)
+        label_multiline(col, text=self.message, width=self.width)

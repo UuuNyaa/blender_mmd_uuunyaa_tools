@@ -8,9 +8,10 @@ from enum import Enum
 from typing import List, Set, Union
 
 import bpy
+import bpy.utils.previews
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
-from mmd_uuunyaa_tools.utilities import to_human_friendly_text, to_int32
+from mmd_uuunyaa_tools.utilities import label_multiline, to_human_friendly_text, to_int32
 
 
 class AssetState(Enum):
@@ -133,19 +134,6 @@ class AssetSearch(bpy.types.Operator):
             )
 
         return {'FINISHED'}
-
-
-def label_multiline(layout, text='', width=0):
-    if text.strip() == '':
-        return
-
-    threshold = int(width / 5.5) if width > 0 else 35
-    for line in text.split('\n'):
-        while len(line) > threshold:
-            space_index = line.rfind(' ', 0, threshold)
-            layout.label(text=line[:space_index])
-            line = line[space_index:].lstrip()
-        layout.label(text=line)
 
 
 class AssetDownload(bpy.types.Operator):

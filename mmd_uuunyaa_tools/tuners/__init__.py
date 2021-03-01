@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, NamedTuple
 
 import bpy
+import bpy.utils.previews
 from mmd_uuunyaa_tools import PACKAGE_PATH
 
 
@@ -39,9 +40,6 @@ class TunerRegistry:
         self.tuners: Dict[str, TunerDescription] = {}
         for t in tuners:
             self.add(t)
-
-    def __del__(self):
-        del self.previews
 
     def __getitem__(self, tuner_id: str) -> TunerABC:
         return self.tuners[tuner_id].tuner

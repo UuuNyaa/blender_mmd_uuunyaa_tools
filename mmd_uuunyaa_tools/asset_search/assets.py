@@ -95,8 +95,11 @@ class _Utilities:
         loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'rarfile', 'rarfile.py'))
         rarfile = loader.load_module(namespace)
 
-        with rarfile.RarFile(rar_file_path) as rar:
-            rar.extractall(path=asset_path, pwd=password)
+        try:
+            with rarfile.RarFile(rar_file_path) as rar:
+                rar.extractall(path=asset_path, pwd=password)
+        except rarfile.RarCannotExec:
+            raise rarfile.RarCannotExec('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.')
 
         _Utilities.write_json(asset)
         _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -251,6 +254,7 @@ class _Utilities:
         tree = ast.parse(asset.import_action)
 
         _Utilities.Visitor().visit(tree)
+
         exec(compile(tree, '<source>', 'exec'), {'__builtins__': {}}, {
             'unzip': functools.partial(_Utilities.unzip, asset=asset),
             'unrar': functools.partial(_Utilities.unrar, asset=asset),
@@ -283,7 +287,7 @@ class AssetRegistry:
 
         for json_path in glob.glob(os.path.join(asset_jsons_folder, '*.json')):
             try:
-                with open(json_path) as f:
+                with open(json_path, encoding='utf-8') as f:
                     for asset in json.load(f)['assets']:
                         self.add(_Utilities.from_dict(asset))
             except:
