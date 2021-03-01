@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+import os
+import traceback
+
 from mmd_uuunyaa_tools import auto_load
 
 bl_info = {
@@ -31,10 +34,29 @@ bl_info = {
     "category": "Object"
 }
 
+PACKAGE_PATH = os.path.dirname(__file__)
+PACKAGE_NAME = __package__
+
+REGISTER_HOOKS = []
+UNREGISTER_HOOKS = []
+
 auto_load.init()
+
 
 def register():
     auto_load.register()
+    for hook in REGISTER_HOOKS:
+        try:
+            hook()
+        except:
+            traceback.print_exc()
+
 
 def unregister():
     auto_load.unregister()
+
+    for hook in UNREGISTER_HOOKS:
+        try:
+            hook()
+        except:
+            traceback.print_exc()

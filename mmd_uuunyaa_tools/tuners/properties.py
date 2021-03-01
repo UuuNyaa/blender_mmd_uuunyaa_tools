@@ -2,23 +2,8 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-import os
-import glob
-
 import bpy
-import bpy.utils.previews
-from mmd_uuunyaa_tools import material_tuner
-from mmd_uuunyaa_tools import lighting_tuner
-
-
-def load_previews():
-    global previews
-    previews = bpy.utils.previews.new()
-    for path in glob.glob(os.path.join(os.path.dirname(__file__), 'thumbnails', '*.png')):
-        previews.load(os.path.basename(path), path, 'IMAGE')
-
-
-load_previews()
+from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
 
 
 def update_lighting_thumbnails(property, context):
@@ -27,20 +12,18 @@ def update_lighting_thumbnails(property, context):
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=lighting_tuner.TUNERS.to_enum_property_items(previews),
+        items=lighting_tuners.TUNERS.to_enum_property_items(),
         description='Choose the lighting you want to use',
         update=update_lighting_thumbnails,
     )
 
-    previous_collection_name: bpy.props.StringProperty()
-
     @staticmethod
     def register():
-        bpy.types.Scene.mmd_uuunyaa_tools_lighting = bpy.props.PointerProperty(type=LightingPropertyGroup)
+        bpy.types.Collection.mmd_uuunyaa_tools_lighting = bpy.props.PointerProperty(type=LightingPropertyGroup)
 
     @staticmethod
     def unregister():
-        del bpy.types.Scene.mmd_uuunyaa_tools_lighting
+        del bpy.types.Collection.mmd_uuunyaa_tools_lighting
 
 
 def update_material_thumbnails(property, context):
@@ -49,7 +32,7 @@ def update_material_thumbnails(property, context):
 
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
     thumbnails: bpy.props.EnumProperty(
-        items=material_tuner.TUNERS.to_enum_property_items(previews),
+        items=material_tuners.TUNERS.to_enum_property_items(),
         description='Choose the material you want to use',
         update=update_material_thumbnails,
     )

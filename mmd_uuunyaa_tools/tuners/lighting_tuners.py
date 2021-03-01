@@ -3,35 +3,45 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import os
-from typing import Dict, Any
+from typing import Any, Dict, Union
 
 import bpy
+from bpy.types import Object
 
-from mmd_uuunyaa_tools.abstract import TunerABC, TunerRegistry
-from mmd_uuunyaa_tools.utilities import ObjectMarker, ObjectAppender
+from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
+from mmd_uuunyaa_tools.utilities import ObjectAppender, ObjectMarker
 
-PATH_BLENDS_UUUNYAA_LIGHTINGS = 'blends/UuuNyaa_Lightings.blend'
+PATH_BLENDS_UUUNYAA_LIGHTINGS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Lightings.blend')
 
 
 class LightingUtilities:
-    def __init__(self, scene):
-        self.scene = scene
+    def __init__(self, collection):
+        self.collection = collection
         self.object_appender = ObjectAppender(
-            'mmd_uuunyaa_tools_lighting',
-            os.path.join(os.path.dirname(__file__), PATH_BLENDS_UUUNYAA_LIGHTINGS)
+            'mmd_uuunyaa_tools_lighting_mark',
+            PATH_BLENDS_UUUNYAA_LIGHTINGS
         )
 
     @property
     def object_marker(self) -> ObjectMarker:
         return self.object_appender
 
+    def find_active_lighting(self) -> Union[Object, None]:
+        for obj in self.collection.objects.values():
+            if obj.type != 'EMPTY' or obj.parent is not None or not self.object_marker.is_marked(obj):
+                continue
+            return obj
+
+        return None
+
 
 class LightingTunerABC(TunerABC, LightingUtilities):
     def reset(self):
-        self.object_appender.remove_objects()
+        self.object_appender.remove_objects(self.collection)
 
     def add_lights(self, name: str):
-        self.object_appender.append_objects_from_collection(name)
+        self.object_appender.append_objects_from_collection(name, self.collection)
 
 
 class ResetLightingTuner(LightingTunerABC):
