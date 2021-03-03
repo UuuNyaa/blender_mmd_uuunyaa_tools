@@ -1,0 +1,1 @@
+copy from https://github.com/UuuNyaa/blender_mmd_assets

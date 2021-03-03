@@ -92,8 +92,8 @@ class AssetSearch(bpy.types.Operator):
         asset_item.id = asset.id
 
         global PREVIEWS
-        if asset.id not in PREVIEWS:
-            PREVIEWS.load(asset.id, content.filepath, 'IMAGE')
+        if asset.thumbnail_url not in PREVIEWS:
+            PREVIEWS.load(asset.thumbnail_url, content.filepath, 'IMAGE')
 
         region.tag_redraw()
 
@@ -185,7 +185,13 @@ class AssetImport(bpy.types.Operator):
 
         asset = ASSETS[self.asset_id]
         content = CONTENT_CACHE.try_get_content(asset.download_url)
-        ASSETS.execute_import_action(asset.id, content.filepath if content is not None else None)
+
+        try:
+            ASSETS.execute_import_action(asset.id, content.filepath if content is not None else None)
+        except Exception as e:
+            if e.__class__.__name__ != 'RarCannotExec':
+                raise e
+            self.report(type={'ERROR'}, message=str(e))
 
         return {'FINISHED'}
 
@@ -264,7 +270,7 @@ class AssetSearchPanel(bpy.types.Panel):
     bl_label = 'UuuNyaa Asset Search'
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'MMD'
+    bl_category = 'Assets'
 
     def draw(self, context):
         search = context.scene.mmd_uuunyaa_tools_asset_search
@@ -310,7 +316,7 @@ class AssetSearchPanel(bpy.types.Panel):
                 icon = 'ERROR'
 
             box = grid.box().column(align=True)
-            box.template_icon(PREVIEWS[asset.id].icon_id, scale=6.0)
+            box.template_icon(PREVIEWS[asset.thumbnail_url].icon_id, scale=6.0)
             box.operator(AssetDetailPopup.bl_idname, text=asset.name, icon=icon).asset_id = asset.id
 
         if search.result.count > len(asset_items):

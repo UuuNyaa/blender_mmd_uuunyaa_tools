@@ -64,7 +64,7 @@ class AssetDescription:
 
 class _Utilities:
     @staticmethod
-    def unzip(zip_file_path, encoding='cp437', password=None, asset=None):
+    def unzip(zip_file_path=None, encoding='cp437', password=None, asset=None):
         asset_path, asset_json = _Utilities.resolve_path(asset)
 
         print(f'unzip({zip_file_path},{asset_path},{asset_json})')
@@ -83,7 +83,7 @@ class _Utilities:
         _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
 
     @staticmethod
-    def unrar(rar_file_path, password=None, asset=None):
+    def unrar(rar_file_path=None, password=None, asset=None):
         asset_path, asset_json = _Utilities.resolve_path(asset)
 
         print(f'unrar({rar_file_path},{asset_path},{asset_json})')
@@ -105,7 +105,7 @@ class _Utilities:
         _Utilities.chmod_recursively(asset_path, stat.S_IWRITE)
 
     @staticmethod
-    def link(from_path, to_name, asset=None):
+    def link(from_path=None, to_name=None, asset=None):
         asset_path, asset_json = _Utilities.resolve_path(asset)
 
         print(f'link({from_path},{to_name},{asset_path},{asset_json})')
@@ -256,10 +256,9 @@ class _Utilities:
         _Utilities.Visitor().visit(tree)
 
         exec(compile(tree, '<source>', 'exec'), {'__builtins__': {}}, {
-            'unzip': functools.partial(_Utilities.unzip, asset=asset),
-            'unrar': functools.partial(_Utilities.unrar, asset=asset),
+            'unzip': functools.partial(_Utilities.unzip, zip_file_path=target_file, asset=asset),
+            'unrar': functools.partial(_Utilities.unrar, rar_file_path=target_file, asset=asset),
             'import_pmx': functools.partial(_Utilities.import_pmx, asset=asset),
-            'file': target_file,
         })
 
 
@@ -285,7 +284,9 @@ class AssetRegistry:
     def reload(self, asset_jsons_folder: str):
         self.assets.clear()
 
-        for json_path in glob.glob(os.path.join(asset_jsons_folder, '*.json')):
+        json_paths = glob.glob(os.path.join(asset_jsons_folder, '*.json'))
+        json_paths.sort()
+        for json_path in json_paths:
             try:
                 with open(json_path, encoding='utf-8') as f:
                     for asset in json.load(f)['assets']:
