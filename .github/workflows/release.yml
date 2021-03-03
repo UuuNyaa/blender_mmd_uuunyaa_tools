@@ -38,7 +38,7 @@ jobs:
       - name: Build asset
         run: |
           mkdir mmd_uuunyaa_tools/asset_jsons
-          python blender_mmd_assets/cat_asset_json.py UuuNyaa/blender_mmd_assets "{'state': 'open', 'labels':'Official'}" > mmd_uuunyaa_tools/asset_jsons/official_assets.json
+          python blender_mmd_assets/cat_asset_json.py UuuNyaa/blender_mmd_assets "{'state': 'open', 'labels':'Official'}" > mmd_uuunyaa_tools/asset_jsons/assets.json
 
       - name: Copy LICENSE file
         run: cp -p LICENSE mmd_uuunyaa_tools/
