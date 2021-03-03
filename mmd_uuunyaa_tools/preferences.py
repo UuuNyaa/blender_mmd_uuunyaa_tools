@@ -9,7 +9,7 @@ import tempfile
 import bpy
 
 from mmd_uuunyaa_tools import utilities
-from mmd_uuunyaa_tools.asset_search.operators import DeleteCachedFiles, ReloadAssetJsons
+from mmd_uuunyaa_tools.asset_search.operators import DeleteCachedFiles, ReloadAssetJsons, UpdateAssetJson
 
 
 class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
@@ -65,7 +65,9 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col = layout.box().column(align=True)
         col.prop(self, 'asset_jsons_folder')
         col.separator()
-        col.operator(ReloadAssetJsons.bl_idname)
+        row = col.row()
+        row.operator(ReloadAssetJsons.bl_idname, icon='FILE_REFRESH')
+        row.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
 
         col = layout.box().column(align=True)
         col.prop(self, 'asset_cache_folder')

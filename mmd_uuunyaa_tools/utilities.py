@@ -8,7 +8,6 @@ import os
 import re
 
 import bpy
-from typing import TypeVar, Generic
 
 
 def to_int32(value: int) -> int:
