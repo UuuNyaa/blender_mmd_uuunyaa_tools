@@ -106,7 +106,7 @@ def to_asset(issue):
             'enhancement',
             'invalid',
             'question',
-        ] and (not label.startswith('type='))
+        ] and ('=' not in label)
     }
 
     types = [
@@ -238,7 +238,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 3:
         query = ast.literal_eval(sys.argv[2])
     else:
-        query = {'state': 'open', 'labels': 'Official'}
+        query = {'state': 'open', 'milestone': 1, 'labels': 'Official'}
 
     session = requests.Session()
     session.auth = (None, token)

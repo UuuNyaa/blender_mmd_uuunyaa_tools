@@ -34,7 +34,7 @@ class UpdateAssetJson(bpy.types.Operator):
     bl_options = {'REGISTER'}
 
     repo: bpy.props.StringProperty(default='UuuNyaa/blender_mmd_assets')
-    query: bpy.props.StringProperty(default="{'state': 'open', 'labels': 'Official'}")
+    query: bpy.props.StringProperty(default="{'state': 'open', 'milestone': 1, 'labels': 'Official'}")
     json: bpy.props.StringProperty(default='assets.json')
 
     def execute(self, context):
