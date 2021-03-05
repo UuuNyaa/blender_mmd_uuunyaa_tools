@@ -142,7 +142,7 @@ def to_asset(issue):
 
 def to_summary_issue(raw_issue):
     return {
-        'url': raw_issue['url'],
+        'url': raw_issue['html_url'],
         'number': raw_issue['number'],
         'title': raw_issue['title'],
         'labels': {label['name']: label['description'] for label in raw_issue['labels']},

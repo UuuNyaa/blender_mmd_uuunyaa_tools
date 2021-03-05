@@ -11,6 +11,7 @@ import bpy
 import bpy.utils.previews
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
+from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
 from mmd_uuunyaa_tools.utilities import label_multiline, to_human_friendly_text, to_int32
 
 
@@ -228,6 +229,11 @@ class AssetDetailPopup(bpy.types.Operator):
         self.asset_name = asset.name
 
         col = layout.column(align=True)
+
+        split = col.split(factor=0.11)
+        split.alignment = 'RIGHT'
+        split.label(text='ID:')
+        split.operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
         draw_titled_label(col, title='Name:', text=asset.name)
         draw_titled_label(col, title='Aliases:', text=', '.join([p for p in asset.aliases.values()]))
         draw_titled_label(col, title='Tags:', text=asset.tags_text())
@@ -335,3 +341,53 @@ class AssetSearchPanel(bpy.types.Panel):
         global PREVIEWS
         if PREVIEWS is not None:
             bpy.utils.previews.remove(PREVIEWS)
+
+
+class AssetsOperatorPanel(bpy.types.Panel):
+    bl_idname = 'UUUNYAA_PT_assets_operator_panel'
+    bl_label = 'UuuNyaa Assets Operator'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Assets'
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw(self, context):
+        layout = self.layout
+
+        col = layout.column()
+        box = col.box().column(align=True)
+        box.label(text='Reload local asset JSON files')
+        box.operator(ReloadAssetJsons.bl_idname, icon='FILE_REFRESH')
+
+        box = col.box().column(align=True)
+        box.label(text='Download and Update to the latest assets')
+        box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
+
+        props = context.scene.mmd_uuunyaa_tools_asset_operator
+
+        row = col.row(align=True)
+        row.prop(
+            props, 'debug_expanded',
+            icon='TRIA_DOWN' if props.debug_expanded else 'TRIA_RIGHT',
+            icon_only=True,
+            emboss=False,
+        )
+        row.label(text='Debug')
+
+        if not props.debug_expanded:
+            return
+
+        box = col.box().column()
+        box.label(text='Fetch an asset for debug')
+        box.column(align=True).prop(props, 'debug_issue_number', text='issue #')
+
+        row = box.row(align=True)
+        row.operator(DeleteDebugAssetJson.bl_idname, icon='X')
+        row.operator(UpdateDebugAssetJson.bl_idname, icon='TRIA_DOWN_BAR').issue_number = props.debug_issue_number
+
+        box = col.box().column()
+        box.label(text='Download and Update to the latest all assets for debug')
+
+        box.prop(props, 'repo', text='Repository')
+        box.prop(props, 'query', text='Query')
+        box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR').query = props.query
