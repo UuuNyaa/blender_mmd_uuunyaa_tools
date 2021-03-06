@@ -90,6 +90,7 @@ class AssetSearchProperties(bpy.types.PropertyGroup):
 class AssetOperatorProperties(bpy.types.PropertyGroup):
     repo: bpy.props.StringProperty(default='UuuNyaa/blender_mmd_assets')
     query: bpy.props.StringProperty(default="{'state': 'open', 'milestone': 1, 'labels': 'Official'}")
+    output_json: bpy.props.StringProperty(default='assets.json')
 
     debug_expanded: bpy.props.BoolProperty(default=False)
     debug_issue_number: bpy.props.IntProperty(default=1)

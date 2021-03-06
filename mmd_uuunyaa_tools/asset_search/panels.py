@@ -378,16 +378,20 @@ class AssetsOperatorPanel(bpy.types.Panel):
             return
 
         box = col.box().column()
-        box.label(text='Fetch an asset for debug')
+        box.label(text='Fetch an asset for debug', icon='MODIFIER')
         box.column(align=True).prop(props, 'debug_issue_number', text='issue #')
 
         row = box.row(align=True)
-        row.operator(DeleteDebugAssetJson.bl_idname, icon='X')
+        row.operator(DeleteDebugAssetJson.bl_idname, icon='CANCEL')
         row.operator(UpdateDebugAssetJson.bl_idname, icon='TRIA_DOWN_BAR').issue_number = props.debug_issue_number
 
         box = col.box().column()
-        box.label(text='Download and Update to the latest all assets for debug')
+        box.label(text='Download and Update to the latest filterd assets for debug', icon='FILTER')
 
         box.prop(props, 'repo', text='Repository')
         box.prop(props, 'query', text='Query')
-        box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR').query = props.query
+        box.prop(props, 'output_json', text='Write to')
+        op = box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
+        op.repo = props.repo
+        op.query = props.query
+        op.output_json = props.output_json

@@ -44,7 +44,7 @@ class UpdateAssetJson(bpy.types.Operator):
 
     repo: bpy.props.StringProperty(default='UuuNyaa/blender_mmd_assets')
     query: bpy.props.StringProperty(default="{'state': 'open', 'milestone': 1, 'labels': 'Official'}")
-    json: bpy.props.StringProperty(default='assets.json')
+    output_json: bpy.props.StringProperty(default='assets.json')
 
     def execute(self, context):
         query = ast.literal_eval(self.query)
@@ -53,7 +53,7 @@ class UpdateAssetJson(bpy.types.Operator):
         session = requests.Session()
         assets = cat_asset_json.wrap_assets(cat_asset_json.fetch_assets(session, self.repo, query))
 
-        with open(os.path.join(PACKAGE_PATH, 'asset_jsons', self.json), mode='wt', encoding='utf-8') as f:
+        with open(os.path.join(PACKAGE_PATH, 'asset_jsons', self.output_json), mode='wt', encoding='utf-8') as f:
             json.dump(assets, f, ensure_ascii=False, indent=2)
 
         return {'FINISHED'}
@@ -67,10 +67,10 @@ class UpdateDebugAssetJson(bpy.types.Operator):
 
     repo: bpy.props.StringProperty(default='UuuNyaa/blender_mmd_assets')
     issue_number: bpy.props.IntProperty()
-    json: bpy.props.StringProperty(default='ZDEBUG.json')
+    output_json: bpy.props.StringProperty(default='ZDEBUG.json')
 
     def execute(self, context):
-        json_path = os.path.join(PACKAGE_PATH, 'asset_jsons', self.json)
+        json_path = os.path.join(PACKAGE_PATH, 'asset_jsons', self.output_json)
 
         cat_asset_json = load_cat_asset_json()
 
@@ -91,13 +91,13 @@ class DeleteDebugAssetJson(bpy.types.Operator):
     bl_description = 'Delete debug asset JSON.'
     bl_options = {'INTERNAL'}
 
-    json: bpy.props.StringProperty(default='ZDEBUG.json')
+    delete_json: bpy.props.StringProperty(default='ZDEBUG.json')
 
     def execute(self, context):
-        json_path = os.path.join(PACKAGE_PATH, 'asset_jsons', self.json)
+        json_path = os.path.join(PACKAGE_PATH, 'asset_jsons', self.delete_json)
 
         if not os.path.exists(json_path):
-            self.report(type={'INFO'}, message=f'{self.json} does not exist.')
+            self.report(type={'INFO'}, message=f'{self.delete_json} does not exist.')
             return {'CANCELLED'}
 
         os.remove(json_path)
