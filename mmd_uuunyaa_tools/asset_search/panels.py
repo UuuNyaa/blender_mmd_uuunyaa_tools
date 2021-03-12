@@ -190,9 +190,12 @@ class AssetImport(bpy.types.Operator):
         try:
             ASSETS.execute_import_action(asset.id, content.filepath if content is not None else None)
         except Exception as e:
-            if e.__class__.__name__ != 'RarCannotExec':
+            if e.__class__.__name__ == 'RarCannotExec':
+                self.report(type={'ERROR'}, message=str(e))
+            elif type(e) is RuntimeError and str(e) == 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
+                self.report(type={'ERROR'}, message='Select an object.\nThe target object for motion import is not selected.')
+            else:
                 raise e
-            self.report(type={'ERROR'}, message=str(e))
 
         return {'FINISHED'}
 
