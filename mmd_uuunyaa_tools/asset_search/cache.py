@@ -82,6 +82,17 @@ class Task:
         self.content_length = 0
 
 
+class URLResolverABC(ABC):
+    @abstractmethod
+    def resolve(self, url: str):
+        pass
+
+
+class URLResolver(URLResolverABC):
+    def resolve(self, url: str):
+        return requests.get(url, stream=True)
+
+
 class CacheABC(ABC):
     @abstractmethod
     def cancel_fetch(self, url: URL):
@@ -108,13 +119,15 @@ class ContentCache(CacheABC):
         max_cache_size_bytes: int = 1024*1024*1024,
         max_workers: int = 10,
         contents_load: bool = True,
-        contents_save_interval_secs: float = 5.0
+        contents_save_interval_secs: float = 5.0,
+        url_resolver: URLResolverABC = URLResolver()
     ):
         print(f'ContentCache.__init__: cache_folder={cache_folder}, temporary_dir={temporary_dir}')
         self.cache_folder: str = cache_folder
         self.max_cache_size_bytes: int = max_cache_size_bytes
         self.temporary_dir = temporary_dir
         self.contents_save_interval_secs = contents_save_interval_secs
+        self.url_resolver = url_resolver
 
         self._lock = threading.RLock()
 
@@ -195,7 +208,7 @@ class ContentCache(CacheABC):
         try:
             temp_fd, temp_path = tempfile.mkstemp(dir=self.temporary_dir)
             with os.fdopen(temp_fd, 'bw') as temp_file:
-                response = requests.get(task.url, stream=True)
+                response = self.url_resolver.resolve(task.url)
                 response.raise_for_status()
 
                 content_type = response.headers.get('Content-Type')
@@ -329,7 +342,7 @@ class ContentCache(CacheABC):
                 return task.future
 
 
-class ReloadableContentCache(CacheABC):
+class ReloadableContentCache(CacheABC, URLResolver):
     _cache: CacheABC = None
 
     def __init__(self):
@@ -356,6 +369,7 @@ class ReloadableContentCache(CacheABC):
             cache_folder=asset_cache_folder,
             max_cache_size_bytes=preferences.asset_max_cache_size*1024*1024,
             temporary_dir=tempfile.mkdtemp(),
+            url_resolver=self
         )
 
     def cancel_fetch(self, url: URL):
@@ -376,6 +390,23 @@ class ReloadableContentCache(CacheABC):
 
         shutil.rmtree(cache_folder, ignore_errors=True)
         self.reload()
+
+    def resolve(self, url: str):
+        if url.startswith('http://tstorage.info/'):
+            return requests.post(
+                url,
+                data={
+                    'op': 'download2',
+                    'id': url[len('http://tstorage.info/'):],
+                    'rand': '',
+                    'referer': '',
+                    'method_free': '',
+                    'method_premium': '',
+                },
+                allow_redirects=True
+            )
+
+        return super().resolve(url)
 
 
 CONTENT_CACHE = ReloadableContentCache()

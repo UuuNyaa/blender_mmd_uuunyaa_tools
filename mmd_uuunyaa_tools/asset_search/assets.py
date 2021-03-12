@@ -25,6 +25,8 @@ from mmd_uuunyaa_tools.utilities import get_preferences
 class AssetType(Enum):
     MODEL_MMD = 'Model (.pmx)'
     MODEL_BLENDER = 'Model (.blend)'
+    MOTION_MMD = 'Motion (.vmd)'
+    POSE_MMD = 'Pose (.vpd)'
     LIGHTING = 'Lighting'
     MATERIAL = 'Material'
 
@@ -131,8 +133,14 @@ class _Utilities:
                 os.chmod(target, os.stat(target).st_mode | mode)
 
     @staticmethod
-    def import_collection(blend_file_path, collection_name, asset_path=None):
+    def import_collection(blend_file_path, collection_name, asset=None):
+        asset_path, _ = _Utilities.resolve_path(asset)
+
         print(f'import_collection({blend_file_path},{collection_name},{asset_path})')
+        bpy.ops.wm.append(
+            directory=f'{os.path.join(asset_path, blend_file_path)}\\Collection\\',
+            filename=collection_name
+        )
 
     @staticmethod
     def import_pmx(pmx_file_path, scale=0.08, asset=None):
@@ -140,6 +148,20 @@ class _Utilities:
 
         print(f'import_pmx({pmx_file_path},{scale},{asset_path})')
         bpy.ops.mmd_tools.import_model('INVOKE_DEFAULT', filepath=os.path.join(asset_path, pmx_file_path), scale=scale)
+
+    @staticmethod
+    def import_vmd(vmd_file_path, scale=0.08, asset=None):
+        asset_path, _ = _Utilities.resolve_path(asset)
+
+        print(f'import_vmd({vmd_file_path},{scale},{asset_path})')
+        bpy.ops.mmd_tools.import_vmd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vmd_file_path), scale=scale)
+
+    @staticmethod
+    def import_vpd(vpd_file_path, scale=0.08, asset=None):
+        asset_path, _ = _Utilities.resolve_path(asset)
+
+        print(f'import_vpd({vpd_file_path},{scale},{asset_path})')
+        bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
 
     class Visitor(ast.NodeVisitor):
         def visit(self, node: ast.AST):
@@ -149,7 +171,7 @@ class _Utilities:
                 raise NotImplementedError(ast.dump(node))
 
             if node_name == 'Call':
-                if node.func.id not in {'unzip', 'unrar', 'import_collection', 'import_pmx'}:
+                if node.func.id not in {'unzip', 'unrar', 'import_collection', 'import_pmx', 'import_vmd'}:
                     raise NotImplementedError(ast.dump(node))
 
             return self.generic_visit(node)
@@ -259,7 +281,10 @@ class _Utilities:
         exec(compile(tree, '<source>', 'exec'), {'__builtins__': {}}, {
             'unzip': functools.partial(_Utilities.unzip, zip_file_path=target_file, asset=asset),
             'unrar': functools.partial(_Utilities.unrar, rar_file_path=target_file, asset=asset),
+            'import_collection': functools.partial(_Utilities.import_collection, asset=asset),
             'import_pmx': functools.partial(_Utilities.import_pmx, asset=asset),
+            'import_vmd': functools.partial(_Utilities.import_vmd, asset=asset),
+            'import_vpd': functools.partial(_Utilities.import_vpd, asset=asset),
         })
 
 
