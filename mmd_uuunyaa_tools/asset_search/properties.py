@@ -65,7 +65,7 @@ class AssetSearchQuery(bpy.types.PropertyGroup):
         update=update_search_query,
         options={'SKIP_SAVE'},
         items=[(t.name, t.value, '') for t in AssetType],
-        default=AssetType.MODEL_MMD.name
+        default=AssetType.ALL.name
     )
     text: bpy.props.StringProperty(update=update_search_query, options={'SKIP_SAVE'})
     is_cached: bpy.props.BoolProperty(update=update_search_query, options={'SKIP_SAVE'})

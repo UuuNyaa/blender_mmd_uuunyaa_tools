@@ -9,7 +9,7 @@ from typing import List, Set, Union
 
 import bpy
 import bpy.utils.previews
-from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription
+from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
 from mmd_uuunyaa_tools.utilities import label_multiline, to_human_friendly_text, to_int32
@@ -113,7 +113,7 @@ class AssetSearch(bpy.types.Operator):
         search_results: List[AssetDescription] = []
         search_results = [
             asset for asset in ASSETS.values() if (
-                query_type == asset.type.name
+                (query_type == AssetType.ALL.name or query_type == asset.type.name)
                 and enabled_tag_count == len(asset.tag_names & enabled_tag_names)
                 and query_text in asset.keywords
                 and (Utilities.is_importable(asset) if query_is_cached else True)
@@ -233,10 +233,17 @@ class AssetDetailPopup(bpy.types.Operator):
 
         col = layout.column(align=True)
 
-        split = col.split(factor=0.11)
+        grid = col.split(factor=0.5)
+        split = grid.split(factor=0.11*2)
+        split.alignment = 'RIGHT'
+        split.label(text='Type:')
+        split.row().label(text=asset.type.value)
+
+        split = grid.split(factor=0.11*2)
         split.alignment = 'RIGHT'
         split.label(text='ID:')
         split.operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
+
         draw_titled_label(col, title='Name:', text=asset.name)
         draw_titled_label(col, title='Aliases:', text=', '.join([p for p in asset.aliases.values()]))
         draw_titled_label(col, title='Tags:', text=asset.tags_text())

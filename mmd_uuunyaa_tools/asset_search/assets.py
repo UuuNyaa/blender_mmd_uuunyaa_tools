@@ -23,6 +23,7 @@ from mmd_uuunyaa_tools.utilities import get_preferences
 
 
 class AssetType(Enum):
+    ALL = 'All'
     MODEL_MMD = 'Model (.pmx)'
     MODEL_BLENDER = 'Model (.blend)'
     MOTION_MMD = 'Motion (.vmd)'
@@ -138,8 +139,10 @@ class _Utilities:
 
         print(f'import_collection({blend_file_path},{collection_name},{asset_path})')
         bpy.ops.wm.append(
-            directory=f'{os.path.join(asset_path, blend_file_path)}\\Collection\\',
-            filename=collection_name
+            # 'INVOKE_DEFAULT',
+            # filepath=os.path.join(asset_path, blend_file_path, 'Collection', collection_name),
+            directory=os.path.join(asset_path, blend_file_path, 'Collection'),
+            filename=collection_name,
         )
 
     @staticmethod

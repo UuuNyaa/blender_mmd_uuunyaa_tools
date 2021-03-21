@@ -13,8 +13,8 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
 from typing import Callable, Dict, List, OrderedDict, Set, Union
 
-import requests
 from mmd_uuunyaa_tools import REGISTER_HOOKS
+from mmd_uuunyaa_tools.asset_search.url_resolvers import URLResolver, URLResolverABC
 from mmd_uuunyaa_tools.utilities import get_preferences, strict_hash
 
 URL = str
@@ -80,17 +80,6 @@ class Task:
         self.content_id = Content.to_content_id(url)
         self.fetched_size = 0
         self.content_length = 0
-
-
-class URLResolverABC(ABC):
-    @abstractmethod
-    def resolve(self, url: str):
-        pass
-
-
-class URLResolver(URLResolverABC):
-    def resolve(self, url: str):
-        return requests.get(url, stream=True)
 
 
 class CacheABC(ABC):
@@ -342,7 +331,7 @@ class ContentCache(CacheABC):
                 return task.future
 
 
-class ReloadableContentCache(CacheABC, URLResolver):
+class ReloadableContentCache(CacheABC):
     _cache: CacheABC = None
 
     def __init__(self):
@@ -368,8 +357,7 @@ class ReloadableContentCache(CacheABC, URLResolver):
         self._cache = ContentCache(
             cache_folder=asset_cache_folder,
             max_cache_size_bytes=preferences.asset_max_cache_size*1024*1024,
-            temporary_dir=tempfile.mkdtemp(),
-            url_resolver=self
+            temporary_dir=tempfile.mkdtemp()
         )
 
     def cancel_fetch(self, url: URL):
@@ -390,23 +378,6 @@ class ReloadableContentCache(CacheABC, URLResolver):
 
         shutil.rmtree(cache_folder, ignore_errors=True)
         self.reload()
-
-    def resolve(self, url: str):
-        if url.startswith('http://tstorage.info/'):
-            return requests.post(
-                url,
-                data={
-                    'op': 'download2',
-                    'id': url[len('http://tstorage.info/'):],
-                    'rand': '',
-                    'referer': '',
-                    'method_free': '',
-                    'method_premium': '',
-                },
-                allow_redirects=True
-            )
-
-        return super().resolve(url)
 
 
 CONTENT_CACHE = ReloadableContentCache()
