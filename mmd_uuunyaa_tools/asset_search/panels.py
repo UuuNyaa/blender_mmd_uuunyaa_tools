@@ -9,6 +9,7 @@ from typing import List, Set, Union
 
 import bpy
 import bpy.utils.previews
+from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
@@ -30,7 +31,7 @@ class Utilities:
         return (
             ASSETS.is_extracted(asset.id)
             or
-            CONTENT_CACHE.try_get_content(asset.download_url) is not None
+            CONTENT_CACHE.try_get_content(asset.download_action) is not None
         )
 
     @staticmethod
@@ -38,7 +39,7 @@ class Utilities:
         if ASSETS.is_extracted(asset.id):
             return (AssetState.EXTRACTED, None, None)
 
-        content = CONTENT_CACHE.try_get_content(asset.download_url)
+        content = CONTENT_CACHE.try_get_content(asset.download_action)
         if content is not None:
             if content.state is Content.State.CACHED:
                 return (AssetState.CACHED, content, None)
@@ -47,7 +48,7 @@ class Utilities:
                 return (AssetState.FAILED, content, None)
 
         else:
-            task = CONTENT_CACHE.try_get_task(asset.download_url)
+            task = CONTENT_CACHE.try_get_task(asset.download_action)
             if task is None:
                 return (AssetState.INITIALIZED, None, None)
 
@@ -150,7 +151,7 @@ class AssetDownload(bpy.types.Operator):
     def execute(self, context):
         print(f'do: {self.bl_idname}, {self.asset_id}')
         asset = ASSETS[self.asset_id]
-        CONTENT_CACHE.async_get_content(asset.download_url, functools.partial(self.__on_fetched, context, asset))
+        CONTENT_CACHE.async_get_content(asset.download_action, functools.partial(self.__on_fetched, context, asset))
         return {'FINISHED'}
 
 
@@ -185,10 +186,10 @@ class AssetImport(bpy.types.Operator):
         print(f'do: {self.bl_idname}')
 
         asset = ASSETS[self.asset_id]
-        content = CONTENT_CACHE.try_get_content(asset.download_url)
+        content = CONTENT_CACHE.try_get_content(asset.download_action)
 
         try:
-            ASSETS.execute_import_action(asset.id, content.filepath if content is not None else None)
+            ImportActionExecutor.execute_import_action(asset, content.filepath if content is not None else None)
         except Exception as e:
             if e.__class__.__name__ == 'RarCannotExec':
                 self.report(type={'ERROR'}, message=str(e))

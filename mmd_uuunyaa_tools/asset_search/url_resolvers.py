@@ -4,6 +4,9 @@
 
 from abc import ABC, abstractmethod
 
+from mmd_uuunyaa_tools.asset_search.actions import DownloadActionExecutor
+
+
 import requests
 
 
@@ -15,19 +18,6 @@ class URLResolverABC(ABC):
 
 class URLResolver(URLResolverABC):
     def resolve(self, url: str) -> requests.models.Response:
-        if url.startswith('http://tstorage.info/'):
-            return requests.post(
-                url,
-                data={
-                    'op': 'download2',
-                    'id': url[len('http://tstorage.info/'):],
-                    'rand': '',
-                    'referer': '',
-                    'method_free': '',
-                    'method_premium': '',
-                },
-                allow_redirects=True,
-                stream=True
-            )
-
-        return requests.get(url, stream=True)
+        if url.startswith('http://') or url.startswith('https://'):
+            return requests.get(url, stream=True)
+        return DownloadActionExecutor.execute_action(url)

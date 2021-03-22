@@ -185,7 +185,7 @@ def fetch_issues(session, repo, query):
 
 def wrap_assets(assets):
     return {
-        'format': 'blender_mmd_assets:2',
+        'format': 'blender_mmd_assets:3',
         'description': 'This file is a release asset of blender_mmd_assets',
         'license': 'CC-BY-4.0 License',
         'created_at': datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ'),
@@ -216,7 +216,7 @@ def fetch_assets(session, repo, query):
 
         if all([
             check('thumbnail_url'),
-            check('download_url'),
+            check('download_action'),
             check('import_action'),
             check('aliases'),
             check('note'),
