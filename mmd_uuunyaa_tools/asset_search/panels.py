@@ -336,10 +336,11 @@ class AssetSearchPanel(bpy.types.Panel):
             box.template_icon(PREVIEWS[asset.thumbnail_url].icon_id, scale=6.0)
             box.operator(AssetDetailPopup.bl_idname, text=asset.name, icon=icon).asset_id = asset.id
 
-        if search.result.count > len(asset_items):
+        loading_count = search.result.count - len(asset_items)
+        if loading_count > 0:
             row = layout.row()
             row.alignment = 'CENTER'
-            row.label(text='Loading...')
+            row.label(text=f"Loading {loading_count} item{'s' if loading_count > 1 else ''}...")
             return
 
     @staticmethod
