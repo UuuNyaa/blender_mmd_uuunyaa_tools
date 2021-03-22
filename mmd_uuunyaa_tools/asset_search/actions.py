@@ -3,10 +3,13 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import ast
+import errno
 import functools
 import importlib
 import os
 import pathlib
+import re
+import shutil
 import stat
 import zipfile
 from typing import List, Union
@@ -37,7 +40,7 @@ class RestrictionChecker(ast.NodeVisitor):
 class DownloadActionExecutor:
     @staticmethod
     def get(url: str) -> requests.models.Response:
-        return requests.get(url, stream=True)
+        return requests.get(url, allow_redirects=True, stream=True)
 
     @staticmethod
     def tstorage(url: str, password: str = None) -> requests.models.Response:
@@ -57,12 +60,24 @@ class DownloadActionExecutor:
         )
 
     @staticmethod
+    def smutbase(url: str) -> requests.models.Response:
+        response = requests.get(url, allow_redirects=True)
+        response.raise_for_status()
+
+        match = re.search(r'<a +href="([^"]+)">Click here if your download does not start within a few seconds.</a>', response.text)
+        if match is None:
+            raise ValueError(f'Failed to download assets from SmutBase. SmutBase response format may have changed.')
+
+        return DownloadActionExecutor.get(match.group(1).replace('&amp;', '&'))
+
+    @staticmethod
     def execute_action(download_action: str):
         tree = ast.parse(download_action)
 
         functions = {
             'get': functools.partial(DownloadActionExecutor.get),
             'tstorage': functools.partial(DownloadActionExecutor.tstorage),
+            'smutbase': functools.partial(DownloadActionExecutor.smutbase),
         }
 
         RestrictionChecker(*(functions.keys())).visit(tree)
@@ -121,15 +136,24 @@ class ImportActionExecutor:
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
 
     @staticmethod
-    def link(from_path=None, to_name=None, asset=None):
+    def link(to_name, from_path=None, asset=None):
         asset_path, asset_json = _Utilities.resolve_path(asset)
 
-        print(f'link({from_path},{to_name},{asset_path},{asset_json})')
+        print(f'link({to_name},{from_path},{asset_path},{asset_json})')
 
         if _Utilities.is_extracted(asset):
             return
 
-        os.link(from_path, os.path.join(asset_path, to_name))
+        to_path = os.path.join(asset_path, to_name)
+
+        os.makedirs(asset_path, exist_ok=True)
+        try:
+            os.link(from_path, to_path)
+        except OSError as e:
+            if e.errno != errno.EXDEV:
+                raise e
+            # Invalid cross-device link
+            shutil.copyfile(from_path, to_path)
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -179,16 +203,37 @@ class ImportActionExecutor:
         bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
 
     @staticmethod
+    def delete_objects(prefix=None, suffix=None, recursive=False):
+        print(f'delete_objects({prefix},{suffix})')
+
+        if prefix is None and suffix is None:
+            return
+
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in bpy.context.view_layer.active_layer_collection.collection.objects:
+            if (prefix is None or obj.name.startswith(prefix)) and (suffix is None or obj.name.endswith(suffix)):
+                obj.select_set(True)
+
+        bpy.ops.object.delete()
+
+        # objects = bpy.data.objects
+        # for obj in bpy.context.view_layer.active_layer_collection.collection.objects:
+        #     if (prefix is None or obj.name.startswith(prefix)) and (suffix is None or obj.name.endswith(suffix)):
+        #         objects.remove(obj, do_unlink=False)
+
+    @staticmethod
     def execute_import_action(asset: AssetDescription, target_file: Union[str, None]):
         tree = ast.parse(asset.import_action)
 
         functions = {
             'unzip': functools.partial(ImportActionExecutor.unzip, zip_file_path=target_file, asset=asset),
             'unrar': functools.partial(ImportActionExecutor.unrar, rar_file_path=target_file, asset=asset),
+            'link': functools.partial(ImportActionExecutor.link, from_path=target_file, asset=asset),
             'import_collection': functools.partial(ImportActionExecutor.import_collection, asset=asset),
             'import_pmx': functools.partial(ImportActionExecutor.import_pmx, asset=asset),
             'import_vmd': functools.partial(ImportActionExecutor.import_vmd, asset=asset),
             'import_vpd': functools.partial(ImportActionExecutor.import_vpd, asset=asset),
+            'delete_objects': functools.partial(ImportActionExecutor.delete_objects),
         }
 
         RestrictionChecker(*(functions.keys())).visit(tree)

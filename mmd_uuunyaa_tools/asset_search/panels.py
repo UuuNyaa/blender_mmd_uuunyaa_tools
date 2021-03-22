@@ -180,7 +180,7 @@ class AssetImport(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return True
+        return bpy.context.mode == 'OBJECT'
 
     def execute(self, context):
         print(f'do: {self.bl_idname}')

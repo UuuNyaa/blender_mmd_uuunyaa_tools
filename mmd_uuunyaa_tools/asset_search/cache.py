@@ -2,6 +2,7 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+import hashlib
 import json
 import os
 import shutil
@@ -15,7 +16,7 @@ from typing import Callable, Dict, List, OrderedDict, Set, Union
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
 from mmd_uuunyaa_tools.asset_search.url_resolvers import URLResolver, URLResolverABC
-from mmd_uuunyaa_tools.utilities import get_preferences, strict_hash
+from mmd_uuunyaa_tools.utilities import get_preferences
 
 URL = str
 Callback = Callable[['Content'], None]
@@ -49,7 +50,7 @@ class Content:
 
     @staticmethod
     def to_content_id(url: URL) -> str:
-        return f'{strict_hash(url) & 0xffffffff:08x}'
+        return hashlib.sha1(url.encode('utf-8')).hexdigest()
 
 
 class Task:
