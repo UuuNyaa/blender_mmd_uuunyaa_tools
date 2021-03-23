@@ -6,6 +6,7 @@ import ast
 import errno
 import functools
 import importlib
+import json
 import os
 import pathlib
 import re
@@ -71,6 +72,33 @@ class DownloadActionExecutor:
         return DownloadActionExecutor.get(match.group(1).replace('&amp;', '&'))
 
     @staticmethod
+    def bowlroll(url: str, password: str = None) -> requests.models.Response:
+        session = requests.Session()
+        response = session.get(url)
+        response.raise_for_status()
+
+        match = re.search(r' data-csrf_token="([^"]+)"', response.text)
+        csrf_token = match.group(1)
+
+        match = re.search(r'<input type="hidden" name="download_key" value="([^"]+)">', response.text)
+        download_key = match.group(1) if password is None else password
+
+        response = session.post(
+            f"{url.replace('/file/','/api/file/')}/download-check",
+            data={
+                'download_key': download_key,
+                'csrf_token': csrf_token,
+            }
+        )
+        response.raise_for_status()
+
+        download_json = json.loads(response.text)
+        if 'url' not in download_json:
+            raise ValueError(f'Failed to download assets from BowlRoll. Incorrect download key.')
+
+        return session.get(download_json['url'], allow_redirects=True)
+
+    @staticmethod
     def execute_action(download_action: str):
         tree = ast.parse(download_action)
 
@@ -78,6 +106,7 @@ class DownloadActionExecutor:
             'get': functools.partial(DownloadActionExecutor.get),
             'tstorage': functools.partial(DownloadActionExecutor.tstorage),
             'smutbase': functools.partial(DownloadActionExecutor.smutbase),
+            'bowlroll': functools.partial(DownloadActionExecutor.bowlroll),
         }
 
         RestrictionChecker(*(functions.keys())).visit(tree)
