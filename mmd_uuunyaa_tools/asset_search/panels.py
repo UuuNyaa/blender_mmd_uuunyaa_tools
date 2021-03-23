@@ -135,6 +135,21 @@ class AssetSearch(bpy.types.Operator):
                 functools.partial(self._on_thumbnail_fetched, context, context.region, update_time, asset)
             )
 
+        tag_names = set()
+        for asset in search_results:
+            tag_names.update(asset.tag_names)
+
+        query.is_updating = True
+        try:
+            query_tags.clear()
+            query.tags_index = 0
+            for tag_name in sorted(tag_names):
+                tag = query_tags.add()
+                tag.name = tag_name
+                tag.enabled = tag_name in enabled_tag_names
+        finally:
+            query.is_updating = False
+
         return {'FINISHED'}
 
 

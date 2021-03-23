@@ -9,36 +9,8 @@ from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetType
 
 
 def update_search_query(property, context):
-    query = context.scene.mmd_uuunyaa_tools_asset_search.query
-    if query.is_updating:
+    if context.scene.mmd_uuunyaa_tools_asset_search.query.is_updating:
         return
-
-    query_type = query.type
-    query_text = query.text.lower()
-    query_tags = query.tags
-
-    tags: Dict[str, bool] = {}
-
-    for asset in ASSETS.values():
-        if query_type != asset.type.name:
-            continue
-
-        if query_text not in asset.keywords:
-            continue
-
-        for tag_name in asset.tag_names:
-            tags[tag_name] = query_tags[tag_name].enabled if tag_name in query_tags else False
-
-    query.is_updating = True
-    try:
-        query_tags.clear()
-        query.tags_index = 0
-        for tag_name in sorted(tags):
-            tag = query_tags.add()
-            tag.name = tag_name
-            tag.enabled = tags[tag_name]
-    finally:
-        query.is_updating = False
 
     bpy.ops.mmd_uuunyaa_tools.asset_search()
 
