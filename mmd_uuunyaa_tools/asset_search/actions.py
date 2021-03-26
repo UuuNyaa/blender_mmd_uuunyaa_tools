@@ -21,6 +21,10 @@ from mmd_uuunyaa_tools import PACKAGE_PATH, REGISTER_HOOKS
 from mmd_uuunyaa_tools.asset_search.assets import AssetDescription, _Utilities
 
 
+class MessageException(Exception):
+    """Class for error with message."""
+
+
 class RestrictionChecker(ast.NodeVisitor):
     def __init__(self, *functions: List[str]):
         self._functions = functions
@@ -159,7 +163,29 @@ class ImportActionExecutor:
             with rarfile.RarFile(rar_file_path) as rar:
                 rar.extractall(path=asset_path, pwd=password)
         except rarfile.RarCannotExec:
-            raise rarfile.RarCannotExec('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.')
+            raise MessageException('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.')
+
+        _Utilities.write_json(asset)
+        ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
+
+    @staticmethod
+    def un7zip(zip_file_path=None, password=None, asset=None):
+        asset_path, asset_json = _Utilities.resolve_path(asset)
+
+        print(f'un7zip({zip_file_path},{asset_path},{asset_json})')
+
+        if _Utilities.is_extracted(asset):
+            return
+
+        namespace = 'x7zipfile'
+        loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'x7zipfile', 'x7zipfile.py'))
+        x7zipfile = loader.load_module(namespace)
+
+        try:
+            with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip:
+                zip.extractall(path=asset_path)
+        except x7zipfile.x7ZipCannotExec:
+            raise MessageException('Failed to execute 7z, 7za or 7zr\nPlease install p7zip or 7-zip and setup the PATH properly.')
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -222,14 +248,24 @@ class ImportActionExecutor:
         asset_path, _ = _Utilities.resolve_path(asset)
 
         print(f'import_vmd({vmd_file_path},{scale},{asset_path})')
-        bpy.ops.mmd_tools.import_vmd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vmd_file_path), scale=scale)
+        try:
+            bpy.ops.mmd_tools.import_vmd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vmd_file_path), scale=scale)
+        except RuntimeError as e:
+            if str(e) != 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
+                raise
+            raise MessageException('Select an object.\nThe target object for motion import is not selected.')
 
     @staticmethod
     def import_vpd(vpd_file_path, scale=0.08, asset=None):
         asset_path, _ = _Utilities.resolve_path(asset)
 
         print(f'import_vpd({vpd_file_path},{scale},{asset_path})')
-        bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
+        try:
+            bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
+        except RuntimeError as e:
+            if str(e) != 'Operator bpy.ops.mmd_tools.import_vpd.poll() failed, context is incorrect':
+                raise
+            raise MessageException('Select an object.\nThe target object for pose import is not selected.')
 
     @staticmethod
     def delete_objects(prefix=None, suffix=None, recursive=False):
@@ -245,17 +281,13 @@ class ImportActionExecutor:
 
         bpy.ops.object.delete()
 
-        # objects = bpy.data.objects
-        # for obj in bpy.context.view_layer.active_layer_collection.collection.objects:
-        #     if (prefix is None or obj.name.startswith(prefix)) and (suffix is None or obj.name.endswith(suffix)):
-        #         objects.remove(obj, do_unlink=False)
-
     @staticmethod
     def execute_import_action(asset: AssetDescription, target_file: Union[str, None]):
         tree = ast.parse(asset.import_action)
 
         functions = {
             'unzip': functools.partial(ImportActionExecutor.unzip, zip_file_path=target_file, asset=asset),
+            'un7zip': functools.partial(ImportActionExecutor.un7zip, zip_file_path=target_file, asset=asset),
             'unrar': functools.partial(ImportActionExecutor.unrar, rar_file_path=target_file, asset=asset),
             'link': functools.partial(ImportActionExecutor.link, from_path=target_file, asset=asset),
             'import_collection': functools.partial(ImportActionExecutor.import_collection, asset=asset),

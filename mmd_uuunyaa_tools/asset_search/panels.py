@@ -9,7 +9,7 @@ from typing import List, Set, Union
 
 import bpy
 import bpy.utils.previews
-from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor
+from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor, MessageException
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
@@ -205,13 +205,8 @@ class AssetImport(bpy.types.Operator):
 
         try:
             ImportActionExecutor.execute_import_action(asset, content.filepath if content is not None else None)
-        except Exception as e:
-            if e.__class__.__name__ == 'RarCannotExec':
-                self.report(type={'ERROR'}, message=str(e))
-            elif type(e) is RuntimeError and str(e) == 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
-                self.report(type={'ERROR'}, message='Select an object.\nThe target object for motion import is not selected.')
-            else:
-                raise e
+        except MessageException as e:
+            self.report(type={'ERROR'}, message=str(e))
 
         return {'FINISHED'}
 

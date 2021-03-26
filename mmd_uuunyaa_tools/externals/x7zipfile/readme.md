@@ -1,0 +1,1 @@
+copy from https://github.com/UuuNyaa/x7zipfile/blob/5701758d39878a23bd0eae9a64cfabf7d1504c15/src/x7zipfile.py
