@@ -205,9 +205,9 @@ class ImportActionExecutor:
         try:
             os.link(from_path, to_path)
         except OSError as e:
+            # Invalid cross-device link
             if e.errno != errno.EXDEV:
                 raise e
-            # Invalid cross-device link
             shutil.copyfile(from_path, to_path)
 
         _Utilities.write_json(asset)
@@ -225,15 +225,15 @@ class ImportActionExecutor:
                 os.chmod(target, os.stat(target).st_mode | mode)
 
     @staticmethod
-    def import_collection(blend_file_path, collection_name, asset=None):
+    def import_collection(blend_file_path, *collection_names, asset=None):
         asset_path, _ = _Utilities.resolve_path(asset)
 
-        print(f'import_collection({blend_file_path},{collection_name},{asset_path})')
+        print(f'import_collection({blend_file_path},{collection_names},{asset_path})')
         bpy.ops.wm.append(
             # 'INVOKE_DEFAULT',
             # filepath=os.path.join(asset_path, blend_file_path, 'Collection', collection_name),
             directory=os.path.join(asset_path, blend_file_path, 'Collection'),
-            filename=collection_name,
+            files=[{'name': name} for name in collection_names],
         )
 
     @staticmethod
@@ -304,6 +304,7 @@ class ImportActionExecutor:
             'unrar': functools.partial(ImportActionExecutor.unrar, rar_file_path=target_file, asset=asset),
             'link': functools.partial(ImportActionExecutor.link, from_path=target_file, asset=asset),
             'import_collection': functools.partial(ImportActionExecutor.import_collection, asset=asset),
+            'import_collections': functools.partial(ImportActionExecutor.import_collection, asset=asset),
             'import_pmx': functools.partial(ImportActionExecutor.import_pmx, asset=asset),
             'import_vmd': functools.partial(ImportActionExecutor.import_vmd, asset=asset),
             'import_vpd': functools.partial(ImportActionExecutor.import_vpd, asset=asset),
