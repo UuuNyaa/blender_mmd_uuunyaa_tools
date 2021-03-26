@@ -241,7 +241,12 @@ class ImportActionExecutor:
         asset_path, _ = _Utilities.resolve_path(asset)
 
         print(f'import_pmx({pmx_file_path},{scale},{asset_path})')
-        bpy.ops.mmd_tools.import_model('INVOKE_DEFAULT', filepath=os.path.join(asset_path, pmx_file_path), scale=scale)
+        try:
+            bpy.ops.mmd_tools.import_model('INVOKE_DEFAULT', filepath=os.path.join(asset_path, pmx_file_path), scale=scale)
+        except AttributeError as e:
+            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_model" error, could not be found':
+                raise
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
 
     @staticmethod
     def import_vmd(vmd_file_path, scale=0.08, asset=None):
@@ -250,6 +255,10 @@ class ImportActionExecutor:
         print(f'import_vmd({vmd_file_path},{scale},{asset_path})')
         try:
             bpy.ops.mmd_tools.import_vmd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vmd_file_path), scale=scale)
+        except AttributeError as e:
+            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_vmd" error, could not be found':
+                raise
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
         except RuntimeError as e:
             if str(e) != 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
                 raise
@@ -262,6 +271,10 @@ class ImportActionExecutor:
         print(f'import_vpd({vpd_file_path},{scale},{asset_path})')
         try:
             bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
+        except AttributeError as e:
+            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_vpd" error, could not be found':
+                raise
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
         except RuntimeError as e:
             if str(e) != 'Operator bpy.ops.mmd_tools.import_vpd.poll() failed, context is incorrect':
                 raise
