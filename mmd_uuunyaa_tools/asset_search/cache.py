@@ -202,7 +202,8 @@ class ContentCache(CacheABC):
                 response.raise_for_status()
 
                 content_type = response.headers.get('Content-Type')
-                content_length = int(response.headers.get('Content-Length'))
+                content_length_text = response.headers.get('Content-Length')
+                content_length = int(content_length_text) if content_length_text else 0
                 fetch_size = 0
 
                 with self._lock:

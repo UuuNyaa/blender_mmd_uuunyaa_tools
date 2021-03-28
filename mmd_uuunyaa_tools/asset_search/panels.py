@@ -234,6 +234,12 @@ class AssetDetailPopup(bpy.types.Operator):
 
         layout = self.layout
 
+        def draw_title(layout, title, factor=0.11):
+            split = layout.split(factor=factor)
+            split.alignment = 'RIGHT'
+            split.label(text=title)
+            return split.row()
+
         def draw_titled_label(layout, title, text, split_factor=0.11):
             split = layout.split(factor=split_factor)
             split.alignment = 'RIGHT'
@@ -245,15 +251,8 @@ class AssetDetailPopup(bpy.types.Operator):
         col = layout.column(align=True)
 
         grid = col.split(factor=0.5)
-        split = grid.split(factor=0.11*2)
-        split.alignment = 'RIGHT'
-        split.label(text='Type:')
-        split.row().label(text=asset.type.value)
-
-        split = grid.split(factor=0.11*2)
-        split.alignment = 'RIGHT'
-        split.label(text='ID:')
-        split.operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
+        draw_title(grid, 'Type:', factor=0.11*2).label(text=asset.type.value)
+        draw_title(grid, 'ID:', factor=0.11*2).operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
 
         draw_titled_label(col, title='Name:', text=asset.name)
         draw_titled_label(col, title='Aliases:', text=', '.join([p for p in asset.aliases.values()]))
@@ -271,11 +270,17 @@ class AssetDetailPopup(bpy.types.Operator):
             layout.operator(AssetDownloadCancel.bl_idname, text='Cancel', icon='CANCEL').asset_id = asset.id
 
         elif asset_state is AssetState.CACHED:
-            draw_titled_label(col, title='Cache:', text=f'{content.filepath}\n{to_human_friendly_text(content.length)}B   ({content.type})')
+            draw_title(layout, 'Cache:').label(text=f'{to_human_friendly_text(content.length)}B   ({content.type})')
+            draw_title(layout, 'Path:').operator(
+                'wm.path_open',
+                text=content.filepath,
+                icon='FILEBROWSER'
+            ).filepath = content.filepath
             layout.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
 
         elif asset_state is AssetState.EXTRACTED:
-            draw_titled_label(col, title='Path:', text=f'{Utilities.resolve_path(asset)}')
+            asset_path = Utilities.resolve_path(asset)
+            draw_title(layout, 'Path:').operator('wm.path_open', text=asset_path, icon='FILEBROWSER').filepath = asset_path
             layout.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
 
         elif asset_state is AssetState.FAILED:
@@ -413,7 +418,7 @@ class AssetsOperatorPanel(bpy.types.Panel):
         box.prop(props, 'repo', text='Repository')
         box.prop(props, 'query', text='Query')
         box.prop(props, 'output_json', text='Write to')
-        op = box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
+        op = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')
         op.repo = props.repo
         op.query = props.query
         op.output_json = props.output_json

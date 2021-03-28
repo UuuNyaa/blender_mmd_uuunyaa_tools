@@ -12,6 +12,7 @@ import pathlib
 import re
 import shutil
 import stat
+import urllib
 import zipfile
 from typing import List, Union
 
@@ -103,6 +104,35 @@ class DownloadActionExecutor:
         return session.get(download_json['url'], allow_redirects=True)
 
     @staticmethod
+    def gdrive(url: str) -> requests.models.Response:
+        parsed = urllib.parse.urlparse(url)
+
+        match = re.match(r'^/file/d/(.*?)/view$', parsed.path)
+        if match:
+            file_id = match.groups()[0]
+        else:
+            query = urllib.parse.parse_qs(parsed.query)
+            if 'id' in query and parsed.hostname == 'drive.google.com':
+                file_id = query['id'][0]
+            else:
+                raise ValueError(f'Failed to download assets from BowlRoll. Incorrect download key.')
+
+        download_url = urllib.parse.urljoin(url, '/uc')
+
+        session = requests.Session()
+        response = session.get(download_url, params={'id': file_id}, stream=True)
+        warning = [value for key, value in response.cookies.items() if key.startswith('download_warning')]
+
+        if len(warning) == 0:
+            return response
+
+        return session.get(
+            download_url,
+            params={'id': file_id, 'confirm': warning[0]},
+            stream=True
+        )
+
+    @staticmethod
     def execute_action(download_action: str):
         tree = ast.parse(download_action)
 
@@ -111,6 +141,7 @@ class DownloadActionExecutor:
             'tstorage': functools.partial(DownloadActionExecutor.tstorage),
             'smutbase': functools.partial(DownloadActionExecutor.smutbase),
             'bowlroll': functools.partial(DownloadActionExecutor.bowlroll),
+            'gdrive': functools.partial(DownloadActionExecutor.gdrive),
         }
 
         RestrictionChecker(*(functions.keys())).visit(tree)
@@ -185,7 +216,7 @@ class ImportActionExecutor:
             with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip:
                 zip.extractall(path=asset_path)
         except x7zipfile.x7ZipCannotExec:
-            raise MessageException('Failed to execute 7z, 7za or 7zr\nPlease install p7zip or 7-zip and setup the PATH properly.')
+            raise MessageException('Failed to execute 7z\nPlease install p7zip-full or 7-zip and setup the PATH properly.')
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -225,10 +256,10 @@ class ImportActionExecutor:
                 os.chmod(target, os.stat(target).st_mode | mode)
 
     @staticmethod
-    def import_collection(blend_file_path, *collection_names, asset=None):
+    def import_collections(blend_file_path, *collection_names, asset=None):
         asset_path, _ = _Utilities.resolve_path(asset)
 
-        print(f'import_collection({blend_file_path},{collection_names},{asset_path})')
+        print(f'import_collections({blend_file_path},{collection_names},{asset_path})')
         bpy.ops.wm.append(
             # 'INVOKE_DEFAULT',
             # filepath=os.path.join(asset_path, blend_file_path, 'Collection', collection_name),
@@ -303,8 +334,7 @@ class ImportActionExecutor:
             'un7zip': functools.partial(ImportActionExecutor.un7zip, zip_file_path=target_file, asset=asset),
             'unrar': functools.partial(ImportActionExecutor.unrar, rar_file_path=target_file, asset=asset),
             'link': functools.partial(ImportActionExecutor.link, from_path=target_file, asset=asset),
-            'import_collection': functools.partial(ImportActionExecutor.import_collection, asset=asset),
-            'import_collections': functools.partial(ImportActionExecutor.import_collection, asset=asset),
+            'import_collections': functools.partial(ImportActionExecutor.import_collections, asset=asset),
             'import_pmx': functools.partial(ImportActionExecutor.import_pmx, asset=asset),
             'import_vmd': functools.partial(ImportActionExecutor.import_vmd, asset=asset),
             'import_vpd': functools.partial(ImportActionExecutor.import_vpd, asset=asset),
