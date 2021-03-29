@@ -260,6 +260,8 @@ class AssetDetailPopup(bpy.types.Operator):
         draw_titled_label(col, title='Updated at:', text=asset.updated_at.strftime('%Y-%m-%d %H:%M:%S %Z'))
         draw_titled_label(col, title='Note:', text=asset.note)
 
+        draw_title(col, 'Source:').operator('wm.url_open', text=asset.source_url, icon='URL').url = asset.source_url
+
         (asset_state, content, task) = Utilities.get_asset_state(asset)
 
         if asset_state is AssetState.INITIALIZED:

@@ -216,6 +216,7 @@ def fetch_assets(session, repo, query):
 
         if all([
             check('thumbnail_url'),
+            check('source_url'),
             check('download_action'),
             check('import_action'),
             check('aliases'),

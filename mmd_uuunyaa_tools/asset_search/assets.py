@@ -34,6 +34,7 @@ class AssetDescription:
         tags: Dict[str, str],
         updated_at: datetime,
         thumbnail_url: str,
+        source_url: str,
         download_action: str,
         import_action: str,
         aliases: Dict[str, str],
@@ -46,6 +47,7 @@ class AssetDescription:
         self.tags = tags
         self.updated_at = updated_at
         self.thumbnail_url = thumbnail_url
+        self.source_url = source_url
         self.download_action = download_action
         self.import_action = import_action
         self.aliases = aliases
@@ -69,6 +71,7 @@ class _Utilities:
             'tags': asset.tags,
             'updated_at': asset.updated_at,
             'thumbnail_url': asset.thumbnail_url,
+            'source_url': asset.source_url,
             'download_action': asset.download_action,
             'import_action': asset.import_action,
             'aliases': asset.aliases,
@@ -85,6 +88,7 @@ class _Utilities:
             tags=asset['tags'],
             updated_at=datetime.strptime(asset['updated_at'], '%Y-%m-%dT%H:%M:%S%z').replace(tzinfo=timezone.utc).astimezone(tz=None),
             thumbnail_url=asset['thumbnail_url'],
+            source_url=asset['source_url'],
             download_action=asset['download_action'],
             import_action=asset['import_action'],
             aliases=asset['aliases'],
