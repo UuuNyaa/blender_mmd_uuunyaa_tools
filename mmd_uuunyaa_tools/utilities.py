@@ -3,6 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import hashlib
+import importlib
 import math
 import os
 import re
@@ -62,6 +63,14 @@ def sanitize_path_fragment(path_fragment: str) -> str:
             )
         )
     )
+
+
+def is_mmd_tools_installed() -> bool:
+    return importlib.find_loader('mmd_tools')
+
+
+def import_mmd_tools():
+    return importlib.import_module('mmd_tools')
 
 
 def label_multiline(layout, text='', width=0):

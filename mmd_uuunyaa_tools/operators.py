@@ -2,11 +2,12 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-import importlib
 import os
+import re
 
 import bpy
-from mmd_uuunyaa_tools.utilities import label_multiline
+
+from mmd_uuunyaa_tools.utilities import import_mmd_tools, is_mmd_tools_installed, label_multiline
 
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
@@ -19,11 +20,11 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
     def poll(cls, context):
         return (
             next((x for x in context.selected_objects if x.type == 'MESH'), None)
-            and importlib.find_loader('mmd_tools')
+            and is_mmd_tools_installed()
         )
 
     def execute(self, context):
-        mmd_tools = importlib.import_module('mmd_tools')
+        mmd_tools = import_mmd_tools()
         for obj in (x for x in context.selected_objects if x.type == 'MESH'):
             mmd_tools.cycles_converter.convertToCyclesShader(obj, use_principled=True, clean_nodes=True)
 
@@ -119,3 +120,129 @@ class ShowMessageBox(bpy.types.Operator):
         layout.label(text=self.title, icon=self.icon)
         col = layout.column(align=True)
         label_multiline(col, text=self.message, width=self.width)
+
+
+class SelectRelatedObjects(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.select_related_objects'
+    bl_label = 'Select Related Objects'
+    bl_description = 'Select related objects.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    type_to_name_func = {
+        'RIGID_BODY': lambda o: o.mmd_rigid.name_j,
+        'JOINT': lambda o: o.mmd_joint.name_j,
+    }
+
+    @classmethod
+    def poll(cls, context):
+        for obj in context.selected_objects:
+            if obj.mmd_type in {'RIGID_BODY', 'JOINT'}:
+                return True
+        return False
+
+    def execute(self, context):
+        mmd_model = import_mmd_tools().core.model.Model
+
+        origin_objects = set(context.selected_objects)
+        while origin_objects:
+            origin_object = origin_objects.pop()
+            origin_type = origin_object.mmd_type
+            if origin_type == 'NONE':
+                continue
+
+            to_name = self.type_to_name_func[origin_type]
+
+            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', to_name(origin_object))
+            if match is None:
+                continue
+
+            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+
+            root = mmd_model.findRoot(origin_object)
+
+            for obj in context.view_layer.objects:
+                if obj.mmd_type != origin_type:
+                    continue
+
+                if mmd_model.findRoot(obj) != root:
+                    continue
+
+                if re.match(pattern, to_name(obj)) is None:
+                    continue
+
+                if obj in origin_objects:
+                    origin_objects.remove(obj)
+                else:
+                    obj.select_set(True)
+
+        return {'FINISHED'}
+
+
+class SelectRelatedBones(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.select_related_bones'
+    bl_label = 'Select Related Bones'
+    bl_description = 'Select related bones.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == 'EDIT_ARMATURE'
+
+    def execute(self, context):
+        origin_editable_bones = set(context.selected_editable_bones)
+
+        while origin_editable_bones:
+            origin_editable_bone = origin_editable_bones.pop()
+            armature = origin_editable_bone.id_data
+
+            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', origin_editable_bone.name)
+            if match is None:
+                continue
+
+            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+
+            for bone in armature.edit_bones:
+                if re.match(pattern, bone.name) is None:
+                    continue
+
+                if bone in origin_editable_bones:
+                    origin_editable_bones.remove(bone)
+                else:
+                    bone.select = True
+
+        return {'FINISHED'}
+
+
+class SelectRelatedPoseBones(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.select_related_pose_bones'
+    bl_label = 'Select Related Pose Bones'
+    bl_description = 'Select related pose bones.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == 'POSE'
+
+    def execute(self, context):
+        origin_pose_bones = set(context.selected_pose_bones)
+
+        while origin_pose_bones:
+            origin_pose_bone = origin_pose_bones.pop()
+            armature = origin_pose_bone.id_data
+
+            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', origin_pose_bone.name)
+            if match is None:
+                continue
+
+            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+
+            for pose_bone in armature.pose.bones:
+                if re.match(pattern, pose_bone.name) is None:
+                    continue
+
+                if pose_bone in origin_pose_bones:
+                    origin_pose_bones.remove(pose_bone)
+                else:
+                    pose_bone.bone.select = True
+
+        return {'FINISHED'}
