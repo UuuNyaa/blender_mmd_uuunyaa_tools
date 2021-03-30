@@ -67,14 +67,15 @@ class DownloadActionExecutor:
 
     @staticmethod
     def smutbase(url: str) -> requests.models.Response:
-        response = requests.get(url, allow_redirects=True)
+        session = requests.Session()
+        response = session.get(url, allow_redirects=True)
         response.raise_for_status()
 
         match = re.search(r'<a +href="([^"]+)">Click here if your download does not start within a few seconds.</a>', response.text)
         if match is None:
             raise ValueError(f'Failed to download assets from SmutBase. SmutBase response format may have changed.')
 
-        return DownloadActionExecutor.get(match.group(1).replace('&amp;', '&'))
+        return session.get(match.group(1).replace('&amp;', '&'), stream=True)
 
     @staticmethod
     def bowlroll(url: str, password: str = None) -> requests.models.Response:
@@ -115,12 +116,14 @@ class DownloadActionExecutor:
             if 'id' in query and parsed.hostname == 'drive.google.com':
                 file_id = query['id'][0]
             else:
-                raise ValueError(f'Failed to download assets from BowlRoll. Incorrect download key.')
+                raise ValueError(f'Failed to download assets from Google Drive. Incorrect download key.')
 
         download_url = urllib.parse.urljoin(url, '/uc')
 
         session = requests.Session()
         response = session.get(download_url, params={'id': file_id}, stream=True)
+        response.raise_for_status()
+
         warning = [value for key, value in response.cookies.items() if key.startswith('download_warning')]
 
         if len(warning) == 0:
@@ -133,6 +136,30 @@ class DownloadActionExecutor:
         )
 
     @staticmethod
+    def uploader(url: str, password=None) -> requests.models.Response:
+        error_message = 'Failed to download assets from uploader.jp. uploader.jp response format may have changed.'
+        session = requests.Session()
+
+        if password is None:
+            response = session.get(url)
+        else:
+            response = session.post(url, data={'password': password})
+        response.raise_for_status()
+
+        match = re.search(r'<input +type="hidden" +name="token" value="([^"]+)" ', response.text)
+        if match is None:
+            raise ValueError(error_message)
+
+        response = session.post(url, data={'token': match.group(1)})
+        response.raise_for_status()
+
+        match = re.search(r'<a +href="([^"]+)"[^>]*>Download Now</a>', response.text)
+        if match is None:
+            raise ValueError(error_message)
+
+        return session.get(match.group(1).replace('&#45;', '-'), stream=True)
+
+    @staticmethod
     def execute_action(download_action: str):
         tree = ast.parse(download_action)
 
@@ -142,6 +169,7 @@ class DownloadActionExecutor:
             'smutbase': functools.partial(DownloadActionExecutor.smutbase),
             'bowlroll': functools.partial(DownloadActionExecutor.bowlroll),
             'gdrive': functools.partial(DownloadActionExecutor.gdrive),
+            'uploader': functools.partial(DownloadActionExecutor.uploader),
         }
 
         RestrictionChecker(*(functions.keys())).visit(tree)
