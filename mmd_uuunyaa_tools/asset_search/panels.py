@@ -320,7 +320,14 @@ class AssetSearchPanel(bpy.types.Panel):
             row = row.row()
             row.alignment = 'RIGHT'
             row.prop(query, 'is_cached', text='Cached')
-            col.template_list(AssetSearchQueryTags.bl_idname, '', query, 'tags', query, 'tags_index', type='GRID', columns=3, rows=2)
+            col.template_list(
+                AssetSearchQueryTags.bl_idname, '',
+                query, 'tags',
+                query, 'tags_index',
+                type='GRID',
+                columns=max(1, int(context.region.width / 250)),
+                rows=2
+            )
             row = col.row()
 
         row = layout.row()
