@@ -4,67 +4,57 @@
 
 import bpy
 
-from mmd_uuunyaa_tools.operators import SelectRelatedBones, SelectRelatedObjects, SelectRelatedPoseBones
+from mmd_uuunyaa_tools.operators import SelectRelatedBones, SelectRelatedObjects, SelectRelatedPoseBones, RemoveUnusedVertexGroups
 
 
-class ObjectSelectMenu(bpy.types.Menu):
-    bl_idname = "VIEW3D_MT_mmd_uuunyaa_tools_select_object"
-    bl_label = "MMD UuuNyaa"
+class SelectRelatedObjectsMenu(bpy.types.Menu):
+    bl_idname = 'VIEW3D_MT_mmd_uuunyaa_tools_select_related_objects'
+    bl_label = 'MMD UuuNyaa'
 
     def draw(self, context):
-        layout = self.layout
-        layout.operator(SelectRelatedObjects.bl_idname)
+        pass
 
     @staticmethod
-    def object_menu_func(this, context):
-        this.layout.menu(ObjectSelectMenu.bl_idname)
+    def draw_object_menu(this, context):
+        this.layout.operator(SelectRelatedObjects.bl_idname)
+
+    @staticmethod
+    def draw_bone_menu(this, context):
+        this.layout.operator(SelectRelatedBones.bl_idname)
+
+    @staticmethod
+    def draw_pose_bone_menu(this, context):
+        this.layout.operator(SelectRelatedPoseBones.bl_idname)
 
     @staticmethod
     def register():
-        bpy.types.VIEW3D_MT_select_object.append(ObjectSelectMenu.object_menu_func)
+        bpy.types.VIEW3D_MT_select_object.append(SelectRelatedObjectsMenu.draw_object_menu)
+        bpy.types.VIEW3D_MT_select_edit_armature.append(SelectRelatedObjectsMenu.draw_bone_menu)
+        bpy.types.VIEW3D_MT_select_pose.append(SelectRelatedObjectsMenu.draw_pose_bone_menu)
 
     @staticmethod
     def unregister():
-        bpy.types.VIEW3D_MT_select_object.remove(ObjectSelectMenu.object_menu_func)
+        bpy.types.VIEW3D_MT_select_pose.remove(SelectRelatedObjectsMenu.draw_pose_bone_menu)
+        bpy.types.VIEW3D_MT_select_edit_armature.remove(SelectRelatedObjectsMenu.draw_bone_menu)
+        bpy.types.VIEW3D_MT_select_object.remove(SelectRelatedObjectsMenu.draw_object_menu)
 
 
-class BoneSelectMenu(bpy.types.Menu):
-    bl_idname = "VIEW3D_MT_mmd_uuunyaa_tools_select_bone"
-    bl_label = "MMD UuuNyaa"
+class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
+    bl_idname = 'VGROUP_MT_mmd_uuunyaa_tools_remove_unused_vertex_groups'
+    bl_label = 'MMD UuuNyaa'
 
     def draw(self, context):
-        layout = self.layout
-        layout.operator(SelectRelatedBones.bl_idname)
+        pass
 
     @staticmethod
-    def bone_menu_func(this, context):
-        this.layout.menu(BoneSelectMenu.bl_idname)
+    def draw_menu(this, context):
+        this.layout.operator_context = 'INVOKE_DEFAULT'
+        this.layout.operator(RemoveUnusedVertexGroups.bl_idname)
 
     @staticmethod
     def register():
-        bpy.types.VIEW3D_MT_select_edit_armature.append(BoneSelectMenu.bone_menu_func)
+        bpy.types.MESH_MT_vertex_group_context_menu.append(RemoveUnusedVertexGroupsMenu.draw_menu)
 
     @staticmethod
     def unregister():
-        bpy.types.VIEW3D_MT_select_edit_armature.remove(BoneSelectMenu.bone_menu_func)
-
-
-class PoseBoneSelectMenu(bpy.types.Menu):
-    bl_idname = "VIEW3D_MT_mmd_uuunyaa_tools_select_pose_bone"
-    bl_label = "MMD UuuNyaa"
-
-    def draw(self, context):
-        layout = self.layout
-        layout.operator(SelectRelatedPoseBones.bl_idname)
-
-    @staticmethod
-    def pose_bone_menu_func(this, context):
-        this.layout.menu(PoseBoneSelectMenu.bl_idname)
-
-    @staticmethod
-    def register():
-        bpy.types.VIEW3D_MT_select_pose.append(PoseBoneSelectMenu.pose_bone_menu_func)
-
-    @staticmethod
-    def unregister():
-        bpy.types.VIEW3D_MT_select_pose.remove(PoseBoneSelectMenu.pose_bone_menu_func)
+        bpy.types.MESH_MT_vertex_group_context_menu.remove(RemoveUnusedVertexGroupsMenu.draw_menu)

@@ -246,3 +246,60 @@ class SelectRelatedPoseBones(bpy.types.Operator):
                     pose_bone.bone.select = True
 
         return {'FINISHED'}
+
+
+class RemoveUnusedVertexGroups(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.remove_unused_vertex_groups'
+    bl_label = 'Remove Unused Vertex Groups'
+    bl_description = 'Remove unused vertex groups from the active meshes'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    weight_threshold: bpy.props.FloatProperty(name='Weight Threshold', default=0.0, min=0.0, max=1.0)
+
+    def invoke(self, context, event):
+        wm = context.window_manager
+        return wm.invoke_props_dialog(self)
+
+    def execute(self, context):
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                continue
+
+            used_vertex_group_indices = set()
+
+            # Used groups from weight paint
+            for vertices in obj.data.vertices:
+                for vertex_group in vertices.groups:
+                    if vertex_group.weight < self.weight_threshold:
+                        continue
+
+                    vertex_group_indices = vertex_group.group
+                    used_vertex_group_indices.add(vertex_group_indices)
+
+            # Used groups from modifiers
+            for modifier in obj.modifiers:
+                vertex_group = getattr(modifier, 'vertex_group', None)
+                if not vertex_group:
+                    continue
+
+                vertex_group_index = obj.vertex_groups[vertex_group].index
+                used_vertex_group_indices.add(vertex_group_index)
+
+            # Used groups from shape keys
+            if obj.data.shape_keys:
+                for key_block in obj.data.shape_keys.key_blocks:
+                    if not key_block.vertex_group:
+                        continue
+
+                    vertex_group = obj.vertex_groups.get(key_block.vertex_group)
+                    if not vertex_group:
+                        continue
+
+                    used_vertex_group_indices.add(vertex_group.index)
+
+            for vertex_group in list(reversed(obj.vertex_groups)):
+                if vertex_group.index in used_vertex_group_indices:
+                    continue
+                obj.vertex_groups.remove(vertex_group)
+
+        return {'FINISHED'}
