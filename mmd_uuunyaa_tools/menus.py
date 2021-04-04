@@ -48,7 +48,6 @@ class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
 
     @staticmethod
     def draw_menu(this, context):
-        this.layout.operator_context = 'INVOKE_DEFAULT'
         this.layout.operator(RemoveUnusedVertexGroups.bl_idname)
 
     @staticmethod

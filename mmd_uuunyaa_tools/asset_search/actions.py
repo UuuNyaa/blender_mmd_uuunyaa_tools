@@ -102,7 +102,7 @@ class DownloadActionExecutor:
         if 'url' not in download_json:
             raise ValueError(f'Failed to download assets from BowlRoll. Incorrect download key.')
 
-        return session.get(download_json['url'], allow_redirects=True)
+        return session.get(download_json['url'], stream=True)
 
     @staticmethod
     def gdrive(url: str) -> requests.models.Response:
