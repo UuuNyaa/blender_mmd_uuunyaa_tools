@@ -3,6 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import math
+from dataclasses import dataclass
+from enum import Enum
 from typing import Callable, Dict, Iterable, List, Tuple, Union
 
 import bpy
@@ -10,81 +12,48 @@ import rna_prop_ui
 from mathutils import Vector
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
-metarig_mmd_tail_bone_names: Dict[str, str] = {
-    'shoulder.L': '肩.L',
-    'shoulder.R': '肩.R',
-    'forearm.L': '手捩.L',
-    'forearm.R': '手捩.R',
-    'hand.L': '手首.L',
-    'hand.R': '手首.R',
-    'thumb.01.L': '親指０.L',
-    'thumb.01.R': '親指０.R',
-    'thumb.02.L': '親指１.L',
-    'thumb.02.R': '親指１.R',
-    'thumb.03.L': '親指２.L',
-    'thumb.03.R': '親指２.R',
-    'f_index.01.L': '人指１.L',
-    'f_index.01.R': '人指１.R',
-    'f_index.02.L': '人指２.L',
-    'f_index.02.R': '人指２.R',
-    'f_index.03.L': '人指３.L',
-    'f_index.03.R': '人指３.R',
-    'f_middle.01.L': '中指１.L',
-    'f_middle.01.R': '中指１.R',
-    'f_middle.02.L': '中指２.L',
-    'f_middle.02.R': '中指２.R',
-    'f_middle.03.L': '中指３.L',
-    'f_middle.03.R': '中指３.R',
-    'f_ring.01.L': '薬指１.L',
-    'f_ring.01.R': '薬指１.R',
-    'f_ring.02.L': '薬指２.L',
-    'f_ring.02.R': '薬指２.R',
-    'f_ring.03.L': '薬指３.L',
-    'f_ring.03.R': '薬指３.R',
-    'f_pinky.01.L': '小指１.L',
-    'f_pinky.01.R': '小指１.R',
-    'f_pinky.02.L': '小指２.L',
-    'f_pinky.02.R': '小指２.R',
-    'f_pinky.03.L': '小指３.L',
-    'f_pinky.03.R': '小指３.R',
-    'thigh.L': '足.L',
-    'thigh.R': '足.R',
-    'shin.L': 'ひざ.L',
-    'shin.R': 'ひざ.R',
-    'foot.L': '足首.L',
-    'foot.R': '足首.R',
-    'toe.L': 'つま先.L',
-    'toe.R': 'つま先.R',
-    'spine.001': '上半身',
-    'spine.003': '上半身2',
-    'spine.005': '首',
-    'spine.006': '頭',
-}
+
+@dataclass
+class MMDRigifyBone:
+
+    class BindType(Enum):
+        COPY_PARENT = 0,
+        COPY_LOCAL = 1,
+        COPY_SPINE = 2,
+
+    class GroupType(Enum):
+        TORSO = 'torso',
+        ARM_L = 'arm_l',
+        ARM_R = 'arm_R',
+        LEG_L = 'arm_l',
+        LEG_R = 'arm_R',
+
+    mmd_name: str
+    metarig_name: str
+    rigify_name: str
+
+    bind_type: BindType
 
 
-metarig_mmd_head_bone_names: Dict[str, str] = {
-    'shoulder.L': '肩.L',
-    'shoulder.R': '肩.R',
-    'upper_arm.L': '腕.L',
-    'upper_arm.R': '腕.R',
-    'forearm.L': 'ひじ.L',
-    'forearm.R': 'ひじ.R',
-    'thumb.01.L': '親指０.L',
-    'thumb.01.R': '親指０.R',
-    'f_index.01.L': '人指１.L',
-    'f_index.01.R': '人指１.R',
-    'f_middle.01.L': '中指１.L',
-    'f_middle.01.R': '中指１.R',
-    'f_ring.01.L': '薬指１.L',
-    'f_ring.01.R': '薬指１.R',
-    'f_pinky.01.L': '小指１.L',
-    'f_pinky.01.R': '小指１.R',
-    'thigh.L': '足.L',
-    'thigh.R': '足.R',
-    'face': '頭',
-}
+"""
+MCH-eyes_parent
+    eyes
+        eye.L
+        eye.R
+ORG-spine.006
+    ORG-face
+        master_eye.L
+            MCH-eye.L
+                ORG-eye.L
+            MCH-eye.L.001
+        master_eye.R
+            MCH-eye.R
+                ORG-eye.R
+            MCH-eye.R.001
+"""
 
 
+# TODO merge with bind_bone_mapping
 pose_bone_mapping: Dict[str, str] = {
     'root': '全ての親',
     'center': 'センター',
@@ -267,63 +236,110 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         def to_bone_center(bone: bpy.types.EditBone) -> Vector:
             return to_center(bone.head, bone.tail)
 
-        for bone_name in metarig_mmd_head_bone_names.keys():
-            mmd_bone = mmd_bones[metarig_mmd_head_bone_names[bone_name]]
-            metarig_bones[bone_name].head = mmd_bone.head
-
-        for bone_name in metarig_mmd_tail_bone_names.keys():
-            mmd_bone = mmd_bones[metarig_mmd_tail_bone_names[bone_name]]
-            metarig_bones[bone_name].tail = mmd_bone.tail
-
+        metarig_bones['spine.001'].tail = mmd_bones['上半身'].tail
+        metarig_bones['spine.002'].tail = to_bone_center(mmd_bones['上半身2'])
+        metarig_bones['spine.003'].tail = mmd_bones['上半身2'].tail
         metarig_bones['spine.004'].tail = to_bone_center(mmd_bones['首'])
         metarig_bones['spine.004'].head = mmd_bones['首'].head
-        metarig_bones['spine'].tail = mmd_bones['下半身'].head
-        metarig_bones['spine.002'].tail = to_bone_center(mmd_bones['上半身2'])
+        metarig_bones['spine.005'].tail = mmd_bones['首'].tail
+        metarig_bones['spine.006'].tail = mmd_bones['頭'].tail
+
+        metarig_bones['face'].head = mmd_bones['頭'].head
         metarig_bones['face'].tail = to_bone_center(mmd_bones['頭'])
 
-        下半身_tail = mmd_bones['下半身'].tail
-        metarig_bones['spine'].head = 下半身_tail
-        metarig_bones['pelvis.L'].head = 下半身_tail
-        metarig_bones['pelvis.R'].head = 下半身_tail
-        metarig_bones['pelvis.L'].tail[1:3] = [下半身_tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
-        metarig_bones['pelvis.R'].tail[1:3] = [下半身_tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
+        metarig_bones['shoulder.L'].head = mmd_bones['肩.L'].head
+        metarig_bones['shoulder.L'].tail = mmd_bones['肩.L'].tail
+        metarig_bones['shoulder.R'].head = mmd_bones['肩.R'].head
+        metarig_bones['shoulder.R'].tail = mmd_bones['肩.R'].tail
+        metarig_bones['upper_arm.L'].head = mmd_bones['腕.L'].head
+        metarig_bones['upper_arm.R'].head = mmd_bones['腕.R'].head
+        metarig_bones['forearm.L'].head = mmd_bones['ひじ.L'].head
+        metarig_bones['forearm.L'].tail = mmd_bones['手捩.L'].tail
+        metarig_bones['forearm.R'].head = mmd_bones['ひじ.R'].head
+        metarig_bones['forearm.R'].tail = mmd_bones['手捩.R'].tail
 
-        ひざ_L_length = mmd_bones['ひざ.L'].length
-        metarig_bones['heel.02.L'].tail = mmd_bones['ひざ.L'].tail + Vector([+ひざ_L_length / 6, +ひざ_L_length / 8, +0.0])
-        metarig_bones['heel.02.L'].head = mmd_bones['ひざ.L'].tail + Vector([-ひざ_L_length / 6, +ひざ_L_length / 8, +0.0])
-
-        ひざ_R_length = mmd_bones['ひざ.R'].length
-        metarig_bones['heel.02.R'].tail = mmd_bones['ひざ.R'].tail + Vector([-ひざ_R_length / 6, +ひざ_R_length / 8, +0.0])
-        metarig_bones['heel.02.R'].head = mmd_bones['ひざ.R'].tail + Vector([+ひざ_R_length / 6, +ひざ_R_length / 8, +0.0])
-
-        # tail
+        metarig_bones['hand.L'].tail = mmd_bones['手首.L'].tail
+        metarig_bones['hand.R'].tail = mmd_bones['手首.R'].tail
+        metarig_bones['thumb.01.L'].head = mmd_bones['親指０.L'].head
+        metarig_bones['thumb.01.L'].tail = mmd_bones['親指０.L'].tail
+        metarig_bones['thumb.01.R'].head = mmd_bones['親指０.R'].head
+        metarig_bones['thumb.01.R'].tail = mmd_bones['親指０.R'].tail
+        metarig_bones['thumb.02.L'].tail = mmd_bones['親指１.L'].tail
+        metarig_bones['thumb.02.R'].tail = mmd_bones['親指１.R'].tail
+        metarig_bones['thumb.03.L'].tail = mmd_bones['親指２.L'].tail
+        metarig_bones['thumb.03.R'].tail = mmd_bones['親指２.R'].tail
+        metarig_bones['palm.01.L'].head = to_center(mmd_bones['人指１.L'].head, mmd_bones['手捩.L'].tail)
         metarig_bones['palm.01.L'].tail = mmd_bones['人指１.L'].head
-        metarig_bones['palm.02.L'].tail = mmd_bones['中指１.L'].head
-        metarig_bones['palm.03.L'].tail = mmd_bones['薬指１.L'].head
-        metarig_bones['palm.04.L'].tail = mmd_bones['小指１.L'].head
+        metarig_bones['palm.01.R'].head = to_center(mmd_bones['人指１.R'].head, mmd_bones['手捩.R'].tail)
         metarig_bones['palm.01.R'].tail = mmd_bones['人指１.R'].head
+        metarig_bones['f_index.01.L'].head = mmd_bones['人指１.L'].head
+        metarig_bones['f_index.01.L'].tail = mmd_bones['人指１.L'].tail
+        metarig_bones['f_index.01.R'].head = mmd_bones['人指１.R'].head
+        metarig_bones['f_index.01.R'].tail = mmd_bones['人指１.R'].tail
+        metarig_bones['f_index.02.L'].tail = mmd_bones['人指２.L'].tail
+        metarig_bones['f_index.02.R'].tail = mmd_bones['人指２.R'].tail
+        metarig_bones['f_index.03.L'].tail = mmd_bones['人指３.L'].tail
+        metarig_bones['f_index.03.R'].tail = mmd_bones['人指３.R'].tail
+        metarig_bones['palm.02.L'].head = to_center(mmd_bones['中指１.L'].head, mmd_bones['手捩.L'].tail)
+        metarig_bones['palm.02.L'].tail = mmd_bones['中指１.L'].head
+        metarig_bones['palm.02.R'].head = to_center(mmd_bones['中指１.R'].head, mmd_bones['手捩.R'].tail)
         metarig_bones['palm.02.R'].tail = mmd_bones['中指１.R'].head
+        metarig_bones['f_middle.01.L'].head = mmd_bones['中指１.L'].head
+        metarig_bones['f_middle.01.L'].tail = mmd_bones['中指１.L'].tail
+        metarig_bones['f_middle.01.R'].head = mmd_bones['中指１.R'].head
+        metarig_bones['f_middle.01.R'].tail = mmd_bones['中指１.R'].tail
+        metarig_bones['f_middle.02.L'].tail = mmd_bones['中指２.L'].tail
+        metarig_bones['f_middle.02.R'].tail = mmd_bones['中指２.R'].tail
+        metarig_bones['f_middle.03.L'].tail = mmd_bones['中指３.L'].tail
+        metarig_bones['f_middle.03.R'].tail = mmd_bones['中指３.R'].tail
+        metarig_bones['palm.03.L'].head = to_center(mmd_bones['薬指１.L'].head, mmd_bones['手捩.L'].tail)
+        metarig_bones['palm.03.L'].tail = mmd_bones['薬指１.L'].head
+        metarig_bones['palm.03.R'].head = to_center(mmd_bones['薬指１.R'].head, mmd_bones['手捩.R'].tail)
         metarig_bones['palm.03.R'].tail = mmd_bones['薬指１.R'].head
+        metarig_bones['f_ring.01.L'].head = mmd_bones['薬指１.L'].head
+        metarig_bones['f_ring.01.L'].tail = mmd_bones['薬指１.L'].tail
+        metarig_bones['f_ring.01.R'].head = mmd_bones['薬指１.R'].head
+        metarig_bones['f_ring.01.R'].tail = mmd_bones['薬指１.R'].tail
+        metarig_bones['f_ring.02.L'].tail = mmd_bones['薬指２.L'].tail
+        metarig_bones['f_ring.02.R'].tail = mmd_bones['薬指２.R'].tail
+        metarig_bones['f_ring.03.L'].tail = mmd_bones['薬指３.L'].tail
+        metarig_bones['f_ring.03.R'].tail = mmd_bones['薬指３.R'].tail
+        metarig_bones['palm.04.L'].head = to_center(mmd_bones['小指１.L'].head, mmd_bones['手捩.L'].tail)
+        metarig_bones['palm.04.L'].tail = mmd_bones['小指１.L'].head
+        metarig_bones['palm.04.R'].head = to_center(mmd_bones['小指１.R'].head, mmd_bones['手捩.R'].tail)
         metarig_bones['palm.04.R'].tail = mmd_bones['小指１.R'].head
+        metarig_bones['f_pinky.01.L'].head = mmd_bones['小指１.L'].head
+        metarig_bones['f_pinky.01.L'].tail = mmd_bones['小指１.L'].tail
+        metarig_bones['f_pinky.01.R'].head = mmd_bones['小指１.R'].head
+        metarig_bones['f_pinky.01.R'].tail = mmd_bones['小指１.R'].tail
+        metarig_bones['f_pinky.02.L'].tail = mmd_bones['小指２.L'].tail
+        metarig_bones['f_pinky.02.R'].tail = mmd_bones['小指２.R'].tail
+        metarig_bones['f_pinky.03.L'].tail = mmd_bones['小指３.L'].tail
+        metarig_bones['f_pinky.03.R'].tail = mmd_bones['小指３.R'].tail
 
-        足首_L = mmd_bones['足首.L']
-        metarig_bones['toe.L'].tail = 足首_L.tail + Vector([+0.0, -足首_L.length / 2, +0.0])
+        metarig_bones['spine'].head = mmd_bones['下半身'].tail
+        metarig_bones['spine'].tail = mmd_bones['下半身'].head
+        metarig_bones['pelvis.L'].head = mmd_bones['下半身'].tail
+        metarig_bones['pelvis.R'].head = mmd_bones['下半身'].tail
+        metarig_bones['pelvis.L'].tail[1:3] = [mmd_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
+        metarig_bones['pelvis.R'].tail[1:3] = [mmd_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
 
-        足首_R = mmd_bones['足首.R']
-        metarig_bones['toe.R'].tail = 足首_R.tail + Vector([+0.0, -足首_R.length / 2, +0.0])
-
-        # head
-        手捩_L_tail = mmd_bones['手捩.L'].tail
-        metarig_bones['palm.01.L'].head = to_center(mmd_bones['人指１.L'].head, 手捩_L_tail)
-        metarig_bones['palm.02.L'].head = to_center(mmd_bones['中指１.L'].head, 手捩_L_tail)
-        metarig_bones['palm.03.L'].head = to_center(mmd_bones['薬指１.L'].head, 手捩_L_tail)
-        metarig_bones['palm.04.L'].head = to_center(mmd_bones['小指１.L'].head, 手捩_L_tail)
-
-        手捩_R_tail = mmd_bones['手捩.R'].tail
-        metarig_bones['palm.01.R'].head = to_center(mmd_bones['人指１.R'].head, 手捩_R_tail)
-        metarig_bones['palm.02.R'].head = to_center(mmd_bones['中指１.R'].head, 手捩_R_tail)
-        metarig_bones['palm.03.R'].head = to_center(mmd_bones['薬指１.R'].head, 手捩_R_tail)
-        metarig_bones['palm.04.R'].head = to_center(mmd_bones['小指１.R'].head, 手捩_R_tail)
+        metarig_bones['thigh.L'].head = mmd_bones['足.L'].head
+        metarig_bones['thigh.L'].tail = mmd_bones['足.L'].tail
+        metarig_bones['thigh.R'].head = mmd_bones['足.R'].head
+        metarig_bones['thigh.R'].tail = mmd_bones['足.R'].tail
+        metarig_bones['shin.L'].tail = mmd_bones['ひざ.L'].tail
+        metarig_bones['shin.R'].tail = mmd_bones['ひざ.R'].tail
+        metarig_bones['foot.L'].tail = mmd_bones['足首.L'].tail
+        metarig_bones['foot.R'].tail = mmd_bones['足首.R'].tail
+        metarig_bones['heel.02.L'].tail = mmd_bones['ひざ.L'].tail + Vector([+mmd_bones['ひざ.L'].length / 6, +mmd_bones['ひざ.L'].length / 8, +0.0])
+        metarig_bones['heel.02.L'].head = mmd_bones['ひざ.L'].tail + Vector([-mmd_bones['ひざ.L'].length / 6, +mmd_bones['ひざ.L'].length / 8, +0.0])
+        metarig_bones['heel.02.R'].tail = mmd_bones['ひざ.R'].tail + Vector([-mmd_bones['ひざ.R'].length / 6, +mmd_bones['ひざ.R'].length / 8, +0.0])
+        metarig_bones['heel.02.R'].head = mmd_bones['ひざ.R'].tail + Vector([+mmd_bones['ひざ.R'].length / 6, +mmd_bones['ひざ.R'].length / 8, +0.0])
+        metarig_bones['toe.L'].tail = mmd_bones['足首.L'].tail + Vector([+0.0, -mmd_bones['足首.L'].length / 2, +0.0])
+        metarig_bones['toe.R'].tail = mmd_bones['足首.R'].tail + Vector([+0.0, -mmd_bones['足首.R'].length / 2, +0.0])
+        metarig_bones['toe.L'].tail = mmd_bones['つま先.L'].tail
+        metarig_bones['toe.R'].tail = mmd_bones['つま先.R'].tail
 
         # fix straight finger bend problem
         # https://blenderartists.org/t/rigify-fingers-issue/1218987
@@ -576,6 +592,9 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         mmd_object: Union[bpy.types.Object, None] = None
 
         for obj in objects:
+            if obj.type != 'ARMATURE':
+                continue
+
             if 'rig_id' in obj.data:
                 rigify_object = obj
                 continue
@@ -623,8 +642,8 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         """Imitate the behavior of MMD armature as much as possible."""
         pose_bones = rigify_armature_object.pose.bones
 
-        pose_bones["upper_arm_parent.L"]["IK_FK"] = 1.000
-        pose_bones["upper_arm_parent.R"]["IK_FK"] = 1.000
+        pose_bones["upper_arm_parent.L"]["IK_FK"] = 0.000
+        pose_bones["upper_arm_parent.R"]["IK_FK"] = 0.000
         pose_bones['upper_arm_parent.L']['IK_Stretch'] = 0.000
         pose_bones['upper_arm_parent.R']['IK_Stretch'] = 0.000
 
@@ -672,7 +691,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
             rna_prop_ui.rna_idprop_ui_create(
                 torso_pose_bone,
                 influence_prop_name,
-                default=0.000,
+                default=1.000,
                 min=0.000, max=1.000,
                 soft_min=None, soft_max=None,
                 description=None,
@@ -688,6 +707,9 @@ class MMDRigifyIntegrate(bpy.types.Operator):
             for constraint in mmd_pose_bone.constraints:
                 if constraint.name.startswith('mmd_rigify_'):
                     mmd_pose_bone.constraints.remove(constraint)
+
+                elif constraint.name == 'IK' and constraint.type == 'IK':
+                    constraint.influence = 0.000
 
             edit(rigify_armature_object, mmd_pose_bones, mmd_name, org_name, f'pose.bones["torso"]["{influence_prop_name}"]')
 
@@ -716,6 +738,10 @@ class MMDRigifyIntegrate(bpy.types.Operator):
                 continue
             mmd_bones[mmd_name].layers[23] = True
 
+    def set_view_layers(self, rigify_armature_object: bpy.types.Object):
+        rig_armature: bpy.types.Armature = rigify_armature_object.data
+        rig_armature.layers = [i in {3, 5, 7, 10, 13, 16, 28} for i in range(32)]
+
     def execute(self, context: bpy.types.Context):
         rigify_armature_object, mmd_armature_object = self.find_armature_objects(bpy.context.selected_objects)
 
@@ -730,6 +756,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         bpy.ops.object.mode_set(mode='OBJECT')
         self.change_mmd_bone_layer(mmd_armature_object)
+        self.set_view_layers(rigify_armature_object)
 
         return {'FINISHED'}
 
@@ -742,7 +769,7 @@ class OperatorPanel(bpy.types.Panel):
     bl_category = 'Item'
     bl_context = ''
 
-    @ classmethod
+    @classmethod
     def poll(cls, context):
         if not context.object:
             return False
