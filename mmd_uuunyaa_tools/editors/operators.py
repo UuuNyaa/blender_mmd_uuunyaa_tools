@@ -5,7 +5,7 @@
 import math
 from dataclasses import dataclass
 from enum import Enum
-from typing import Callable, Dict, Iterable, List, Tuple, Union
+from typing import Callable, Dict, Iterable, List, Set, Tuple, Union
 
 import bpy
 import rna_prop_ui
@@ -13,26 +13,320 @@ from mathutils import Vector
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
 
+class BoneType(Enum):
+    STANDARD = '標準'
+    PARENT = '全ての親'
+    UPPER_ARM_TWIST = '腕捩れ'
+    LOWER_ARM_TWIST = '手捩れ'
+    UPPER_BODY_2 = '上半身２'
+    GROOVE = 'グルーブ'
+    WAIST_HIP_CONTROL = '腰'
+    LEG_IK_PARENT = '足IK親'
+    CONTROL = '操作中心'
+    TOE_EX = '足先EX'
+    HAND_ACCESSORIES = '手持ちアクセサリ用ダミー'
+    SHOULDER_CANCEL = '肩キャンセル'
+    THUMB_0 = '親指０'
+    OTHERS = 'その他・独自'
+
+
+class GroupType(Enum):
+    NONE = 'none'
+    TORSO = 'torso'
+    ARM_L = 'arm_l'
+    ARM_R = 'arm_R'
+    LEG_L = 'leg_l'
+    LEG_R = 'leg_R'
+
+
+class BindType(Enum):
+    NONE = 0
+    COPY_POSE = 1
+    COPY_PARENT = 2
+    COPY_LOCAL = 3
+    COPY_SPINE = 4
+    COPY_TOE = 5
+
+
 @dataclass
 class MMDRigifyBone:
 
-    class BindType(Enum):
-        COPY_PARENT = 0,
-        COPY_LOCAL = 1,
-        COPY_SPINE = 2,
+    bone_type: BoneType
+    mmd_bone_name: str
 
-    class GroupType(Enum):
-        TORSO = 'torso',
-        ARM_L = 'arm_l',
-        ARM_R = 'arm_R',
-        LEG_L = 'arm_l',
-        LEG_R = 'arm_R',
+    pose_bone_name: str
+    bind_bone_name: str
 
-    mmd_name: str
-    metarig_name: str
-    rigify_name: str
-
+    group_type: GroupType
     bind_type: BindType
+
+
+mmd_rigify_bones = [
+    MMDRigifyBone(BoneType.PARENT, '全ての親', 'root', 'root', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, 'センター', 'center', 'center', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.GROOVE, 'グルーブ', 'groove', 'groove', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '上半身', 'torso', 'ORG-spine.001', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.UPPER_BODY_2, '上半身2', 'chest', 'ORG-spine.002', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '首', 'neck', 'ORG-spine.005', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '頭', 'head', 'ORG-spine.006', GroupType.TORSO, BindType.COPY_PARENT),
+
+    MMDRigifyBone(BoneType.STANDARD, '左肩', 'shoulder.L', 'ORG-shoulder.L', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '左腕', 'upper_arm_fk.L', 'ORG-upper_arm.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左ひじ', 'forearm_fk.L', 'ORG-forearm.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左手首', 'hand_fk.L', 'ORG-hand.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.THUMB_0, '左親指０', 'thumb.01.L', 'ORG-thumb.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左親指１', 'thumb.02.L', 'ORG-thumb.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左親指２', 'thumb.03.L', 'ORG-thumb.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '左人指０', None, 'ORG-palm.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左人指１', 'f_index.01.L', 'ORG-f_index.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左人指２', 'f_index.02.L', 'ORG-f_index.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左人指３', 'f_index.03.L', 'ORG-f_index.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '左中指０', None, 'ORG-palm.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左中指１', 'f_middle.01.L', 'ORG-f_middle.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左中指２', 'f_middle.02.L', 'ORG-f_middle.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左中指３', 'f_middle.03.L', 'ORG-f_middle.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '左薬指０', None, 'ORG-palm.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左薬指１', 'f_ring.01.L', 'ORG-f_ring.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左薬指２', 'f_ring.02.L', 'ORG-f_ring.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左薬指３', 'f_ring.03.L', 'ORG-f_ring.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '左小指０', None, 'ORG-palm.04.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左小指１', 'f_pinky.01.L', 'ORG-f_pinky.01.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左小指２', 'f_pinky.02.L', 'ORG-f_pinky.02.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左小指３', 'f_pinky.03.L', 'ORG-f_pinky.03.L', GroupType.ARM_L, BindType.COPY_LOCAL),
+
+
+    MMDRigifyBone(BoneType.STANDARD, '右肩', 'shoulder.R', 'ORG-shoulder.R', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '右腕', 'upper_arm_fk.R', 'ORG-upper_arm.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右ひじ', 'forearm_fk.R', 'ORG-forearm.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右手首', 'hand_fk.R', 'ORG-hand.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.THUMB_0, '右親指０', 'thumb.01.R', 'ORG-thumb.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右親指１', 'thumb.02.R', 'ORG-thumb.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右親指２', 'thumb.03.R', 'ORG-thumb.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '右人指０', None, 'ORG-palm.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右人指１', 'f_index.01.R', 'ORG-f_index.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右人指２', 'f_index.02.R', 'ORG-f_index.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右人指３', 'f_index.03.R', 'ORG-f_index.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '右中指０', None, 'ORG-palm.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右中指１', 'f_middle.01.R', 'ORG-f_middle.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右中指２', 'f_middle.02.R', 'ORG-f_middle.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右中指３', 'f_middle.03.R', 'ORG-f_middle.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '右薬指０', None, 'ORG-palm.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右薬指１', 'f_ring.01.R', 'ORG-f_ring.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右薬指２', 'f_ring.02.R', 'ORG-f_ring.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右薬指３', 'f_ring.03.R', 'ORG-f_ring.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.OTHERS, '右小指０', None, 'ORG-palm.04.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右小指１', 'f_pinky.01.R', 'ORG-f_pinky.01.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右小指２', 'f_pinky.02.R', 'ORG-f_pinky.02.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右小指３', 'f_pinky.03.R', 'ORG-f_pinky.03.R', GroupType.ARM_R, BindType.COPY_LOCAL),
+
+    MMDRigifyBone(BoneType.STANDARD, '下半身', 'spine_fk', 'ORG-spine', GroupType.TORSO, BindType.COPY_SPINE),
+
+    MMDRigifyBone(BoneType.STANDARD, '左足', 'thigh_fk.L', 'ORG-thigh.L', GroupType.LEG_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左ひざ', 'shin_fk.L', 'ORG-shin.L', GroupType.LEG_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左足首', 'foot_fk.L', 'ORG-foot.L', GroupType.LEG_L, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '左足ＩＫ', 'foot_ik.L', 'ORG-foot.L', GroupType.LEG_L, BindType.COPY_POSE),
+    MMDRigifyBone(BoneType.TOE_EX, '左足先EX', None, 'ORG-toe.L', GroupType.LEG_L, BindType.COPY_TOE),
+
+    MMDRigifyBone(BoneType.STANDARD, '右足', 'thigh_fk.R', 'ORG-thigh.R', GroupType.LEG_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右ひざ', 'shin_fk.R', 'ORG-shin.R', GroupType.LEG_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右足首', 'foot_fk.R', 'ORG-foot.R', GroupType.LEG_R, BindType.COPY_LOCAL),
+    MMDRigifyBone(BoneType.STANDARD, '右足ＩＫ', 'foot_ik.R', 'ORG-foot.R', GroupType.LEG_R, BindType.COPY_POSE),
+    MMDRigifyBone(BoneType.TOE_EX, '右足先EX', None, 'ORG-toe.R', GroupType.LEG_R, BindType.COPY_TOE),
+
+
+    MMDRigifyBone(BoneType.STANDARD, '左つま先ＩＫ', 'toe.L', None, GroupType.LEG_L, BindType.NONE),
+    MMDRigifyBone(BoneType.STANDARD, '右つま先ＩＫ', 'toe.R', None, GroupType.LEG_R, BindType.NONE),
+    MMDRigifyBone(BoneType.STANDARD, '左つま先', None, None, GroupType.LEG_L, BindType.NONE),
+    MMDRigifyBone(BoneType.STANDARD, '右つま先', None, None, GroupType.LEG_R, BindType.NONE),
+
+
+    MMDRigifyBone(BoneType.SHOULDER_CANCEL, '左肩C', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.SHOULDER_CANCEL, '左肩P', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.SHOULDER_CANCEL, '右肩C', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.SHOULDER_CANCEL, '右肩P', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.HAND_ACCESSORIES, '左ダミー', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.HAND_ACCESSORIES, '右ダミー', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.LEG_IK_PARENT, '左足IK親', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.LEG_IK_PARENT, '右足IK親', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.LOWER_ARM_TWIST, '左手捩', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.LOWER_ARM_TWIST, '右手捩', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.UPPER_ARM_TWIST, '左腕捩', None, None, GroupType.NONE, BindType.NONE),
+    MMDRigifyBone(BoneType.UPPER_ARM_TWIST, '右腕捩', None, None, GroupType.NONE, BindType.NONE),
+]
+
+RigifyArmaturePoseBones = Dict[str, bpy.types.PoseBone]
+RigifyArmatureEditBones = Dict[str, bpy.types.EditBone]
+MMDArmatureBones = Dict[str, bpy.types.Bone]
+MMDArmaturePoseBones = Dict[str, bpy.types.PoseBone]
+MMDArmatureEditBones = Dict[str, bpy.types.EditBone]
+
+
+group_type2prop_names: Dict[GroupType, str] = {
+    GroupType.TORSO: 'mmd_rigify_torso_bind_influence',
+    GroupType.ARM_L: 'mmd_rigify_arm_l_bind_influence',
+    GroupType.ARM_R: 'mmd_rigify_arm_r_bind_influence',
+    GroupType.LEG_L: 'mmd_rigify_leg_l_bind_influence',
+    GroupType.LEG_R: 'mmd_rigify_leg_r_bind_influence',
+}
+
+
+def add_influence_driver(constraint: bpy.types.Constraint, target, data_path, invert=False):
+    driver: bpy.types.Driver = constraint.driver_add('influence').driver
+    variable: bpy.types.DriverVariable = driver.variables.new()
+    variable.name = 'mmd_rigify_influence'
+    variable.targets[0].id = target
+    variable.targets[0].data_path = data_path
+    driver.expression = ('1-' if invert else '+') + variable.name
+
+
+def create_binders() -> Dict[BindType, Callable]:
+
+    def copy_pose(mmd_bone, org_armature_object, org_name, influence_data_path):
+        constraint = mmd_bone.constraints.new('COPY_TRANSFORMS')
+        constraint.name = 'mmd_rigify_copy_transforms'
+        constraint.target = org_armature_object
+        constraint.subtarget = org_name
+        constraint.target_space = 'POSE'
+        constraint.owner_space = 'POSE'
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+    def copy_parent(mmd_bone, org_armature_object, org_name, influence_data_path):
+        constraint = mmd_bone.constraints.new('COPY_TRANSFORMS')
+        constraint.name = 'mmd_rigify_copy_transforms'
+        constraint.target = org_armature_object
+        constraint.subtarget = org_name
+        constraint.target_space = 'LOCAL_WITH_PARENT'
+        constraint.owner_space = 'LOCAL_WITH_PARENT'
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+    def copy_local(mmd_bone, org_armature_object, org_name, influence_data_path):
+        constraint = mmd_bone.constraints.new('COPY_TRANSFORMS')
+        constraint.name = 'mmd_rigify_copy_transforms'
+        constraint.target = org_armature_object
+        constraint.subtarget = org_name
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+    def copy_spine(mmd_bone, org_armature_object, org_name, influence_data_path):
+        constraint = mmd_bone.constraints.new('COPY_LOCATION')
+        constraint.name = 'mmd_rigify_copy_location'
+        constraint.target = org_armature_object
+        constraint.subtarget = 'ORG-spine.001'
+        constraint.target_space = 'WORLD'
+        constraint.owner_space = 'WORLD'
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+        constraint = mmd_bone.constraints.new('COPY_ROTATION')
+        constraint.name = 'mmd_rigify_copy_rotation'
+        constraint.target = org_armature_object
+        constraint.subtarget = 'ORG-spine'
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        constraint.invert_x = False
+        constraint.invert_y = True
+        constraint.invert_z = True
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+    def copy_toe(mmd_bone, org_armature_object, org_name, influence_data_path):
+        constraint = mmd_bone.constraints.new('COPY_LOCATION')
+        constraint.name = 'mmd_rigify_copy_location'
+        constraint.target = org_armature_object
+        constraint.subtarget = org_name
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+        constraint = mmd_bone.constraints.new('COPY_ROTATION')
+        constraint.name = 'mmd_rigify_copy_rotation'
+        constraint.target = org_armature_object
+        constraint.subtarget = org_name
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        constraint.invert_x = True
+        constraint.invert_y = False
+        constraint.invert_z = False
+        add_influence_driver(constraint, org_armature_object, influence_data_path)
+
+    return {
+        BindType.COPY_POSE: copy_pose,
+        BindType.COPY_PARENT: copy_parent,
+        BindType.COPY_LOCAL: copy_local,
+        BindType.COPY_SPINE: copy_spine,
+        BindType.COPY_TOE: copy_toe,
+    }
+
+
+binders: Dict[BindType, Callable] = create_binders()
+
+
+class MMDArmatureObject:
+    mmd_armature_object: bpy.types.Object
+    mmd_armature: bpy.types.Armature
+
+    existing_bone_types: Set[BoneType]
+    pose_bones: MMDArmaturePoseBones
+    mmd_rigify_bones: List[MMDRigifyBone]
+
+    actual_pose_bones: MMDArmaturePoseBones
+
+    def __init__(self, mmd_armature_object: bpy.types.Object):
+        self.mmd_armature_object = mmd_armature_object
+        mmd_armature: bpy.types.Armature = mmd_armature_object.data
+        self.mmd_armature = mmd_armature
+
+        mmd_names: Set[str] = {b.mmd_bone_name for b in mmd_rigify_bones}
+
+        self.pose_bones: MMDArmaturePoseBones = {
+            b.mmd_bone.name_j: b
+            for b in mmd_armature_object.pose.bones
+            if b.mmd_bone.name_j in mmd_names
+        }
+
+        self.actual_pose_bones: MMDArmaturePoseBones = {
+            b.name: b
+            for b in self.pose_bones.values()
+        }
+
+        self.mmd_rigify_bones = [
+            b
+            for b in mmd_rigify_bones
+            if b.mmd_bone_name in self.pose_bones
+        ]
+
+        self.existing_bone_types: Set[BoneType] = {b.bone_type for b in mmd_rigify_bones}
+
+    def has_bone_type(self, bone_type: BoneType) -> bool:
+        return bone_type in self.existing_bone_types
+
+    def to_strict_mmd_bone_name(self, actual_mmd_bone_name: str) -> str:
+        return self.actual_pose_bones[actual_mmd_bone_name].mmd_bone.name_j
+
+    def to_actual_mmd_bone_name(self, strict_mmd_bone_name: str) -> str:
+        return self.pose_bones[strict_mmd_bone_name].name
+
+    @property
+    def bones(self) -> MMDArmatureBones:
+        return {
+            self.to_strict_mmd_bone_name(b.name): b
+            for b in self.mmd_armature.bones
+            if b.name in self.actual_pose_bones
+        }
+
+    @property
+    def edit_bones(self) -> MMDArmatureEditBones:
+        return {
+            self.to_strict_mmd_bone_name(b.name): b
+            for b in self.mmd_armature.edit_bones
+            if b.name in self.actual_pose_bones
+        }
+
+
+class MMDRigifyBoneBinder:
+
+    @staticmethod
+    def bind():
+        pass
 
 
 """
@@ -51,71 +345,6 @@ ORG-spine.006
                 ORG-eye.R
             MCH-eye.R.001
 """
-
-
-# TODO merge with bind_bone_mapping
-pose_bone_mapping: Dict[str, str] = {
-    'root': '全ての親',
-    'center': 'センター',
-    'groove': 'グルーブ',
-    'torso': '上半身',
-    'chest': '上半身2',
-    'neck': '首',
-    'head': '頭',
-
-    'shoulder.L': '左肩',
-    'upper_arm_fk.L': '左腕',
-    'forearm_fk.L': '左ひじ',
-    'hand_fk.L': '左手首',
-    'thumb.01.L': '左親指０',
-    'thumb.02.L': '左親指１',
-    'thumb.03.L': '左親指２',
-    'f_index.01.L': '左人指１',
-    'f_index.02.L': '左人指２',
-    'f_index.03.L': '左人指３',
-    'f_middle.01.L': '左中指１',
-    'f_middle.02.L': '左中指２',
-    'f_middle.03.L': '左中指３',
-    'f_ring.01.L': '左薬指１',
-    'f_ring.02.L': '左薬指２',
-    'f_ring.03.L': '左薬指３',
-    'f_pinky.01.L': '左小指１',
-    'f_pinky.02.L': '左小指２',
-    'f_pinky.03.L': '左小指３',
-
-    'shoulder.R': '右肩',
-    'upper_arm_fk.R': '右腕',
-    'forearm_fk.R': '右ひじ',
-    'hand_fk.R': '右手首',
-    'thumb.01.R': '右親指０',
-    'thumb.02.R': '右親指１',
-    'thumb.03.R': '右親指２',
-    'f_index.01.R': '右人指１',
-    'f_index.02.R': '右人指２',
-    'f_index.03.R': '右人指３',
-    'f_middle.01.R': '右中指１',
-    'f_middle.02.R': '右中指２',
-    'f_middle.03.R': '右中指３',
-    'f_ring.01.R': '右薬指１',
-    'f_ring.02.R': '右薬指２',
-    'f_ring.03.R': '右薬指３',
-    'f_pinky.01.R': '右小指１',
-    'f_pinky.02.R': '右小指２',
-    'f_pinky.03.R': '右小指３',
-
-    'spine_fk': '下半身',
-    'thigh_fk.L': '左足',
-    'shin_fk.L': '左ひざ',
-    'foot_fk.L': '左足首',
-    'foot_ik.L': '左足ＩＫ',
-    'toe.L': '左つま先ＩＫ',
-
-    'thigh_fk.R': '右足',
-    'shin_fk.R': '右ひざ',
-    'foot_fk.R': '右足首',
-    'foot_ik.R': '右足ＩＫ',
-    'toe.R': '右つま先ＩＫ',
-}
 
 
 class MMDArmatureClean(bpy.types.Operator):
@@ -141,7 +370,7 @@ class MMDArmatureClean(bpy.types.Operator):
 
         return True
 
-    def clean_armature(self, mmd_armature: bpy.types.Armature):
+    def clean_armature(self, mmd_armature_object: MMDArmatureObject):
         def to_distance(left: Vector, right: Vector) -> float:
             return (left - right).length
 
@@ -160,26 +389,26 @@ class MMDArmatureClean(bpy.types.Operator):
                 if to_distance(target.tail, tail) > threshold:
                     target.tail = tail
 
-        mmd_bones = mmd_armature.edit_bones
+        mmd_edit_bones = mmd_armature_object.edit_bones
 
-        if_far_then_set(mmd_bones['親指２.R'], tail=extend_toward_tail(mmd_bones['親指１.R'], 1.8))
-        if_far_then_set(mmd_bones['人指３.R'], tail=extend_toward_tail(mmd_bones['人指２.R'], 1.8))
-        if_far_then_set(mmd_bones['中指３.R'], tail=extend_toward_tail(mmd_bones['中指２.R'], 1.8))
-        if_far_then_set(mmd_bones['薬指３.R'], tail=extend_toward_tail(mmd_bones['薬指２.R'], 1.8))
-        if_far_then_set(mmd_bones['小指３.R'], tail=extend_toward_tail(mmd_bones['小指２.R'], 1.8))
-        if_far_then_set(mmd_bones['手首.R'], tail=extend_toward_tail(mmd_bones['ひじ.R'], 1.3))
+        if_far_then_set(mmd_edit_bones['右親指２'], tail=extend_toward_tail(mmd_edit_bones['右親指１'], 1.8))
+        if_far_then_set(mmd_edit_bones['右人指３'], tail=extend_toward_tail(mmd_edit_bones['右人指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['右中指３'], tail=extend_toward_tail(mmd_edit_bones['右中指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['右薬指３'], tail=extend_toward_tail(mmd_edit_bones['右薬指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['右小指３'], tail=extend_toward_tail(mmd_edit_bones['右小指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['右手首'], tail=extend_toward_tail(mmd_edit_bones['右ひじ'], 1.3))
 
-        if_far_then_set(mmd_bones['親指２.L'], tail=extend_toward_tail(mmd_bones['親指１.L'], 1.8))
-        if_far_then_set(mmd_bones['人指３.L'], tail=extend_toward_tail(mmd_bones['人指２.L'], 1.8))
-        if_far_then_set(mmd_bones['中指３.L'], tail=extend_toward_tail(mmd_bones['中指２.L'], 1.8))
-        if_far_then_set(mmd_bones['薬指３.L'], tail=extend_toward_tail(mmd_bones['薬指２.L'], 1.8))
-        if_far_then_set(mmd_bones['小指３.L'], tail=extend_toward_tail(mmd_bones['小指２.L'], 1.8))
-        if_far_then_set(mmd_bones['手首.L'], tail=extend_toward_tail(mmd_bones['ひじ.L'], 1.3))
+        if_far_then_set(mmd_edit_bones['左親指２'], tail=extend_toward_tail(mmd_edit_bones['左親指１'], 1.8))
+        if_far_then_set(mmd_edit_bones['左人指３'], tail=extend_toward_tail(mmd_edit_bones['左人指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['左中指３'], tail=extend_toward_tail(mmd_edit_bones['左中指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['左薬指３'], tail=extend_toward_tail(mmd_edit_bones['左薬指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['左小指３'], tail=extend_toward_tail(mmd_edit_bones['左小指２'], 1.8))
+        if_far_then_set(mmd_edit_bones['左手首'], tail=extend_toward_tail(mmd_edit_bones['左ひじ'], 1.3))
 
     def execute(self, context: bpy.types.Context):
         bpy.ops.object.mode_set(mode='EDIT')
 
-        self.clean_armature(bpy.context.active_object.data)
+        self.clean_armature(MMDArmatureObject(bpy.context.active_object))
 
         bpy.ops.object.mode_set(mode='OBJECT')
 
@@ -221,125 +450,123 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         finally:
             bpy.context.scene.cursor.location = original_cursor_location
 
-    def fit_scale(self, metarig_object: bpy.types.Object, mmd_object: bpy.types.Object):
+    def fit_scale(self, metarig_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rigify_height = metarig_object.data.bones['spine.006'].tail_local[2]
-        mmd_height = mmd_object.data.bones['頭'].tail_local[2]
+        mmd_height = mmd_armature_object.bones['頭'].tail_local[2]
 
         scale = mmd_height / rigify_height
         metarig_object.scale = (scale, scale, scale)
         bpy.ops.object.transform_apply(scale=True)
 
-    def fit_bones(self, metarig_bones: bpy.types.ArmatureEditBones, mmd_bones: bpy.types.ArmatureEditBones):
+    def fit_bones(self, metarig_bones: bpy.types.ArmatureEditBones, mmd_edit_bones: bpy.types.ArmatureEditBones):
         def to_center(v1: Vector, v2: Vector) -> Vector:
             return (v1 + v2) / 2
 
         def to_bone_center(bone: bpy.types.EditBone) -> Vector:
             return to_center(bone.head, bone.tail)
 
-        metarig_bones['spine.001'].tail = mmd_bones['上半身'].tail
-        metarig_bones['spine.002'].tail = to_bone_center(mmd_bones['上半身2'])
-        metarig_bones['spine.003'].tail = mmd_bones['上半身2'].tail
-        metarig_bones['spine.004'].tail = to_bone_center(mmd_bones['首'])
-        metarig_bones['spine.004'].head = mmd_bones['首'].head
-        metarig_bones['spine.005'].tail = mmd_bones['首'].tail
-        metarig_bones['spine.006'].tail = mmd_bones['頭'].tail
+        metarig_bones['spine.001'].tail = mmd_edit_bones['上半身'].tail
+        metarig_bones['spine.002'].tail = to_bone_center(mmd_edit_bones['上半身2'])
+        metarig_bones['spine.003'].tail = mmd_edit_bones['上半身2'].tail
+        metarig_bones['spine.004'].tail = to_bone_center(mmd_edit_bones['首'])
+        metarig_bones['spine.004'].head = mmd_edit_bones['首'].head
+        metarig_bones['spine.005'].tail = mmd_edit_bones['首'].tail
+        metarig_bones['spine.006'].tail = mmd_edit_bones['頭'].tail
 
-        metarig_bones['face'].head = mmd_bones['頭'].head
-        metarig_bones['face'].tail = to_bone_center(mmd_bones['頭'])
+        metarig_bones['face'].head = mmd_edit_bones['頭'].head
+        metarig_bones['face'].tail = to_bone_center(mmd_edit_bones['頭'])
 
-        metarig_bones['shoulder.L'].head = mmd_bones['肩.L'].head
-        metarig_bones['shoulder.L'].tail = mmd_bones['肩.L'].tail
-        metarig_bones['shoulder.R'].head = mmd_bones['肩.R'].head
-        metarig_bones['shoulder.R'].tail = mmd_bones['肩.R'].tail
-        metarig_bones['upper_arm.L'].head = mmd_bones['腕.L'].head
-        metarig_bones['upper_arm.R'].head = mmd_bones['腕.R'].head
-        metarig_bones['forearm.L'].head = mmd_bones['ひじ.L'].head
-        metarig_bones['forearm.L'].tail = mmd_bones['手捩.L'].tail
-        metarig_bones['forearm.R'].head = mmd_bones['ひじ.R'].head
-        metarig_bones['forearm.R'].tail = mmd_bones['手捩.R'].tail
+        metarig_bones['shoulder.L'].head = mmd_edit_bones['左肩'].head
+        metarig_bones['shoulder.L'].tail = mmd_edit_bones['左肩'].tail
+        metarig_bones['shoulder.R'].head = mmd_edit_bones['右肩'].head
+        metarig_bones['shoulder.R'].tail = mmd_edit_bones['右肩'].tail
+        metarig_bones['upper_arm.L'].head = mmd_edit_bones['左腕'].head
+        metarig_bones['upper_arm.R'].head = mmd_edit_bones['右腕'].head
+        metarig_bones['forearm.L'].head = mmd_edit_bones['左ひじ'].head
+        metarig_bones['forearm.L'].tail = mmd_edit_bones['左手捩'].tail
+        metarig_bones['forearm.R'].head = mmd_edit_bones['右ひじ'].head
+        metarig_bones['forearm.R'].tail = mmd_edit_bones['右手捩'].tail
 
-        metarig_bones['hand.L'].tail = mmd_bones['手首.L'].tail
-        metarig_bones['hand.R'].tail = mmd_bones['手首.R'].tail
-        metarig_bones['thumb.01.L'].head = mmd_bones['親指０.L'].head
-        metarig_bones['thumb.01.L'].tail = mmd_bones['親指０.L'].tail
-        metarig_bones['thumb.01.R'].head = mmd_bones['親指０.R'].head
-        metarig_bones['thumb.01.R'].tail = mmd_bones['親指０.R'].tail
-        metarig_bones['thumb.02.L'].tail = mmd_bones['親指１.L'].tail
-        metarig_bones['thumb.02.R'].tail = mmd_bones['親指１.R'].tail
-        metarig_bones['thumb.03.L'].tail = mmd_bones['親指２.L'].tail
-        metarig_bones['thumb.03.R'].tail = mmd_bones['親指２.R'].tail
-        metarig_bones['palm.01.L'].head = to_center(mmd_bones['人指１.L'].head, mmd_bones['手捩.L'].tail)
-        metarig_bones['palm.01.L'].tail = mmd_bones['人指１.L'].head
-        metarig_bones['palm.01.R'].head = to_center(mmd_bones['人指１.R'].head, mmd_bones['手捩.R'].tail)
-        metarig_bones['palm.01.R'].tail = mmd_bones['人指１.R'].head
-        metarig_bones['f_index.01.L'].head = mmd_bones['人指１.L'].head
-        metarig_bones['f_index.01.L'].tail = mmd_bones['人指１.L'].tail
-        metarig_bones['f_index.01.R'].head = mmd_bones['人指１.R'].head
-        metarig_bones['f_index.01.R'].tail = mmd_bones['人指１.R'].tail
-        metarig_bones['f_index.02.L'].tail = mmd_bones['人指２.L'].tail
-        metarig_bones['f_index.02.R'].tail = mmd_bones['人指２.R'].tail
-        metarig_bones['f_index.03.L'].tail = mmd_bones['人指３.L'].tail
-        metarig_bones['f_index.03.R'].tail = mmd_bones['人指３.R'].tail
-        metarig_bones['palm.02.L'].head = to_center(mmd_bones['中指１.L'].head, mmd_bones['手捩.L'].tail)
-        metarig_bones['palm.02.L'].tail = mmd_bones['中指１.L'].head
-        metarig_bones['palm.02.R'].head = to_center(mmd_bones['中指１.R'].head, mmd_bones['手捩.R'].tail)
-        metarig_bones['palm.02.R'].tail = mmd_bones['中指１.R'].head
-        metarig_bones['f_middle.01.L'].head = mmd_bones['中指１.L'].head
-        metarig_bones['f_middle.01.L'].tail = mmd_bones['中指１.L'].tail
-        metarig_bones['f_middle.01.R'].head = mmd_bones['中指１.R'].head
-        metarig_bones['f_middle.01.R'].tail = mmd_bones['中指１.R'].tail
-        metarig_bones['f_middle.02.L'].tail = mmd_bones['中指２.L'].tail
-        metarig_bones['f_middle.02.R'].tail = mmd_bones['中指２.R'].tail
-        metarig_bones['f_middle.03.L'].tail = mmd_bones['中指３.L'].tail
-        metarig_bones['f_middle.03.R'].tail = mmd_bones['中指３.R'].tail
-        metarig_bones['palm.03.L'].head = to_center(mmd_bones['薬指１.L'].head, mmd_bones['手捩.L'].tail)
-        metarig_bones['palm.03.L'].tail = mmd_bones['薬指１.L'].head
-        metarig_bones['palm.03.R'].head = to_center(mmd_bones['薬指１.R'].head, mmd_bones['手捩.R'].tail)
-        metarig_bones['palm.03.R'].tail = mmd_bones['薬指１.R'].head
-        metarig_bones['f_ring.01.L'].head = mmd_bones['薬指１.L'].head
-        metarig_bones['f_ring.01.L'].tail = mmd_bones['薬指１.L'].tail
-        metarig_bones['f_ring.01.R'].head = mmd_bones['薬指１.R'].head
-        metarig_bones['f_ring.01.R'].tail = mmd_bones['薬指１.R'].tail
-        metarig_bones['f_ring.02.L'].tail = mmd_bones['薬指２.L'].tail
-        metarig_bones['f_ring.02.R'].tail = mmd_bones['薬指２.R'].tail
-        metarig_bones['f_ring.03.L'].tail = mmd_bones['薬指３.L'].tail
-        metarig_bones['f_ring.03.R'].tail = mmd_bones['薬指３.R'].tail
-        metarig_bones['palm.04.L'].head = to_center(mmd_bones['小指１.L'].head, mmd_bones['手捩.L'].tail)
-        metarig_bones['palm.04.L'].tail = mmd_bones['小指１.L'].head
-        metarig_bones['palm.04.R'].head = to_center(mmd_bones['小指１.R'].head, mmd_bones['手捩.R'].tail)
-        metarig_bones['palm.04.R'].tail = mmd_bones['小指１.R'].head
-        metarig_bones['f_pinky.01.L'].head = mmd_bones['小指１.L'].head
-        metarig_bones['f_pinky.01.L'].tail = mmd_bones['小指１.L'].tail
-        metarig_bones['f_pinky.01.R'].head = mmd_bones['小指１.R'].head
-        metarig_bones['f_pinky.01.R'].tail = mmd_bones['小指１.R'].tail
-        metarig_bones['f_pinky.02.L'].tail = mmd_bones['小指２.L'].tail
-        metarig_bones['f_pinky.02.R'].tail = mmd_bones['小指２.R'].tail
-        metarig_bones['f_pinky.03.L'].tail = mmd_bones['小指３.L'].tail
-        metarig_bones['f_pinky.03.R'].tail = mmd_bones['小指３.R'].tail
+        metarig_bones['hand.L'].tail = mmd_edit_bones['左手首'].tail
+        metarig_bones['hand.R'].tail = mmd_edit_bones['右手首'].tail
+        metarig_bones['thumb.01.L'].head = mmd_edit_bones['左親指０'].head
+        metarig_bones['thumb.01.L'].tail = mmd_edit_bones['左親指０'].tail
+        metarig_bones['thumb.01.R'].head = mmd_edit_bones['右親指０'].head
+        metarig_bones['thumb.01.R'].tail = mmd_edit_bones['右親指０'].tail
+        metarig_bones['thumb.02.L'].tail = mmd_edit_bones['左親指１'].tail
+        metarig_bones['thumb.02.R'].tail = mmd_edit_bones['右親指１'].tail
+        metarig_bones['thumb.03.L'].tail = mmd_edit_bones['左親指２'].tail
+        metarig_bones['thumb.03.R'].tail = mmd_edit_bones['右親指２'].tail
+        metarig_bones['palm.01.L'].head = to_center(mmd_edit_bones['左人指１'].head, mmd_edit_bones['左手捩'].tail)
+        metarig_bones['palm.01.L'].tail = mmd_edit_bones['左人指１'].head
+        metarig_bones['palm.01.R'].head = to_center(mmd_edit_bones['右人指１'].head, mmd_edit_bones['右手捩'].tail)
+        metarig_bones['palm.01.R'].tail = mmd_edit_bones['右人指１'].head
+        metarig_bones['f_index.01.L'].head = mmd_edit_bones['左人指１'].head
+        metarig_bones['f_index.01.L'].tail = mmd_edit_bones['左人指１'].tail
+        metarig_bones['f_index.01.R'].head = mmd_edit_bones['右人指１'].head
+        metarig_bones['f_index.01.R'].tail = mmd_edit_bones['右人指１'].tail
+        metarig_bones['f_index.02.L'].tail = mmd_edit_bones['左人指２'].tail
+        metarig_bones['f_index.02.R'].tail = mmd_edit_bones['右人指２'].tail
+        metarig_bones['f_index.03.L'].tail = mmd_edit_bones['左人指３'].tail
+        metarig_bones['f_index.03.R'].tail = mmd_edit_bones['右人指３'].tail
+        metarig_bones['palm.02.L'].head = to_center(mmd_edit_bones['左中指１'].head, mmd_edit_bones['左手捩'].tail)
+        metarig_bones['palm.02.L'].tail = mmd_edit_bones['左中指１'].head
+        metarig_bones['palm.02.R'].head = to_center(mmd_edit_bones['右中指１'].head, mmd_edit_bones['右手捩'].tail)
+        metarig_bones['palm.02.R'].tail = mmd_edit_bones['右中指１'].head
+        metarig_bones['f_middle.01.L'].head = mmd_edit_bones['左中指１'].head
+        metarig_bones['f_middle.01.L'].tail = mmd_edit_bones['左中指１'].tail
+        metarig_bones['f_middle.01.R'].head = mmd_edit_bones['右中指１'].head
+        metarig_bones['f_middle.01.R'].tail = mmd_edit_bones['右中指１'].tail
+        metarig_bones['f_middle.02.L'].tail = mmd_edit_bones['左中指２'].tail
+        metarig_bones['f_middle.02.R'].tail = mmd_edit_bones['右中指２'].tail
+        metarig_bones['f_middle.03.L'].tail = mmd_edit_bones['左中指３'].tail
+        metarig_bones['f_middle.03.R'].tail = mmd_edit_bones['右中指３'].tail
+        metarig_bones['palm.03.L'].head = to_center(mmd_edit_bones['左薬指１'].head, mmd_edit_bones['左手捩'].tail)
+        metarig_bones['palm.03.L'].tail = mmd_edit_bones['左薬指１'].head
+        metarig_bones['palm.03.R'].head = to_center(mmd_edit_bones['右薬指１'].head, mmd_edit_bones['右手捩'].tail)
+        metarig_bones['palm.03.R'].tail = mmd_edit_bones['右薬指１'].head
+        metarig_bones['f_ring.01.L'].head = mmd_edit_bones['左薬指１'].head
+        metarig_bones['f_ring.01.L'].tail = mmd_edit_bones['左薬指１'].tail
+        metarig_bones['f_ring.01.R'].head = mmd_edit_bones['右薬指１'].head
+        metarig_bones['f_ring.01.R'].tail = mmd_edit_bones['右薬指１'].tail
+        metarig_bones['f_ring.02.L'].tail = mmd_edit_bones['左薬指２'].tail
+        metarig_bones['f_ring.02.R'].tail = mmd_edit_bones['右薬指２'].tail
+        metarig_bones['f_ring.03.L'].tail = mmd_edit_bones['左薬指３'].tail
+        metarig_bones['f_ring.03.R'].tail = mmd_edit_bones['右薬指３'].tail
+        metarig_bones['palm.04.L'].head = to_center(mmd_edit_bones['左小指１'].head, mmd_edit_bones['左手捩'].tail)
+        metarig_bones['palm.04.L'].tail = mmd_edit_bones['左小指１'].head
+        metarig_bones['palm.04.R'].head = to_center(mmd_edit_bones['右小指１'].head, mmd_edit_bones['右手捩'].tail)
+        metarig_bones['palm.04.R'].tail = mmd_edit_bones['右小指１'].head
+        metarig_bones['f_pinky.01.L'].head = mmd_edit_bones['左小指１'].head
+        metarig_bones['f_pinky.01.L'].tail = mmd_edit_bones['左小指１'].tail
+        metarig_bones['f_pinky.01.R'].head = mmd_edit_bones['右小指１'].head
+        metarig_bones['f_pinky.01.R'].tail = mmd_edit_bones['右小指１'].tail
+        metarig_bones['f_pinky.02.L'].tail = mmd_edit_bones['左小指２'].tail
+        metarig_bones['f_pinky.02.R'].tail = mmd_edit_bones['右小指２'].tail
+        metarig_bones['f_pinky.03.L'].tail = mmd_edit_bones['左小指３'].tail
+        metarig_bones['f_pinky.03.R'].tail = mmd_edit_bones['右小指３'].tail
 
-        metarig_bones['spine'].head = mmd_bones['下半身'].tail
-        metarig_bones['spine'].tail = mmd_bones['下半身'].head
-        metarig_bones['pelvis.L'].head = mmd_bones['下半身'].tail
-        metarig_bones['pelvis.R'].head = mmd_bones['下半身'].tail
-        metarig_bones['pelvis.L'].tail[1:3] = [mmd_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
-        metarig_bones['pelvis.R'].tail[1:3] = [mmd_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_bones['下半身'].head[2]]
+        metarig_bones['spine'].head = mmd_edit_bones['下半身'].tail
+        metarig_bones['spine'].tail = mmd_edit_bones['下半身'].head
+        metarig_bones['pelvis.L'].head = mmd_edit_bones['下半身'].tail
+        metarig_bones['pelvis.R'].head = mmd_edit_bones['下半身'].tail
+        metarig_bones['pelvis.L'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_edit_bones['下半身'].head[2]]
+        metarig_bones['pelvis.R'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-metarig_bones['spine'].length/2, mmd_edit_bones['下半身'].head[2]]
 
-        metarig_bones['thigh.L'].head = mmd_bones['足.L'].head
-        metarig_bones['thigh.L'].tail = mmd_bones['足.L'].tail
-        metarig_bones['thigh.R'].head = mmd_bones['足.R'].head
-        metarig_bones['thigh.R'].tail = mmd_bones['足.R'].tail
-        metarig_bones['shin.L'].tail = mmd_bones['ひざ.L'].tail
-        metarig_bones['shin.R'].tail = mmd_bones['ひざ.R'].tail
-        metarig_bones['foot.L'].tail = mmd_bones['足首.L'].tail
-        metarig_bones['foot.R'].tail = mmd_bones['足首.R'].tail
-        metarig_bones['heel.02.L'].tail = mmd_bones['ひざ.L'].tail + Vector([+mmd_bones['ひざ.L'].length / 6, +mmd_bones['ひざ.L'].length / 8, +0.0])
-        metarig_bones['heel.02.L'].head = mmd_bones['ひざ.L'].tail + Vector([-mmd_bones['ひざ.L'].length / 6, +mmd_bones['ひざ.L'].length / 8, +0.0])
-        metarig_bones['heel.02.R'].tail = mmd_bones['ひざ.R'].tail + Vector([-mmd_bones['ひざ.R'].length / 6, +mmd_bones['ひざ.R'].length / 8, +0.0])
-        metarig_bones['heel.02.R'].head = mmd_bones['ひざ.R'].tail + Vector([+mmd_bones['ひざ.R'].length / 6, +mmd_bones['ひざ.R'].length / 8, +0.0])
-        metarig_bones['toe.L'].tail = mmd_bones['足首.L'].tail + Vector([+0.0, -mmd_bones['足首.L'].length / 2, +0.0])
-        metarig_bones['toe.R'].tail = mmd_bones['足首.R'].tail + Vector([+0.0, -mmd_bones['足首.R'].length / 2, +0.0])
-        metarig_bones['toe.L'].tail = mmd_bones['つま先.L'].tail
-        metarig_bones['toe.R'].tail = mmd_bones['つま先.R'].tail
+        metarig_bones['thigh.L'].head = mmd_edit_bones['左足'].head
+        metarig_bones['thigh.L'].tail = mmd_edit_bones['左足'].tail
+        metarig_bones['thigh.R'].head = mmd_edit_bones['右足'].head
+        metarig_bones['thigh.R'].tail = mmd_edit_bones['右足'].tail
+        metarig_bones['shin.L'].tail = mmd_edit_bones['左ひざ'].tail
+        metarig_bones['shin.R'].tail = mmd_edit_bones['右ひざ'].tail
+        metarig_bones['foot.L'].tail = mmd_edit_bones['左足首'].tail
+        metarig_bones['foot.R'].tail = mmd_edit_bones['右足首'].tail
+        metarig_bones['heel.02.L'].tail = mmd_edit_bones['左ひざ'].tail + Vector([+mmd_edit_bones['左ひざ'].length / 6, +mmd_edit_bones['左ひざ'].length / 8, +0.0])
+        metarig_bones['heel.02.L'].head = mmd_edit_bones['左ひざ'].tail + Vector([-mmd_edit_bones['左ひざ'].length / 6, +mmd_edit_bones['左ひざ'].length / 8, +0.0])
+        metarig_bones['heel.02.R'].tail = mmd_edit_bones['右ひざ'].tail + Vector([-mmd_edit_bones['右ひざ'].length / 6, +mmd_edit_bones['右ひざ'].length / 8, +0.0])
+        metarig_bones['heel.02.R'].head = mmd_edit_bones['右ひざ'].tail + Vector([+mmd_edit_bones['右ひざ'].length / 6, +mmd_edit_bones['右ひざ'].length / 8, +0.0])
+        metarig_bones['toe.L'].tail = mmd_edit_bones['左足首'].tail + Vector([+0.0, -mmd_edit_bones['左足首'].length / 2, +0.0])
+        metarig_bones['toe.R'].tail = mmd_edit_bones['右足首'].tail + Vector([+0.0, -mmd_edit_bones['右足首'].length / 2, +0.0])
 
         # fix straight finger bend problem
         # https://blenderartists.org/t/rigify-fingers-issue/1218987
@@ -381,7 +608,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         metarig_bones['upper_arm.L'].tail += Vector([0, +0.001, 0])
         metarig_bones['upper_arm.R'].tail += Vector([0, +0.001, 0])
 
-        # remove unused mmd_bones
+        # remove unused mmd_edit_bones
         metarig_face = metarig_bones['face']
         remove_metarig_bones = [
             metarig_bones['breast.L'],
@@ -397,15 +624,25 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         # https://blenderartists.org/t/rigify-fingers-issue/1218987
         # limbs.super_finger
         metarig_bones['thumb.01.L'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['thumb.01.L'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['thumb.01.R'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['thumb.01.R'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_index.01.L'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_index.01.L'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_index.01.R'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_index.01.R'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_middle.01.L'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_middle.01.L'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_middle.01.R'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_middle.01.R'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_ring.01.L'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_ring.01.L'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_ring.01.R'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_ring.01.R'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_pinky.01.L'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_pinky.01.L'].rigify_parameters.make_extra_ik_control = True
         metarig_bones['f_pinky.01.R'].rigify_parameters.primary_rotation_axis = 'X'
+        metarig_bones['f_pinky.01.R'].rigify_parameters.make_extra_ik_control = True
 
         # fix straight arm IK problem
         # limbs.super_limb
@@ -415,167 +652,21 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
     def execute(self, context: bpy.types.Context):
         mmd_object = context.active_object
         metarig_object = self.create_metarig_object()
-        self.fit_scale(metarig_object, mmd_object)
+
+        mmd_armature = MMDArmatureObject(mmd_object)
+        self.fit_scale(metarig_object, mmd_armature)
 
         mmd_object.select = True
         metarig_object.select = True
         bpy.ops.object.mode_set(mode='EDIT')
-        self.fit_bones(metarig_object.data.edit_bones, mmd_object.data.edit_bones)
+        self.fit_bones(metarig_object.data.edit_bones, mmd_armature.edit_bones)
 
         bpy.ops.object.mode_set(mode='POSE')
-        self.pose_bones(metarig_object.pose.bones, mmd_object.pose.bones)
+        self.pose_bones(metarig_object.pose.bones, mmd_armature.pose_bones)
 
         bpy.ops.object.mode_set(mode='OBJECT')
 
         return {'FINISHED'}
-
-
-def add_influence_driver(constraint: bpy.types.Constraint, target, data_path, invert=False):
-    driver: bpy.types.Driver = constraint.driver_add('influence').driver
-    variable: bpy.types.DriverVariable = driver.variables.new()
-    variable.name = 'mmd_rigify_influence'
-    variable.targets[0].id = target
-    variable.targets[0].data_path = data_path
-    driver.expression = ('-' if invert else '+') + variable.name
-
-
-def copy_local(org_armature_object, pose_bones, mmd_name, org_name, influence_data_path):
-    constraint = pose_bones[mmd_name].constraints.new('COPY_TRANSFORMS')
-    constraint.name = 'mmd_rigify_copy_transforms'
-    constraint.target = org_armature_object
-    constraint.subtarget = org_name
-    constraint.target_space = 'LOCAL'
-    constraint.owner_space = 'LOCAL'
-
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-
-def copy_parent(org_armature_object, pose_bones, mmd_name, org_name, influence_data_path):
-    constraint = pose_bones[mmd_name].constraints.new('COPY_TRANSFORMS')
-    constraint.name = 'mmd_rigify_copy_transforms'
-    constraint.target = org_armature_object
-    constraint.subtarget = org_name
-    constraint.target_space = 'LOCAL_WITH_PARENT'
-    constraint.owner_space = 'LOCAL_WITH_PARENT'
-
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-
-def copy_spine(org_armature_object, pose_bones, mmd_name, org_name, influence_data_path):
-    mmd_bone = pose_bones[mmd_name]
-    constraint = mmd_bone.constraints.new('COPY_LOCATION')
-    constraint.name = 'mmd_rigify_copy_location'
-    constraint.target = org_armature_object
-    constraint.subtarget = 'ORG-spine.001'
-    constraint.target_space = 'WORLD'
-    constraint.owner_space = 'WORLD'
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-    constraint = mmd_bone.constraints.new('COPY_ROTATION')
-    constraint.name = 'mmd_rigify_copy_rotation'
-    constraint.target = org_armature_object
-    constraint.subtarget = 'ORG-spine'
-    constraint.target_space = 'LOCAL'
-    constraint.owner_space = 'LOCAL'
-    constraint.invert_x = False
-    constraint.invert_y = True
-    constraint.invert_z = True
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-
-def copy_toe(org_armature_object, pose_bones, mmd_name, org_name, influence_data_path):
-    mmd_bone = pose_bones[mmd_name]
-    constraint = mmd_bone.constraints.new('COPY_LOCATION')
-    constraint.name = 'mmd_rigify_copy_location'
-    constraint.target = org_armature_object
-    constraint.subtarget = org_name
-    constraint.target_space = 'LOCAL'
-    constraint.owner_space = 'LOCAL'
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-    constraint = mmd_bone.constraints.new('COPY_ROTATION')
-    constraint.name = 'mmd_rigify_copy_rotation'
-    constraint.target = org_armature_object
-    constraint.subtarget = org_name
-    constraint.target_space = 'LOCAL'
-    constraint.owner_space = 'LOCAL'
-    constraint.invert_x = True
-    constraint.invert_y = False
-    constraint.invert_z = False
-    add_influence_driver(constraint, org_armature_object, influence_data_path)
-
-
-bind_bone_mapping: List[Tuple[str, str, str, Callable]] = [
-    ('センター', 'center', 'torso_influence', copy_parent),
-    ('グルーブ', 'groove', 'torso_influence', copy_parent),
-    ('上半身', 'ORG-spine.001', 'torso_influence', copy_parent),
-    ('上半身2', 'ORG-spine.002', 'torso_influence', copy_parent),
-    ('首', 'ORG-spine.005', 'torso_influence', copy_parent),
-    ('頭', 'ORG-spine.006', 'torso_influence', copy_parent),
-
-    ('肩.L', 'ORG-shoulder.L', 'torso_influence', copy_parent),
-    ('腕.L', 'ORG-upper_arm.L', 'arm_l_influence', copy_local),
-    ('ひじ.L', 'ORG-forearm.L', 'arm_l_influence', copy_local),
-    ('手首.L', 'ORG-hand.L', 'arm_l_influence', copy_local),
-    ('親指０.L', 'ORG-thumb.01.L', 'arm_l_influence', copy_local),
-    ('親指１.L', 'ORG-thumb.02.L', 'arm_l_influence', copy_local),
-    ('親指２.L', 'ORG-thumb.03.L', 'arm_l_influence', copy_local),
-    ('人指０.L', 'ORG-palm.01.L', 'arm_l_influence', copy_local),
-    ('人指１.L', 'ORG-f_index.01.L', 'arm_l_influence', copy_local),
-    ('人指２.L', 'ORG-f_index.02.L', 'arm_l_influence', copy_local),
-    ('人指３.L', 'ORG-f_index.03.L', 'arm_l_influence', copy_local),
-    ('中指０.L', 'ORG-palm.02.L', 'arm_l_influence', copy_local),
-    ('中指１.L', 'ORG-f_middle.01.L', 'arm_l_influence', copy_local),
-    ('中指２.L', 'ORG-f_middle.02.L', 'arm_l_influence', copy_local),
-    ('中指３.L', 'ORG-f_middle.03.L', 'arm_l_influence', copy_local),
-    ('薬指０.L', 'ORG-palm.03.L', 'arm_l_influence', copy_local),
-    ('薬指１.L', 'ORG-f_ring.01.L', 'arm_l_influence', copy_local),
-    ('薬指２.L', 'ORG-f_ring.02.L', 'arm_l_influence', copy_local),
-    ('薬指３.L', 'ORG-f_ring.03.L', 'arm_l_influence', copy_local),
-    ('小指０.L', 'ORG-palm.04.L', 'arm_l_influence', copy_local),
-    ('小指１.L', 'ORG-f_pinky.01.L', 'arm_l_influence', copy_local),
-    ('小指２.L', 'ORG-f_pinky.02.L', 'arm_l_influence', copy_local),
-    ('小指３.L', 'ORG-f_pinky.03.L', 'arm_l_influence', copy_local),
-
-    ('肩.R', 'ORG-shoulder.R', 'torso_influence', copy_parent),
-    ('腕.R', 'ORG-upper_arm.R', 'arm_r_influence', copy_local),
-    ('ひじ.R', 'ORG-forearm.R', 'arm_r_influence', copy_local),
-    ('手首.R', 'ORG-hand.R', 'arm_r_influence', copy_local),
-    ('親指０.R', 'ORG-thumb.01.R', 'arm_r_influence', copy_local),
-    ('親指１.R', 'ORG-thumb.02.R', 'arm_r_influence', copy_local),
-    ('親指２.R', 'ORG-thumb.03.R', 'arm_r_influence', copy_local),
-    ('人指０.R', 'ORG-palm.01.R', 'arm_r_influence', copy_local),
-    ('人指１.R', 'ORG-f_index.01.R', 'arm_r_influence', copy_local),
-    ('人指２.R', 'ORG-f_index.02.R', 'arm_r_influence', copy_local),
-    ('人指３.R', 'ORG-f_index.03.R', 'arm_r_influence', copy_local),
-    ('中指０.R', 'ORG-palm.02.R', 'arm_r_influence', copy_local),
-    ('中指１.R', 'ORG-f_middle.01.R', 'arm_r_influence', copy_local),
-    ('中指２.R', 'ORG-f_middle.02.R', 'arm_r_influence', copy_local),
-    ('中指３.R', 'ORG-f_middle.03.R', 'arm_r_influence', copy_local),
-    ('薬指０.R', 'ORG-palm.03.R', 'arm_r_influence', copy_local),
-    ('薬指１.R', 'ORG-f_ring.01.R', 'arm_r_influence', copy_local),
-    ('薬指２.R', 'ORG-f_ring.02.R', 'arm_r_influence', copy_local),
-    ('薬指３.R', 'ORG-f_ring.03.R', 'arm_r_influence', copy_local),
-    ('小指０.R', 'ORG-palm.04.R', 'arm_r_influence', copy_local),
-    ('小指１.R', 'ORG-f_pinky.01.R', 'arm_r_influence', copy_local),
-    ('小指２.R', 'ORG-f_pinky.02.R', 'arm_r_influence', copy_local),
-    ('小指３.R', 'ORG-f_pinky.03.R', 'arm_r_influence', copy_local),
-
-
-    ('下半身', 'ORG-spine', 'torso_influence', copy_spine),
-    ('足.L', 'ORG-thigh.L', 'leg_l_influence', copy_local),
-    ('ひざ.L', 'ORG-shin.L', 'leg_l_influence', copy_local),
-    ('足首.L', 'ORG-foot.L', 'leg_l_influence', copy_local),
-    ('足ＩＫ.L', 'ORG-foot.L', 'leg_l_influence', copy_parent),
-    ('足先EX.L', 'ORG-toe.L', 'leg_l_influence', copy_toe),
-
-    ('足.R', 'ORG-thigh.R', 'leg_r_influence', copy_local),
-    ('ひざ.R', 'ORG-shin.R', 'leg_r_influence', copy_local),
-    ('足首.R', 'ORG-foot.R', 'leg_r_influence', copy_local),
-    ('足ＩＫ.R', 'ORG-foot.R', 'leg_r_influence', copy_parent),
-    ('足先EX.R', 'ORG-toe.R', 'leg_r_influence', copy_toe),
-
-]
 
 
 class MMDRigifyIntegrate(bpy.types.Operator):
@@ -616,17 +707,17 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         return mmd_object is not None and rigify_object is not None
 
-    def edit_bones(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: bpy.types.Object):
+    def edit_bones(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = rigify_armature_object.data.edit_bones
-        mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.data.edit_bones
+        mmd_edit_bones: MMDArmatureEditBones = mmd_armature_object.edit_bones
 
         center_bone = rig_edit_bones.new('center')
-        center_bone.layers = [i == 4 for i in range(32)]
+        center_bone.layers = [i in {4} for i in range(32)]
         center_bone.head = mmd_edit_bones['センター'].head
         center_bone.tail = mmd_edit_bones['センター'].tail
 
         groove_bone = rig_edit_bones.new('groove')
-        groove_bone.layers = [i == 4 for i in range(32)]
+        groove_bone.layers = [i in {4} for i in range(32)]
         groove_bone.head = mmd_edit_bones['グルーブ'].head
         groove_bone.tail = mmd_edit_bones['グルーブ'].tail
 
@@ -640,6 +731,9 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
     def imitate_mmd_behavior(self, rigify_armature_object: bpy.types.Object):
         """Imitate the behavior of MMD armature as much as possible."""
+
+        rigify_armature_object.show_in_front = True
+
         pose_bones = rigify_armature_object.pose.bones
 
         pose_bones["upper_arm_parent.L"]["IK_FK"] = 0.000
@@ -649,45 +743,46 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         pose_bones['thigh_parent.L']['IK_Stretch'] = 0.000
         pose_bones['thigh_parent.R']['IK_Stretch'] = 0.000
-
         pose_bones['thigh_parent.L']['IK_parent'] = 1  # root
         pose_bones['thigh_parent.R']['IK_parent'] = 1  # root
+        pose_bones['thigh_parent.L']['pole_parent'] = 2  # torso
+        pose_bones['thigh_parent.R']['pole_parent'] = 2  # torso
 
         # torso hack
         pose_bones["torso"]["neck_follow"] = 1.000  # follow chest
         pose_bones["torso"]["head_follow"] = 1.000  # follow chest
 
-        bones: bpy.types.ArmatureBones = rigify_armature_object.data.bones
-
         # 上半身２
         pose_bones["MCH-spine.003"].constraints['Copy Transforms'].influence = 0.000
         pose_bones["MCH-spine.002"].constraints['Copy Transforms'].influence = 1.000
 
+        bones: bpy.types.ArmatureBones = rigify_armature_object.data.bones
+
         # 上半身
-        bones["tweak_spine.001"].use_inherit_rotation = False
+        bones["tweak_spine.001"].use_inherit_rotation = True
 
         # 下半身
         bones["spine_fk"].use_inherit_rotation = False
 
-    def fit_bone_rotations(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: bpy.types.Object):
+    def fit_bone_rotations(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = rigify_armature_object.data.edit_bones
-        mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.data.edit_bones
+        mmd_edit_bones: MMDArmatureEditBones = mmd_armature_object.edit_bones
 
-        for mmd_name, org_name, _, _ in bind_bone_mapping:
-            if mmd_name not in mmd_edit_bones:
+        for mmd_rigify_bone in mmd_armature_object.mmd_rigify_bones:
+            if mmd_rigify_bone.bind_bone_name is None:
                 continue
-            mmd_edit_bones[mmd_name].roll = rig_edit_bones[org_name].roll
 
-    def pose_bone_constraints(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: bpy.types.Object):
+            mmd_edit_bones[mmd_rigify_bone.mmd_bone_name].roll = rig_edit_bones[mmd_rigify_bone.bind_bone_name].roll
+
+    def pose_bone_constraints(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rig_pose_bones: Dict[str, bpy.types.PoseBone] = rigify_armature_object.pose.bones
         rig_bone_groups = rigify_armature_object.pose.bone_groups
-        mmd_pose_bones: Dict[str, bpy.types.PoseBone] = mmd_armature_object.pose.bones
 
         rig_pose_bones['center'].bone_group = rig_bone_groups['Tweak']
         rig_pose_bones['groove'].bone_group = rig_bone_groups['Tweak']
 
         torso_pose_bone = rig_pose_bones['torso']
-        for influence_prop_name in set([g for _, _, g, _ in bind_bone_mapping]):
+        for influence_prop_name in group_type2prop_names.values():
             rna_prop_ui.rna_idprop_ui_create(
                 torso_pose_bone,
                 influence_prop_name,
@@ -699,44 +794,51 @@ class MMDRigifyIntegrate(bpy.types.Operator):
                 subtype=None
             )
 
-        for mmd_name, org_name, influence_prop_name, edit in bind_bone_mapping:
-            if mmd_name not in mmd_pose_bones:
+        mmd_pose_bones: MMDArmaturePoseBones = mmd_armature_object.pose_bones
+
+        for mmd_rigify_bone in mmd_armature_object.mmd_rigify_bones:
+            if mmd_rigify_bone.bind_type == BindType.NONE:
                 continue
 
-            mmd_pose_bone = mmd_pose_bones[mmd_name]
+            mmd_pose_bone = mmd_pose_bones[mmd_rigify_bone.mmd_bone_name]
+            prop_data_path = f'pose.bones["torso"]["{group_type2prop_names[mmd_rigify_bone.group_type]}"]'
+
             for constraint in mmd_pose_bone.constraints:
                 if constraint.name.startswith('mmd_rigify_'):
                     mmd_pose_bone.constraints.remove(constraint)
 
                 elif constraint.name == 'IK' and constraint.type == 'IK':
-                    constraint.influence = 0.000
+                    add_influence_driver(constraint, rigify_armature_object, prop_data_path, invert=True)
 
-            edit(rigify_armature_object, mmd_pose_bones, mmd_name, org_name, f'pose.bones["torso"]["{influence_prop_name}"]')
+            binders[mmd_rigify_bone.bind_type](
+                mmd_pose_bone,
+                rigify_armature_object,
+                mmd_rigify_bone.bind_bone_name,
+                prop_data_path
+            )
 
     def assign_mmd_bone_names(self, rigify_armature_object: bpy.types.Object):
         pose_bones = rigify_armature_object.pose.bones
 
-        mmd_bone_names = set(pose_bone_mapping.values())
+        mmd_name2rigify_names = {b.mmd_bone_name: b.pose_bone_name for b in mmd_rigify_bones}
 
         # clear mmd pose bone names
         for pose_bone in pose_bones:
-            if pose_bone.mmd_bone.name_j not in mmd_bone_names:
+            if pose_bone.mmd_bone.name_j not in mmd_name2rigify_names:
                 continue
 
             pose_bone.mmd_bone.name_j = ''
 
-        for name_rigify, name_mmd in pose_bone_mapping.items():
-            if name_rigify not in pose_bones:
+        for mmd_bone_name, pose_bone_name in mmd_name2rigify_names.items():
+            if pose_bone_name is None:
                 continue
 
-            pose_bones[name_rigify].mmd_bone.name_j = name_mmd
+            pose_bones[pose_bone_name].mmd_bone.name_j = mmd_bone_name
 
-    def change_mmd_bone_layer(self, mmd_armature_object: bpy.types.Object):
-        mmd_bones: Dict[str, bpy.types.Bone] = mmd_armature_object.data.bones
-        for mmd_name, _, _, _ in bind_bone_mapping:
-            if mmd_name not in mmd_bones:
-                continue
-            mmd_bones[mmd_name].layers[23] = True
+    def change_mmd_bone_layer(self, mmd_armature_object: MMDArmatureObject):
+        mmd_bones = mmd_armature_object.bones
+        for mmd_rigify_bone in mmd_armature_object.mmd_rigify_bones:
+            mmd_bones[mmd_rigify_bone.mmd_bone_name].layers[23] = True
 
     def set_view_layers(self, rigify_armature_object: bpy.types.Object):
         rig_armature: bpy.types.Armature = rigify_armature_object.data
@@ -744,6 +846,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context):
         rigify_armature_object, mmd_armature_object = self.find_armature_objects(bpy.context.selected_objects)
+        mmd_armature_object = MMDArmatureObject(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
         self.edit_bones(rigify_armature_object, mmd_armature_object)
@@ -778,21 +881,21 @@ class OperatorPanel(bpy.types.Panel):
 
     def draw(self, context: bpy.types.Context):
         torso_pose_bone = bpy.context.active_object.pose.bones['torso']
-        if 'torso_influence' not in torso_pose_bone:
+        if group_type2prop_names[GroupType.TORSO] not in torso_pose_bone:
             return
 
         layout = self.layout
         col = layout.column()
         col.label(text='Influences:')
         row = col.row()
-        row.prop(torso_pose_bone, '["torso_influence"]', text='Torso', slider=True)
+        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
 
         row = col.row()
-        row.prop(torso_pose_bone, '["arm_l_influence"]', text='Arm.L', slider=True)
-        row.prop(torso_pose_bone, '["arm_r_influence"]', text='Arm.R', slider=True)
+        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
+        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
         row = col.row()
-        row.prop(torso_pose_bone, '["leg_l_influence"]', text='Leg.L', slider=True)
-        row.prop(torso_pose_bone, '["leg_r_influence"]', text='Leg.R', slider=True)
+        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
+        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
 
 
 class MMDArmatureAssignBoneNames(bpy.types.Operator):
