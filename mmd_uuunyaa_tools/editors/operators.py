@@ -65,7 +65,7 @@ mmd_rigify_bones = [
     MMDRigifyBone(BoneType.PARENT, '全ての親', 'root', 'root', GroupType.TORSO, BindType.COPY_PARENT),
     MMDRigifyBone(BoneType.STANDARD, 'センター', 'center', 'center', GroupType.TORSO, BindType.COPY_PARENT),
     MMDRigifyBone(BoneType.GROOVE, 'グルーブ', 'groove', 'groove', GroupType.TORSO, BindType.COPY_PARENT),
-    MMDRigifyBone(BoneType.STANDARD, '上半身', 'torso', 'ORG-spine.001', GroupType.TORSO, BindType.COPY_PARENT),
+    MMDRigifyBone(BoneType.STANDARD, '上半身', 'torso', 'ORG-spine.001', GroupType.TORSO, BindType.COPY_POSE),
     MMDRigifyBone(BoneType.UPPER_BODY_2, '上半身2', 'chest', 'ORG-spine.002', GroupType.TORSO, BindType.COPY_PARENT),
     MMDRigifyBone(BoneType.STANDARD, '首', 'neck', 'ORG-spine.005', GroupType.TORSO, BindType.COPY_PARENT),
     MMDRigifyBone(BoneType.STANDARD, '頭', 'head', 'ORG-spine.006', GroupType.TORSO, BindType.COPY_PARENT),
@@ -212,9 +212,9 @@ def create_binders() -> Dict[BindType, Callable]:
         constraint = mmd_bone.constraints.new('COPY_LOCATION')
         constraint.name = 'mmd_rigify_copy_location'
         constraint.target = org_armature_object
-        constraint.subtarget = 'ORG-spine.001'
-        constraint.target_space = 'WORLD'
-        constraint.owner_space = 'WORLD'
+        constraint.subtarget = 'spine_fk'
+        constraint.target_space = 'POSE'
+        constraint.owner_space = 'POSE'
         add_influence_driver(constraint, org_armature_object, influence_data_path)
 
         constraint = mmd_bone.constraints.new('COPY_ROTATION')
@@ -707,40 +707,65 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         return mmd_object is not None and rigify_object is not None
 
-    def edit_bones(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
+    def imitate_mmd_bone_behavior(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = rigify_armature_object.data.edit_bones
         mmd_edit_bones: MMDArmatureEditBones = mmd_armature_object.edit_bones
 
+        # add center (センター) bone
         center_bone = rig_edit_bones.new('center')
         center_bone.layers = [i in {4} for i in range(32)]
         center_bone.head = mmd_edit_bones['センター'].head
         center_bone.tail = mmd_edit_bones['センター'].tail
 
+        # add groove (グルーブ) bone
         groove_bone = rig_edit_bones.new('groove')
         groove_bone.layers = [i in {4} for i in range(32)]
         groove_bone.head = mmd_edit_bones['グルーブ'].head
         groove_bone.tail = mmd_edit_bones['グルーブ'].tail
 
+        # fix torso rotation origin
         torso_bone = rig_edit_bones['torso']
         torso_bone.head = mmd_edit_bones['上半身'].head
         torso_bone.tail[2] = torso_bone.head[2]
 
+        # set parent-child relationship
         center_bone.parent = rig_edit_bones['MCH-torso.parent']
         groove_bone.parent = center_bone
         torso_bone.parent = groove_bone
 
-    def imitate_mmd_behavior(self, rigify_armature_object: bpy.types.Object):
+        def move_bone(edit_bone: bpy.types.EditBone, head: Vector = None, tail: Vector = None):
+            vector: Vector = edit_bone.vector
+            if head is not None:
+                edit_bone.head = head
+                edit_bone.tail = head + vector
+            elif tail is not None:
+                edit_bone.head = tail - vector
+                edit_bone.tail = tail
+
+        # split spine.001 (上半身) and spine (下半身)
+        rig_edit_bones['ORG-spine.001'].use_connect = False
+        rig_edit_bones['ORG-spine.001'].head = mmd_edit_bones['上半身'].head
+        rig_edit_bones['DEF-spine.001'].use_connect = False
+        rig_edit_bones['DEF-spine.001'].head = mmd_edit_bones['上半身'].head
+
+        rig_edit_bones['ORG-spine'].tail = rig_edit_bones['spine_fk'].head
+        move_bone(rig_edit_bones['MCH-spine'], head=mmd_edit_bones['上半身'].head)
+        move_bone(rig_edit_bones['tweak_spine.001'], head=mmd_edit_bones['上半身'].head)
+
+    def imitate_mmd_pose_behavior(self, rigify_armature_object: bpy.types.Object):
         """Imitate the behavior of MMD armature as much as possible."""
 
         rigify_armature_object.show_in_front = True
 
         pose_bones = rigify_armature_object.pose.bones
 
+        # set arms IK and stretch
         pose_bones["upper_arm_parent.L"]["IK_FK"] = 0.000
         pose_bones["upper_arm_parent.R"]["IK_FK"] = 0.000
         pose_bones['upper_arm_parent.L']['IK_Stretch'] = 0.000
         pose_bones['upper_arm_parent.R']['IK_Stretch'] = 0.000
 
+        # set legs IK and stretch
         pose_bones['thigh_parent.L']['IK_Stretch'] = 0.000
         pose_bones['thigh_parent.R']['IK_Stretch'] = 0.000
         pose_bones['thigh_parent.L']['IK_parent'] = 1  # root
@@ -752,9 +777,13 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         pose_bones["torso"]["neck_follow"] = 1.000  # follow chest
         pose_bones["torso"]["head_follow"] = 1.000  # follow chest
 
-        # 上半身２
+        # 上半身２ connect spine.002 and spine.003
         pose_bones["MCH-spine.003"].constraints['Copy Transforms'].influence = 0.000
         pose_bones["MCH-spine.002"].constraints['Copy Transforms'].influence = 1.000
+
+        # TODO enable spine_fk.003
+        # split 上半身２
+        # constraint subtarget ORG-spine.003
 
         bones: bpy.types.ArmatureBones = rigify_armature_object.data.bones
 
@@ -763,6 +792,18 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         # 下半身
         bones["spine_fk"].use_inherit_rotation = False
+
+        # split spine.001 (上半身) and spine (下半身)
+        pose_bones["ORG-spine.001"].constraints['Copy Transforms'].subtarget = 'tweak_spine.001'
+        pose_bones["ORG-spine.001"].constraints['Stretch To'].subtarget = 'tweak_spine.002'
+
+        pose_bones["ORG-spine"].constraints['Copy Transforms'].subtarget = 'tweak_spine'
+        pose_bones["ORG-spine"].constraints['Stretch To'].subtarget = 'spine_fk'
+
+        # reset rest_length
+        # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
+        pose_bones["ORG-spine.001"].constraints['Stretch To'].rest_length = 0.000
+        pose_bones["ORG-spine"].constraints['Stretch To'].rest_length = 0.000
 
     def fit_bone_rotations(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = rigify_armature_object.data.edit_bones
@@ -849,11 +890,11 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         mmd_armature_object = MMDArmatureObject(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
-        self.edit_bones(rigify_armature_object, mmd_armature_object)
+        self.imitate_mmd_bone_behavior(rigify_armature_object, mmd_armature_object)
         self.fit_bone_rotations(rigify_armature_object, mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='POSE')
-        self.imitate_mmd_behavior(rigify_armature_object)
+        self.imitate_mmd_pose_behavior(rigify_armature_object)
         self.assign_mmd_bone_names(rigify_armature_object)
         self.pose_bone_constraints(rigify_armature_object, mmd_armature_object)
 
@@ -880,22 +921,31 @@ class OperatorPanel(bpy.types.Panel):
         return context.object.type == 'ARMATURE' and context.active_object.data.get('rig_id') is not None
 
     def draw(self, context: bpy.types.Context):
-        torso_pose_bone = bpy.context.active_object.pose.bones['torso']
-        if group_type2prop_names[GroupType.TORSO] not in torso_pose_bone:
+        pose_bones = bpy.context.active_object.pose.bones
+
+        if group_type2prop_names[GroupType.TORSO] not in pose_bones['torso']:
             return
 
         layout = self.layout
         col = layout.column()
+
+        col.label(text='IK-FK:')
+        row = col.row()
+        row.prop(pose_bones['upper_arm_parent.L'], '["IK_FK"]', text='Arm.L', slider=True)
+        row.prop(pose_bones['upper_arm_parent.R'], '["IK_FK"]', text='Arm.R', slider=True)
+        row = col.row()
+        row.prop(pose_bones['thigh_parent.L'], '["IK_FK"]', text='Leg.L', slider=True)
+        row.prop(pose_bones['thigh_parent.R'], '["IK_FK"]', text='Leg.R', slider=True)
+
         col.label(text='Influences:')
         row = col.row()
-        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
-
+        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
         row = col.row()
-        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
-        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
+        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
+        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
         row = col.row()
-        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
-        row.prop(torso_pose_bone, f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
+        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
+        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
 
 
 class MMDArmatureAssignBoneNames(bpy.types.Operator):
