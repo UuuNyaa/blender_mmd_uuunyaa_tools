@@ -6,7 +6,7 @@ import bpy
 
 from mmd_uuunyaa_tools import operators
 from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
-from mmd_uuunyaa_tools.editors.operators import MMDArmatureAddMetarig, MMDRigifyIntegrate, MMDArmatureClean
+from mmd_uuunyaa_tools.editors.operators import MMDArmatureAddMetarig, MMDRigifyIntegrate
 
 
 class OperatorPanel(bpy.types.Panel):
@@ -27,7 +27,6 @@ class OperatorPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text='Rigify:', icon='OUTLINER_OB_ARMATURE')
-        col.operator(MMDArmatureClean.bl_idname, text='Clean', icon='SHADERFX')
         col.operator(MMDArmatureAddMetarig.bl_idname, text='Add Metarig', icon='ADD')
         col.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE')
 

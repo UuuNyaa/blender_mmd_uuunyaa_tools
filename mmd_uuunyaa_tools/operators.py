@@ -257,8 +257,7 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
     weight_threshold: bpy.props.FloatProperty(name='Weight Threshold', default=0.0, min=0.0, max=1.0)
 
     def invoke(self, context, event):
-        wm = context.window_manager
-        return wm.invoke_props_dialog(self)
+        return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context):
         for obj in context.selected_objects:
