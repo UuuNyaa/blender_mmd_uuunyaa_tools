@@ -10,7 +10,7 @@ from typing import Callable, Dict, Iterable, List, Set, Tuple, Union
 import bpy
 import rna_prop_ui
 from mathutils import Vector
-from mmd_uuunyaa_tools.utilities import import_mmd_tools
+from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 
 
 class BoneType(Enum):
@@ -413,6 +413,10 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
             bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
             bpy.ops.object.armature_human_metarig_add()
             return bpy.context.object
+        except AttributeError as e:
+            if str(e) != 'Calling operator "bpy.ops.object.armature_human_metarig_add" error, could not be found':
+                raise
+            raise MessageException('Failed to invoke Rigify\nPlease enable Rigify add-on.')
         finally:
             bpy.context.scene.cursor.location = original_cursor_location
 
@@ -631,7 +635,12 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context):
         mmd_object = context.active_object
-        metarig_object = self.create_metarig_object()
+
+        try:
+            metarig_object = self.create_metarig_object()
+        except MessageException as e:
+            self.report(type={'ERROR'}, message=str(e))
+            return {'CANCELLED'}
 
         mmd_armature_object = MMDArmatureObject(mmd_object)
         self.fit_scale(metarig_object, mmd_armature_object)
@@ -809,6 +818,15 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         rig_eye_r_bone.layers = [i in {0} for i in range(32)]
         rig_eye_r_bone.parent = rig_edit_bones['ORG-face']
 
+    def remove_unused_face_bones(self, rigify_armature_object: bpy.types.Object):
+        # remove unused face drivers
+        rig_pose_bones: Dict[str, bpy.types.PoseBone] = rigify_armature_object.pose.bones
+        rig_pose_bones['MCH-jaw_master'].constraints['Copy Transforms.001'].driver_remove('influence')
+        rig_pose_bones['MCH-jaw_master.001'].constraints['Copy Transforms.001'].driver_remove('influence')
+        rig_pose_bones['MCH-jaw_master.002'].constraints['Copy Transforms.001'].driver_remove('influence')
+        rig_pose_bones['MCH-jaw_master.003'].constraints['Copy Transforms.001'].driver_remove('influence')
+
+        # remove unused face bones
         use_bone_names = {
             'MCH-eyes_parent',
             'eyes',
@@ -819,7 +837,11 @@ class MMDRigifyIntegrate(bpy.types.Operator):
             'mmd_rigify_eyes_fk',
             'mmd_rigify_eye_fk.L', 'mmd_rigify_eye_fk.R',
         }
-        for rig_edit_bone in [b for b in rig_edit_bones['ORG-face'].children_recursive if b.name not in use_bone_names]:
+        rig_edit_bones: bpy.types.ArmatureEditBones = rigify_armature_object.data.edit_bones
+        for rig_edit_bone in rig_edit_bones['ORG-face'].children_recursive:
+            if rig_edit_bone.name in use_bone_names:
+                continue
+
             rig_edit_bones.remove(rig_edit_bone)
 
     def fit_bone_rotations(self, rigify_armature_object: bpy.types.Object, mmd_armature_object: MMDArmatureObject):
@@ -1054,6 +1076,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         self.change_mmd_bone_layer(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
+        self.remove_unused_face_bones(rigify_armature_object)
         self.fit_bone_rotations(rigify_armature_object, mmd_armature_object)
         self.imitate_mmd_bone_behavior(rigify_armature_object, mmd_armature_object)
 
