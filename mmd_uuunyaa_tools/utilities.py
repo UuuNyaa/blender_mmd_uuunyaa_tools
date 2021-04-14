@@ -149,3 +149,7 @@ class ObjectAppender(ObjectMarker):
             source.objects.unlink(obj)
             target.objects.link(obj)
         bpy.data.collections.remove(source)
+
+
+class MessageException(Exception):
+    """Class for error with message."""
