@@ -152,11 +152,11 @@ class SelectRelatedObjects(bpy.types.Operator):
 
             to_name = self.type_to_name_func[origin_type]
 
-            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', to_name(origin_object))
+            match = re.match(r'(.+)[_＿\-]([0-9]+)[_＿\-]([0-9]+)', to_name(origin_object))
             if match is None:
                 continue
 
-            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+            pattern = match.group(1) + r'[_＿\-]([0-9]+)[_＿\-]([0-9]+)'
 
             root = mmd_model.findRoot(origin_object)
 
@@ -195,11 +195,11 @@ class SelectRelatedBones(bpy.types.Operator):
             origin_editable_bone = origin_editable_bones.pop()
             armature = origin_editable_bone.id_data
 
-            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', origin_editable_bone.name)
+            match = re.match(r'(.+)[_＿\-]([0-9]+)[_＿\-]([0-9]+)', origin_editable_bone.name)
             if match is None:
                 continue
 
-            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+            pattern = match.group(1) + r'[_＿\-]([0-9]+)[_＿\-]([0-9]+)'
 
             for bone in armature.edit_bones:
                 if re.match(pattern, bone.name) is None:
@@ -230,11 +230,11 @@ class SelectRelatedPoseBones(bpy.types.Operator):
             origin_pose_bone = origin_pose_bones.pop()
             armature = origin_pose_bone.id_data
 
-            match = re.match(r'(.+)_([0-9]+)_([0-9]+)', origin_pose_bone.name)
+            match = re.match(r'(.+)[_＿\-]([0-9]+)[_＿\-]([0-9]+)', origin_pose_bone.name)
             if match is None:
                 continue
 
-            pattern = f'{match.group(1)}_([0-9]+)_([0-9]+)'
+            pattern = match.group(1) + r'[_＿\-]([0-9]+)[_＿\-]([0-9]+)'
 
             for pose_bone in armature.pose.bones:
                 if re.match(pattern, pose_bone.name) is None:
