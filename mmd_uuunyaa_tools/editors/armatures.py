@@ -82,8 +82,8 @@ mmd_rigify_bones = [
     MMDRigifyBone(MMDBoneType.STANDARD, '頭', 'head', 'ORG-spine.006', GroupType.TORSO, MMDBindType.COPY_PARENT),
 
     MMDRigifyBone(MMDBoneType.STANDARD, '両目', 'mmd_rigify_eyes_fk', 'mmd_rigify_eyes_fk', GroupType.FACE, MMDBindType.COPY_EYE),
-    MMDRigifyBone(MMDBoneType.STANDARD, '左目', 'mmd_rigify_eye_fk.L', 'ORG-eye.L', GroupType.FACE, MMDBindType.COPY_EYE),
-    MMDRigifyBone(MMDBoneType.STANDARD, '右目', 'mmd_rigify_eye_fk.R', 'ORG-eye.R', GroupType.FACE, MMDBindType.COPY_EYE),
+    MMDRigifyBone(MMDBoneType.STANDARD, '左目', 'mmd_rigify_eye_fk.L', 'MCH-eye.L', GroupType.FACE, MMDBindType.COPY_EYE),
+    MMDRigifyBone(MMDBoneType.STANDARD, '右目', 'mmd_rigify_eye_fk.R', 'MCH-eye.R', GroupType.FACE, MMDBindType.COPY_EYE),
 
     MMDRigifyBone(MMDBoneType.STANDARD, '左肩', 'shoulder.L', 'ORG-shoulder.L', GroupType.TORSO, MMDBindType.COPY_PARENT),
     MMDRigifyBone(MMDBoneType.STANDARD, '左腕', 'upper_arm_fk.L', 'ORG-upper_arm.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
@@ -400,6 +400,30 @@ class DataPath:
     prop_name: str
 
 
+class ControlType(Enum):
+    TORSO_NECK_FOLLOW = 'torso_neck_follow'
+    TORSO_HEAD_FOLLOW = 'torso_head_follow'
+    EYE_MMD_RIGIFY = 'eye_mmd_rigify'
+    ARM_L_IK_FK = 'arm_l_ik_fk'
+    ARM_R_IK_FK = 'arm_r_ik_fk'
+    ARM_L_IK_STRETCH = 'arm_l_ik_stretch'
+    ARM_R_IK_STRETCH = 'arm_r_ik_stretch'
+    ARM_L_IK_PARENT = 'arm_l_ik_parent'
+    ARM_R_IK_PARENT = 'arm_r_ik_parent'
+    ARM_L_POLE_VECTOR = 'arm_l_pole_vector'
+    ARM_R_POLE_VECTOR = 'arm_r_pole_vector'
+    LEG_L_IK_FK = 'leg_l_ik_fk'
+    LEG_R_IK_FK = 'leg_r_ik_fk'
+    LEG_L_IK_STRETCH = 'leg_l_ik_stretch'
+    LEG_R_IK_STRETCH = 'leg_r_ik_stretch'
+    LEG_L_IK_PARENT = 'leg_l_ik_parent'
+    LEG_R_IK_PARENT = 'leg_r_ik_parent'
+    LEG_L_POLE_VECTOR = 'leg_l_pole_vector'
+    LEG_R_POLE_VECTOR = 'leg_r_pole_vector'
+    LEG_L_POLE_PARENT = 'leg_l_pole_parent'
+    LEG_R_POLE_PARENT = 'leg_r_pole_parent'
+
+
 class RigifyArmatureObject:
     raw_object: bpy.types.Object
     raw_armature: bpy.types.Armature
@@ -439,28 +463,32 @@ class RigifyArmatureObject:
             else:
                 return 'R'
 
-        control_names = {
-            (True, False, 'L', 'IK_FK'): 'arm_l_ik_fk',
-            (True, False, 'R', 'IK_FK'): 'arm_r_ik_fk',
-            (True, False, 'L', 'IK_Strertch'): 'arm_l_ik_stretch',
-            (True, False, 'R', 'IK_Strertch'): 'arm_r_ik_stretch',
-            (True, False, 'L', 'IK_parent'): 'arm_l_ik_parent',
-            (True, False, 'R', 'IK_parent'): 'arm_r_ik_parent',
-            (True, False, 'L', 'pole_vector'): 'arm_l_pole_vector',
-            (True, False, 'R', 'pole_vector'): 'arm_r_pole_vector',
-            (False, True, 'L', 'IK_FK'): 'leg_l_ik_fk',
-            (False, True, 'R', 'IK_FK'): 'leg_r_ik_fk',
-            (False, True, 'L', 'IK_Strertch'): 'leg_l_ik_stretch',
-            (False, True, 'R', 'IK_Strertch'): 'leg_r_ik_stretch',
-            (False, True, 'L', 'IK_parent'): 'leg_l_ik_parent',
-            (False, True, 'R', 'IK_parent'): 'leg_r_ik_parent',
-            (False, True, 'L', 'pole_vector'): 'leg_l_pole_vector',
-            (False, True, 'R', 'pole_vector'): 'leg_r_pole_vector',
-            (False, True, 'L', 'pole_parent'): 'leg_l_pole_parent',
-            (False, True, 'R', 'pole_parent'): 'leg_r_pole_parent',
+        control_types = {
+            (True, False, 'L', 'IK_FK'): ControlType.ARM_L_IK_FK,
+            (True, False, 'R', 'IK_FK'): ControlType.ARM_R_IK_FK,
+            (True, False, 'L', 'IK_Strertch'): ControlType.ARM_L_IK_STRETCH,
+            (True, False, 'R', 'IK_Strertch'): ControlType.ARM_R_IK_STRETCH,
+            (True, False, 'L', 'IK_parent'): ControlType.ARM_L_IK_PARENT,
+            (True, False, 'R', 'IK_parent'): ControlType.ARM_R_IK_PARENT,
+            (True, False, 'L', 'pole_vector'): ControlType.ARM_L_POLE_VECTOR,
+            (True, False, 'R', 'pole_vector'): ControlType.ARM_R_POLE_VECTOR,
+            (False, True, 'L', 'IK_FK'): ControlType.LEG_L_IK_FK,
+            (False, True, 'R', 'IK_FK'): ControlType.LEG_R_IK_FK,
+            (False, True, 'L', 'IK_Strertch'): ControlType.LEG_L_IK_STRETCH,
+            (False, True, 'R', 'IK_Strertch'): ControlType.LEG_R_IK_STRETCH,
+            (False, True, 'L', 'IK_parent'): ControlType.LEG_L_IK_PARENT,
+            (False, True, 'R', 'IK_parent'): ControlType.LEG_R_IK_PARENT,
+            (False, True, 'L', 'pole_vector'): ControlType.LEG_L_POLE_VECTOR,
+            (False, True, 'R', 'pole_vector'): ControlType.LEG_R_POLE_VECTOR,
+            (False, True, 'L', 'pole_parent'): ControlType.LEG_L_POLE_PARENT,
+            (False, True, 'R', 'pole_parent'): ControlType.LEG_R_POLE_PARENT,
         }
 
-        datapaths: Dict[str, DataPath] = {}
+        datapaths: Dict[ControlType, DataPath] = {
+            ControlType.TORSO_NECK_FOLLOW: DataPath('torso', 'neck_follow'),
+            ControlType.TORSO_HEAD_FOLLOW: DataPath('torso', 'head_follow'),
+            ControlType.EYE_MMD_RIGIFY: DataPath('torso', 'mmd_rigify_eye_mmd_rigify'),
+        }
 
         for pose_bone in self.pose_bones:
             bone_name = pose_bone.name
@@ -469,9 +497,7 @@ class RigifyArmatureObject:
             is_leg_bone_name = 'thigh_parent' in bone_name
             bone_suffix = to_bone_suffix(bone_name)
 
-            keys = pose_bone.keys()
-
-            for key in keys:
+            for key in pose_bone.keys():
                 if key in {'IK_FK', 'IK/FK'}:
                     prop_name = 'IK_FK'
                 elif key in {'IK_Strertch', 'IK_parent', 'pole_vector', 'pole_parent'}:
@@ -479,11 +505,11 @@ class RigifyArmatureObject:
                 else:
                     continue
 
-                control_name = control_names.get((is_arm_bone_name, is_leg_bone_name, bone_suffix, prop_name))
-                if control_name is None:
+                control_type = control_types.get((is_arm_bone_name, is_leg_bone_name, bone_suffix, prop_name))
+                if control_type is None:
                     continue
 
-                datapaths[control_name] = DataPath(bone_name, key)
+                datapaths[control_type] = DataPath(bone_name, key)
 
         self.datapaths = datapaths
 
@@ -499,161 +525,185 @@ class RigifyArmatureObject:
     def edit_bones(self) -> RigifyArmatureEditBones:
         return self.raw_armature.edit_bones
 
-    def _get_property(self, control_name):
-        datapath = self.datapaths.get(control_name)
+    def _get_property(self, control_type: ControlType):
+        datapath = self.datapaths.get(control_type)
         if datapath is None:
             return None
         return self.pose_bones[datapath.bone_name][datapath.prop_name]
 
-    def _set_property(self, control_name, value):
-        datapath = self.datapaths.get(control_name)
+    def _set_property(self, control_type: ControlType, value):
+        datapath = self.datapaths.get(control_type)
         if datapath is None:
             return
         self.pose_bones[datapath.bone_name][datapath.prop_name] = value
 
     @property
+    def torso_neck_follow(self):
+        return self._get_property(ControlType.TORSO_NECK_FOLLOW)
+
+    @torso_neck_follow.setter
+    def torso_neck_follow(self, value):
+        self._set_property(ControlType.TORSO_NECK_FOLLOW, value)
+
+    @property
+    def torso_head_follow(self):
+        return self._get_property(ControlType.TORSO_HEAD_FOLLOW)
+
+    @torso_head_follow.setter
+    def torso_head_follow(self, value):
+        self._set_property(ControlType.TORSO_HEAD_FOLLOW, value)
+
+    @property
+    def eye_mmd_rigify(self):
+        return self._get_property(ControlType.EYE_MMD_RIGIFY)
+
+    @eye_mmd_rigify.setter
+    def eye_mmd_rigify(self, value):
+        self._set_property(ControlType.EYE_MMD_RIGIFY, value)
+
+    @property
     def arm_l_ik_fk(self):
-        return self._get_property('arm_l_ik_fk')
+        return self._get_property(ControlType.ARM_L_IK_FK)
 
     @arm_l_ik_fk.setter
     def arm_l_ik_fk(self, value):
-        self._set_property('arm_l_ik_fk', value)
+        self._set_property(ControlType.ARM_L_IK_FK, value)
 
     @property
     def arm_r_ik_fk(self):
-        return self._get_property('arm_r_ik_fk')
+        return self._get_property(ControlType.ARM_R_IK_FK)
 
     @arm_r_ik_fk.setter
     def arm_r_ik_fk(self, value):
-        self._set_property('arm_r_ik_fk', value)
+        self._set_property(ControlType.ARM_R_IK_FK, value)
 
     @property
     def arm_l_ik_stretch(self):
-        return self._get_property('arm_l_ik_stretch')
+        return self._get_property(ControlType.ARM_L_IK_STRETCH)
 
     @arm_l_ik_stretch.setter
     def arm_l_ik_stretch(self, value):
-        self._set_property('arm_l_ik_stretch', value)
+        self._set_property(ControlType.ARM_L_IK_STRETCH, value)
 
     @property
     def arm_r_ik_stretch(self):
-        return self._get_property('arm_r_ik_stretch')
+        return self._get_property(ControlType.ARM_R_IK_STRETCH)
 
     @arm_r_ik_stretch.setter
     def arm_r_ik_stretch(self, value):
-        self._set_property('arm_r_ik_stretch', value)
+        self._set_property(ControlType.ARM_R_IK_STRETCH, value)
 
     @property
     def arm_l_ik_parent(self):
-        return self._get_property('arm_l_ik_parent')
+        return self._get_property(ControlType.ARM_L_IK_PARENT)
 
     @arm_l_ik_parent.setter
     def arm_l_ik_parent(self, value):
-        self._set_property('arm_l_ik_parent', value)
+        self._set_property(ControlType.ARM_L_IK_PARENT, value)
 
     @property
     def arm_r_ik_parent(self):
-        return self._get_property('arm_r_ik_parent')
+        return self._get_property(ControlType.ARM_R_IK_PARENT)
 
     @arm_r_ik_parent.setter
     def arm_r_ik_parent(self, value):
-        self._set_property('arm_r_ik_parent', value)
+        self._set_property(ControlType.ARM_R_IK_PARENT, value)
 
     @property
     def arm_l_pole_vector(self):
-        return self._get_property('arm_l_pole_vector')
+        return self._get_property(ControlType.ARM_L_POLE_VECTOR)
 
     @arm_l_pole_vector.setter
     def arm_l_pole_vector(self, value):
-        self._set_property('arm_l_pole_vector', value)
+        self._set_property(ControlType.ARM_L_POLE_VECTOR, value)
 
     @property
     def arm_r_pole_vector(self):
-        return self._get_property('arm_r_pole_vector')
+        return self._get_property(ControlType.ARM_R_POLE_VECTOR)
 
     @arm_r_pole_vector.setter
     def arm_r_pole_vector(self, value):
-        self._set_property('arm_r_pole_vector', value)
+        self._set_property(ControlType.ARM_R_POLE_VECTOR, value)
 
     @property
     def leg_l_ik_fk(self):
-        return self._get_property('leg_l_ik_fk')
+        return self._get_property(ControlType.LEG_L_IK_FK)
 
     @leg_l_ik_fk.setter
     def leg_l_ik_fk(self, value):
-        self._set_property('leg_l_ik_fk', value)
+        self._set_property(ControlType.LEG_L_IK_FK, value)
 
     @property
     def leg_r_ik_fk(self):
-        return self._get_property('leg_r_ik_fk')
+        return self._get_property(ControlType.LEG_R_IK_FK)
 
     @leg_r_ik_fk.setter
     def leg_r_ik_fk(self, value):
-        self._set_property('leg_r_ik_fk', value)
+        self._set_property(ControlType.LEG_R_IK_FK, value)
 
     @property
     def leg_l_ik_stretch(self):
-        return self._get_property('leg_l_ik_stretch')
+        return self._get_property(ControlType.LEG_L_IK_STRETCH)
 
     @leg_l_ik_stretch.setter
     def leg_l_ik_stretch(self, value):
-        self._set_property('leg_l_ik_stretch', value)
+        self._set_property(ControlType.LEG_L_IK_STRETCH, value)
 
     @property
     def leg_r_ik_stretch(self):
-        return self._get_property('leg_r_ik_stretch')
+        return self._get_property(ControlType.LEG_R_IK_STRETCH)
 
     @leg_r_ik_stretch.setter
     def leg_r_ik_stretch(self, value):
-        self._set_property('leg_r_ik_stretch', value)
+        self._set_property(ControlType.LEG_R_IK_STRETCH, value)
 
     @property
     def leg_l_ik_parent(self):
-        return self._get_property('leg_l_ik_parent')
+        return self._get_property(ControlType.LEG_L_IK_PARENT)
 
     @leg_l_ik_parent.setter
     def leg_l_ik_parent(self, value):
-        self._set_property('leg_l_ik_parent', value)
+        self._set_property(ControlType.LEG_L_IK_PARENT, value)
 
     @property
     def leg_r_ik_parent(self):
-        return self._get_property('leg_r_ik_parent')
+        return self._get_property(ControlType.LEG_R_IK_PARENT)
 
     @leg_r_ik_parent.setter
     def leg_r_ik_parent(self, value):
-        self._set_property('leg_r_ik_parent', value)
+        self._set_property(ControlType.LEG_R_IK_PARENT, value)
 
     @property
     def leg_l_pole_vector(self):
-        return self._get_property('leg_l_pole_vector')
+        return self._get_property(ControlType.LEG_L_POLE_VECTOR)
 
     @leg_l_pole_vector.setter
     def leg_l_pole_vector(self, value):
-        self._set_property('leg_l_pole_vector', value)
+        self._set_property(ControlType.LEG_L_POLE_VECTOR, value)
 
     @property
     def leg_r_pole_vector(self):
-        return self._get_property('leg_r_pole_vector')
+        return self._get_property(ControlType.LEG_R_POLE_VECTOR)
 
     @leg_r_pole_vector.setter
     def leg_r_pole_vector(self, value):
-        self._set_property('leg_r_pole_vector', value)
+        self._set_property(ControlType.LEG_R_POLE_VECTOR, value)
 
     @property
     def leg_l_pole_parent(self):
-        return self._get_property('leg_l_pole_parent')
+        return self._get_property(ControlType.LEG_L_POLE_PARENT)
 
     @leg_l_pole_parent.setter
     def leg_l_pole_parent(self, value):
-        self._set_property('leg_l_pole_parent', value)
+        self._set_property(ControlType.LEG_L_POLE_PARENT, value)
 
     @property
     def leg_r_pole_parent(self):
-        return self._get_property('leg_r_pole_parent')
+        return self._get_property(ControlType.LEG_R_POLE_PARENT)
 
     @leg_r_pole_parent.setter
     def leg_r_pole_parent(self, value):
-        self._set_property('leg_r_pole_parent', value)
+        self._set_property(ControlType.LEG_R_POLE_PARENT, value)
 
     def imitate_mmd_pose_behavior(self):
         """Imitate the behavior of MMD armature as much as possible."""
@@ -680,11 +730,12 @@ class RigifyArmatureObject:
         self.leg_l_pole_parent = 2  # torso
         self.leg_r_pole_parent = 2  # torso
 
-        pose_bones = self.pose_bones
+        # set eye motion mode
+        self.eye_mmd_rigify = 0.000  # MMD
 
         # torso hack
-        pose_bones['torso']['neck_follow'] = 1  # follow chest
-        pose_bones['torso']['head_follow'] = 1  # follow chest
+        self.torso_neck_follow = 1.000  # follow chest
+        self.torso_head_follow = 1.000  # follow chest
 
         def get_constraint(pose_bone: bpy.types.PoseBone, type: str) -> bpy.types.Constraint:
             for constraint in pose_bone.constraints:
@@ -699,6 +750,8 @@ class RigifyArmatureObject:
 
             for key, value in kwargs.items():
                 setattr(constraint, key, value)
+
+        pose_bones = self.pose_bones
 
         # 上半身２ connect spine.002 and spine.003
         edit_constraint(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', influence=0.000)
@@ -826,6 +879,8 @@ class RigifyArmatureObject:
         rig_pose_bones['mmd_rigify_eye_fk.R'].bone_group = rig_bone_groups['FK']
 
     def pose_bone_constraints(self):
+        eye_mmd_rigify = self.datapaths[ControlType.EYE_MMD_RIGIFY]
+
         def create_props(prop_storage_bone):
             for influence_prop_name in group_type2prop_names.values():
                 rna_prop_ui.rna_idprop_ui_create(
@@ -841,7 +896,7 @@ class RigifyArmatureObject:
 
             rna_prop_ui.rna_idprop_ui_create(
                 prop_storage_bone,
-                'mmd_rigify_eye_mmd_rigify',
+                eye_mmd_rigify.prop_name,
                 default=1.000,
                 min=0.000, max=1.000,
                 soft_min=None, soft_max=None,
@@ -868,25 +923,13 @@ class RigifyArmatureObject:
             add_influence_driver(constraint, self.raw_object, influence_data_path, invert=True)
             return constraint
 
-        def create_rig_rotation_constraint(rig_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: str) -> bpy.types.Constraint:
-            constraint = rig_bone.constraints.new('COPY_ROTATION')
-            constraint.name = 'mmd_rigify_copy_rotation_rigify'
-            constraint.target = self.raw_object
-            constraint.subtarget = subtarget
-            constraint.target_space = 'LOCAL'
-            constraint.owner_space = 'LOCAL'
-            add_influence_driver(constraint, self.raw_object, influence_data_path, invert=False)
-            return constraint
-
         rig_pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
         create_props(rig_pose_bones[self.prop_storage_bone_name])
         remove_constraints(rig_pose_bones)
-        create_mmd_rotation_constraint(rig_pose_bones['ORG-eye.L'], 'mmd_rigify_eye_fk.L', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]')
-        create_rig_rotation_constraint(rig_pose_bones['ORG-eye.L'], 'MCH-eye.L', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]')
-        create_mmd_rotation_constraint(rig_pose_bones['ORG-eye.R'], 'mmd_rigify_eye_fk.R', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]')
-        create_rig_rotation_constraint(rig_pose_bones['ORG-eye.R'], 'MCH-eye.R', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]')
-        create_mmd_rotation_constraint(rig_pose_bones['mmd_rigify_eye_fk.L'], 'mmd_rigify_eyes_fk', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]').mix_mode = 'ADD'
-        create_mmd_rotation_constraint(rig_pose_bones['mmd_rigify_eye_fk.R'], 'mmd_rigify_eyes_fk', 'pose.bones["torso"]["mmd_rigify_eye_mmd_rigify"]').mix_mode = 'ADD'
+        create_mmd_rotation_constraint(rig_pose_bones['MCH-eye.L'], 'mmd_rigify_eye_fk.L', f'pose.bones["{eye_mmd_rigify.bone_name}"]["{eye_mmd_rigify.prop_name}"]')
+        create_mmd_rotation_constraint(rig_pose_bones['MCH-eye.R'], 'mmd_rigify_eye_fk.R', f'pose.bones["{eye_mmd_rigify.bone_name}"]["{eye_mmd_rigify.prop_name}"]')
+        create_mmd_rotation_constraint(rig_pose_bones['mmd_rigify_eye_fk.L'], 'mmd_rigify_eyes_fk', f'pose.bones["{eye_mmd_rigify.bone_name}"]["{eye_mmd_rigify.prop_name}"]').mix_mode = 'ADD'
+        create_mmd_rotation_constraint(rig_pose_bones['mmd_rigify_eye_fk.R'], 'mmd_rigify_eyes_fk', f'pose.bones["{eye_mmd_rigify.bone_name}"]["{eye_mmd_rigify.prop_name}"]').mix_mode = 'ADD'
 
     def pose_mmd_rest(self, dependency_graph: bpy.types.Depsgraph, iterations: int):
         pose_bones = self.pose_bones
@@ -998,6 +1041,9 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
     @staticmethod
     def is_mmd_integrated_object(obj: bpy.types.Object):
         if not RigifyArmatureObject.is_rigify_armature_object(obj):
+            return False
+
+        if not MMDArmatureObject.is_mmd_armature_object(obj):
             return False
 
         pose_bones: Dict[str, bpy.types.PoseBone] = obj.pose.bones

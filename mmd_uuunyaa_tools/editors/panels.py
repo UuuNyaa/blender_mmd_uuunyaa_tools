@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import GroupType, group_type2prop_names
+from mmd_uuunyaa_tools.editors.armatures import ControlType, GroupType, group_type2prop_names, MMDRigifyArmatureObject
 
 
 class OperatorPanel(bpy.types.Panel):
@@ -22,10 +22,17 @@ class OperatorPanel(bpy.types.Panel):
         return context.object.type == 'ARMATURE' and context.active_object.data.get('rig_id') is not None
 
     def draw(self, context: bpy.types.Context):
+        active_object = bpy.context.active_object
         pose_bones = bpy.context.active_object.pose.bones
 
         if group_type2prop_names[GroupType.TORSO] not in pose_bones['torso']:
             return
+
+        rigify_armature_object = MMDRigifyArmatureObject(active_object)
+        arm_l_ik_fk = rigify_armature_object.datapaths[ControlType.ARM_L_IK_FK]
+        arm_r_ik_fk = rigify_armature_object.datapaths[ControlType.ARM_R_IK_FK]
+        leg_l_ik_fk = rigify_armature_object.datapaths[ControlType.LEG_L_IK_FK]
+        leg_r_ik_fk = rigify_armature_object.datapaths[ControlType.LEG_R_IK_FK]
 
         layout = self.layout
         col = layout.column()
@@ -36,11 +43,14 @@ class OperatorPanel(bpy.types.Panel):
 
         col.label(text='IK-FK:')
         row = col.row()
-        row.prop(pose_bones['upper_arm_parent.L'], '["IK_FK"]', text='Arm.L', slider=True)
-        row.prop(pose_bones['upper_arm_parent.R'], '["IK_FK"]', text='Arm.R', slider=True)
+        row.prop(pose_bones[arm_l_ik_fk.bone_name], f'["{arm_l_ik_fk.prop_name}"]', text='Arm.L', slider=True)
+        row.prop(pose_bones[arm_r_ik_fk.bone_name], f'["{arm_r_ik_fk.prop_name}"]', text='Arm.R', slider=True)
         row = col.row()
-        row.prop(pose_bones['thigh_parent.L'], '["IK_FK"]', text='Leg.L', slider=True)
-        row.prop(pose_bones['thigh_parent.R'], '["IK_FK"]', text='Leg.R', slider=True)
+        row.prop(pose_bones[leg_l_ik_fk.bone_name], f'["{leg_l_ik_fk.prop_name}"]', text='Leg.L', slider=True)
+        row.prop(pose_bones[leg_r_ik_fk.bone_name], f'["{leg_r_ik_fk.prop_name}"]', text='Leg.R', slider=True)
+
+        if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
+            return
 
         col.label(text='Influences:')
         row = col.row()
