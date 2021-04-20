@@ -31,7 +31,7 @@ class OperatorPanel(bpy.types.Panel):
         col.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE')
 
         col = layout.column(align=True)
-        col.label(text='Rigify to MMD:', icon='OUTLINER_OB_ARMATURE')
+        col.label(text='(Experimental) Rigify to MMD:', icon='OUTLINER_OB_ARMATURE')
         col.operator(MMDRigifyConvert.bl_idname, text='Convert to MMD compatible', icon='ARMATURE_DATA')
         col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text='Apply MMD rest pose')
 
