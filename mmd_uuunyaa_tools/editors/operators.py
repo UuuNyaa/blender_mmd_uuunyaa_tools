@@ -236,6 +236,9 @@ class MMDRigifyApplyMMDRestPose(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     iterations: bpy.props.IntProperty(name='Iterations', description='Number of solving iterations', default=7, min=1, max=100)
+    pose_arms: bpy.props.BoolProperty(name='Pose arms', default=True)
+    pose_legs: bpy.props.BoolProperty(name='Pose legs', default=True)
+    pose_fingers: bpy.props.BoolProperty(name='Pose fingers', default=False)
 
     @classmethod
     def poll(cls, context):
@@ -254,8 +257,13 @@ class MMDRigifyApplyMMDRestPose(bpy.types.Operator):
             dependency_graph = context.evaluated_depsgraph_get()
 
             bpy.ops.object.mode_set(mode='POSE')
-            rigify_armature_object.imitate_mmd_pose_behavior()
-            rigify_armature_object.pose_mmd_rest(dependency_graph, self.iterations)
+            rigify_armature_object.pose_mmd_rest(
+                dependency_graph,
+                self.iterations,
+                pose_arms=self.pose_arms,
+                pose_legs=self.pose_legs,
+                pose_fingers=self.pose_fingers
+            )
 
         finally:
             bpy.ops.object.mode_set(mode=previous_mode)
