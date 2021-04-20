@@ -223,6 +223,7 @@ class MMDRigifyConvert(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.pose_bone_constraints()
         rigify_armature_object.imitate_mmd_pose_behavior()
+        rigify_armature_object.set_bone_groups()
 
         bpy.ops.object.mode_set(mode='OBJECT')
         rigify_armature_object.assign_mmd_bone_names()
