@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import ControlType, GroupType, group_type2prop_names, MMDRigifyArmatureObject
+from mmd_uuunyaa_tools.editors.armatures import ControlType, GroupType, MMDRigifyArmatureObject
 
 
 class OperatorPanel(bpy.types.Panel):
@@ -25,10 +25,14 @@ class OperatorPanel(bpy.types.Panel):
         active_object = bpy.context.active_object
         pose_bones = bpy.context.active_object.pose.bones
 
-        if group_type2prop_names[GroupType.TORSO] not in pose_bones['torso']:
+        if MMDRigifyArmatureObject.prop_name_mmd_rigify_bind_mmd_rigify not in pose_bones[MMDRigifyArmatureObject.prop_storage_bone_name]:
             return
 
         rigify_armature_object = MMDRigifyArmatureObject(active_object)
+        bind_mmd_rigify = rigify_armature_object.datapaths[ControlType.BIND_MMD_RIGIFY]
+        eye_mmd_rigify = rigify_armature_object.datapaths[ControlType.EYE_MMD_RIGIFY]
+        toe_l_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_L_MMD_RIGIFY]
+        toe_r_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_R_MMD_RIGIFY]
         arm_l_ik_fk = rigify_armature_object.datapaths[ControlType.ARM_L_IK_FK]
         arm_r_ik_fk = rigify_armature_object.datapaths[ControlType.ARM_R_IK_FK]
         leg_l_ik_fk = rigify_armature_object.datapaths[ControlType.LEG_L_IK_FK]
@@ -38,28 +42,31 @@ class OperatorPanel(bpy.types.Panel):
         col = layout.column()
 
         col.label(text='MMD-Rigify:')
+        col.prop(pose_bones[bind_mmd_rigify.bone_name], bind_mmd_rigify.prop_data_path, text='Bind', slider=True)
+        col.prop(pose_bones[eye_mmd_rigify.bone_name], eye_mmd_rigify.prop_data_path, text='Eyes', slider=True)
         row = col.row()
-        row.prop(pose_bones['torso'], '["mmd_rigify_eye_mmd_rigify"]', text='Eyes', slider=True)
+        row.prop(pose_bones[toe_l_mmd_rigify.bone_name], toe_l_mmd_rigify.prop_data_path, text='Toe.L', slider=True)
+        row.prop(pose_bones[toe_r_mmd_rigify.bone_name], toe_r_mmd_rigify.prop_data_path, text='Toe.R', slider=True)
 
         col.label(text='IK-FK:')
         row = col.row()
-        row.prop(pose_bones[arm_l_ik_fk.bone_name], f'["{arm_l_ik_fk.prop_name}"]', text='Arm.L', slider=True)
-        row.prop(pose_bones[arm_r_ik_fk.bone_name], f'["{arm_r_ik_fk.prop_name}"]', text='Arm.R', slider=True)
+        row.prop(pose_bones[arm_l_ik_fk.bone_name], arm_l_ik_fk.prop_data_path, text='Arm.L', slider=True)
+        row.prop(pose_bones[arm_r_ik_fk.bone_name], arm_r_ik_fk.prop_data_path, text='Arm.R', slider=True)
         row = col.row()
-        row.prop(pose_bones[leg_l_ik_fk.bone_name], f'["{leg_l_ik_fk.prop_name}"]', text='Leg.L', slider=True)
-        row.prop(pose_bones[leg_r_ik_fk.bone_name], f'["{leg_r_ik_fk.prop_name}"]', text='Leg.R', slider=True)
+        row.prop(pose_bones[leg_l_ik_fk.bone_name], leg_l_ik_fk.prop_data_path, text='Leg.L', slider=True)
+        row.prop(pose_bones[leg_r_ik_fk.bone_name], leg_r_ik_fk.prop_data_path, text='Leg.R', slider=True)
 
-        if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
-            return
+        # if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
+        #     return
 
-        col.label(text='Influences:')
-        row = col.row()
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.FACE]}"]', text='Face', slider=True)
-        row = col.row()
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
-        row = col.row()
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
-        row = col.row()
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
-        row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
+        # col.label(text='Influences:')
+        # row = col.row()
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.FACE]}"]', text='Face', slider=True)
+        # row = col.row()
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
+        # row = col.row()
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
+        # row = col.row()
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
+        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
