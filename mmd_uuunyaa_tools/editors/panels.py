@@ -56,17 +56,18 @@ class OperatorPanel(bpy.types.Panel):
         row.prop(pose_bones[leg_l_ik_fk.bone_name], leg_l_ik_fk.prop_data_path, text='Leg.L', slider=True)
         row.prop(pose_bones[leg_r_ik_fk.bone_name], leg_r_ik_fk.prop_data_path, text='Leg.R', slider=True)
 
-        # if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
-        #     return
+        if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
+            return
 
-        # col.label(text='Influences:')
-        # row = col.row()
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.FACE]}"]', text='Face', slider=True)
-        # row = col.row()
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.TORSO]}"]', text='Torso', slider=True)
-        # row = col.row()
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_L]}"]', text='Arm.L', slider=True)
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.ARM_R]}"]', text='Arm.R', slider=True)
-        # row = col.row()
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_L]}"]', text='Leg.L', slider=True)
-        # row.prop(pose_bones['torso'], f'["{group_type2prop_names[GroupType.LEG_R]}"]', text='Leg.R', slider=True)
+        col.label(text='MMD Layers:')
+        row = col.row()
+        row.prop(context.active_object.data, 'layers', index=24, toggle=True, text='Main')
+
+        row = col.row()
+        row.prop(context.active_object.data, 'layers', index=25, toggle=True, text='Others')
+
+        row = col.row()
+        row.prop(context.active_object.data, 'layers', index=26, toggle=True, text='Shadow')
+
+        row = col.row()
+        row.prop(context.active_object.data, 'layers', index=27, toggle=True, text='Dummy')

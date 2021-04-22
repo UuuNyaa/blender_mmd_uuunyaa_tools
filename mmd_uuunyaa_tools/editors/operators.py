@@ -128,6 +128,41 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
         rig_armature.layers = [i in {0, 3, 5, 7, 10, 13, 16, 28} for i in range(32)]
 
+    def adjust_bone_groups(self, rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
+        # copy bone groups Rigify -> MMD
+        rig_bone_groups = rigify_armature_object.pose_bone_groups
+        mmd_bone_groups = mmd_armature_object.pose_bone_groups
+        for rig_bone_group_name, rig_bone_group in rig_bone_groups.items():
+            if rig_bone_group_name in mmd_bone_groups:
+                continue
+            mmd_bone_group = mmd_bone_groups.new(name=rig_bone_group_name)
+            mmd_bone_group.color_set = 'CUSTOM'
+            mmd_bone_group.colors.normal = rig_bone_group.colors.normal
+            mmd_bone_group.colors.select = rig_bone_group.colors.select
+            mmd_bone_group.colors.active = rig_bone_group.colors.active
+
+        # copy bone groups MMD -> Rigify
+        diff_bone_group_names = set(mmd_bone_groups.keys()) - set(rig_bone_groups.keys())
+        for mmd_bone_group_name in diff_bone_group_names:
+            mmd_bone_group = mmd_bone_groups[mmd_bone_group_name]
+            rig_bone_group = rig_bone_groups.new(name=mmd_bone_group_name)
+            rig_bone_group.color_set = mmd_bone_group.color_set
+            rig_bone_group.colors.normal = mmd_bone_group.colors.normal
+            rig_bone_group.colors.select = mmd_bone_group.colors.select
+            rig_bone_group.colors.active = mmd_bone_group.colors.active
+
+        # adjust Rigify bone group indices
+        bone_group_mapping = {
+            rig_bone_group_index: mmd_bone_group_index
+            for rig_bone_group_index, rig_bone_group_name in enumerate(rig_bone_groups.keys())
+            for mmd_bone_group_index, mmd_bone_group_name in enumerate(mmd_bone_groups.keys())
+            if rig_bone_group_name == mmd_bone_group_name
+        }
+        for pose_bones in rigify_armature_object.pose_bones:
+            if pose_bones.bone_group is None:
+                continue
+            pose_bones.bone_group_index = bone_group_mapping[pose_bones.bone_group_index]
+
     def join_armatures(self, rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
         mmd_main_bone_layer = self.mmd_main_bone_layer
         mmd_others_bone_layer = self.mmd_others_bone_layer
@@ -154,6 +189,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
             elif bone.layers[23] == True:
                 bone.layers[23] = False
 
+        # join armatures
         rigify_armature: bpy.types.Armature = rigify_armature_object.raw_armature
         layers = rigify_armature.layers
         rig_id = rigify_armature['rig_id']
@@ -187,6 +223,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
         rigify_armature_object.bind_bones(mmd_armature_object)
+        self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='OBJECT')
         rigify_armature_object.assign_mmd_bone_names()
@@ -221,7 +258,6 @@ class MMDRigifyConvert(bpy.types.Operator):
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
-        rigify_armature_object.set_bone_groups()
 
         bpy.ops.object.mode_set(mode='OBJECT')
         rigify_armature_object.assign_mmd_bone_names()
