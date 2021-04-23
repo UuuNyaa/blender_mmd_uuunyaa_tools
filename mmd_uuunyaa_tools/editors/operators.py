@@ -59,8 +59,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         metarig_object.select = True
         bpy.ops.object.mode_set(mode='EDIT')
         if self.is_clean_armature:
-            mmd_armature_object.clean_armature_fingers()
-            mmd_armature_object.clean_armature_spine()
+            mmd_armature_object.clean_armature()
 
         metarig_object.fit_bones(mmd_armature_object)
 
@@ -120,7 +119,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         return mmd_object is not None and rigify_object is not None
 
     def change_mmd_bone_layer(self, mmd_armature_object: MMDArmatureObject):
-        mmd_bones = mmd_armature_object.bones
+        mmd_bones = mmd_armature_object.strict_bones
         for mmd_rigify_bone in mmd_armature_object.mmd_rigify_bones:
             mmd_bones[mmd_rigify_bone.mmd_bone_name].layers[23] = True
 
@@ -172,7 +171,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         mmd_armature = mmd_armature_object.raw_armature
         mmd_armature.layers = [i in {0, 8, 9, 23, mmd_main_bone_layer, mmd_others_bone_layer, mmd_shadow_bone_layer, mmd_dummy_bone_layer} for i in range(32)]
 
-        mmd_bind_bones = {b.name for b in mmd_armature_object.bones.values()}
+        mmd_bind_bones = mmd_armature_object.exist_actual_bone_names
 
         for bone in mmd_armature.bones.values():
             if bone.layers[0] == True:
@@ -207,6 +206,9 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         mmd_armature_object.raw_object.show_x_ray = True
 
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
     def execute(self, context: bpy.types.Context):
         rigify_armature_object, mmd_armature_object = self.find_armature_objects(context.selected_objects)
 
@@ -223,14 +225,16 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
         rigify_armature_object.bind_bones(mmd_armature_object)
-        self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='OBJECT')
-        rigify_armature_object.assign_mmd_bone_names()
         self.set_view_layers(rigify_armature_object)
 
         if self.is_join_armatures:
+            self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
             self.join_armatures(rigify_armature_object, mmd_armature_object)
+            rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_object.raw_object)
+
+        rigify_armature_object.assign_mmd_bone_names()
 
         return {'FINISHED'}
 

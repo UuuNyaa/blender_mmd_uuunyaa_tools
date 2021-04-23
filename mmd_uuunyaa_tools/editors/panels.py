@@ -16,10 +16,11 @@ class OperatorPanel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        if not context.object:
+        active_object = context.active_object
+        if not active_object:
             return False
 
-        return context.object.type == 'ARMATURE' and context.active_object.data.get('rig_id') is not None
+        return active_object.type == 'ARMATURE' and active_object.data.get('rig_id') is not None
 
     def draw(self, context: bpy.types.Context):
         active_object = bpy.context.active_object

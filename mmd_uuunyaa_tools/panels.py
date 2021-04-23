@@ -28,7 +28,11 @@ class OperatorPanel(bpy.types.Panel):
         col = layout.column(align=True)
         col.label(text='MMD to Rigify:', icon='OUTLINER_OB_ARMATURE')
         col.operator(MMDArmatureAddMetarig.bl_idname, text='Add Metarig', icon='ADD')
-        col.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE')
+        row = col.split(factor=0.9, align=True)
+        row.operator_context = 'EXEC_DEFAULT'
+        row.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE')
+        row.operator_context = 'INVOKE_DEFAULT'
+        row.operator(MMDRigifyIntegrate.bl_idname, text='', icon='WINDOW').is_join_armatures = False
 
         col = layout.column(align=True)
         col.label(text='Rigify to MMD:', icon='OUTLINER_OB_ARMATURE')
