@@ -220,7 +220,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         bpy.ops.object.mode_set(mode='EDIT')
         rigify_armature_object.remove_unused_face_bones()
         rigify_armature_object.fit_bone_rotations(mmd_armature_object)
-        rigify_armature_object.imitate_mmd_bone_behavior(mmd_armature_object)
+        rigify_armature_object.imitate_mmd_bone_structure(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
@@ -258,7 +258,7 @@ class MMDRigifyConvert(bpy.types.Operator):
         rigify_armature_object = RigifyArmatureObject(context.active_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
-        rigify_armature_object.imitate_mmd_bone_behavior()
+        rigify_armature_object.imitate_mmd_bone_structure()
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()

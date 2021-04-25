@@ -75,7 +75,8 @@ mmd_rigify_bones = [
     MMDRigifyBone(MMDBoneType.PARENT, '全ての親', 'root', 'root', GroupType.TORSO, MMDBindType.COPY_ROOT),
     MMDRigifyBone(MMDBoneType.STANDARD, 'センター', 'center', 'center', GroupType.TORSO, MMDBindType.COPY_PARENT),
     MMDRigifyBone(MMDBoneType.GROOVE, 'グルーブ', 'groove', 'groove', GroupType.TORSO, MMDBindType.COPY_PARENT),
-    MMDRigifyBone(MMDBoneType.WAIST_HIP_CONTROL, '腰', 'hips', None, GroupType.TORSO, MMDBindType.NONE),
+    # MMDRigifyBone(MMDBoneType.WAIST_HIP_CONTROL, '腰', 'hips', 'hips', GroupType.TORSO, MMDBindType.COPY_POSE),
+    MMDRigifyBone(MMDBoneType.WAIST_HIP_CONTROL, '腰', 'rigify_waist_hip_control', 'rigify_waist_hip_control', GroupType.TORSO, MMDBindType.COPY_PARENT),
     MMDRigifyBone(MMDBoneType.STANDARD, '上半身', 'torso', 'ORG-spine.001', GroupType.TORSO, MMDBindType.COPY_POSE),
     MMDRigifyBone(MMDBoneType.UPPER_BODY_1, '上半身1', None, None, GroupType.TORSO, MMDBindType.NONE),
     MMDRigifyBone(MMDBoneType.UPPER_BODY_2, '上半身2', 'chest', 'ORG-spine.002', GroupType.TORSO, MMDBindType.COPY_PARENT),
@@ -168,13 +169,16 @@ mmd_rigify_bones = [
 ]
 
 
-def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False):
+def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False, expression=None):
     driver: bpy.types.Driver = constraint.driver_add('influence').driver
     variable: bpy.types.DriverVariable = driver.variables.new()
     variable.name = 'mmd_rigify_influence'
     variable.targets[0].id = target
     variable.targets[0].data_path = data_path
-    driver.expression = ('1-' if invert else '+') + variable.name
+    if expression is None:
+        driver.expression = ('1-' if invert else '+') + variable.name
+    else:
+        driver.expression = expression
 
 
 def create_binders() -> Dict[MMDBindType, Callable]:
@@ -741,6 +745,7 @@ class DataPath:
 class ControlType(Enum):
     EYE_MMD_RIGIFY = 'eye_mmd_rigify'
     BIND_MMD_RIGIFY = 'bind_mmd_rigify'
+    SPINE_MMD_RIGIFY = 'spine_mmd_rigify'
     TOE_L_MMD_RIGIFY = 'toe_l_mmd_rigify'
     TOE_R_MMD_RIGIFY = 'toe_r_mmd_rigify'
     TORSO_NECK_FOLLOW = 'torso_neck_follow'
@@ -821,6 +826,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
 
         datapaths: Dict[ControlType, DataPath] = {
             ControlType.BIND_MMD_RIGIFY: DataPath(self.prop_storage_bone_name, self.prop_name_mmd_rigify_bind_mmd_rigify),
+            ControlType.SPINE_MMD_RIGIFY: DataPath(self.prop_storage_bone_name, 'mmd_rigify_spine_mmd_rigify'),
             ControlType.EYE_MMD_RIGIFY: DataPath(self.prop_storage_bone_name, 'mmd_rigify_eye_mmd_rigify'),
             ControlType.TOE_L_MMD_RIGIFY: DataPath(self.prop_storage_bone_name, 'mmd_rigify_toe_l_mmd_rigify'),
             ControlType.TOE_R_MMD_RIGIFY: DataPath(self.prop_storage_bone_name, 'mmd_rigify_toe_r_mmd_rigify'),
@@ -890,6 +896,14 @@ class RigifyArmatureObject(ArmatureObjectABC):
     @bind_mmd_rigify.setter
     def bind_mmd_rigify(self, value):
         self._set_property(ControlType.BIND_MMD_RIGIFY, value)
+
+    @property
+    def spine_mmd_rigify(self):
+        return self._get_property(ControlType.SPINE_MMD_RIGIFY)
+
+    @spine_mmd_rigify.setter
+    def spine_mmd_rigify(self, value):
+        self._set_property(ControlType.SPINE_MMD_RIGIFY, value)
 
     @property
     def eye_mmd_rigify(self):
@@ -1059,7 +1073,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
     def leg_r_pole_parent(self, value):
         self._set_property(ControlType.LEG_R_POLE_PARENT, value)
 
-    def imitate_mmd_bone_behavior(self):
+    def imitate_mmd_bone_structure(self):
         rig_edit_bones = self.edit_bones
 
         # add center (センター) bone
@@ -1183,7 +1197,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
         """Imitate the behavior of MMD armature as much as possible."""
 
         def create_props(prop_storage_bone):
-            for control_type in [ControlType.BIND_MMD_RIGIFY, ControlType.EYE_MMD_RIGIFY, ControlType.TOE_L_MMD_RIGIFY, ControlType.TOE_R_MMD_RIGIFY]:
+            for control_type in [ControlType.BIND_MMD_RIGIFY, ControlType.SPINE_MMD_RIGIFY, ControlType.EYE_MMD_RIGIFY, ControlType.TOE_L_MMD_RIGIFY, ControlType.TOE_R_MMD_RIGIFY]:
                 data_path = self.datapaths[control_type]
                 rna_prop_ui.rna_idprop_ui_create(
                     prop_storage_bone,
@@ -1235,6 +1249,9 @@ class RigifyArmatureObject(ArmatureObjectABC):
         # set bind mode
         self.bind_mmd_rigify = 1.000  # Bind
 
+        # set spine mode
+        self.spine_mmd_rigify = 0.000  # MMD
+
         # set eye motion mode
         self.eye_mmd_rigify = 0.000  # MMD
 
@@ -1246,23 +1263,83 @@ class RigifyArmatureObject(ArmatureObjectABC):
         self.torso_neck_follow = 1.000  # follow chest
         self.torso_head_follow = 1.000  # follow chest
 
-        def list_constraint(pose_bone: bpy.types.PoseBone, type: str) -> Iterable[bpy.types.Constraint]:
+        def list_constraints(pose_bone: bpy.types.PoseBone, type: str) -> Iterable[bpy.types.Constraint]:
             for constraint in pose_bone.constraints:
                 if constraint.type == type:
                     yield constraint
 
-        def edit_constraint(pose_bone: bpy.types.PoseBone, type: str, **kwargs) -> bpy.types.Constraint:
-            for constraint in list_constraint(pose_bone, type):
+        def edit_constraints(pose_bone: bpy.types.PoseBone, type: str, **kwargs):
+            for constraint in list_constraints(pose_bone, type):
                 for key, value in kwargs.items():
                     setattr(constraint, key, value)
 
+        def add_constraints(pose_bone: bpy.types.PoseBone, type: str, data_path: str, **kwargs):
+            constraints = pose_bone.constraints
+            for constraint in list_constraints(pose_bone, type):
+                add_influence_driver(constraint, self.raw_object, data_path, invert=True)
+
+                mmd_constraints = constraints.new(constraint.type)
+                mmd_constraints.name = f'mmd_rigify_{constraint.name}'
+                for prop_name in dir(constraint):
+                    try:
+                        if prop_name in {'name', 'influence'}:
+                            continue
+
+                        setattr(mmd_constraints, prop_name, getattr(constraint, prop_name))
+                    except:
+                        pass
+
+                for key, value in kwargs.items():
+                    setattr(mmd_constraints, key, value)
+
+                add_influence_driver(mmd_constraints, self.raw_object, data_path, invert=False)
+
+        def add_influence_drivers(constraints: Iterable[bpy.types.Constraint], data_path: str, expression: str):
+            for constraint in constraints:
+                add_influence_driver(constraint, self.raw_object, data_path, expression=expression)
+
         # 上半身２ connect spine.002 and spine.003
-        edit_constraint(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', influence=0.000)
-        edit_constraint(pose_bones['MCH-spine.002'], 'COPY_TRANSFORMS', influence=1.000)
+        spine_mmd_rigify = self.datapaths[ControlType.SPINE_MMD_RIGIFY]
+        spine_mmd_rigify_data_path = f'pose.bones{spine_mmd_rigify.data_path}'
+
+        add_influence_drivers(list_constraints(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS'), data_path=spine_mmd_rigify_data_path, expression='0.000 + 0.500 * mmd_rigify_influence')
+        add_influence_drivers(list_constraints(pose_bones['MCH-spine.002'], 'COPY_TRANSFORMS'), data_path=spine_mmd_rigify_data_path, expression='1.000 - 0.500 * mmd_rigify_influence')
 
         # TODO enable spine_fk.003
         # split 上半身２
         # constraint subtarget ORG-spine.003
+
+        bones = self.bones
+
+        # 上半身
+        bones['tweak_spine.001'].use_inherit_rotation = True
+
+        # 下半身
+        # bones['spine_fk'].use_inherit_rotation = False
+
+        # split spine.001 (上半身) and spine (下半身)
+        add_constraints(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', data_path=spine_mmd_rigify_data_path, subtarget='tweak_spine.001')
+        add_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', data_path=spine_mmd_rigify_data_path, subtarget='tweak_spine.002')
+
+        add_constraints(pose_bones['ORG-spine'], 'COPY_TRANSFORMS', data_path=spine_mmd_rigify_data_path, subtarget='tweak_spine')
+        add_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', data_path=spine_mmd_rigify_data_path, subtarget='spine_fk')
+
+        add_constraints(pose_bones['MCH-spine'], 'COPY_TRANSFORMS', data_path=spine_mmd_rigify_data_path, subtarget='torso', target_space='LOCAL_WITH_PARENT', owner_space='LOCAL_WITH_PARENT', influence=1.000)
+
+        # fingers
+        for pose_bone_name in [
+            'thumb.02.R', 'thumb.03.R', 'thumb.02.L', 'thumb.03.L',
+            'f_index.02.R', 'f_index.03.R', 'f_index.02.L', 'f_index.03.L',
+            'f_middle.02.R', 'f_middle.03.R', 'f_middle.02.L', 'f_middle.03.L',
+            'f_ring.02.R', 'f_ring.03.R', 'f_ring.02.L', 'f_ring.03.L',
+            'f_pinky.02.R', 'f_pinky.03.R', 'f_pinky.02.L', 'f_pinky.03.L',
+        ]:
+            edit_constraints(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
+
+        # reset rest_length
+        # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
+        edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
+        edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
 
         # leg IK
         def create_mmd_limit_rotation_constraint(rig_bone: bpy.types.PoseBone, limit_x=None, limit_y=None, limit_z=None) -> bpy.types.Constraint:
@@ -1283,42 +1360,10 @@ class RigifyArmatureObject(ArmatureObjectABC):
             constraint.owner_space = 'POSE'
             return constraint
 
-        edit_constraint(pose_bones['MCH-shin_ik.L'], 'IK', iterations=40, use_stretch=False)
+        edit_constraints(pose_bones['MCH-shin_ik.L'], 'IK', iterations=40, use_stretch=False)
         create_mmd_limit_rotation_constraint(pose_bones['MCH-shin_ik.L'], limit_x=(math.radians(0.5), math.radians(180)))
-        edit_constraint(pose_bones['MCH-shin_ik.R'], 'IK', iterations=40, use_stretch=False)
+        edit_constraints(pose_bones['MCH-shin_ik.R'], 'IK', iterations=40, use_stretch=False)
         create_mmd_limit_rotation_constraint(pose_bones['MCH-shin_ik.R'], limit_x=(math.radians(0.5), math.radians(180)))
-
-        bones = self.bones
-
-        # 上半身
-        bones['tweak_spine.001'].use_inherit_rotation = True
-
-        # 下半身
-        # bones['spine_fk'].use_inherit_rotation = False
-
-        # split spine.001 (上半身) and spine (下半身)
-        edit_constraint(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', subtarget='tweak_spine.001')
-        edit_constraint(pose_bones['ORG-spine.001'], 'STRETCH_TO', subtarget='tweak_spine.002')
-
-        edit_constraint(pose_bones['ORG-spine'], 'COPY_TRANSFORMS', subtarget='tweak_spine')
-        edit_constraint(pose_bones['ORG-spine'], 'STRETCH_TO', subtarget='spine_fk')
-
-        edit_constraint(pose_bones['MCH-spine'], 'COPY_TRANSFORMS', subtarget='torso', target_space='LOCAL_WITH_PARENT', owner_space='LOCAL_WITH_PARENT', influence=1.000)
-
-        # fingers
-        for pose_bone_name in [
-            'thumb.02.R', 'thumb.03.R', 'thumb.02.L', 'thumb.03.L',
-            'f_index.02.R', 'f_index.03.R', 'f_index.02.L', 'f_index.03.L',
-            'f_middle.02.R', 'f_middle.03.R', 'f_middle.02.L', 'f_middle.03.L',
-            'f_ring.02.R', 'f_ring.03.R', 'f_ring.02.L', 'f_ring.03.L',
-            'f_pinky.02.R', 'f_pinky.03.R', 'f_pinky.02.L', 'f_pinky.03.L',
-        ]:
-            edit_constraint(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
-
-        # reset rest_length
-        # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
-        edit_constraint(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
-        edit_constraint(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
 
         # toe IK
         def create_mmd_ik_constraint(rig_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: Union[str, None], chain_count: int, iterations: int) -> bpy.types.Constraint:
@@ -1338,10 +1383,10 @@ class RigifyArmatureObject(ArmatureObjectABC):
         create_mmd_ik_constraint(pose_bones['ORG-foot.L'], 'mmd_rigify_toe_ik.L', f'pose.bones{leg_l_ik_fk.data_path}', 1, 3)
         create_mmd_ik_constraint(pose_bones['ORG-foot.R'], 'mmd_rigify_toe_ik.R', f'pose.bones{leg_r_ik_fk.data_path}', 1, 3)
 
-        self.set_bone_groups()
-        self.set_bone_custom_shapes(pose_bones)
+        self._set_bone_groups(pose_bones)
+        self._set_bone_custom_shapes(pose_bones)
 
-    def set_bone_custom_shapes(self, pose_bones: Dict[str, bpy.types.PoseBone]):
+    def _set_bone_custom_shapes(self, pose_bones: Dict[str, bpy.types.PoseBone]):
         with bpy.data.libraries.load(PATH_BLENDS_RIGSHAPELIBRARY, link=False) as (_, data_to):
             data_to.objects = [
                 'WGT-Root.Round.',
@@ -1362,8 +1407,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
         pose_bones['mmd_rigify_toe_ik.R'].custom_shape = bpy.data.objects['WGT-Visor.Wide']
         pose_bones['mmd_rigify_toe_ik.R'].custom_shape_scale = 1.0
 
-    def set_bone_groups(self):
-        pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
+    def _set_bone_groups(self, pose_bones: Dict[str, bpy.types.PoseBone]):
         rig_bone_groups = self.pose_bone_groups
 
         # add Rigify bone groups
@@ -1395,7 +1439,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
         if not self.has_face_bones():
             return
 
-        pose_bones['mmd_rigify_eyes_fk'].bone_group = rig_bone_groups['FK']
+            pose_bones['mmd_rigify_eyes_fk'].bone_group = rig_bone_groups['FK']
         pose_bones['mmd_rigify_eye_fk.L'].bone_group = rig_bone_groups['FK']
         pose_bones['mmd_rigify_eye_fk.R'].bone_group = rig_bone_groups['FK']
 
@@ -1524,7 +1568,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         return True
 
-    def imitate_mmd_bone_behavior(self, mmd_armature_object: MMDArmatureObject):
+    def imitate_mmd_bone_structure(self, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones
         mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.strict_edit_bones
 
@@ -1624,16 +1668,35 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         move_bone(rig_edit_bones['tweak_spine.001'], head=mmd_edit_bones['上半身'].head)
         rig_edit_bones['tweak_spine.001'].parent = rig_edit_bones['MCH-spine']
 
-        # reverse hip <-> torso position
-        rig_edit_bones['hips'].parent = groove_bone
-        rig_edit_bones['torso'].parent = rig_edit_bones['hips']
+        # add hips
+        rigify_waist_hip_control = self.get_or_create_bone(rig_edit_bones, 'rigify_waist_hip_control')
+        rigify_waist_hip_control.parent = groove_bone
+        rig_edit_bones['torso'].parent = rigify_waist_hip_control
 
         if MMDBoneType.WAIST_HIP_CONTROL in mmd_armature_object.exist_bone_types:
-            rig_edit_bones['hips'].head = mmd_edit_bones['腰'].head
-            rig_edit_bones['hips'].tail = mmd_edit_bones['腰'].tail
+            rigify_waist_hip_control.head = mmd_edit_bones['腰'].head
+            rigify_waist_hip_control.tail = mmd_edit_bones['腰'].tail
             mmd_edit_bones['腰'].roll = 0
         else:
             pass
+
+
+        # TODO
+        # torso <- 腰
+        # hips <- 下半身
+        # chest <- 上半身
+        # spine_fk.002 <- 上半身2
+
+        # reverse hip <-> torso position
+        # rig_edit_bones['hips'].parent = groove_bone
+        # rig_edit_bones['torso'].parent = rig_edit_bones['hips']
+
+        # if MMDBoneType.WAIST_HIP_CONTROL in mmd_armature_object.exist_bone_types:
+        #     rig_edit_bones['hips'].head = mmd_edit_bones['腰'].head
+        #     rig_edit_bones['hips'].tail = mmd_edit_bones['腰'].tail
+        #     mmd_edit_bones['腰'].roll = 0
+        # else:
+        #     pass
 
         # set face bones
         eye_height_translation_vector = Vector([0.0, 0.0, mmd_edit_bones['左目'].head[2] - rig_edit_bones['ORG-eye.L'].head[2]])
