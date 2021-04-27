@@ -114,9 +114,9 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         if len(selected_objects) != 2:
             return False
 
-        rigify_object, mmd_object = cls.find_armature_objects(selected_objects)
+        rigify_armature_object, mmd_armature_object = cls.find_armature_objects(selected_objects)
 
-        return mmd_object is not None and rigify_object is not None
+        return rigify_armature_object is not None and mmd_armature_object is not None
 
     def change_mmd_bone_layer(self, mmd_armature_object: MMDArmatureObject):
         mmd_bones = mmd_armature_object.strict_bones
@@ -125,7 +125,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
     def set_view_layers(self, rigify_armature_object: bpy.types.Object):
         rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
-        rig_armature.layers = [i in {0, 3, 5, 7, 10, 13, 16, 28} for i in range(32)]
+        rig_armature.layers = [i in {0, 3, 4, 5, 8, 11, 13, 16, 28} for i in range(32)]
 
     def adjust_bone_groups(self, rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
         # copy bone groups Rigify -> MMD
@@ -210,10 +210,10 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context: bpy.types.Context):
-        rigify_armature_object, mmd_armature_object = self.find_armature_objects(context.selected_objects)
+        rigify_armature_raw_object, mmd_armature_raw_object = self.find_armature_objects(context.selected_objects)
 
-        rigify_armature_object = MMDRigifyArmatureObject(rigify_armature_object)
-        mmd_armature_object = MMDArmatureObject(mmd_armature_object)
+        rigify_armature_object = MMDRigifyArmatureObject(rigify_armature_raw_object)
+        mmd_armature_object = MMDArmatureObject(mmd_armature_raw_object)
 
         self.change_mmd_bone_layer(mmd_armature_object)
 
@@ -232,7 +232,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         if self.is_join_armatures:
             self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
             self.join_armatures(rigify_armature_object, mmd_armature_object)
-            rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_object.raw_object)
+            rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_raw_object)
 
         rigify_armature_object.assign_mmd_bone_names()
 
@@ -244,6 +244,15 @@ class MMDRigifyConvert(bpy.types.Operator):
     bl_label = 'Convert Rigify Armature to MMD compatible'
     bl_description = 'Convert Rigify armature to MMD compatible.'
     bl_options = {'REGISTER', 'UNDO'}
+
+    lower_body_bind_bone: bpy.props.EnumProperty(
+        name='Lower Body as',
+        items=[
+            ('spine_fk', 'spine_fk', ''),
+            ('spine_fk.001', 'spine_fk.001', ''),
+        ],
+        default='spine_fk.001'
+    )
 
     @classmethod
     def poll(cls, context):
@@ -264,7 +273,7 @@ class MMDRigifyConvert(bpy.types.Operator):
         rigify_armature_object.imitate_mmd_pose_behavior()
 
         bpy.ops.object.mode_set(mode='OBJECT')
-        rigify_armature_object.assign_mmd_bone_names()
+        rigify_armature_object.assign_mmd_bone_names(mmd2pose_bone_names={'下半身': self.lower_body_bind_bone})
         return {'FINISHED'}
 
 
