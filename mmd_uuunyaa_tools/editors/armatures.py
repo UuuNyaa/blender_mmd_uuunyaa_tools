@@ -475,6 +475,13 @@ class MMDArmatureObject(ArmatureObjectABC):
         if_far_then_set(mmd_edit_bones['左手首'], tail=extend_toward_tail(mmd_edit_bones['左ひじ'], 1.3))
 
         # spine chain
+
+        upper_lower_distance = (mmd_edit_bones['上半身'].head - mmd_edit_bones['下半身'].head).length
+        lower_half_length = mmd_edit_bones['下半身'].length / 2
+        if upper_lower_distance > lower_half_length:
+            # 上半身 is too far
+            mmd_edit_bones['上半身'].head += -mmd_edit_bones['上半身'].vector * ((upper_lower_distance-lower_half_length)/mmd_edit_bones['上半身'].length)
+
         if MMDBoneType.UPPER_BODY_1 in self.exist_bone_types:
             upper_body_1_head = self.to_center(mmd_edit_bones['上半身'].head, mmd_edit_bones['上半身2'].head)
             mmd_edit_bones['上半身'].tail = upper_body_1_head
@@ -524,7 +531,7 @@ class MetarigArmatureObject(ArmatureObjectABC):
         metarig_edit_bones['spine.002'].head = mmd_edit_bones['上半身'].head
 
         if MMDBoneType.UPPER_BODY_2 in mmd_armature_object.exist_bone_types:
-            metarig_edit_bones['spine.002'].tail = mmd_edit_bones['上半身'].tail
+            metarig_edit_bones['spine.002'].tail = mmd_edit_bones['上半身2'].head
             metarig_edit_bones['spine.003'].tail = mmd_edit_bones['上半身2'].tail
         else:
             metarig_edit_bones['spine.002'].tail = self.to_bone_center(mmd_edit_bones['上半身'])
@@ -1470,19 +1477,17 @@ class RigifyArmatureObject(ArmatureObjectABC):
 
         pose_bones['thigh_ik.L'].lock_rotation = [False, False, False]
         shin_ik_l_bone = pose_bones['MCH-shin_ik.L'] if 'MCH-shin_ik.L' in pose_bones else pose_bones['MCH-thigh_ik.L']
-        edit_constraints(shin_ik_l_bone, 'IK', iterations=40, use_stretch=False)
+        edit_constraints(shin_ik_l_bone, 'IK', iterations=40)
         shin_ik_l_bone.use_ik_limit_x = True
         shin_ik_l_bone.ik_min_x = math.radians(0)
         shin_ik_l_bone.ik_max_x = math.radians(180)
-        # create_mmd_limit_rotation_constraint(shin_ik_l_bone, limit_x=(math.radians(0.5), math.radians(180)))
 
         pose_bones['thigh_ik.R'].lock_rotation = [False, False, False]
         shin_ik_r_bone = pose_bones['MCH-shin_ik.R'] if 'MCH-shin_ik.R' in pose_bones else pose_bones['MCH-thigh_ik.R']
-        edit_constraints(shin_ik_r_bone, 'IK', iterations=40, use_stretch=False)
+        edit_constraints(shin_ik_r_bone, 'IK', iterations=40)
         shin_ik_r_bone.use_ik_limit_x = True
         shin_ik_r_bone.ik_min_x = math.radians(0)
         shin_ik_r_bone.ik_max_x = math.radians(180)
-        # create_mmd_limit_rotation_constraint(shin_ik_r_bone, limit_x=(math.radians(0.5), math.radians(180)))
 
         # toe IK
         def create_mmd_ik_constraint(rig_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: Union[str, None], chain_count: int, iterations: int) -> bpy.types.Constraint:

@@ -43,6 +43,9 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         finally:
             bpy.context.scene.cursor.location = original_cursor_location
 
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
     def execute(self, context: bpy.types.Context):
         mmd_object = context.active_object
 
@@ -57,6 +60,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
         mmd_object.select = True
         metarig_object.select = True
+
         bpy.ops.object.mode_set(mode='EDIT')
         if self.is_clean_armature:
             mmd_armature_object.clean_armature()
@@ -251,7 +255,7 @@ class MMDRigifyConvert(bpy.types.Operator):
             ('spine_fk', 'spine_fk', ''),
             ('spine_fk.001', 'spine_fk.001', ''),
         ],
-        default='spine_fk.001'
+        default='spine_fk'
     )
 
     @classmethod
