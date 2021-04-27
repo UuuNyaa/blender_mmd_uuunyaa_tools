@@ -1272,10 +1272,6 @@ class RigifyArmatureObject(ArmatureObjectABC):
                 bone.parent = edit_bone
             edit_bone.parent = parent_bone
 
-        # split spine.001 (上半身) and spine (下半身) bones
-        rig_edit_bones['ORG-spine.001'].use_connect = False
-        rig_edit_bones['DEF-spine.001'].use_connect = False
-
         # add spine fk bones
         spine_fk_bone = self.get_or_create_bone(rig_edit_bones, 'spine_fk')
         spine_fk_bone.layers = [i in {4} for i in range(32)]
@@ -1300,6 +1296,27 @@ class RigifyArmatureObject(ArmatureObjectABC):
         spine_fk_003_bone.head = rig_edit_bones['ORG-spine.003'].head
         spine_fk_003_bone.tail = rig_edit_bones['ORG-spine.003'].tail
         insert_bone(spine_fk_003_bone, parent_bone=rig_edit_bones['MCH-spine.003'])
+
+        # split spine.001 (上半身) and spine (下半身) bones
+        rig_edit_bones['ORG-spine.001'].use_connect = False
+        rig_edit_bones['DEF-spine.001'].use_connect = False
+
+        rig_edit_bones['MCH-spine'].parent = rig_edit_bones['torso']
+        rig_edit_bones['MCH-spine.002'].parent = rig_edit_bones['spine_fk.001']
+
+
+        def move_bone(edit_bone: bpy.types.EditBone, head: Vector = None, tail: Vector = None):
+            vector: Vector = edit_bone.vector
+            if head is not None:
+                edit_bone.head = head
+                edit_bone.tail = head + vector
+            elif tail is not None:
+                edit_bone.head = tail - vector
+                edit_bone.tail = tail
+
+        move_bone(rig_edit_bones['spine_fk.001'], head=rig_edit_bones['ORG-spine.001'].head)
+        move_bone(rig_edit_bones['MCH-spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
+        move_bone(rig_edit_bones['tweak_spine.001'], head=rig_edit_bones['ORG-spine'].tail)
 
         # adjust torso bone
         self._adjust_torso_bone(rig_edit_bones)
