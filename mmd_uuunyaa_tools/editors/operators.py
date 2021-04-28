@@ -249,11 +249,21 @@ class MMDRigifyConvert(bpy.types.Operator):
     bl_description = 'Convert Rigify armature to MMD compatible.'
     bl_options = {'REGISTER', 'UNDO'}
 
+    upper_body2_bind_bone: bpy.props.EnumProperty(
+        name='Upper Body2 as',
+        items=[
+            ('spine_fk.002', 'spine_fk.002', ''),
+            ('spine_fk.003', 'spine_fk.003', ''),
+            ('chest', 'chest', ''),
+        ],
+        default='spine_fk.002'
+    )
+
     lower_body_bind_bone: bpy.props.EnumProperty(
         name='Lower Body as',
         items=[
             ('spine_fk', 'spine_fk', ''),
-            ('spine_fk.001', 'spine_fk.001', ''),
+            ('hips', 'hips', ''),
         ],
         default='spine_fk'
     )
@@ -277,7 +287,10 @@ class MMDRigifyConvert(bpy.types.Operator):
         rigify_armature_object.imitate_mmd_pose_behavior()
 
         bpy.ops.object.mode_set(mode='OBJECT')
-        rigify_armature_object.assign_mmd_bone_names(mmd2pose_bone_names={'下半身': self.lower_body_bind_bone})
+        rigify_armature_object.assign_mmd_bone_names(mmd2pose_bone_names={
+            '上半身2': self.upper_body2_bind_bone,
+            '下半身': self.lower_body_bind_bone,
+        })
         return {'FINISHED'}
 
 

@@ -31,7 +31,6 @@ class OperatorPanel(bpy.types.Panel):
 
         rigify_armature_object = MMDRigifyArmatureObject(active_object)
         bind_mmd_rigify = rigify_armature_object.datapaths[ControlType.BIND_MMD_RIGIFY]
-        spine_mmd_rigify = rigify_armature_object.datapaths[ControlType.SPINE_MMD_RIGIFY]
         eye_mmd_rigify = rigify_armature_object.datapaths[ControlType.EYE_MMD_RIGIFY]
         toe_l_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_L_MMD_RIGIFY]
         toe_r_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_R_MMD_RIGIFY]
@@ -45,7 +44,6 @@ class OperatorPanel(bpy.types.Panel):
 
         col.label(text='MMD-Rigify:')
         col.prop(pose_bones[bind_mmd_rigify.bone_name], bind_mmd_rigify.prop_data_path, text='Bind', slider=True)
-        col.prop(pose_bones[spine_mmd_rigify.bone_name], spine_mmd_rigify.prop_data_path, text='Spine', slider=True)
         col.prop(pose_bones[eye_mmd_rigify.bone_name], eye_mmd_rigify.prop_data_path, text='Eyes', slider=True)
         row = col.row()
         row.prop(pose_bones[toe_l_mmd_rigify.bone_name], toe_l_mmd_rigify.prop_data_path, text='Toe.L', slider=True)
