@@ -31,13 +31,13 @@ class OperatorPanel(bpy.types.Panel):
         row.operator_context = 'EXEC_DEFAULT'
         row.operator(MMDArmatureAddMetarig.bl_idname, text='Add Metarig', icon='ADD').is_clean_armature = True
         row.operator_context = 'INVOKE_DEFAULT'
-        row.operator(MMDArmatureAddMetarig.bl_idname, text='', icon='PRESET')
+        row.operator(MMDArmatureAddMetarig.bl_idname, text='', icon='WINDOW')
 
         row = col.split(factor=0.9, align=True)
         row.operator_context = 'EXEC_DEFAULT'
         row.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
-        row.operator(MMDRigifyIntegrate.bl_idname, text='', icon='PRESET')
+        row.operator(MMDRigifyIntegrate.bl_idname, text='', icon='WINDOW')
 
         col = layout.column(align=True)
         col.label(text='Rigify to MMD:', icon='OUTLINER_OB_ARMATURE')
