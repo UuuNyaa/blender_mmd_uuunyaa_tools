@@ -20,10 +20,7 @@ import bpy
 import requests
 from mmd_uuunyaa_tools import PACKAGE_PATH, REGISTER_HOOKS
 from mmd_uuunyaa_tools.asset_search.assets import AssetDescription, _Utilities
-
-
-class MessageException(Exception):
-    """Class for error with message."""
+from mmd_uuunyaa_tools.utilities import MessageException
 
 
 class RestrictionChecker(ast.NodeVisitor):
