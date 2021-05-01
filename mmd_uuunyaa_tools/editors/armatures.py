@@ -830,16 +830,16 @@ class RigifyArmatureObject(ArmatureObjectABC):
         control_types = {
             (True, False, 'L', 'IK_FK'): ControlType.ARM_L_IK_FK,
             (True, False, 'R', 'IK_FK'): ControlType.ARM_R_IK_FK,
-            (True, False, 'L', 'IK_Strertch'): ControlType.ARM_L_IK_STRETCH,
-            (True, False, 'R', 'IK_Strertch'): ControlType.ARM_R_IK_STRETCH,
+            (True, False, 'L', 'IK_Stretch'): ControlType.ARM_L_IK_STRETCH,
+            (True, False, 'R', 'IK_Stretch'): ControlType.ARM_R_IK_STRETCH,
             (True, False, 'L', 'IK_parent'): ControlType.ARM_L_IK_PARENT,
             (True, False, 'R', 'IK_parent'): ControlType.ARM_R_IK_PARENT,
             (True, False, 'L', 'pole_vector'): ControlType.ARM_L_POLE_VECTOR,
             (True, False, 'R', 'pole_vector'): ControlType.ARM_R_POLE_VECTOR,
             (False, True, 'L', 'IK_FK'): ControlType.LEG_L_IK_FK,
             (False, True, 'R', 'IK_FK'): ControlType.LEG_R_IK_FK,
-            (False, True, 'L', 'IK_Strertch'): ControlType.LEG_L_IK_STRETCH,
-            (False, True, 'R', 'IK_Strertch'): ControlType.LEG_R_IK_STRETCH,
+            (False, True, 'L', 'IK_Stretch'): ControlType.LEG_L_IK_STRETCH,
+            (False, True, 'R', 'IK_Stretch'): ControlType.LEG_R_IK_STRETCH,
             (False, True, 'L', 'IK_parent'): ControlType.LEG_L_IK_PARENT,
             (False, True, 'R', 'IK_parent'): ControlType.LEG_R_IK_PARENT,
             (False, True, 'L', 'pole_vector'): ControlType.LEG_L_POLE_VECTOR,
@@ -867,7 +867,7 @@ class RigifyArmatureObject(ArmatureObjectABC):
             for key in pose_bone.keys():
                 if key in {'IK_FK', 'IK/FK'}:
                     prop_name = 'IK_FK'
-                elif key in {'IK_Strertch', 'IK_parent', 'pole_vector', 'pole_parent'}:
+                elif key in {'IK_Stretch', 'IK_parent', 'pole_vector', 'pole_parent'}:
                     prop_name = key
                 else:
                     continue
@@ -1439,42 +1439,6 @@ class RigifyArmatureObject(ArmatureObjectABC):
 
         self._imitate_mmd_eye_behavior(pose_bones)
 
-        self.raw_object.show_in_front = True
-
-        # set arms IK and stretch
-        self.arm_l_ik_fk = 1.000
-        self.arm_r_ik_fk = 1.000
-        self.arm_l_ik_stretch = 0.000
-        self.arm_r_ik_stretch = 0.000
-        self.arm_l_pole_vector = 0  # disable
-        self.arm_r_pole_vector = 0  # disable
-
-        # set legs IK and stretch
-        self.leg_l_ik_fk = 0.000
-        self.leg_r_ik_fk = 0.000
-        self.leg_l_stretch = 0.000
-        self.leg_r_stretch = 0.000
-        self.leg_l_ik_parent = 1  # root
-        self.leg_r_ik_parent = 1  # root
-        self.leg_l_pole_vector = 0  # disable
-        self.leg_r_pole_vector = 0  # disable
-        self.leg_l_pole_parent = 2  # torso
-        self.leg_r_pole_parent = 2  # torso
-
-        # set bind mode
-        self.bind_mmd_rigify = 1.000  # Bind
-
-        # set eye motion mode
-        self.eye_mmd_rigify = 0.000  # MMD
-
-        # set toe fix mode
-        self.toe_l_mmd_rigify = 0.000  # MMD
-        self.toe_r_mmd_rigify = 0.000  # MMD
-
-        # torso hack
-        self.torso_neck_follow = 1.000  # follow chest
-        self.torso_head_follow = 1.000  # follow chest
-
         def list_constraints(pose_bone: bpy.types.PoseBone, type: str) -> Iterable[bpy.types.Constraint]:
             for constraint in pose_bone.constraints:
                 if constraint.type == type:
@@ -1655,6 +1619,42 @@ class RigifyArmatureObject(ArmatureObjectABC):
         create_mmd_ik_constraint(pose_bones['ORG-foot.R'], 'mmd_rigify_toe_ik.R', f'pose.bones{leg_r_ik_fk.data_path}', 1, 3)
 
         self._set_bone_custom_shapes(pose_bones)
+
+        self.raw_object.show_in_front = True
+
+        # set arms IK and stretch
+        self.arm_l_ik_fk = 1.000
+        self.arm_r_ik_fk = 1.000
+        self.arm_l_ik_stretch = 0.000
+        self.arm_r_ik_stretch = 0.000
+        self.arm_l_pole_vector = 0  # disable
+        self.arm_r_pole_vector = 0  # disable
+
+        # set legs IK and stretch
+        self.leg_l_ik_fk = 0.000
+        self.leg_r_ik_fk = 0.000
+        self.leg_l_ik_stretch = 0.000
+        self.leg_r_ik_stretch = 0.000
+        self.leg_l_ik_parent = 1  # root
+        self.leg_r_ik_parent = 1  # root
+        self.leg_l_pole_vector = 0  # disable
+        self.leg_r_pole_vector = 0  # disable
+        self.leg_l_pole_parent = 2  # torso
+        self.leg_r_pole_parent = 2  # torso
+
+        # set bind mode
+        self.bind_mmd_rigify = 1.000  # Bind
+
+        # set eye motion mode
+        self.eye_mmd_rigify = 0.000  # MMD
+
+        # set toe fix mode
+        self.toe_l_mmd_rigify = 0.000  # MMD
+        self.toe_r_mmd_rigify = 0.000  # MMD
+
+        # torso hack
+        self.torso_neck_follow = 1.000  # follow chest
+        self.torso_head_follow = 1.000  # follow chest
 
     def _set_bone_custom_shapes(self, pose_bones: Dict[str, bpy.types.PoseBone]):
 
