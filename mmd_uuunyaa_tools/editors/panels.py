@@ -20,14 +20,24 @@ class OperatorPanel(bpy.types.Panel):
         if not active_object:
             return False
 
-        return active_object.type == 'ARMATURE' and active_object.data.get('rig_id') is not None
+        if active_object.type != 'ARMATURE':
+            return False
+
+        if active_object.data.get('rig_id') is None:
+            return False
+
+        prop_storage_bone = context.active_object.pose.bones.get(MMDRigifyArmatureObject.prop_storage_bone_name)
+        if prop_storage_bone is None:
+            return False
+
+        if MMDRigifyArmatureObject.prop_name_mmd_rigify_bind_mmd_rigify not in prop_storage_bone:
+            return False
+
+        return True
 
     def draw(self, context: bpy.types.Context):
-        active_object = bpy.context.active_object
-        pose_bones = bpy.context.active_object.pose.bones
-
-        if MMDRigifyArmatureObject.prop_name_mmd_rigify_bind_mmd_rigify not in pose_bones[MMDRigifyArmatureObject.prop_storage_bone_name]:
-            return
+        active_object = context.active_object
+        pose_bones = context.active_object.pose.bones
 
         rigify_armature_object = MMDRigifyArmatureObject(active_object)
         bind_mmd_rigify = rigify_armature_object.datapaths[ControlType.BIND_MMD_RIGIFY]
