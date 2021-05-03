@@ -3,7 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import ControlType, GroupType, MMDRigifyArmatureObject
+from mmd_uuunyaa_tools.editors.armatures import ControlType
+from mmd_uuunyaa_tools.editors.armatures.rigify import MMDRigifyArmatureObject
 
 
 class OperatorPanel(bpy.types.Panel):
@@ -36,6 +37,7 @@ class OperatorPanel(bpy.types.Panel):
         return True
 
     def draw(self, context: bpy.types.Context):
+        # pylint: disable=too-many-locals
         active_object = context.active_object
         pose_bones = context.active_object.pose.bones
 

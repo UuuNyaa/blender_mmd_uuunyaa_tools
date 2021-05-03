@@ -5,7 +5,8 @@
 from typing import Iterable, Union
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import MetarigArmatureObject, MMDArmatureObject, MMDRigifyArmatureObject, RigifyArmatureObject
+from mmd_uuunyaa_tools.editors.armatures import MMDArmatureObject
+from mmd_uuunyaa_tools.editors.armatures.rigify import MetarigArmatureObject, MMDRigifyArmatureObject, RigifyArmatureObject
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 
 
@@ -36,10 +37,10 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
             bpy.context.scene.cursor.location = (0.0, 0.0, 0.0)
             bpy.ops.object.armature_human_metarig_add()
             return bpy.context.object
-        except AttributeError as e:
-            if str(e) != 'Calling operator "bpy.ops.object.armature_human_metarig_add" error, could not be found':
+        except AttributeError as ex:
+            if str(ex) != 'Calling operator "bpy.ops.object.armature_human_metarig_add" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke Rigify\nPlease enable Rigify add-on.')
+            raise MessageException('Failed to invoke Rigify\nPlease enable Rigify add-on.') from None
         finally:
             bpy.context.scene.cursor.location = original_cursor_location
 
@@ -51,8 +52,8 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
         try:
             metarig_object = MetarigArmatureObject(self.create_metarig_object())
-        except MessageException as e:
-            self.report(type={'ERROR'}, message=str(e))
+        except MessageException as ex:
+            self.report(type={'ERROR'}, message=str(ex))
             return {'CANCELLED'}
 
         mmd_armature_object = MMDArmatureObject(mmd_object)
@@ -122,16 +123,21 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         return rigify_armature_object is not None and mmd_armature_object is not None
 
-    def change_mmd_bone_layer(self, mmd_armature_object: MMDArmatureObject):
+    @staticmethod
+    def change_mmd_bone_layer(mmd_armature_object: MMDArmatureObject):
         mmd_bones = mmd_armature_object.strict_bones
-        for mmd_rigify_bone in mmd_armature_object.mmd_rigify_bones:
-            mmd_bones[mmd_rigify_bone.mmd_bone_name].layers[23] = True
+        for mmd_bone_name in mmd_armature_object.mmd_bone_names:
+            if mmd_bone_name not in mmd_bones:
+                continue
+            mmd_bones[mmd_bone_name].layers[23] = True
 
-    def set_view_layers(self, rigify_armature_object: bpy.types.Object):
+    @staticmethod
+    def set_view_layers(rigify_armature_object: bpy.types.Object):
         rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
         rig_armature.layers = [i in {0, 3, 4, 5, 8, 11, 13, 16, 28} for i in range(32)]
 
-    def adjust_bone_groups(self, rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
+    @staticmethod
+    def adjust_bone_groups(rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
         # copy bone groups Rigify -> MMD
         rig_bone_groups = rigify_armature_object.pose_bone_groups
         mmd_bone_groups = mmd_armature_object.pose_bone_groups
@@ -178,18 +184,18 @@ class MMDRigifyIntegrate(bpy.types.Operator):
         mmd_bind_bones = mmd_armature_object.exist_actual_bone_names
 
         for bone in mmd_armature.bones.values():
-            if bone.layers[0] == True:
+            if bone.layers[0]:
                 bone.layers = [i in {mmd_main_bone_layer} for i in range(32)]
                 if bone.name not in mmd_bind_bones:
                     bone.layers[mmd_others_bone_layer] = True
 
-            elif bone.layers[8] == True:
+            elif bone.layers[8]:
                 bone.layers = [i in {mmd_shadow_bone_layer} for i in range(32)]
 
-            elif bone.layers[9] == True:
+            elif bone.layers[9]:
                 bone.layers = [i in {mmd_dummy_bone_layer} for i in range(32)]
 
-            elif bone.layers[23] == True:
+            elif bone.layers[23]:
                 bone.layers[23] = False
 
         # join armatures
@@ -281,13 +287,13 @@ class MMDRigifyConvert(bpy.types.Operator):
         rigify_armature_object = RigifyArmatureObject(context.active_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
-        rigify_armature_object.imitate_mmd_bone_structure()
+        rigify_armature_object.imitate_mmd_bone_structure(None)
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
 
         bpy.ops.object.mode_set(mode='OBJECT')
-        rigify_armature_object.assign_mmd_bone_names(mmd2pose_bone_names={
+        rigify_armature_object.assign_mmd_bone_names(mmd2pose_bone_name_overrides={
             '上半身2': self.upper_body2_bind_bone,
             '下半身': self.lower_body_bind_bone,
         })
