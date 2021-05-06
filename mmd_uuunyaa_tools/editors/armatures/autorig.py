@@ -653,10 +653,6 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         self.leg_l_mmd_autorig = 0.000  # MMD
         self.leg_r_mmd_autorig = 0.000  # MMD
 
-        # set toe fix mode
-        self.toe_l_mmd_autorig = 0.000  # MMD
-        self.toe_r_mmd_autorig = 0.000  # MMD
-
         # torso hack
         self.torso_head_follow = 1.000  # follow chest
 
