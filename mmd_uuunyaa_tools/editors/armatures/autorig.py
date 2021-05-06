@@ -9,28 +9,11 @@ import bpy
 from mathutils import Euler, Matrix, Vector
 from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
                                                  ControlType, DataPath,
-                                                 GroupType, MMDArmatureObject,
-                                                 MMDBindInfo, MMDBindType,
-                                                 MMDBoneInfo,
+                                                 GroupType, MMDBindInfo,
+                                                 MMDBindType, MMDBoneInfo,
                                                  RichArmatureObjectABC,
                                                  add_influence_driver)
-
-# pose.bones["c_hand_ik.l"]["ik_fk_switch"] = 1.000 # FK
-# pose.bones["c_hand_ik.l"]["auto_stretch"] = 0.000 # No stretch
-
-# pose.bones["c_foot_ik.l"]["ik_fk_switch"] = 1.000 # IK
-# pose.bones["c_foot_ik.l"]["auto_stretch"] = 0.000 # No stretch
-
-# pose.bones["c_head.x"]["head_free"] = 1 # Free
-
-# disable pole target
-# pose.bones["leg_ik_nostr.l"].constraints["IK"].pole_target #???
-# pose.bones["c_leg_pole.l"]["pole_parent"] = 1 # first choice
-
-# c_root.x 下半身
-
-
-# pose.bones["c_eye_target.x"]["eye_target"] -> IK/FK
+from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
 
 
 class AutoRigArmatureObject(RichArmatureObjectABC):

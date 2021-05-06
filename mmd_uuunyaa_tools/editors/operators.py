@@ -5,9 +5,9 @@
 from typing import Iterable, Union
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import MMDArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.autorig import AutoRigArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.metarig import MetarigArmatureObject
+from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.rigify import MMDRigifyArmatureObject, RigifyArmatureObject
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 

@@ -11,11 +11,12 @@ import bpy
 from mathutils import Color, Euler, Matrix, Vector
 from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
                                                  ControlType, DataPath,
-                                                 GroupType, MMDArmatureObject,
-                                                 MMDBindInfo, MMDBindType,
-                                                 MMDBoneInfo, MMDBoneType,
+                                                 GroupType, MMDBindInfo,
+                                                 MMDBindType, MMDBoneInfo,
+                                                 MMDBoneType,
                                                  RichArmatureObjectABC,
                                                  add_influence_driver)
+from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
 
 
 def _create_binders() -> Dict[MMDBindType, Callable]:
@@ -788,14 +789,14 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         pose_bones['thigh_ik.L'].lock_rotation = [False, False, False]
         shin_ik_l_bone = pose_bones['MCH-shin_ik.L'] if 'MCH-shin_ik.L' in pose_bones else pose_bones['MCH-thigh_ik.L']
-        edit_constraints(shin_ik_l_bone, 'IK', iterations=40)
+        edit_constraints(shin_ik_l_bone, 'IK', iterations=200)
         shin_ik_l_bone.use_ik_limit_x = True
         shin_ik_l_bone.ik_min_x = math.radians(0)
         shin_ik_l_bone.ik_max_x = math.radians(180)
 
         pose_bones['thigh_ik.R'].lock_rotation = [False, False, False]
         shin_ik_r_bone = pose_bones['MCH-shin_ik.R'] if 'MCH-shin_ik.R' in pose_bones else pose_bones['MCH-thigh_ik.R']
-        edit_constraints(shin_ik_r_bone, 'IK', iterations=40)
+        edit_constraints(shin_ik_r_bone, 'IK', iterations=200)
         shin_ik_r_bone.use_ik_limit_x = True
         shin_ik_r_bone.ik_min_x = math.radians(0)
         shin_ik_r_bone.ik_max_x = math.radians(180)
