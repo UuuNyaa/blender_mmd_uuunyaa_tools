@@ -5,8 +5,12 @@
 import bpy
 
 from mmd_uuunyaa_tools import operators
-from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
-from mmd_uuunyaa_tools.editors.operators import MMDArmatureAddMetarig, MMDRigifyIntegrate, MMDRigifyConvert, MMDRigifyApplyMMDRestPose
+from mmd_uuunyaa_tools.editors.operators import (MMDArmatureAddMetarig,
+                                                 MMDAutoRigApplyMMDRestPose,
+                                                 MMDAutoRigConvert,
+                                                 MMDRigifyApplyMMDRestPose,
+                                                 MMDRigifyConvert,
+                                                 MMDRigifyIntegrate)
 
 
 class OperatorPanel(bpy.types.Panel):
@@ -44,6 +48,11 @@ class OperatorPanel(bpy.types.Panel):
         col.operator(MMDRigifyConvert.bl_idname, text='Convert to MMD compatible', icon='ARMATURE_DATA')
         col.separator()
         col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text='Apply MMD rest pose')
+
+        col.label(text='Auto-Rig to MMD:', icon='OUTLINER_OB_ARMATURE')
+        col.operator(MMDAutoRigConvert.bl_idname, text='Convert to MMD compatible', icon='ARMATURE_DATA')
+        col.separator()
+        col.operator(MMDAutoRigApplyMMDRestPose.bl_idname, text='Apply MMD rest pose')
 
         layout.label(text='UI Panels')
         col = layout.column(align=True)

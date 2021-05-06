@@ -6,6 +6,7 @@ from typing import Iterable, Union
 
 import bpy
 from mmd_uuunyaa_tools.editors.armatures import MMDArmatureObject
+from mmd_uuunyaa_tools.editors.armatures.autorig import AutoRigArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.rigify import MetarigArmatureObject, MMDRigifyArmatureObject, RigifyArmatureObject
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 
@@ -325,6 +326,78 @@ class MMDRigifyApplyMMDRestPose(bpy.types.Operator):
 
         try:
             rigify_armature_object = RigifyArmatureObject(context.active_object)
+            dependency_graph = context.evaluated_depsgraph_get()
+
+            bpy.ops.object.mode_set(mode='POSE')
+            rigify_armature_object.pose_mmd_rest(
+                dependency_graph,
+                self.iterations,
+                pose_arms=self.pose_arms,
+                pose_legs=self.pose_legs,
+                pose_fingers=self.pose_fingers
+            )
+
+        finally:
+            bpy.ops.object.mode_set(mode=previous_mode)
+
+        return {'FINISHED'}
+
+
+
+class MMDAutoRigConvert(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.autorig_to_mmd_compatible'
+    bl_label = 'Convert AutoRig Armature to MMD compatible'
+    bl_description = 'Convert AutoRig armature to MMD compatible.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        if context.mode != 'OBJECT':
+            return False
+
+        active_object = context.active_object
+
+        return AutoRigArmatureObject.is_autorig_armature_object(active_object)
+
+    def execute(self, context: bpy.types.Context):
+        autorig_armature_object = AutoRigArmatureObject(context.active_object)
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        autorig_armature_object.imitate_mmd_bone_structure(None)
+
+        bpy.ops.object.mode_set(mode='POSE')
+        autorig_armature_object.imitate_mmd_pose_behavior()
+
+        bpy.ops.object.mode_set(mode='OBJECT')
+        autorig_armature_object.assign_mmd_bone_names()
+        return {'FINISHED'}
+
+
+class MMDAutoRigApplyMMDRestPose(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.autorig_apply_mmd_rest_pose'
+    bl_label = 'Apply MMD Rest Pose'
+    bl_description = 'Apply MMD rest pose.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    iterations: bpy.props.IntProperty(name='Iterations', description='Number of solving iterations', default=7, min=1, max=100)
+    pose_arms: bpy.props.BoolProperty(name='Pose arms', default=True)
+    pose_legs: bpy.props.BoolProperty(name='Pose legs', default=True)
+    pose_fingers: bpy.props.BoolProperty(name='Pose fingers', default=False)
+
+    @classmethod
+    def poll(cls, context):
+        if context.mode not in {'OBJECT', 'POSE'}:
+            return False
+
+        active_object = context.active_object
+
+        return AutoRigArmatureObject.is_autorig_armature_object(active_object)
+
+    def execute(self, context: bpy.types.Context):
+        previous_mode = context.mode
+
+        try:
+            rigify_armature_object = AutoRigArmatureObject(context.active_object)
             dependency_graph = context.evaluated_depsgraph_get()
 
             bpy.ops.object.mode_set(mode='POSE')

@@ -3,14 +3,29 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import math
+import os
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Set, Union
 
 import bpy
+import rna_prop_ui
 from mathutils import Matrix, Vector
+from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
+
+PATH_BLENDS_RIGSHAPELIBRARY = os.path.join(PACKAGE_PATH, 'blends', 'RigShapeLibrary.blend')
+
+
+def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False):
+    driver: bpy.types.Driver = constraint.driver_add('influence').driver
+    variable: bpy.types.DriverVariable = driver.variables.new()
+    variable.name = 'mmd_uuunyaa_influence'
+    variable.targets[0].id = target
+    variable.targets[0].data_path = data_path
+    driver.expression = ('1-' if invert else '+') + variable.name
 
 
 class MMDBindType(Enum):
@@ -190,6 +205,17 @@ class ArmatureObjectABC(ABC):
     @staticmethod
     def to_bone_stretch(bone: bpy.types.EditBone, stretch_factor: float) -> Vector:
         return bone.head + bone.vector * stretch_factor
+
+    @staticmethod
+    def to_bone_suffix(bone_name: str) -> Union[str, None]:
+        match = re.search(r'[_\.]([lLrR])$', bone_name)
+        if not match:
+            return None
+
+        raw_suffix = match.group(1)
+        if raw_suffix in {'l', 'L'}:
+            return 'L'
+        return 'R'
 
     @property
     def bones(self) -> bpy.types.ArmatureBones:
@@ -380,10 +406,12 @@ class DataPath:
 
 
 class ControlType(Enum):
-    EYE_MMD_RIGIFY = 'eye_mmd_rigify'
-    BIND_MMD_RIGIFY = 'bind_mmd_rigify'
-    TOE_L_MMD_RIGIFY = 'toe_l_mmd_rigify'
-    TOE_R_MMD_RIGIFY = 'toe_r_mmd_rigify'
+    EYE_MMD_UUUNYAA = 'eye_mmd_uuunyaa'
+    BIND_MMD_UUUNYAA = 'bind_mmd_uuunyaa'
+    LEG_L_MMD_UUUNYAA = 'leg_l_mmd_uuunyaa'
+    LEG_R_MMD_UUUNYAA = 'leg_r_mmd_uuunyaa'
+    TOE_L_MMD_UUUNYAA = 'toe_l_mmd_uuunyaa'
+    TOE_R_MMD_UUUNYAA = 'toe_r_mmd_uuunyaa'
     TORSO_NECK_FOLLOW = 'torso_neck_follow'
     TORSO_HEAD_FOLLOW = 'torso_head_follow'
     ARM_L_IK_FK = 'arm_l_ik_fk'
@@ -408,9 +436,86 @@ class ControlType(Enum):
 
 class RichArmatureObjectABC(ArmatureObjectABC):
     # pylint: disable=too-many-public-methods
-    # generated methods
-
     datapaths: Dict[str, DataPath]
+    mmd_bind_infos: List[MMDBindInfo]
+
+    def create_props(self, prop_storage_bone: bpy.types.PoseBone):
+        for control_type in [
+            ControlType.BIND_MMD_UUUNYAA, ControlType.EYE_MMD_UUUNYAA,
+            ControlType.LEG_L_MMD_UUUNYAA, ControlType.LEG_R_MMD_UUUNYAA,
+            ControlType.TOE_L_MMD_UUUNYAA, ControlType.TOE_R_MMD_UUUNYAA
+        ]:
+            data_path = self.datapaths.get(control_type)
+            if data_path is None:
+                continue
+
+            rna_prop_ui.rna_idprop_ui_create(
+                prop_storage_bone,
+                data_path.prop_name,
+                default=0.000,
+                min=0.000, max=1.000,
+                soft_min=None, soft_max=None,
+                description=None,
+                overridable=True,
+                subtype=None
+            )
+
+    # pylint: disable=too-many-arguments
+    def create_mmd_ik_constraint(self, pose_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert: bool = True) -> bpy.types.Constraint:
+        constraint = pose_bone.constraints.new('IK')
+        constraint.name = 'mmd_uuunyaa_ik_mmd'
+        constraint.target = self.raw_object
+        constraint.subtarget = subtarget
+        constraint.chain_count = chain_count
+        constraint.iterations = iterations
+        add_influence_driver(constraint, self.raw_object, influence_data_path, invert=invert)
+        return constraint
+
+    @staticmethod
+    def remove_constraints(pose_bones: Dict[str, bpy.types.PoseBone]):
+        for pose_bone in pose_bones.values():
+            for constraint in pose_bone.constraints:
+                if not constraint.name.startswith('mmd_uuunyaa_'):
+                    continue
+                pose_bone.constraints.remove(constraint)
+
+    @staticmethod
+    def fit_edit_bone_rotation(target_bone: bpy.types.EditBone, reference_bone: bpy.types.EditBone):
+        def set_rotation(bone, rotation_matrix: Matrix):
+            bone.matrix = Matrix.Translation(bone.matrix.to_translation()) @ rotation_matrix
+
+        def to_rotation_matrix(bone) -> Matrix:
+            return bone.matrix.to_quaternion().to_matrix().to_4x4()
+
+        set_rotation(target_bone, to_rotation_matrix(reference_bone))
+
+    @staticmethod
+    def insert_edit_bone(edit_bone: bpy.types.EditBone, parent_bone: bpy.types.EditBone):
+        for bone in parent_bone.children:
+            bone.parent = edit_bone
+        edit_bone.parent = parent_bone
+
+    def assign_mmd_bone_names(self, mmd2pose_bone_name_overrides: Union[Dict[str, str], None] = None):
+        pose_bones = self.pose_bones
+        mmd_bone_name2pose_bone_names = {b.bone_info.mmd_bone_name: b.pose_bone_name for b in self.mmd_bind_infos}
+
+        if mmd2pose_bone_name_overrides is not None:
+            mmd_bone_name2pose_bone_names.update(mmd2pose_bone_name_overrides)
+
+        # clear mmd pose bone names
+        for pose_bone in pose_bones:
+            if pose_bone.mmd_bone.name_j not in mmd_bone_name2pose_bone_names:
+                continue
+            pose_bone.mmd_bone.name_j = ''
+
+        for mmd_bone_name, pose_bone_name in mmd_bone_name2pose_bone_names.items():
+            if pose_bone_name is None:
+                continue
+
+            if pose_bone_name not in pose_bones:
+                continue
+
+            pose_bones[pose_bone_name].mmd_bone.name_j = mmd_bone_name
 
     @abstractmethod
     def has_face_bones(self) -> bool:
@@ -427,6 +532,9 @@ class RichArmatureObjectABC(ArmatureObjectABC):
         if datapath is None:
             return
         self.pose_bones[datapath.bone_name][datapath.prop_name] = value
+
+    ######################
+    # generated methods
 
     @property
     def torso_neck_follow(self):
@@ -587,19 +695,3 @@ class RichArmatureObjectABC(ArmatureObjectABC):
     @leg_r_pole_parent.setter
     def leg_r_pole_parent(self, value):
         self._set_property(ControlType.LEG_R_POLE_PARENT, value)
-
-    @staticmethod
-    def fit_edit_bone_rotation(target_bone: bpy.types.EditBone, reference_bone: bpy.types.EditBone):
-        def set_rotation(bone, rotation_matrix: Matrix):
-            bone.matrix = Matrix.Translation(bone.matrix.to_translation()) @ rotation_matrix
-
-        def to_rotation_matrix(bone) -> Matrix:
-            return bone.matrix.to_quaternion().to_matrix().to_4x4()
-
-        set_rotation(target_bone, to_rotation_matrix(reference_bone))
-
-    @staticmethod
-    def insert_edit_bone(edit_bone: bpy.types.EditBone, parent_bone: bpy.types.EditBone):
-        for bone in parent_bone.children:
-            bone.parent = edit_bone
-        edit_bone.parent = parent_bone
