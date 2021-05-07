@@ -8,7 +8,7 @@ import os
 import traceback
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
 from mmd_uuunyaa_tools.utilities import get_preferences

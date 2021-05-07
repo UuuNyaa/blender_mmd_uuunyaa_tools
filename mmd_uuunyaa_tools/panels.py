@@ -49,7 +49,7 @@ class OperatorPanel(bpy.types.Panel):
         col.separator()
         col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text='Apply MMD rest pose')
 
-        col.label(text='Auto-Rig to MMD:', icon='OUTLINER_OB_ARMATURE')
+        col.label(text='(Experimental) Auto-Rig to MMD:', icon='OUTLINER_OB_ARMATURE')
         col.operator(MMDAutoRigConvert.bl_idname, text='Convert to MMD compatible', icon='ARMATURE_DATA')
         col.separator()
         col.operator(MMDAutoRigApplyMMDRestPose.bl_idname, text='Apply MMD rest pose')

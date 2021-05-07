@@ -8,7 +8,6 @@ import functools
 import importlib
 import json
 import os
-import pathlib
 import re
 import shutil
 import stat
@@ -18,7 +17,7 @@ from typing import List, Union
 
 import bpy
 import requests
-from mmd_uuunyaa_tools import PACKAGE_PATH, REGISTER_HOOKS
+from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.asset_search.assets import AssetDescription, _Utilities
 from mmd_uuunyaa_tools.utilities import MessageException
 
@@ -70,7 +69,7 @@ class DownloadActionExecutor:
 
         match = re.search(r'<a +href="([^"]+)">Click here if your download does not start within a few seconds.</a>', response.text)
         if match is None:
-            raise ValueError(f'Failed to download assets from SmutBase. SmutBase response format may have changed.')
+            raise ValueError('Failed to download assets from SmutBase. SmutBase response format may have changed.')
 
         return session.get(match.group(1).replace('&amp;', '&'), stream=True)
 
@@ -97,7 +96,7 @@ class DownloadActionExecutor:
 
         download_json = json.loads(response.text)
         if 'url' not in download_json:
-            raise ValueError(f'Failed to download assets from BowlRoll. Incorrect download key.')
+            raise ValueError('Failed to download assets from BowlRoll. Incorrect download key.')
 
         return session.get(download_json['url'], stream=True)
 
@@ -113,7 +112,7 @@ class DownloadActionExecutor:
             if 'id' in query and parsed.hostname == 'drive.google.com':
                 file_id = query['id'][0]
             else:
-                raise ValueError(f'Failed to download assets from Google Drive. Incorrect download key.')
+                raise ValueError('Failed to download assets from Google Drive. Incorrect download key.')
 
         download_url = urllib.parse.urljoin(url, '/uc')
 
@@ -172,7 +171,7 @@ class DownloadActionExecutor:
         RestrictionChecker(*(functions.keys())).visit(tree)
 
         ast.dump(tree)
-        return eval(
+        return eval(  # pylint: disable=eval-used
             download_action,
             {'__builtins__': {}},
             {
@@ -191,13 +190,13 @@ class ImportActionExecutor:
         if _Utilities.is_extracted(asset):
             return
 
-        with zipfile.ZipFile(zip_file_path) as zip:
-            for info in zip.infolist():
+        with zipfile.ZipFile(zip_file_path) as zip_file:
+            for info in zip_file.infolist():
                 orig_codec = 'utf-8' if info.flag_bits & 0x800 else 'cp437'
                 info.filename = info.orig_filename.encode(orig_codec).decode(encoding)
                 if os.sep != '/' and os.sep in info.filename:
                     info.filename = info.filename.replace(os.sep, '/')
-                zip.extract(info, path=asset_path, pwd=password)
+                zip_file.extract(info, path=asset_path, pwd=password)
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -218,8 +217,8 @@ class ImportActionExecutor:
         try:
             with rarfile.RarFile(rar_file_path) as rar:
                 rar.extractall(path=asset_path, pwd=password)
-        except rarfile.RarCannotExec:
-            raise MessageException('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.')
+        except rarfile.RarCannotExec as ex:
+            raise MessageException('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.') from ex
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -238,10 +237,10 @@ class ImportActionExecutor:
         x7zipfile = loader.load_module(namespace)
 
         try:
-            with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip:
-                zip.extractall(path=asset_path)
-        except x7zipfile.x7ZipCannotExec:
-            raise MessageException('Failed to execute 7z\nPlease install p7zip-full or 7-zip and setup the PATH properly.')
+            with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip_file:
+                zip_file.extractall(path=asset_path)
+        except x7zipfile.x7ZipCannotExec as ex:
+            raise MessageException('Failed to execute 7z\nPlease install p7zip-full or 7-zip and setup the PATH properly.') from ex
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -260,10 +259,10 @@ class ImportActionExecutor:
         os.makedirs(asset_path, exist_ok=True)
         try:
             os.link(from_path, to_path)
-        except OSError as e:
+        except OSError as ex:
             # Invalid cross-device link
-            if e.errno != errno.EXDEV:
-                raise e
+            if ex.errno != errno.EXDEV:
+                raise ex
             shutil.copyfile(from_path, to_path)
 
         _Utilities.write_json(asset)
@@ -272,8 +271,8 @@ class ImportActionExecutor:
     @staticmethod
     def chmod_recursively(path, mode):
         for root, dirs, files in os.walk(path):
-            for dir in dirs:
-                target = os.path.join(root, dir)
+            for dir_name in dirs:
+                target = os.path.join(root, dir_name)
                 os.chmod(target, os.stat(target).st_mode | mode)
 
             for file in files:
@@ -299,10 +298,10 @@ class ImportActionExecutor:
         print(f'import_pmx({pmx_file_path},{scale},{asset_path})')
         try:
             bpy.ops.mmd_tools.import_model('INVOKE_DEFAULT', filepath=os.path.join(asset_path, pmx_file_path), scale=scale)
-        except AttributeError as e:
-            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_model" error, could not be found':
+        except AttributeError as ex:
+            if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_model" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
 
     @staticmethod
     def import_vmd(vmd_file_path, scale=0.08, asset=None):
@@ -311,14 +310,14 @@ class ImportActionExecutor:
         print(f'import_vmd({vmd_file_path},{scale},{asset_path})')
         try:
             bpy.ops.mmd_tools.import_vmd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vmd_file_path), scale=scale)
-        except AttributeError as e:
-            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_vmd" error, could not be found':
+        except AttributeError as ex:
+            if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_vmd" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
-        except RuntimeError as e:
-            if str(e) != 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
+        except RuntimeError as ex:
+            if str(ex) != 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
                 raise
-            raise MessageException('Select an object.\nThe target object for motion import is not selected.')
+            raise MessageException('Select an object.\nThe target object for motion import is not selected.') from ex
 
     @staticmethod
     def import_vpd(vpd_file_path, scale=0.08, asset=None):
@@ -327,14 +326,14 @@ class ImportActionExecutor:
         print(f'import_vpd({vpd_file_path},{scale},{asset_path})')
         try:
             bpy.ops.mmd_tools.import_vpd('INVOKE_DEFAULT', filepath=os.path.join(asset_path, vpd_file_path), scale=scale)
-        except AttributeError as e:
-            if str(e) != 'Calling operator "bpy.ops.mmd_tools.import_vpd" error, could not be found':
+        except AttributeError as ex:
+            if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_vpd" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.')
-        except RuntimeError as e:
-            if str(e) != 'Operator bpy.ops.mmd_tools.import_vpd.poll() failed, context is incorrect':
+            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
+        except RuntimeError as ex:
+            if str(ex) != 'Operator bpy.ops.mmd_tools.import_vpd.poll() failed, context is incorrect':
                 raise
-            raise MessageException('Select an object.\nThe target object for pose import is not selected.')
+            raise MessageException('Select an object.\nThe target object for pose import is not selected.') from ex
 
     @staticmethod
     def delete_objects(prefix=None, suffix=None, recursive=False):
@@ -342,6 +341,10 @@ class ImportActionExecutor:
 
         if prefix is None and suffix is None:
             return
+
+        if recursive:
+            # TODO
+            raise NotImplementedError('TODO')
 
         bpy.ops.object.select_all(action='DESELECT')
         for obj in bpy.context.view_layer.active_layer_collection.collection.objects:
@@ -368,7 +371,7 @@ class ImportActionExecutor:
 
         RestrictionChecker(*(functions.keys())).visit(tree)
 
-        exec(
+        exec(  # pylint: disable=exec-used
             compile(tree, '<source>', 'exec'),
             {'__builtins__': {}},
             {

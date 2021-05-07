@@ -22,99 +22,99 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
     prop_name_mmd_uuunyaa_bind_mmd_autorig = 'mmd_uuunyaa_bind_mmd_autorig'
 
     mmd_bind_infos = [
-        MMDBindInfo(MMDBoneInfo.全ての親, 'c_pos', 'c_pos', GroupType.TORSO, MMDBindType.COPY_ROOT),
-        MMDBindInfo(MMDBoneInfo.センター, 'c_traj', 'c_traj', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.グルーブ, 'groove', 'groove', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.腰, 'c_root_master.x', '	c_root_master.x', GroupType.TORSO, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.上半身, 'c_spine_01.x', 'spine_01.x', GroupType.TORSO, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.全ての親, 'c_pos', 'c_pos', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.センター, 'c_traj', 'c_traj', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.グルーブ, 'groove', 'groove', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.腰, 'c_root_master.x', '	c_root_master.x', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.上半身, 'c_spine_01.x', 'spine_01.x', GroupType.TORSO, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.上半身1, None, None, GroupType.TORSO, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.上半身2, 'c_spine_02.x', 'spine_02.x', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.首, 'c_neck.x', 'neck.x', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.頭, 'c_head.x', 'head.x', GroupType.TORSO, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.上半身2, 'c_spine_02.x', 'spine_02.x', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.首, 'c_neck.x', 'neck.x', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.頭, 'c_head.x', 'head.x', GroupType.TORSO, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.両目, 'mmd_uuunyaa_eyes_fk', 'mmd_uuunyaa_eyes_fk', GroupType.FACE, MMDBindType.COPY_EYE),
-        MMDBindInfo(MMDBoneInfo.左目, 'mmd_uuunyaa_eye_fk.l', 'c_eye.l', GroupType.FACE, MMDBindType.COPY_EYE),
-        MMDBindInfo(MMDBoneInfo.右目, 'mmd_uuunyaa_eye_fk.r', 'c_eye.r', GroupType.FACE, MMDBindType.COPY_EYE),
+        MMDBindInfo(MMDBoneInfo.両目, 'mmd_uuunyaa_eyes_fk', 'mmd_uuunyaa_eyes_fk', GroupType.FACE, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左目, 'mmd_uuunyaa_eye_fk.l', 'c_eye.l', GroupType.FACE, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右目, 'mmd_uuunyaa_eye_fk.r', 'c_eye.r', GroupType.FACE, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.左肩, 'c_shoulder.l', 'shoulder.l', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左腕, 'c_arm_fk.l', 'arm.l', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左肩, 'c_shoulder.l', 'shoulder.l', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左腕, 'c_arm_fk.l', 'arm.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左腕捩, 'mmd_uuunyaa_upper_arm_twist_fk.l', None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左ひじ, 'c_forearm_fk.l', 'forearm.l', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左ひじ, 'c_forearm_fk.l', 'forearm.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左手捩, 'mmd_uuunyaa_wrist_twist_fk.l', None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左手首, 'c_hand_fk.l', 'hand.l', GroupType.ARM_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.左親指０, 'c_thumb1.l', 'thumb1.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左親指１, 'c_thumb2.l', 'thumb2.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左親指２, 'c_thumb3.l', 'thumb3.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左手首, 'c_hand_fk.l', 'hand.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左親指０, 'c_thumb1.l', 'thumb1.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左親指１, 'c_thumb2.l', 'thumb2.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左親指２, 'c_thumb3.l', 'thumb3.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左人指０, None, None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左人指１, 'c_index1.l', 'index1.l', GroupType.ARM_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左人指２, 'c_index2.l', 'index2.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左人指３, 'c_index3.l', 'index3.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左人指１, 'c_index1.l', 'index1.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左人指２, 'c_index2.l', 'index2.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左人指３, 'c_index3.l', 'index3.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左中指０, None, None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左中指１, 'c_middle1.l', 'middle1.l', GroupType.ARM_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左中指２, 'c_middle2.l', 'middle2.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左中指３, 'c_middle3.l', 'middle3.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左中指１, 'c_middle1.l', 'middle1.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左中指２, 'c_middle2.l', 'middle2.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左中指３, 'c_middle3.l', 'middle3.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左薬指０, None, None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左薬指１, 'c_ring1.l', 'ring1.l', GroupType.ARM_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左薬指２, 'c_ring2.l', 'ring2.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左薬指３, 'c_ring3.l', 'ring3.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左薬指１, 'c_ring1.l', 'ring1.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左薬指２, 'c_ring2.l', 'ring2.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左薬指３, 'c_ring3.l', 'ring3.l', GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左小指０, None, None, GroupType.ARM_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左小指１, 'c_pinky1.l', 'pinky1.l', GroupType.ARM_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左小指２, 'c_pinky2.l', 'pinky2.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左小指３, 'c_pinky3.l', 'pinky3.l', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左小指１, 'c_pinky1.l', 'pinky1.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左小指２, 'c_pinky2.l', 'pinky2.l', GroupType.ARM_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左小指３, 'c_pinky3.l', 'pinky3.l', GroupType.ARM_L, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.右肩, 'c_shoulder.r', 'shoulder.r', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右腕, 'c_arm_fk.r', 'arm.r', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右肩, 'c_shoulder.r', 'shoulder.r', GroupType.TORSO, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右腕, 'c_arm_fk.r', 'arm.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右腕捩, 'mmd_uuunyaa_upper_arm_twist_fk.r', None, GroupType.NONE, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右ひじ, 'c_forearm_fk.r', 'forearm.r', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右ひじ, 'c_forearm_fk.r', 'forearm.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右手捩, 'mmd_uuunyaa_wrist_twist_fk.r', None, GroupType.ARM_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右手首, 'c_hand_fk.r', 'hand.r', GroupType.ARM_R, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.右親指０, 'c_thumb1.r', 'thumb1.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右親指１, 'c_thumb2.r', 'thumb2.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右親指２, 'c_thumb3.r', 'thumb3.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右手首, 'c_hand_fk.r', 'hand.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右親指０, 'c_thumb1.r', 'thumb1.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右親指１, 'c_thumb2.r', 'thumb2.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右親指２, 'c_thumb3.r', 'thumb3.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右人指０, None, None, GroupType.ARM_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右人指１, 'c_index1.r', 'index1.r', GroupType.ARM_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右人指２, 'c_index2.r', 'index2.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右人指３, 'c_index3.r', 'index3.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右人指１, 'c_index1.r', 'index1.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右人指２, 'c_index2.r', 'index2.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右人指３, 'c_index3.r', 'index3.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右中指０, None, None, GroupType.ARM_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右中指１, 'c_middle1.r', 'middle1.r', GroupType.ARM_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右中指２, 'c_middle2.r', 'middle2.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右中指３, 'c_middle3.r', 'middle3.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右中指１, 'c_middle1.r', 'middle1.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右中指２, 'c_middle2.r', 'middle2.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右中指３, 'c_middle3.r', 'middle3.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右薬指０, None, None, GroupType.ARM_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右薬指１, 'c_ring1.r', 'ring1.r', GroupType.ARM_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右薬指２, 'c_ring2.r', 'ring2.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右薬指３, 'c_ring3.r', 'ring3.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右薬指１, 'c_ring1.r', 'ring1.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右薬指２, 'c_ring2.r', 'ring2.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右薬指３, 'c_ring3.r', 'ring3.r', GroupType.ARM_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右小指０, None, None, GroupType.ARM_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右小指１, 'c_pinky1.r', 'pinky1.r', GroupType.ARM_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右小指２, 'c_pinky2.r', 'pinky2.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右小指３, 'c_pinky3.r', 'pinky3.r', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右小指１, 'c_pinky1.r', 'pinky1.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右小指２, 'c_pinky2.r', 'pinky2.r', GroupType.ARM_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右小指３, 'c_pinky3.r', 'pinky3.r', GroupType.ARM_R, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.下半身, 'c_root.x', 'root.x', GroupType.TORSO, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.下半身, 'c_root.x', 'root.x', GroupType.TORSO, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.左足, 'c_thigh_ik.l', 'thigh.l', GroupType.LEG_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左ひざ, None, 'leg.l', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左足首, None, 'foot.l', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'c_foot_ik.l', 'c_foot_ik.l', GroupType.LEG_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.左足先EX, 'c_toes_ik.l', 'toes_01.l', GroupType.LEG_L, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.左足, 'c_thigh_ik.l', 'thigh.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左ひざ, None, 'leg.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左足首, None, 'foot.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'c_foot_ik.l', 'c_foot_ik.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左足先EX, 'c_toes_ik.l', 'toes_01.l', GroupType.LEG_L, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.右足, 'c_thigh_ik.r', 'thigh.r', GroupType.LEG_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右ひざ, None, 'leg.r', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右足首, None, 'foot.r', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'c_foot_ik.r', 'c_foot_ik.r', GroupType.LEG_R, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.右足先EX, 'c_toes_ik.r', 'toes_01.r', GroupType.LEG_R, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.右足, 'c_thigh_ik.r', 'thigh.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右ひざ, None, 'leg.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右足首, None, 'foot.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'c_foot_ik.r', 'c_foot_ik.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右足先EX, 'c_toes_ik.r', 'toes_01.r', GroupType.LEG_R, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.左つま先ＩＫ, 'mmd_uuunyaa_toe_ik.l', 'mmd_uuunyaa_toe_ik.l', GroupType.LEG_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右つま先ＩＫ, 'mmd_uuunyaa_toe_ik.r', 'mmd_uuunyaa_toe_ik.r', GroupType.LEG_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左つま先ＩＫ, 'mmd_uuunyaa_toe_ik.l', 'mmd_uuunyaa_toe_ik.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右つま先ＩＫ, 'mmd_uuunyaa_toe_ik.r', 'mmd_uuunyaa_toe_ik.r', GroupType.LEG_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左つま先, None, None, GroupType.LEG_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右つま先, None, None, GroupType.LEG_R, MMDBindType.NONE),
 
-        MMDBindInfo(MMDBoneInfo.左肩C, 'mmd_uuunyaa_shoulder_cancel.l', 'mmd_uuunyaa_shoulder_cancel.l', GroupType.NONE, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左肩P, 'mmd_uuunyaa_shoulder_parent.l', 'mmd_uuunyaa_shoulder_parent.l', GroupType.NONE, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右肩C, 'mmd_uuunyaa_shoulder_cancel.r', 'mmd_uuunyaa_shoulder_cancel.r', GroupType.NONE, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右肩P, 'mmd_uuunyaa_shoulder_parent.r', 'mmd_uuunyaa_shoulder_parent.r', GroupType.NONE, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左肩C, 'mmd_uuunyaa_shoulder_cancel.l', 'mmd_uuunyaa_shoulder_cancel.l', GroupType.NONE, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左肩P, 'mmd_uuunyaa_shoulder_parent.l', 'mmd_uuunyaa_shoulder_parent.l', GroupType.NONE, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右肩C, 'mmd_uuunyaa_shoulder_cancel.r', 'mmd_uuunyaa_shoulder_cancel.r', GroupType.NONE, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右肩P, 'mmd_uuunyaa_shoulder_parent.r', 'mmd_uuunyaa_shoulder_parent.r', GroupType.NONE, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左ダミー, None, None, GroupType.NONE, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右ダミー, None, None, GroupType.NONE, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左足IK親, 'mmd_uuunyaa_leg_ik_parent.l', 'mmd_uuunyaa_leg_ik_parent.l', GroupType.LEG_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.右足IK親, 'mmd_uuunyaa_leg_ik_parent.r', 'mmd_uuunyaa_leg_ik_parent.r', GroupType.LEG_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左足IK親, 'mmd_uuunyaa_leg_ik_parent.l', 'mmd_uuunyaa_leg_ik_parent.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右足IK親, 'mmd_uuunyaa_leg_ik_parent.r', 'mmd_uuunyaa_leg_ik_parent.r', GroupType.LEG_R, MMDBindType.NONE),
     ]
 
     @staticmethod
@@ -180,13 +180,8 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
 
         self.datapaths = datapaths
 
-        self.strict_mmd_bind_infos = [
-            b for b in self.mmd_bind_infos  # pylint: disable=maybe-no-member
-            if b.pose_bone_name is not None and b.pose_bone_name in pose_bones
-        ]
-
     def has_face_bones(self) -> bool:
-        require_bone_names = {'c_eye.l', 'c_eye.r', }
+        require_bone_names = {'head.x', 'c_skull_02.x', 'c_eye.l', 'c_eye.r', 'c_eye_offset.l', 'c_eye_offset.r'}
         return len(require_bone_names - set(self.bones.keys())) == 0
 
     @property
@@ -355,7 +350,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         shoulder_parent_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_parent.l')
         shoulder_parent_l_bone.head = rig_edit_bones['c_shoulder.l'].head
         shoulder_parent_l_bone.tail = shoulder_parent_l_bone.head + Vector([0, 0, rig_edit_bones['c_shoulder.l'].length/2])
-        shoulder_parent_l_bone.layers = [i in {1} for i in range(32)]
+        shoulder_parent_l_bone.layers = [i in {0} for i in range(32)]
         shoulder_parent_l_bone.parent = rig_edit_bones['c_spine_02.x']
         shoulder_parent_l_bone.roll = 0
 
@@ -364,7 +359,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         shoulder_parent_r_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_parent.r')
         shoulder_parent_r_bone.head = rig_edit_bones['c_shoulder.r'].head
         shoulder_parent_r_bone.tail = shoulder_parent_r_bone.head + Vector([0, 0, rig_edit_bones['c_shoulder.r'].length/2])
-        shoulder_parent_r_bone.layers = [i in {1} for i in range(32)]
+        shoulder_parent_r_bone.layers = [i in {0} for i in range(32)]
         shoulder_parent_r_bone.parent = rig_edit_bones['c_spine_02.x']
         shoulder_parent_r_bone.roll = 0
 
@@ -462,7 +457,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
 
     def imitate_mmd_pose_behavior(self):
         """Imitate the behavior of MMD armature as much as possible."""
-        # pylint: disable=too-many-statements
+        # pylint: disable=too-many-statements, too-many-locals
 
         pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
 
@@ -671,7 +666,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
             return
 
         pose_bones['mmd_uuunyaa_eyes_fk'].bone_group = rig_bone_groups['body.x']
-        pose_bones['mmd_uuunyaa_eye_fk.l'].bone_group = rig_bone_groups['body.r']
+        pose_bones['mmd_uuunyaa_eye_fk.l'].bone_group = rig_bone_groups['body.l']
         pose_bones['mmd_uuunyaa_eye_fk.r'].bone_group = rig_bone_groups['body.r']
 
     def _imitate_mmd_eye_behavior(self, pose_bones: Dict[str, bpy.types.PoseBone]):
@@ -703,7 +698,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         create_mmd_rotation_constraint(pose_bones['mmd_uuunyaa_eye_fk.r'], 'mmd_uuunyaa_eyes_fk', f'pose.bones{eye_mmd_autorig.data_path}').mix_mode = 'ADD'
 
     def pose_mmd_rest(self, dependency_graph: bpy.types.Depsgraph, iterations: int, pose_arms: bool, pose_legs: bool, pose_fingers: bool):
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments, too-many-locals
         pose_bones = self.pose_bones
 
         def set_rotation(pose_bone: bpy.types.PoseBone, rotation_matrix: Matrix):
@@ -741,7 +736,6 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
 
                 pose_bones['c_foot_ik.l'].matrix = (
                     pose_bones['c_foot_ik.l'].matrix
-
                     @ Matrix.Rotation(math.radians(180)+pose_bones['foot.l'].matrix.to_euler().z, 4, 'Z')
                 )
                 pose_bones['c_leg_pole.l'].location.x += pose_bones['thigh.l'].head[0]-pose_bones['c_leg_pole.l'].head[0]

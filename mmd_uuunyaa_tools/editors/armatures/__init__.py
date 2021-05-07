@@ -19,26 +19,6 @@ from mmd_uuunyaa_tools.utilities import import_mmd_tools
 PATH_BLENDS_RIGSHAPELIBRARY = os.path.join(PACKAGE_PATH, 'blends', 'RigShapeLibrary.blend')
 
 
-def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False):
-    driver: bpy.types.Driver = constraint.driver_add('influence').driver
-    variable: bpy.types.DriverVariable = driver.variables.new()
-    variable.name = 'mmd_uuunyaa_influence'
-    variable.targets[0].id = target
-    variable.targets[0].data_path = data_path
-    driver.expression = ('1-' if invert else '+') + variable.name
-
-
-class MMDBindType(Enum):
-    NONE = 0
-    COPY_POSE = 1
-    COPY_PARENT = 2
-    COPY_LOCAL = 3
-    COPY_SPINE = 4
-    COPY_TOE = 5
-    COPY_EYE = 6
-    COPY_ROOT = 7
-
-
 class MMDBoneType(Enum):
     STANDARD = '標準'
     PARENT = '全ての親'
@@ -55,16 +35,6 @@ class MMDBoneType(Enum):
     SHOULDER_CANCEL = '肩キャンセル'
     THUMB_0 = '親指０'
     OTHERS = 'その他・独自'
-
-
-class GroupType(Enum):
-    NONE = 'none'
-    FACE = 'face'
-    TORSO = 'torso'
-    ARM_L = 'arm_l'
-    ARM_R = 'arm_R'
-    LEG_L = 'leg_l'
-    LEG_R = 'leg_R'
 
 
 @dataclass
@@ -175,6 +145,27 @@ class MMDBoneInfo(Enum):
         return obj
 
 
+class GroupType(Enum):
+    NONE = 'none'
+    FACE = 'face'
+    TORSO = 'torso'
+    ARM_L = 'arm_l'
+    ARM_R = 'arm_R'
+    LEG_L = 'leg_l'
+    LEG_R = 'leg_R'
+
+
+class MMDBindType(Enum):
+    NONE = 0
+    COPY_POSE = 1
+    COPY_PARENT = 2
+    COPY_LOCAL = 3
+    COPY_SPINE = 4
+    COPY_TOE = 5
+    COPY_EYE = 6
+    COPY_ROOT = 7
+
+
 @dataclass
 class MMDBindInfo:
     bone_info: MMDBoneInfo
@@ -184,6 +175,62 @@ class MMDBindInfo:
 
     group_type: GroupType
     bind_type: MMDBindType
+
+
+@dataclass
+class DataPath:
+    bone_name: str
+    prop_name: str
+
+    @property
+    def bone_data_path(self) -> str:
+        return f'["{self.bone_name}"]'
+
+    @property
+    def prop_data_path(self) -> str:
+        return f'["{self.prop_name}"]'
+
+    @property
+    def data_path(self) -> str:
+        return f'["{self.bone_name}"]["{self.prop_name}"]'
+
+
+class ControlType(Enum):
+    EYE_MMD_UUUNYAA = 'eye_mmd_uuunyaa'
+    BIND_MMD_UUUNYAA = 'bind_mmd_uuunyaa'
+    LEG_L_MMD_UUUNYAA = 'leg_l_mmd_uuunyaa'
+    LEG_R_MMD_UUUNYAA = 'leg_r_mmd_uuunyaa'
+    TOE_L_MMD_UUUNYAA = 'toe_l_mmd_uuunyaa'
+    TOE_R_MMD_UUUNYAA = 'toe_r_mmd_uuunyaa'
+    TORSO_NECK_FOLLOW = 'torso_neck_follow'
+    TORSO_HEAD_FOLLOW = 'torso_head_follow'
+    ARM_L_IK_FK = 'arm_l_ik_fk'
+    ARM_R_IK_FK = 'arm_r_ik_fk'
+    ARM_L_IK_STRETCH = 'arm_l_ik_stretch'
+    ARM_R_IK_STRETCH = 'arm_r_ik_stretch'
+    ARM_L_IK_PARENT = 'arm_l_ik_parent'
+    ARM_R_IK_PARENT = 'arm_r_ik_parent'
+    ARM_L_POLE_VECTOR = 'arm_l_pole_vector'
+    ARM_R_POLE_VECTOR = 'arm_r_pole_vector'
+    LEG_L_IK_FK = 'leg_l_ik_fk'
+    LEG_R_IK_FK = 'leg_r_ik_fk'
+    LEG_L_IK_STRETCH = 'leg_l_ik_stretch'
+    LEG_R_IK_STRETCH = 'leg_r_ik_stretch'
+    LEG_L_IK_PARENT = 'leg_l_ik_parent'
+    LEG_R_IK_PARENT = 'leg_r_ik_parent'
+    LEG_L_POLE_VECTOR = 'leg_l_pole_vector'
+    LEG_R_POLE_VECTOR = 'leg_r_pole_vector'
+    LEG_L_POLE_PARENT = 'leg_l_pole_parent'
+    LEG_R_POLE_PARENT = 'leg_r_pole_parent'
+
+
+def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False):
+    driver: bpy.types.Driver = constraint.driver_add('influence').driver
+    variable: bpy.types.DriverVariable = driver.variables.new()
+    variable.name = 'mmd_uuunyaa_influence'
+    variable.targets[0].id = target
+    variable.targets[0].data_path = data_path
+    driver.expression = ('1-' if invert else '+') + variable.name
 
 
 class ArmatureObjectABC(ABC):
@@ -250,53 +297,6 @@ class ArmatureObjectABC(ABC):
             return math.atan2(vector.z, vector.y)
 
         raise ValueError(f"unknown plane, expected: XY, XZ, YZ, not '{plane}'")
-
-
-@dataclass
-class DataPath:
-    bone_name: str
-    prop_name: str
-
-    @property
-    def bone_data_path(self) -> str:
-        return f'["{self.bone_name}"]'
-
-    @property
-    def prop_data_path(self) -> str:
-        return f'["{self.prop_name}"]'
-
-    @property
-    def data_path(self) -> str:
-        return f'["{self.bone_name}"]["{self.prop_name}"]'
-
-
-class ControlType(Enum):
-    EYE_MMD_UUUNYAA = 'eye_mmd_uuunyaa'
-    BIND_MMD_UUUNYAA = 'bind_mmd_uuunyaa'
-    LEG_L_MMD_UUUNYAA = 'leg_l_mmd_uuunyaa'
-    LEG_R_MMD_UUUNYAA = 'leg_r_mmd_uuunyaa'
-    TOE_L_MMD_UUUNYAA = 'toe_l_mmd_uuunyaa'
-    TOE_R_MMD_UUUNYAA = 'toe_r_mmd_uuunyaa'
-    TORSO_NECK_FOLLOW = 'torso_neck_follow'
-    TORSO_HEAD_FOLLOW = 'torso_head_follow'
-    ARM_L_IK_FK = 'arm_l_ik_fk'
-    ARM_R_IK_FK = 'arm_r_ik_fk'
-    ARM_L_IK_STRETCH = 'arm_l_ik_stretch'
-    ARM_R_IK_STRETCH = 'arm_r_ik_stretch'
-    ARM_L_IK_PARENT = 'arm_l_ik_parent'
-    ARM_R_IK_PARENT = 'arm_r_ik_parent'
-    ARM_L_POLE_VECTOR = 'arm_l_pole_vector'
-    ARM_R_POLE_VECTOR = 'arm_r_pole_vector'
-    LEG_L_IK_FK = 'leg_l_ik_fk'
-    LEG_R_IK_FK = 'leg_r_ik_fk'
-    LEG_L_IK_STRETCH = 'leg_l_ik_stretch'
-    LEG_R_IK_STRETCH = 'leg_r_ik_stretch'
-    LEG_L_IK_PARENT = 'leg_l_ik_parent'
-    LEG_R_IK_PARENT = 'leg_r_ik_parent'
-    LEG_L_POLE_VECTOR = 'leg_l_pole_vector'
-    LEG_R_POLE_VECTOR = 'leg_r_pole_vector'
-    LEG_L_POLE_PARENT = 'leg_l_pole_parent'
-    LEG_R_POLE_PARENT = 'leg_r_pole_parent'
 
 
 class RichArmatureObjectABC(ArmatureObjectABC):
