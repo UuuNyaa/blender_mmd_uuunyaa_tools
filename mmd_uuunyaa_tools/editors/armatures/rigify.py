@@ -227,15 +227,15 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         MMDBindInfo(MMDBoneInfo.下半身, 'spine_fk', 'ORG-spine', GroupType.TORSO, MMDBindType.COPY_SPINE),
 
-        MMDBindInfo(MMDBoneInfo.左足, 'thigh_ik.L', 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.左ひざ, 'MCH-shin_ik.L', 'ORG-shin.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左足首, 'MCH-thigh_ik_target.L', 'ORG-foot.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左足, 'thigh_fk.L', 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左ひざ, 'shin_fk.L', 'ORG-shin.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'ORG-foot.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'foot_ik.L', 'foot_ik.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'ORG-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
 
-        MMDBindInfo(MMDBoneInfo.右足, 'thigh_ik.R', 'ORG-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.右ひざ, 'MCH-shin_ik.R', 'ORG-shin.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右足首, 'MCH-thigh_ik_target.R', 'ORG-foot.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右足, 'thigh_fk.R', 'ORG-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右ひざ, 'shin_fk.R', 'ORG-shin.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'ORG-foot.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'foot_ik.R', 'foot_ik.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'ORG-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
 
@@ -295,6 +295,8 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         datapaths: Dict[ControlType, DataPath] = {
             ControlType.BIND_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, self.prop_name_mmd_uuunyaa_bind_mmd_rigify),
             ControlType.EYE_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_eye_mmd_rigify'),
+            ControlType.LEG_L_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_leg_l_mmd_rigify'),
+            ControlType.LEG_R_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_leg_r_mmd_rigify'),
             ControlType.TOE_L_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_toe_l_mmd_rigify'),
             ControlType.TOE_R_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_toe_r_mmd_rigify'),
             ControlType.TORSO_NECK_FOLLOW: DataPath(self.prop_storage_bone_name, 'neck_follow'),
@@ -324,11 +326,6 @@ class RigifyArmatureObject(RichArmatureObjectABC):
                 datapaths[control_type] = DataPath(bone_name, key)
 
         self.datapaths = datapaths
-
-        self.strict_mmd_bind_infos = [
-            b for b in self.mmd_bind_infos  # pylint: disable=maybe-no-member
-            if b.pose_bone_name is not None and b.pose_bone_name in pose_bones
-        ]
 
     def has_face_bones(self) -> bool:
         require_bone_names = {'ORG-spine.006', 'ORG-eye.L', 'ORG-eye.R', 'ORG-face', 'master_eye.L', 'master_eye.R'}
@@ -581,6 +578,10 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return shoulder_cancel_shadow_l_bone, shoulder_cancel_shadow_r_bone
 
+    def _adjust_leg_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones):
+        rig_edit_bones['thigh_fk.L'].layers = list(map(any, zip(rig_edit_bones['thigh_ik.L'].layers, rig_edit_bones['thigh_fk.L'].layers)))
+        rig_edit_bones['thigh_fk.R'].layers = list(map(any, zip(rig_edit_bones['thigh_ik.R'].layers, rig_edit_bones['thigh_fk.R'].layers)))
+
     def imitate_mmd_bone_structure(self, _: MMDArmatureObject):
         # pylint: disable=too-many-statements
         rig_edit_bones = self.edit_bones
@@ -666,6 +667,9 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         # adjust torso bone
         self._adjust_torso_bone(rig_edit_bones)
 
+        # adjust leg bones
+        self._adjust_leg_bones(rig_edit_bones)
+
         # set face bones
         if not self.has_face_bones():
             # There are not enough bones for the setup.
@@ -694,16 +698,24 @@ class RigifyArmatureObject(RichArmatureObjectABC):
                 for key, value in kwargs.items():
                     setattr(constraint, key, value)
 
-        def add_constraint(pose_bone: bpy.types.PoseBone, constraint_type: str, name: str, **kwargs):
+        def add_constraint(pose_bone: bpy.types.PoseBone, constraint_type: str, name: str, **kwargs) -> bpy.types.Constraint:
             constraints = pose_bone.constraints
             constraint = constraints.new(constraint_type)
             constraint.name = name
             for key, value in kwargs.items():
                 setattr(constraint, key, value)
+            return constraint
 
         # set spine
         edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', influence=0.000)
         edit_constraints(pose_bones['ORG-spine.001'], 'COPY_TRANSFORMS', subtarget='spine_fk.001')
+
+        # reset rest_length
+        # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
+        edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
+        edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
+        edit_constraints(pose_bones['ORG-spine.002'], 'STRETCH_TO', rest_length=0.000)
+        edit_constraints(pose_bones['ORG-spine.003'], 'STRETCH_TO', rest_length=0.000)
 
         # shoulders
         add_constraint(
@@ -780,21 +792,39 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         ]:
             edit_constraints(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
 
-        # reset rest_length
-        # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
-        edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
-        edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
-        edit_constraints(pose_bones['ORG-spine.002'], 'STRETCH_TO', rest_length=0.000)
-        edit_constraints(pose_bones['ORG-spine.003'], 'STRETCH_TO', rest_length=0.000)
+        # legs
+        def bind_fk2ik(from_bone_name: str, ik_bone_name: str, cotrol_data_path: str):
+            add_influence_driver(
+                add_constraint(
+                    pose_bones[ik_bone_name],
+                    'COPY_TRANSFORMS',
+                    'mmd_uuunyaa_copy_transforms',
+                    target=self.raw_object,
+                    subtarget=from_bone_name,
+                    target_space='LOCAL',
+                    owner_space='LOCAL'
+                ),
+                self.raw_object,
+                cotrol_data_path,
+                invert=True
+            )
 
-        pose_bones['thigh_ik.L'].lock_rotation = [False, False, False]
+        leg_l_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_MMD_UUUNYAA].data_path}'
+        bind_fk2ik('thigh_fk.L', 'thigh_ik.L', leg_l_mmd_uuunyaa_data_path)
+        bind_fk2ik('shin_fk.L', 'MCH-shin_ik.L', leg_l_mmd_uuunyaa_data_path)
+        bind_fk2ik('foot_fk.L', 'MCH-thigh_ik_target.L', leg_l_mmd_uuunyaa_data_path)
+
         shin_ik_l_bone = pose_bones['MCH-shin_ik.L'] if 'MCH-shin_ik.L' in pose_bones else pose_bones['MCH-thigh_ik.L']
         edit_constraints(shin_ik_l_bone, 'IK', iterations=200)
         shin_ik_l_bone.use_ik_limit_x = True
         shin_ik_l_bone.ik_min_x = math.radians(0)
         shin_ik_l_bone.ik_max_x = math.radians(180)
 
-        pose_bones['thigh_ik.R'].lock_rotation = [False, False, False]
+        leg_r_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_MMD_UUUNYAA].data_path}'
+        bind_fk2ik('thigh_fk.R', 'thigh_ik.R', leg_r_mmd_uuunyaa_data_path)
+        bind_fk2ik('shin_fk.R', 'MCH-shin_ik.R', leg_r_mmd_uuunyaa_data_path)
+        bind_fk2ik('foot_fk.R', 'MCH-thigh_ik_target.R', leg_r_mmd_uuunyaa_data_path)
+
         shin_ik_r_bone = pose_bones['MCH-shin_ik.R'] if 'MCH-shin_ik.R' in pose_bones else pose_bones['MCH-thigh_ik.R']
         edit_constraints(shin_ik_r_bone, 'IK', iterations=200)
         shin_ik_r_bone.use_ik_limit_x = True
@@ -802,11 +832,10 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         shin_ik_r_bone.ik_max_x = math.radians(180)
 
         # toe IK
-        leg_l_ik_fk = self.datapaths[ControlType.LEG_L_IK_FK]
-        leg_r_ik_fk = self.datapaths[ControlType.LEG_R_IK_FK]
-
-        self.create_mmd_ik_constraint(pose_bones['ORG-foot.L'], 'mmd_uuunyaa_toe_ik.L', f'pose.bones{leg_l_ik_fk.data_path}', 1, 3)
-        self.create_mmd_ik_constraint(pose_bones['ORG-foot.R'], 'mmd_uuunyaa_toe_ik.R', f'pose.bones{leg_r_ik_fk.data_path}', 1, 3)
+        leg_l_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_IK_FK].data_path}'
+        leg_r_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_IK_FK].data_path}'
+        self.create_mmd_ik_constraint(pose_bones['ORG-foot.L'], 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3)
+        self.create_mmd_ik_constraint(pose_bones['ORG-foot.R'], 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3)
 
         self._set_bone_custom_shapes(pose_bones)
 
@@ -942,6 +971,11 @@ class RigifyArmatureObject(RichArmatureObjectABC):
     def pose_mmd_rest(self, dependency_graph: bpy.types.Depsgraph, iterations: int, pose_arms: bool, pose_legs: bool, pose_fingers: bool):
         # pylint: disable=too-many-arguments
         pose_bones = self.pose_bones
+
+        self.arm_l_ik_fk = 1.000  # use FK
+        self.arm_r_ik_fk = 1.000  # use FK
+        self.leg_l_ik_fk = 0.000  # use IK
+        self.leg_r_ik_fk = 0.000  # use IK
 
         def set_rotation(pose_bone: bpy.types.PoseBone, rotation_matrix: Matrix):
             pose_bone.matrix = Matrix.Translation(pose_bone.matrix.to_translation()) @ rotation_matrix
@@ -1131,6 +1165,9 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
             torso_bone.tail = mmd_edit_bones['腰'].tail
             self.fit_edit_bone_rotation(mmd_edit_bones['腰'], torso_bone)
 
+        # adjust leg bones
+        self._adjust_leg_bones(rig_edit_bones)
+
         # set face bones
         if not self.has_face_bones():
             # There are not enough bones for the setup.
@@ -1170,7 +1207,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         # bind rigify -> mmd
         mmd_pose_bones: Dict[str, bpy.types.PoseBone] = mmd_armature_object.strict_pose_bones
-        for mmd_bind_info in self.strict_mmd_bind_infos:
+        for mmd_bind_info in self.mmd_bind_infos:  # pylint: disable=maybe-no-member
             if mmd_bind_info.bind_type == MMDBindType.NONE:
                 continue
 
@@ -1222,6 +1259,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
             'ORG-eye.L', 'ORG-eye.R',
             'mmd_uuunyaa_eyes_fk',
             'mmd_uuunyaa_eye_fk.L', 'mmd_uuunyaa_eye_fk.R',
+            'jaw_master',
         }
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones
         for rig_edit_bone in rig_edit_bones['ORG-face'].children_recursive:
@@ -1229,6 +1267,17 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
                 continue
 
             rig_edit_bones.remove(rig_edit_bone)
+
+    def imitate_mmd_pose_behavior(self):
+        super().imitate_mmd_pose_behavior()
+
+        # hide unused face bones
+        hide_bone_names = {
+            'jaw_master',
+        }
+        rig_bones: bpy.types.ArmatureBones = self.bones
+        for hide_bone_name in hide_bone_names:
+            rig_bones[hide_bone_name].hide = True
 
     def fit_bone_rotations(self, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones

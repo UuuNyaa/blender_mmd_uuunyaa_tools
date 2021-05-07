@@ -28,6 +28,8 @@ class MMDRigifyOperatorPanel(bpy.types.Panel):
         rigify_armature_object = MMDRigifyArmatureObject(active_object)
         bind_mmd_rigify = rigify_armature_object.datapaths[ControlType.BIND_MMD_UUUNYAA]
         eye_mmd_rigify = rigify_armature_object.datapaths[ControlType.EYE_MMD_UUUNYAA]
+        leg_l_mmd_rigify = rigify_armature_object.datapaths[ControlType.LEG_L_MMD_UUUNYAA]
+        leg_r_mmd_rigify = rigify_armature_object.datapaths[ControlType.LEG_R_MMD_UUUNYAA]
         toe_l_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_L_MMD_UUUNYAA]
         toe_r_mmd_rigify = rigify_armature_object.datapaths[ControlType.TOE_R_MMD_UUUNYAA]
         arm_l_ik_fk = rigify_armature_object.datapaths[ControlType.ARM_L_IK_FK]
@@ -41,6 +43,9 @@ class MMDRigifyOperatorPanel(bpy.types.Panel):
         col.label(text='MMD-Rigify:')
         col.prop(pose_bones[bind_mmd_rigify.bone_name], bind_mmd_rigify.prop_data_path, text='Bind', slider=True)
         col.prop(pose_bones[eye_mmd_rigify.bone_name], eye_mmd_rigify.prop_data_path, text='Eyes', slider=True)
+        row = col.row()
+        row.prop(pose_bones[leg_l_mmd_rigify.bone_name], leg_l_mmd_rigify.prop_data_path, text='Leg.L', slider=True)
+        row.prop(pose_bones[leg_r_mmd_rigify.bone_name], leg_r_mmd_rigify.prop_data_path, text='Leg.R', slider=True)
         row = col.row()
         row.prop(pose_bones[toe_l_mmd_rigify.bone_name], toe_l_mmd_rigify.prop_data_path, text='Toe.L', slider=True)
         row.prop(pose_bones[toe_r_mmd_rigify.bone_name], toe_r_mmd_rigify.prop_data_path, text='Toe.R', slider=True)
