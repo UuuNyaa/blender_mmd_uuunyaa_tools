@@ -8,7 +8,7 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Set, Union
+from typing import Dict, Iterable, List, Set, Union
 
 import bpy
 import rna_prop_ui
@@ -224,13 +224,140 @@ class ControlType(Enum):
     LEG_R_POLE_PARENT = 'leg_r_pole_parent'
 
 
-def add_influence_driver(constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert=False):
-    driver: bpy.types.Driver = constraint.driver_add('influence').driver
-    variable: bpy.types.DriverVariable = driver.variables.new()
-    variable.name = 'mmd_uuunyaa_influence'
-    variable.targets[0].id = target
-    variable.targets[0].data_path = data_path
-    driver.expression = ('1-' if invert else '+') + variable.name
+@dataclass
+class DriverVariable:
+    name: str
+    target: bpy.types.Object
+    data_path: str
+
+
+class PoseUtil(ABC):
+    @staticmethod
+    def add_driver(constraint: bpy.types.Constraint, driver_path: str, driver_expression: str, *driver_variables: DriverVariable):
+        driver: bpy.types.Driver = constraint.driver_add(driver_path).driver
+        for driver_variable in driver_variables:
+            variable: bpy.types.DriverVariable = driver.variables.new()
+            variable.name = driver_variable.name
+            variable.targets[0].id = driver_variable.target
+            variable.targets[0].data_path = driver_variable.data_path
+        driver.expression = driver_expression
+
+    @classmethod
+    def add_influence_driver(cls, constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert_influence=False):
+        variable = DriverVariable('mmd_uuunyaa_influence', target, data_path)
+        cls.add_driver(constraint, 'influence', ('1-' if invert_influence else '+') + variable.name, variable)
+
+    @classmethod
+    def update_influence_driver(cls, constraint: bpy.types.Constraint, target: bpy.types.Object, data_path: str, invert_influence=False):
+        constraint.driver_remove('influence')
+        cls.add_influence_driver(constraint, target, data_path, invert_influence=invert_influence)
+
+    @staticmethod
+    def add_prop(
+        pose_bone: bpy.types.PoseBone,
+        prop_name: str,
+        default=0.000,
+        min=0.000, max=1.000,
+        soft_min=None, soft_max=None,
+        description=None,
+        overridable=True,
+        subtype=None
+    ):
+        # pylint: disable=redefined-builtin,too-many-arguments
+        rna_prop_ui.rna_idprop_ui_create(
+            pose_bone, prop_name,
+            default=default,
+            min=min, max=max,
+            soft_min=soft_min, soft_max=soft_max,
+            description=description,
+            overridable=overridable,
+            subtype=subtype
+        )
+
+    @staticmethod
+    def add_constraint(pose_bone: bpy.types.PoseBone, constraint_type: str, name: str, **kwargs) -> bpy.types.Constraint:
+        constraints = pose_bone.constraints
+        constraint = constraints.new(constraint_type)
+        constraint.name = name
+        for key, value in kwargs.items():
+            setattr(constraint, key, value)
+        return constraint
+
+    @staticmethod
+    def list_constraints(pose_bone: bpy.types.PoseBone, constraint_type: str) -> Iterable[bpy.types.Constraint]:
+        for constraint in pose_bone.constraints:
+            if constraint.type == constraint_type:
+                yield constraint
+
+    @classmethod
+    def edit_constraints(cls, pose_bone: bpy.types.PoseBone, constraint_type: str, **kwargs):
+        for constraint in cls.list_constraints(pose_bone, constraint_type):
+            for key, value in kwargs.items():
+                setattr(constraint, key, value)
+
+    @classmethod
+    def add_copy_transforms_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+        # pylint: disable=too-many-arguments
+        constraint = cls.add_constraint(
+            pose_bone, 'COPY_TRANSFORMS', 'mmd_uuunyaa_copy_transforms',
+            target=target_object,
+            subtarget=subtarget,
+            target_space=space,
+            owner_space=space,
+            **kwargs
+        )
+        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        return constraint
+
+    @classmethod
+    def add_copy_rotation_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+        # pylint: disable=too-many-arguments
+        constraint = cls.add_constraint(
+            pose_bone, 'COPY_ROTATION', 'mmd_uuunyaa_copy_rotation',
+            target=target_object,
+            subtarget=subtarget,
+            target_space=space,
+            owner_space=space,
+            **kwargs
+        )
+        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        return constraint
+
+    @classmethod
+    def add_copy_location_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+        # pylint: disable=too-many-arguments
+        constraint = cls.add_constraint(
+            pose_bone, 'COPY_LOCATION', 'mmd_uuunyaa_copy_location',
+            target=target_object,
+            subtarget=subtarget,
+            target_space=space,
+            owner_space=space,
+            **kwargs
+        )
+        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        return constraint
+
+    @classmethod
+    def add_ik_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+        # pylint: disable=too-many-arguments
+        constraint = cls.add_constraint(
+            pose_bone, 'IK', 'mmd_uuunyaa_ik_mmd',
+            target=target_object,
+            subtarget=subtarget,
+            chain_count=chain_count,
+            iterations=iterations,
+            **kwargs
+        )
+        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        return constraint
+
+    @staticmethod
+    def remove_constraints(pose_bones: Dict[str, bpy.types.PoseBone]):
+        for pose_bone in pose_bones.values():
+            for constraint in pose_bone.constraints:
+                if not constraint.name.startswith('mmd_uuunyaa_'):
+                    continue
+                pose_bone.constraints.remove(constraint)
 
 
 class ArmatureObjectABC(ABC):
@@ -291,9 +418,11 @@ class ArmatureObjectABC(ABC):
     def to_angle(vector: Vector, plane: str) -> float:
         if plane == 'XZ':
             return math.atan2(vector.z, vector.x)
-        elif plane == 'XY':
+
+        if plane == 'XY':
             return math.atan2(vector.y, vector.x)
-        elif plane == 'YZ':
+
+        if plane == 'YZ':
             return math.atan2(vector.z, vector.y)
 
         raise ValueError(f"unknown plane, expected: XY, XZ, YZ, not '{plane}'")
@@ -314,35 +443,7 @@ class RichArmatureObjectABC(ArmatureObjectABC):
             if data_path is None:
                 continue
 
-            rna_prop_ui.rna_idprop_ui_create(
-                prop_storage_bone,
-                data_path.prop_name,
-                default=0.000,
-                min=0.000, max=1.000,
-                soft_min=None, soft_max=None,
-                description=None,
-                overridable=True,
-                subtype=None
-            )
-
-    # pylint: disable=too-many-arguments
-    def create_mmd_ik_constraint(self, pose_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert: bool = True) -> bpy.types.Constraint:
-        constraint = pose_bone.constraints.new('IK')
-        constraint.name = 'mmd_uuunyaa_ik_mmd'
-        constraint.target = self.raw_object
-        constraint.subtarget = subtarget
-        constraint.chain_count = chain_count
-        constraint.iterations = iterations
-        add_influence_driver(constraint, self.raw_object, influence_data_path, invert=invert)
-        return constraint
-
-    @staticmethod
-    def remove_constraints(pose_bones: Dict[str, bpy.types.PoseBone]):
-        for pose_bone in pose_bones.values():
-            for constraint in pose_bone.constraints:
-                if not constraint.name.startswith('mmd_uuunyaa_'):
-                    continue
-                pose_bone.constraints.remove(constraint)
+            PoseUtil.add_prop(prop_storage_bone, data_path.prop_name)
 
     @staticmethod
     def fit_edit_bone_rotation(target_bone: bpy.types.EditBone, reference_bone: bpy.types.EditBone):
@@ -385,6 +486,18 @@ class RichArmatureObjectABC(ArmatureObjectABC):
     @abstractmethod
     def has_face_bones(self) -> bool:
         pass
+
+    def _add_eye_constraints(
+        self,
+        target_eye_l_bone: bpy.types.PoseBone, target_eye_r_bone: bpy.types.PoseBone,
+        control_eye_l_bone: bpy.types.PoseBone, control_eye_r_bone: bpy.types.PoseBone,
+        control_eyes_bone: bpy.types.PoseBone
+    ):
+        eye_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.EYE_MMD_UUUNYAA].data_path}'
+        PoseUtil.add_copy_rotation_constraint(target_eye_l_bone, self.raw_object, control_eye_l_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True)
+        PoseUtil.add_copy_rotation_constraint(target_eye_r_bone, self.raw_object, control_eye_r_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True)
+        PoseUtil.add_copy_rotation_constraint(control_eye_l_bone, self.raw_object, control_eyes_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True, mix_mode='ADD')
+        PoseUtil.add_copy_rotation_constraint(control_eye_r_bone, self.raw_object,  control_eyes_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True, mix_mode='ADD')
 
     def _get_property(self, control_type: ControlType):
         datapath = self.datapaths.get(control_type)

@@ -5,7 +5,7 @@
 # pylint: disable=too-many-lines
 
 import math
-from typing import Callable, Dict, Iterable
+from typing import Dict, Iterable
 
 import bpy
 from mathutils import Color, Euler, Matrix, Vector
@@ -13,144 +13,9 @@ from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
                                                  ControlType, DataPath,
                                                  GroupType, MMDBindInfo,
                                                  MMDBindType, MMDBoneInfo,
-                                                 MMDBoneType,
-                                                 RichArmatureObjectABC,
-                                                 add_influence_driver)
+                                                 MMDBoneType, PoseUtil,
+                                                 RichArmatureObjectABC, DriverVariable)
 from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
-
-
-def _create_binders() -> Dict[MMDBindType, Callable]:
-    # pylint: disable=too-many-statements
-
-    def copy_pose(pose_bone, target_object, subtarget, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_TRANSFORMS')
-        constraint.name = 'mmd_uuunyaa_copy_transforms'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'POSE'
-        constraint.owner_space = 'POSE'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    def copy_parent(pose_bone, target_object, subtarget, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_TRANSFORMS')
-        constraint.name = 'mmd_uuunyaa_copy_transforms'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL_WITH_PARENT'
-        constraint.owner_space = 'LOCAL_WITH_PARENT'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    def copy_local(pose_bone, target_object, subtarget, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_TRANSFORMS')
-        constraint.name = 'mmd_uuunyaa_copy_transforms'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL'
-        constraint.owner_space = 'LOCAL'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    def copy_spine(pose_bone, target_object, _, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_LOCATION')
-        constraint.name = 'mmd_uuunyaa_copy_location'
-        constraint.target = target_object
-        constraint.subtarget = 'spine_fk'
-        constraint.target_space = 'POSE'
-        constraint.owner_space = 'POSE'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-        constraint = pose_bone.constraints.new('COPY_ROTATION')
-        constraint.name = 'mmd_uuunyaa_copy_rotation'
-        constraint.target = target_object
-        constraint.subtarget = 'spine_fk'
-        constraint.target_space = 'LOCAL_WITH_PARENT'
-        constraint.owner_space = 'LOCAL_WITH_PARENT'
-        constraint.invert_x = False
-        constraint.invert_y = True
-        constraint.invert_z = True
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    def copy_toe(pose_bone, target_object, subtarget, influence_data_path):
-
-        def add_driver(constraint, target_object, influence_data_path):
-            driver: bpy.types.Driver = constraint.driver_add('influence').driver
-            variable: bpy.types.DriverVariable = driver.variables.new()
-            variable.name = 'mmd_uuunyaa_influence'
-            variable.targets[0].id = target_object
-            variable.targets[0].data_path = influence_data_path
-
-            if subtarget.endswith('.L'):
-                left_right = 'l'
-            else:
-                left_right = 'r'
-
-            variable: bpy.types.DriverVariable = driver.variables.new()
-            variable.name = f'mmd_uuunyaa_toe_{left_right}_mmd_rigify'
-            variable.targets[0].id = target_object
-            variable.targets[0].data_path = f'pose.bones["torso"]["{variable.name}"]'
-
-            driver.expression = f'mmd_uuunyaa_influence * {variable.name}'
-
-        constraint = pose_bone.constraints.new('COPY_LOCATION')
-        constraint.name = 'mmd_uuunyaa_copy_location'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL'
-        constraint.owner_space = 'LOCAL'
-        constraint.invert_x = True
-        constraint.invert_y = False
-        constraint.invert_z = True
-        add_driver(constraint, target_object, influence_data_path)
-
-        constraint = pose_bone.constraints.new('COPY_ROTATION')
-        constraint.name = 'mmd_uuunyaa_copy_rotation'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL'
-        constraint.owner_space = 'LOCAL'
-        constraint.invert_x = True
-        constraint.invert_y = False
-        constraint.invert_z = True
-        constraint.mix_mode = 'ADD'
-        add_driver(constraint, target_object, influence_data_path)
-
-    def copy_eye(pose_bone, target_object, subtarget, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_ROTATION')
-        constraint.name = 'mmd_uuunyaa_copy_rotation'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL'
-        constraint.owner_space = 'LOCAL'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    def copy_root(pose_bone, target_object, subtarget, influence_data_path):
-        constraint = pose_bone.constraints.new('COPY_LOCATION')
-        constraint.name = 'mmd_uuunyaa_copy_location'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'POSE'
-        constraint.owner_space = 'POSE'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-        constraint = pose_bone.constraints.new('COPY_ROTATION')
-        constraint.name = 'mmd_uuunyaa_copy_rotation'
-        constraint.target = target_object
-        constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL'
-        constraint.owner_space = 'LOCAL'
-        add_influence_driver(constraint, target_object, influence_data_path)
-
-    return {
-        MMDBindType.COPY_POSE: copy_pose,
-        MMDBindType.COPY_PARENT: copy_parent,
-        MMDBindType.COPY_LOCAL: copy_local,
-        MMDBindType.COPY_SPINE: copy_spine,
-        MMDBindType.COPY_TOE: copy_toe,
-        MMDBindType.COPY_EYE: copy_eye,
-        MMDBindType.COPY_ROOT: copy_root,
-    }
-
-
-binders: Dict[MMDBindType, Callable] = _create_binders()
 
 
 class RigifyArmatureObject(RichArmatureObjectABC):
@@ -253,6 +118,77 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左足IK親, 'mmd_uuunyaa_leg_ik_parent.L', 'mmd_uuunyaa_leg_ik_parent.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.右足IK親, 'mmd_uuunyaa_leg_ik_parent.R', 'mmd_uuunyaa_leg_ik_parent.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
     ]
+
+    @staticmethod
+    def copy_pose(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+
+    @staticmethod
+    def copy_parent(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL_WITH_PARENT', influence_data_path)
+
+    @staticmethod
+    def copy_local(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
+
+    @staticmethod
+    def copy_spine(pose_bone, target_object, _, influence_data_path):
+        PoseUtil.add_copy_location_constraint(pose_bone, target_object, 'spine_fk', 'POSE', influence_data_path)
+        PoseUtil.add_copy_rotation_constraint(
+            pose_bone, target_object, 'spine_fk', 'LOCAL_WITH_PARENT', influence_data_path,
+            invert_x=False,
+            invert_y=True,
+            invert_z=True
+        )
+
+    @staticmethod
+    def copy_toe(pose_bone, target_object, subtarget, influence_data_path):
+
+        def add_driver(constraint, target_object, influence_data_path, toe_bind_data_path):
+            PoseUtil.add_driver(
+                constraint, 'influence',
+                'mmd_uuunyaa_influence * mmd_uuunyaa_toe_bind',
+                DriverVariable('mmd_uuunyaa_influence', target_object, influence_data_path),
+                DriverVariable('mmd_uuunyaa_toe_bind', target_object, toe_bind_data_path)
+            )
+
+        if subtarget.endswith('.L'):
+            left_right = 'l'
+        else:
+            left_right = 'r'
+
+        toe_bind_data_path = f'pose.bones["torso"]["mmd_uuunyaa_toe_{left_right}_mmd_rigify"]'
+        constraint = pose_bone.constraints.new('COPY_LOCATION')
+        constraint.name = 'mmd_uuunyaa_copy_location'
+        constraint.target = target_object
+        constraint.subtarget = subtarget
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        constraint.invert_x = True
+        constraint.invert_y = False
+        constraint.invert_z = True
+        add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
+
+        constraint = pose_bone.constraints.new('COPY_ROTATION')
+        constraint.name = 'mmd_uuunyaa_copy_rotation'
+        constraint.target = target_object
+        constraint.subtarget = subtarget
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
+        constraint.invert_x = True
+        constraint.invert_y = False
+        constraint.invert_z = True
+        constraint.mix_mode = 'ADD'
+        add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
+
+    @staticmethod
+    def copy_eye(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
+
+    @staticmethod
+    def copy_root(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseUtil.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
 
     @staticmethod
     def is_rigify_armature_object(obj: bpy.types.Object):
@@ -684,7 +620,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
 
         self.create_props(pose_bones[self.prop_storage_bone_name])
-        self.remove_constraints(pose_bones)
+        PoseUtil.remove_constraints(pose_bones)
 
         self._imitate_mmd_eye_behavior(pose_bones)
 
@@ -793,21 +729,8 @@ class RigifyArmatureObject(RichArmatureObjectABC):
             edit_constraints(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
 
         # legs
-        def bind_fk2ik(from_bone_name: str, ik_bone_name: str, cotrol_data_path: str):
-            add_influence_driver(
-                add_constraint(
-                    pose_bones[ik_bone_name],
-                    'COPY_TRANSFORMS',
-                    'mmd_uuunyaa_copy_transforms',
-                    target=self.raw_object,
-                    subtarget=from_bone_name,
-                    target_space='LOCAL',
-                    owner_space='LOCAL'
-                ),
-                self.raw_object,
-                cotrol_data_path,
-                invert=True
-            )
+        def bind_fk2ik(from_bone_name: str, ik_bone_name: str, control_data_path: str):
+            PoseUtil.add_copy_transforms_constraint(pose_bones[ik_bone_name], self.raw_object, from_bone_name, 'LOCAL', control_data_path, invert_influence=True)
 
         leg_l_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_MMD_UUUNYAA].data_path}'
         bind_fk2ik('thigh_fk.L', 'thigh_ik.L', leg_l_mmd_uuunyaa_data_path)
@@ -834,8 +757,8 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         # toe IK
         leg_l_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_IK_FK].data_path}'
         leg_r_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_IK_FK].data_path}'
-        self.create_mmd_ik_constraint(pose_bones['ORG-foot.L'], 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3)
-        self.create_mmd_ik_constraint(pose_bones['ORG-foot.R'], 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3)
+        PoseUtil.add_ik_constraint(pose_bones['ORG-foot.L'], self.raw_object, 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3, invert_influence=True)
+        PoseUtil.add_ik_constraint(pose_bones['ORG-foot.R'], self.raw_object, 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3, invert_influence=True)
 
         self._set_bone_custom_shapes(pose_bones)
 
@@ -951,22 +874,11 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         if not self.has_face_bones():
             return
 
-        eye_mmd_rigify = self.datapaths[ControlType.EYE_MMD_UUUNYAA]
-
-        def create_mmd_rotation_constraint(rig_bone: bpy.types.PoseBone, subtarget: str, influence_data_path: str) -> bpy.types.Constraint:
-            constraint = rig_bone.constraints.new('COPY_ROTATION')
-            constraint.name = 'mmd_uuunyaa_copy_rotation_mmd'
-            constraint.target = self.raw_object
-            constraint.subtarget = subtarget
-            constraint.target_space = 'LOCAL'
-            constraint.owner_space = 'LOCAL'
-            add_influence_driver(constraint, self.raw_object, influence_data_path, invert=True)
-            return constraint
-
-        create_mmd_rotation_constraint(pose_bones['MCH-eye.L'], 'mmd_uuunyaa_eye_fk.L', f'pose.bones{eye_mmd_rigify.data_path}')
-        create_mmd_rotation_constraint(pose_bones['MCH-eye.R'], 'mmd_uuunyaa_eye_fk.R', f'pose.bones{eye_mmd_rigify.data_path}')
-        create_mmd_rotation_constraint(pose_bones['mmd_uuunyaa_eye_fk.L'], 'mmd_uuunyaa_eyes_fk', f'pose.bones{eye_mmd_rigify.data_path}').mix_mode = 'ADD'
-        create_mmd_rotation_constraint(pose_bones['mmd_uuunyaa_eye_fk.R'], 'mmd_uuunyaa_eyes_fk', f'pose.bones{eye_mmd_rigify.data_path}').mix_mode = 'ADD'
+        self._add_eye_constraints(
+            pose_bones['MCH-eye.L'], pose_bones['MCH-eye.R'],
+            pose_bones['mmd_uuunyaa_eye_fk.L'], pose_bones['mmd_uuunyaa_eye_fk.R'],
+            pose_bones['mmd_uuunyaa_eyes_fk']
+        )
 
     def pose_mmd_rest(self, dependency_graph: bpy.types.Depsgraph, iterations: int, pose_arms: bool, pose_legs: bool, pose_fingers: bool):
         # pylint: disable=too-many-arguments
@@ -1205,6 +1117,16 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         bind_mmd_rigify = self.datapaths[ControlType.BIND_MMD_UUUNYAA]
         data_path = f'pose.bones{bind_mmd_rigify.data_path}'
 
+        binders = {
+            MMDBindType.COPY_POSE: self.copy_pose,
+            MMDBindType.COPY_PARENT: self.copy_parent,
+            MMDBindType.COPY_LOCAL: self.copy_local,
+            MMDBindType.COPY_SPINE: self.copy_spine,
+            MMDBindType.COPY_TOE: self.copy_toe,
+            MMDBindType.COPY_EYE: self.copy_eye,
+            MMDBindType.COPY_ROOT: self.copy_root,
+        }
+
         # bind rigify -> mmd
         mmd_pose_bones: Dict[str, bpy.types.PoseBone] = mmd_armature_object.strict_pose_bones
         for mmd_bind_info in self.mmd_bind_infos:  # pylint: disable=maybe-no-member
@@ -1220,11 +1142,11 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
             for constraint in mmd_pose_bone.constraints:
                 if constraint.name == 'IK' and constraint.type == 'IK':
-                    add_influence_driver(constraint, self.raw_object, data_path, invert=True)
+                    PoseUtil.add_influence_driver(constraint, self.raw_object, data_path, invert_influence=True)
 
                 elif mmd_bind_info.bind_type == MMDBindType.COPY_EYE:
                     # mmd internal eye influence
-                    add_influence_driver(constraint, self.raw_object, data_path, invert=True)
+                    PoseUtil.add_influence_driver(constraint, self.raw_object, data_path, invert_influence=True)
 
             binders[mmd_bind_info.bind_type](
                 mmd_pose_bone,
