@@ -1114,8 +1114,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         self.fit_edit_bone_rotation(mmd_edit_bones['右目'], rig_eye_fk_r_bone)
 
     def bind_bones(self, mmd_armature_object: MMDArmatureObject):
-        bind_mmd_rigify = self.datapaths[ControlType.BIND_MMD_UUUNYAA]
-        data_path = f'pose.bones{bind_mmd_rigify.data_path}'
+        bind_mmd_rigify_data_path = f'pose.bones{self.datapaths[ControlType.BIND_MMD_UUUNYAA].data_path}'
 
         binders = {
             MMDBindType.COPY_POSE: self.copy_pose,
@@ -1142,17 +1141,17 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
             for constraint in mmd_pose_bone.constraints:
                 if constraint.name == 'IK' and constraint.type == 'IK':
-                    PoseUtil.add_influence_driver(constraint, self.raw_object, data_path, invert_influence=True)
+                    PoseUtil.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
 
                 elif mmd_bind_info.bind_type == MMDBindType.COPY_EYE:
                     # mmd internal eye influence
-                    PoseUtil.add_influence_driver(constraint, self.raw_object, data_path, invert_influence=True)
+                    PoseUtil.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
 
             binders[mmd_bind_info.bind_type](
                 mmd_pose_bone,
                 self.raw_object,
                 mmd_bind_info.bind_bone_name,
-                data_path
+                bind_mmd_rigify_data_path
             )
 
     def remove_unused_face_bones(self):
