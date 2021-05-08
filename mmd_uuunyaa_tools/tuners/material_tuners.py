@@ -6,13 +6,11 @@ import os
 from typing import Any, Dict
 
 import bpy
-from bpy.types import (
-    Material, NodeFrame, NodeSocket, ShaderNode,
-    ShaderNodeBsdfGlass, ShaderNodeBsdfPrincipled,
-    ShaderNodeBsdfTransparent, ShaderNodeGroup,
-    ShaderNodeMixShader, ShaderNodeOutputMaterial,
-    ShaderNodeRGBCurve, ShaderNodeTexImage
-)
+from bpy.types import (NodeFrame, NodeSocket, ShaderNode, ShaderNodeBsdfGlass,
+                       ShaderNodeBsdfPrincipled, ShaderNodeBsdfTransparent,
+                       ShaderNodeGroup, ShaderNodeMixShader,
+                       ShaderNodeOutputMaterial, ShaderNodeRGBCurve,
+                       ShaderNodeTexImage)
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 
@@ -26,19 +24,20 @@ class MaterialUtilities:
         self.links = material.node_tree.links
 
     @staticmethod
-    def srgb_to_linearrgb(c: float) -> float:
-        if c < 0:
+    def srgb_to_linearrgb(color: float) -> float:
+        if color < 0:
             return 0
-        elif c < 0.04045:
-            return c/12.92
-        else:
-            return ((c+0.055)/1.055)**2.4
+        if color < 0.04045:
+            return color/12.92
+        return ((color+0.055)/1.055)**2.4
 
     @staticmethod
-    def hex_to_rgba(hex: int, alpha=1.0) -> (float, float, float, float):
-        r = (hex & 0xff0000) >> 16
-        g = (hex & 0x00ff00) >> 8
-        b = (hex & 0x0000ff)
+    def hex_to_rgba(hex_int: int, alpha=1.0) -> (float, float, float, float):
+        # pylint: disable=invalid-name
+        # r,g,b is commonly used
+        r = (hex_int & 0xff0000) >> 16
+        g = (hex_int & 0x00ff00) >> 8
+        b = (hex_int & 0x0000ff)
         return tuple([MaterialUtilities.srgb_to_linearrgb(c/0xff) for c in (r, g, b)] + [alpha])
 
     @staticmethod
@@ -65,11 +64,12 @@ class MaterialUtilities:
 
     def list_nodes(self, node_type: type = None, label: str = None, name: str = None, node_frame: NodeFrame = None):
         for node in self.nodes:
-            if ((node_type is None or isinstance(node, node_type))
-                and (label is None or node.label == label)
-                and (name is None or node.name == name)
-                and (node_frame is None or node.parent == node_frame)
-                ):
+            if (
+                (node_type is None or isinstance(node, node_type))
+                    and (label is None or node.label == label)
+                    and (name is None or node.name == name)
+                    and (node_frame is None or node.parent == node_frame)
+            ):
                 yield node
 
     def find_node(self, node_type: type, label: str = None, name: str = None, node_frame: NodeFrame = None) -> ShaderNode:
@@ -131,6 +131,9 @@ class MaterialUtilities:
     def get_shadowless_bsdf_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Shadowless BSDF', label='Shadowless BSDF')
 
+    def get_gem_bsdf_node(self) -> ShaderNodeGroup:
+        return self.get_node_group('Gem BSDF', label='Gem BSDF')
+
     def get_liquid_bsdf_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Liquid BSDF', label='Liquid BSDF')
 
@@ -160,6 +163,8 @@ class MaterialUtilities:
         })
 
     def edit(self, node: ShaderNode, inputs: Dict[str, Any] = {}, properties: Dict[str, Any] = {}, force=False) -> ShaderNode:
+        # pylint: disable=dangerous-default-value
+        # because readonly
         if node is None:
             return None
 
@@ -169,6 +174,8 @@ class MaterialUtilities:
         return node
 
     def set_material_properties(self, properties: Dict[str, Any] = {}):
+        # pylint: disable=dangerous-default-value
+        # because readonly
         for name, value in properties.items():
             setattr(self.material, name, value)
         return self
@@ -302,7 +309,8 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x00001E),
-                'Specular': 0.000,
+                'Subsurface': 0.001,
+                'Specular': 0.500,
                 'Roughness': 0.500,
                 'Clearcoat': 1.000,
                 'Clearcoat Roughness': 0.030,
@@ -311,6 +319,7 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
 class EyeLashMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -329,13 +338,15 @@ class EyeLashMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x122837),
-                'Specular': 0.000,
+                'Subsurface': 0.001,
+                'Specular': 0.500,
                 'Roughness': 1.000,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
 class HairMatteMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -354,13 +365,15 @@ class HairMatteMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x698E9A),
-                'Specular': 0.200,
+                'Subsurface': 0.001,
+                'Specular': 0.500,
                 'Roughness': 0.600,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
 class SkinMucosaMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -375,7 +388,6 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
         node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
-
 
         node_skin_bump = self.edit(self.get_skin_bump_node(), {
             'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
@@ -443,6 +455,90 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
 
+class MetalNobleMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_METAL_NOBLE'
+
+    @classmethod
+    def get_name(cls):
+        return 'Metal Noble'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFC356),
+                'Subsurface': 0.001,
+                'Metallic': 1.000,
+                'Roughness': 0.000,
+                'IOR': 0.500,
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
+class MetalBaseMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_METAL_BASE'
+
+    @classmethod
+    def get_name(cls):
+        return 'Metal Base'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x8E9194),
+                'Subsurface': 0.001,
+                'Metallic': 1.000,
+                'Roughness': 0.400,
+                'IOR': 2.500,
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
+class GemMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_GEM'
+
+    @classmethod
+    def get_name(cls):
+        return 'Gem'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_gem_bsdf_node(), {
+                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x7E8FD4),
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'IOR': 2.000,
+                'Transmission': 1.000,
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.set_material_properties({
+            'blend_method': 'OPAQUE',
+            'shadow_method': 'OPAQUE',
+            'use_screen_refraction': True,
+            'refraction_depth': 0.000,
+        })
+
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
     def get_id(cls):
@@ -460,6 +556,7 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
+                'Subsurface': 0.001,
                 'Specular': 0.130,
                 'Roughness': 1.000,
                 'IOR': 1.450,
@@ -594,14 +691,42 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Subsurface': 0.001,
                 'Specular': 0.500,
-                'Roughness': 0.700,
-                'Clearcoat': 0.200,
+                'Roughness': 0.100,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
+class PlasticMatteMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls):
+        return 'MATERIAL_PLASTIC_MATTE'
+
+    @classmethod
+    def get_name(cls):
+        return 'Plastic Matte'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Subsurface': 0.001,
+                'Specular': 0.500,
+                'Roughness': 0.700,
+                'IOR': 1.450,
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -620,15 +745,16 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': self.hex_to_rgba(0x000000),
+                'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.700,
-                'Clearcoat': 0.200,
                 'IOR': 1.450,
                 'Emission': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFF6666),
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
 class LiquidWaterMaterialTuner(MaterialTunerABC):
     @classmethod
@@ -711,7 +837,11 @@ TUNERS = TunerRegistry(
     FabricKnitMaterialTuner,
     FabricLeatherMaterialTuner,
     PlasticGlossMaterialTuner,
+    PlasticMatteMaterialTuner,
     PlasticEmissionMaterialTuner,
+    MetalNobleMaterialTuner,
+    MetalBaseMaterialTuner,
+    GemMaterialTuner,
     LiquidWaterMaterialTuner,
     LiquidCloudyMaterialTuner,
 )

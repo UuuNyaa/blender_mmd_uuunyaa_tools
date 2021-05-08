@@ -24,7 +24,7 @@ bl_info = {
     "name": "mmd_uuunyaa_tools",
     "description": "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.",
     "author": "UuuNyaa",
-    "version": (0, 5, 1),
+    "version": (0, 5, 2),
     "blender": (2, 80, 0),
     "warning": "",
     "location": "View3D > Tool Shelf > MMD Tools Panel",
@@ -48,7 +48,7 @@ def register():
     for hook in REGISTER_HOOKS:
         try:
             hook()
-        except:
+        except:  # pylint: disable=bare-except
             traceback.print_exc()
 
 
@@ -58,5 +58,5 @@ def unregister():
     for hook in UNREGISTER_HOOKS:
         try:
             hook()
-        except:
+        except:  # pylint: disable=bare-except
             traceback.print_exc()
