@@ -2,7 +2,6 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-import os
 import re
 
 import bpy
