@@ -14,12 +14,12 @@ from mmd_uuunyaa_tools import PACKAGE_PATH
 class TunerABC(ABC):
     @classmethod
     @abstractmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         pass
 
     @classmethod
     @abstractmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         pass
 
     @abstractmethod
@@ -28,29 +28,30 @@ class TunerABC(ABC):
 
 
 class TunerDescription(NamedTuple):
-    tuner: type
+    tuner_index: int
+    tuner: TunerABC
     icon_filename: str
     icon_id: int
 
 
 class TunerRegistry:
-    def __init__(self, *tuners: TunerABC):
-        self.previews = bpy.utils.previews.new()
+    def __init__(self, *tuners: (int, TunerABC)):
+        self.previews = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
         self.tuners: Dict[str, TunerDescription] = {}
-        for t in tuners:
-            self.add(t)
+        for i, t in tuners:
+            self.add(i, t)
 
     def __getitem__(self, tuner_id: str) -> TunerABC:
         return self.tuners[tuner_id].tuner
 
-    def add(self, tuner: TunerABC, icon_filename: str = None):
+    def add(self, tuner_index: int, tuner: TunerABC, icon_filename: str = None):
         if icon_filename is None:
             icon_filename = tuner.get_id() + '.png'
 
         icon_path = os.path.join(PACKAGE_PATH, 'thumbnails', icon_filename)
         icon_id = self.previews.load(icon_filename, icon_path, 'IMAGE').icon_id
-        self.tuners[tuner.get_id()] = TunerDescription(tuner, icon_filename, icon_id)
+        self.tuners[tuner.get_id()] = TunerDescription(tuner_index, tuner, icon_filename, icon_id)
 
     def to_enum_property_items(self):
-        return [(id, t.tuner.get_name(), '', t.icon_id, i) for i, (id, t) in enumerate(self.tuners.items())]
+        return [(id, t.tuner.get_name(), '', t.icon_id, t.tuner_index) for id, t in self.tuners.items()]

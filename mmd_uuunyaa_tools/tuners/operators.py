@@ -36,9 +36,9 @@ class FreezeLighting(bpy.types.Operator):
         return lighting_tuners.LightingUtilities(context.collection).find_active_lighting() is not None
 
     def execute(self, context):
-        lu = lighting_tuners.LightingUtilities(context.collection)
-        lighting = lu.find_active_lighting()
-        lu.object_marker.unmark(lighting, depth=1)
+        utilities = lighting_tuners.LightingUtilities(context.collection)
+        lighting = utilities.find_active_lighting()
+        utilities.object_marker.unmark(lighting, depth=1)
         context.collection.mmd_uuunyaa_tools_lighting.thumbnails = lighting_tuners.ResetLightingTuner.get_id()
         return {'FINISHED'}
 

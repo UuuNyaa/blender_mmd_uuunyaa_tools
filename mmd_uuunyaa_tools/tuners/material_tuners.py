@@ -18,6 +18,8 @@ PATH_BLENDS_UUUNYAA_MATERIALS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Ma
 
 
 class MaterialUtilities:
+    # pylint: disable=too-many-public-methods
+
     def __init__(self, material):
         self.material = material
         self.nodes = material.node_tree.nodes
@@ -48,7 +50,8 @@ class MaterialUtilities:
     def grid_to_position(grid_x: int, grid_y: int) -> (int, int):
         return (grid_x * 300, grid_y * 400)
 
-    def append_node_group(self, name: str):
+    @staticmethod
+    def append_node_group(name: str):
         if name in bpy.data.node_groups:
             return
 
@@ -196,11 +199,11 @@ class MaterialTunerABC(TunerABC, MaterialUtilities):
 
 class ResetMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_RESET'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Reset'
 
     def execute(self):
@@ -219,11 +222,11 @@ class ResetMaterialTuner(MaterialTunerABC):
 
 class TransparentMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_TRANSPARENT'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Transparent'
 
     def execute(self):
@@ -244,11 +247,11 @@ class TransparentMaterialTuner(MaterialTunerABC):
 
 class EyeHighlightMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_EYE_HIGHLIGHT'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Eye Highlight'
 
     def execute(self):
@@ -269,11 +272,11 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
 
 class EyeWhiteMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_EYE_WHITE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Eye White'
 
     def execute(self):
@@ -294,11 +297,11 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
 
 class EyeIrisMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_EYE_IRIS'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Eye Iris'
 
     def execute(self):
@@ -321,13 +324,14 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class EyeLashMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_EYE_LASH'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Eye Lash'
 
     def execute(self):
@@ -348,13 +352,14 @@ class EyeLashMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class HairMatteMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_HAIR_MATTE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Hair Matte'
 
     def execute(self):
@@ -375,13 +380,14 @@ class HairMatteMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class SkinMucosaMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_SKIN_MUCOSA'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Skin Mucosa'
 
     def execute(self):
@@ -418,11 +424,11 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
 
 class SkinBumpMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_SKIN_BUMP'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Skin Bump'
 
     def execute(self):
@@ -457,11 +463,11 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
 
 class MetalNobleMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_METAL_NOBLE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Metal Noble'
 
     def execute(self):
@@ -482,13 +488,14 @@ class MetalNobleMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class MetalBaseMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_METAL_BASE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Metal Base'
 
     def execute(self):
@@ -508,13 +515,14 @@ class MetalBaseMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class GemMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_GEM'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Gem'
 
     def execute(self):
@@ -539,13 +547,14 @@ class GemMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class FabricBumpMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_FABRIC_BUMP'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Fabric Bump'
 
     def execute(self):
@@ -572,11 +581,11 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
 
 class FabricWaveMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_FABRIC_WAVE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Fabric Wave'
 
     def execute(self):
@@ -604,11 +613,11 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
 
 class FabricKnitMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_FABRIC_KNIT'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Fabric Knit'
 
     def execute(self):
@@ -639,11 +648,11 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
 
 class FabricLeatherMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_FABRIC_LEATHER'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Fabric Leather'
 
     def execute(self):
@@ -676,11 +685,11 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
 
 class PlasticGlossMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_PLASTIC_GLOSS'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Plastic Gloss'
 
     def execute(self):
@@ -701,13 +710,14 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class PlasticMatteMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_PLASTIC_MATTE'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Plastic Matte'
 
     def execute(self):
@@ -728,13 +738,14 @@ class PlasticMatteMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_PLASTIC_EMISSION'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Plastic Emission'
 
     def execute(self):
@@ -756,13 +767,14 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
 
+
 class LiquidWaterMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_LIQUID_WATER'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Liquid Water'
 
     def execute(self):
@@ -786,11 +798,11 @@ class LiquidWaterMaterialTuner(MaterialTunerABC):
 
 class LiquidCloudyMaterialTuner(MaterialTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'MATERIAL_LIQUID_CLOUDY'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Liquid Cloudy'
 
     def execute(self):
@@ -823,25 +835,25 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
 
 
 TUNERS = TunerRegistry(
-    ResetMaterialTuner,
-    TransparentMaterialTuner,
-    EyeHighlightMaterialTuner,
-    EyeWhiteMaterialTuner,
-    EyeIrisMaterialTuner,
-    EyeLashMaterialTuner,
-    HairMatteMaterialTuner,
-    SkinMucosaMaterialTuner,
-    SkinBumpMaterialTuner,
-    FabricBumpMaterialTuner,
-    FabricWaveMaterialTuner,
-    FabricKnitMaterialTuner,
-    FabricLeatherMaterialTuner,
-    PlasticGlossMaterialTuner,
-    PlasticMatteMaterialTuner,
-    PlasticEmissionMaterialTuner,
-    MetalNobleMaterialTuner,
-    MetalBaseMaterialTuner,
-    GemMaterialTuner,
-    LiquidWaterMaterialTuner,
-    LiquidCloudyMaterialTuner,
+    (0, ResetMaterialTuner),
+    (1, TransparentMaterialTuner),
+    (2, EyeHighlightMaterialTuner),
+    (3, EyeWhiteMaterialTuner),
+    (4, EyeIrisMaterialTuner),
+    (5, EyeLashMaterialTuner),
+    (6, HairMatteMaterialTuner),
+    (7, SkinMucosaMaterialTuner),
+    (8, SkinBumpMaterialTuner),
+    (9, FabricBumpMaterialTuner),
+    (10, FabricWaveMaterialTuner),
+    (11, FabricKnitMaterialTuner),
+    (12, FabricLeatherMaterialTuner),
+    (17, PlasticGlossMaterialTuner),
+    (13, PlasticMatteMaterialTuner),
+    (14, PlasticEmissionMaterialTuner),
+    (18, MetalNobleMaterialTuner),
+    (19, MetalBaseMaterialTuner),
+    (20, GemMaterialTuner),
+    (15, LiquidWaterMaterialTuner),
+    (16, LiquidCloudyMaterialTuner),
 )

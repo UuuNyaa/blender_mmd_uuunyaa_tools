@@ -3,9 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import os
-from typing import Any, Dict, Union
+from typing import Union
 
-import bpy
 from bpy.types import Object
 
 from mmd_uuunyaa_tools import PACKAGE_PATH
@@ -46,11 +45,11 @@ class LightingTunerABC(TunerABC, LightingUtilities):
 
 class ResetLightingTuner(LightingTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'LIGHTING_RESET'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Reset'
 
     def execute(self):
@@ -59,11 +58,11 @@ class ResetLightingTuner(LightingTunerABC):
 
 class LeftAccentLightingTuner(LightingTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'LIGHTING_LEFT_ACCENT'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Left Accent'
 
     def execute(self):
@@ -73,11 +72,11 @@ class LeftAccentLightingTuner(LightingTunerABC):
 
 class GodRayLightingTuner(LightingTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'LIGHTING_GOD_RAY'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'God Ray'
 
     def execute(self):
@@ -87,11 +86,11 @@ class GodRayLightingTuner(LightingTunerABC):
 
 class BacklightLightingTuner(LightingTunerABC):
     @classmethod
-    def get_id(cls):
+    def get_id(cls) -> str:
         return 'LIGHTING_BACKLIGHT'
 
     @classmethod
-    def get_name(cls):
+    def get_name(cls) -> str:
         return 'Backlight'
 
     def execute(self):
@@ -100,8 +99,8 @@ class BacklightLightingTuner(LightingTunerABC):
 
 
 TUNERS = TunerRegistry(
-    ResetLightingTuner,
-    LeftAccentLightingTuner,
-    GodRayLightingTuner,
-    BacklightLightingTuner,
+    (0, ResetLightingTuner),
+    (1, LeftAccentLightingTuner),
+    (2, GodRayLightingTuner),
+    (3, BacklightLightingTuner),
 )

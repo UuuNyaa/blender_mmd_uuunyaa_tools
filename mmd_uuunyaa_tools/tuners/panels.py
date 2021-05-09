@@ -32,8 +32,8 @@ class LightingPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
 
-        lu = lighting_tuners.LightingUtilities(context.collection)
-        lighting = lu.find_active_lighting()
+        utilities = lighting_tuners.LightingUtilities(context.collection)
+        lighting = utilities.find_active_lighting()
         if lighting is None:
             return
 
@@ -73,12 +73,12 @@ class MaterialPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_material, 'thumbnails', mmd_uuunyaa_tools_material.thumbnails))
 
-        mu = material_tuners.MaterialUtilities(material)
-        node_frame = mu.find_node_frame()
+        utilities = material_tuners.MaterialUtilities(material)
+        node_frame = utilities.find_node_frame()
         if node_frame is not None:
-            for node in mu.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame):
+            for node in utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame):
                 layout.label(text=node.label)
-                for input in node.inputs:
-                    if input.is_linked:
+                for node_input in node.inputs:
+                    if node_input.is_linked:
                         continue
-                    layout.prop(input, 'default_value', text=input.name)
+                    layout.prop(node_input, 'default_value', text=node_input.name)

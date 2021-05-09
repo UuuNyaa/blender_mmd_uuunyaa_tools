@@ -6,8 +6,8 @@ import bpy
 from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
 
 
-def update_lighting_thumbnails(property, context):
-    bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=property.thumbnails)
+def update_lighting_thumbnails(prop: 'LightingPropertyGroup', _):
+    bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=prop.thumbnails)  # pylint: disable=no-member
 
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
@@ -19,6 +19,7 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
 
     @staticmethod
     def register():
+        # pylint: disable=assignment-from-no-return
         bpy.types.Collection.mmd_uuunyaa_tools_lighting = bpy.props.PointerProperty(type=LightingPropertyGroup)
 
     @staticmethod
@@ -26,8 +27,8 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
         del bpy.types.Collection.mmd_uuunyaa_tools_lighting
 
 
-def update_material_thumbnails(property, context):
-    bpy.ops.mmd_uuunyaa_tools.tune_material(material=property.thumbnails)
+def update_material_thumbnails(prop: 'MaterialPropertyGroup', _):
+    bpy.ops.mmd_uuunyaa_tools.tune_material(material=prop.thumbnails)  # pylint: disable=no-member
 
 
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
@@ -39,6 +40,7 @@ class MaterialPropertyGroup(bpy.types.PropertyGroup):
 
     @staticmethod
     def register():
+        # pylint: disable=assignment-from-no-return
         bpy.types.Material.mmd_uuunyaa_tools_material = bpy.props.PointerProperty(type=MaterialPropertyGroup)
 
     @staticmethod
