@@ -8,9 +8,9 @@ from typing import Any, Dict
 import bpy
 from bpy.types import (NodeFrame, NodeSocket, ShaderNode, ShaderNodeBsdfGlass,
                        ShaderNodeBsdfPrincipled, ShaderNodeBsdfTransparent,
-                       ShaderNodeGroup, ShaderNodeMixShader,
-                       ShaderNodeOutputMaterial, ShaderNodeRGBCurve,
-                       ShaderNodeTexImage)
+                       ShaderNodeBump, ShaderNodeGroup, ShaderNodeMath,
+                       ShaderNodeMixShader, ShaderNodeOutputMaterial,
+                       ShaderNodeRGBCurve, ShaderNodeTexImage)
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 
@@ -67,24 +67,35 @@ class MaterialUtilities:
 
     def list_nodes(self, node_type: type = None, label: str = None, name: str = None, node_frame: NodeFrame = None):
         for node in self.nodes:
-            if (
-                (node_type is None or isinstance(node, node_type))
-                    and (label is None or node.label == label)
-                    and (name is None or node.name == name)
-                    and (node_frame is None or node.parent == node_frame)
-            ):
-                yield node
+            if node_type is not None and not isinstance(node, node_type):
+                continue
+
+            if label is not None and node.label != label:
+                continue
+
+            if name is not None and node.name != name:
+                continue
+
+            if node_frame is not None and node.parent != node_frame:
+                continue
+
+            yield node
 
     def find_node(self, node_type: type, label: str = None, name: str = None, node_frame: NodeFrame = None) -> ShaderNode:
         return next(self.list_nodes(node_type, label, name, node_frame), None)
 
+    def new_node(self, node_type: type, label: str = None, name: str = None) -> ShaderNode:
+        node = self.nodes.new(node_type.__name__)
+        node.label = label if label is not None else ''
+        node.name = name if name is not None else self.to_name(label)
+        return node
+
     def get_node(self, node_type: type, label: str = None, name: str = None) -> ShaderNode:
         node = self.find_node(node_type, label, name)
-        if node is None:
-            node = self.nodes.new(node_type.__name__)
-            node.label = label if label is not None else ''
-            node.name = name if name is not None else self.to_name(label)
-        return node
+        if node is not None:
+            return node
+
+        return self.new_node(node_type, label, name)
 
     def get_node_frame(self, label: str = None, name: str = 'uuunyaa_node_frame') -> NodeFrame:
         return self.get_node(NodeFrame, label=label, name=name)
@@ -110,6 +121,12 @@ class MaterialUtilities:
     def find_principled_shader_node(self) -> ShaderNodeBsdfPrincipled:
         return self.find_node(ShaderNodeBsdfPrincipled, label='', name='Principled BSDF')
 
+    def new_bump_node(self) -> ShaderNodeBump:
+        return self.new_node(ShaderNodeBump, label='Bump')
+
+    def new_math_node(self) -> ShaderNodeMath:
+        return self.new_node(ShaderNodeMath, label='Math')
+
     def get_base_texture_node(self) -> ShaderNodeTexImage:
         return self.find_node(ShaderNodeTexImage, label='Mmd Base Tex')
 
@@ -125,11 +142,17 @@ class MaterialUtilities:
     def get_skin_bump_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Skin Bump', label='Skin Bump')
 
+    def get_fabric_woven_texture_node(self) -> ShaderNodeGroup:
+        return self.get_node_group('Fabric Woven Texture', label='Fabric Woven Texture')
+
     def get_fabric_bump_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Fabric Bump', label='Fabric Bump')
 
     def get_wave_bump_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Wave Bump', label='Wave Bump')
+
+    def get_magic_bump_node(self) -> ShaderNodeGroup:
+        return self.get_node_group('Magic Bump', label='Magic Bump')
 
     def get_shadowless_bsdf_node(self) -> ShaderNodeGroup:
         return self.get_node_group('Shadowless BSDF', label='Shadowless BSDF')
@@ -240,6 +263,7 @@ class TransparentMaterialTuner(MaterialTunerABC):
         self.set_material_properties({
             'blend_method': 'HASHED',
             'shadow_method': 'HASHED',
+            'show_transparent_back': False,
             'use_screen_refraction': True,
             'refraction_depth': 0.000,
         })
@@ -596,7 +620,8 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
-                'Specular': 0.130,
+                'Subsurface': 0.001,
+                'Specular': 0.500,
                 'Roughness': 1.000,
                 'IOR': 1.450,
                 'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
@@ -609,6 +634,112 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
                 }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+
+class FabricCottonMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_FABRIC_COTTON'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return 'Fabric Cotton'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+        node_fabric_woven_texture = self.edit(self.get_fabric_woven_texture_node(), {
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
+            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+            'Impurity': 0.200,
+            'Scale': 10.000,
+            'Angle': 0.000,
+            'Strength': 0.350,
+            'Hole Alpha': 0.000,
+            'Gaps': 0.200,
+            'Warp': 1.000,
+            'Woof': 1.000,
+            'Distortion': 1.000,
+            'Fibers': 1.000,
+            'Fuzziness': 0.500,
+            'Errors': 0.000,
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_fabric_woven_texture.outputs['Color'],
+                'Subsurface': 0.001,
+                'Specular': 0.500,
+                'Roughness': 1.000,
+                'Sheen': 1.000,
+                'Sheen Tint': 1.000,
+                'IOR': 1.450,
+                'Alpha': node_fabric_woven_texture.outputs['Alpha'],
+                'Normal': node_fabric_woven_texture.outputs['Normal'],
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.set_material_properties({
+            'blend_method': 'BLEND',
+            'shadow_method': 'OPAQUE',
+            'show_transparent_back': False,
+            'use_screen_refraction': True,
+        })
+
+
+class FabricSilkMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_FABRIC_SILK'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return 'Fabric Silk'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+        node_fabric_woven_texture = self.edit(self.get_fabric_woven_texture_node(), {
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
+            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+            'Impurity': 0.100,
+            'Scale': 100.000,
+            'Angle': 0.000,
+            'Strength': 0.800,
+            'Hole Alpha': 0.000,
+            'Gaps': 0.300,
+            'Warp': 1.000,
+            'Woof': 1.000,
+            'Distortion': 0.000,
+            'Fibers': 0.200,
+            'Fuzziness': 0.100,
+            'Errors': 0.000,
+        }, {'location': self.grid_to_position(-1, +0), 'parent': node_frame})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_fabric_woven_texture.outputs['Color'],
+                'Subsurface': 0.001,
+                'Specular': 1.000,
+                'Roughness': 0.100,
+                'Sheen': 1.000,
+                'Sheen Tint': 1.000,
+                'IOR': 1.450,
+                'Alpha': node_fabric_woven_texture.outputs['Alpha'],
+                'Normal': node_fabric_woven_texture.outputs['Normal'],
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
+
+        self.set_material_properties({
+            'blend_method': 'BLEND',
+            'shadow_method': 'OPAQUE',
+            'show_transparent_back': False,
+            'use_screen_refraction': True,
+        })
 
 
 class FabricKnitMaterialTuner(MaterialTunerABC):
@@ -673,6 +804,7 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
                 'Base Color': leather_texture.outputs['Color'],
+                'Subsurface': 0.001,
                 'Specular': 0.200,
                 'Roughness': leather_texture.outputs['Roughness'],
                 'Sheen': 0.300,
@@ -709,6 +841,38 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
         }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
         self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)})
+
+
+class PlasticBumpMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_PLASTIC_BUMP'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return 'Plastic Bump'
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-2, +0)})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Subsurface': 0.001,
+                'Specular': 0.500,
+                'Roughness': 0.100,
+                'IOR': 1.450,
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Normal': self.edit(self.get_magic_bump_node(), {
+                    'Scale': 10.000,
+                    'Angle': 0.000,
+                    'Strength': 0.200,
+                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-3, +0)}).outputs['Base UV'],
+                }, {'location': self.grid_to_position(-1, -1), 'parent': node_frame}).outputs['Normal'],
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+1, +0)}, force=True)
 
 
 class PlasticMatteMaterialTuner(MaterialTunerABC):
@@ -844,6 +1008,8 @@ TUNERS = TunerRegistry(
     (6, HairMatteMaterialTuner),
     (7, SkinMucosaMaterialTuner),
     (8, SkinBumpMaterialTuner),
+    (21, FabricCottonMaterialTuner),
+    (22, FabricSilkMaterialTuner),
     (9, FabricBumpMaterialTuner),
     (10, FabricWaveMaterialTuner),
     (11, FabricKnitMaterialTuner),
@@ -851,6 +1017,7 @@ TUNERS = TunerRegistry(
     (17, PlasticGlossMaterialTuner),
     (13, PlasticMatteMaterialTuner),
     (14, PlasticEmissionMaterialTuner),
+    (23, PlasticBumpMaterialTuner),
     (18, MetalNobleMaterialTuner),
     (19, MetalBaseMaterialTuner),
     (20, GemMaterialTuner),
