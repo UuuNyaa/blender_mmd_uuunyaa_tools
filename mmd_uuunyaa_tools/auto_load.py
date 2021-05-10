@@ -16,6 +16,8 @@ __all__ = (
 modules = None
 ordered_classes = None
 
+blender_app_version = bpy.app.version
+
 def init():
     global modules
     global ordered_classes
@@ -87,9 +89,13 @@ def iter_register_deps(cls):
             yield dependency
 
 def get_dependency_from_annotation(value):
-    if isinstance(value, tuple) and len(value) == 2:
-        if value[0] in (bpy.props.PointerProperty, bpy.props.CollectionProperty):
-            return value[1]["type"]
+    if blender_app_version >= (2, 93):
+        if isinstance(value, bpy.props._PropertyDeferred):
+            return value.keywords.get("type")
+    else:
+        if isinstance(value, tuple) and len(value) == 2:
+            if value[0] in (bpy.props.PointerProperty, bpy.props.CollectionProperty):
+                return value[1]["type"]
     return None
 
 def iter_classes_to_register(modules):
