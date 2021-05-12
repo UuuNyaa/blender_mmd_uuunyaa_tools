@@ -39,8 +39,8 @@ class TunerRegistry:
         self.previews = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
         self.tuners: Dict[str, TunerDescription] = {}
-        for i, t in tuners:
-            self.add(i, t)
+        for tuner_index, tuner in tuners:
+            self.add(tuner_index, tuner)
 
     def __getitem__(self, tuner_id: str) -> TunerABC:
         return self.tuners[tuner_id].tuner

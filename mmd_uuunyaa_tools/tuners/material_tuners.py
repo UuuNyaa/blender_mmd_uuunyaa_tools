@@ -2,6 +2,8 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+# pylint: disable=too-many-lines
+
 import os
 from typing import Any, Dict
 
@@ -725,7 +727,7 @@ class FabricSilkMaterialTuner(MaterialTunerABC):
                 'Base Color': node_fabric_woven_texture.outputs['Color'],
                 'Subsurface': 0.001,
                 'Specular': 1.000,
-                'Roughness': 0.100,
+                'Roughness': 0.200,
                 'Sheen': 1.000,
                 'Sheen Tint': 1.000,
                 'IOR': 1.450,

@@ -5,7 +5,7 @@
 import functools
 import time
 from enum import Enum
-from typing import List, Set, Union
+from typing import List, Union
 
 import bpy
 import bpy.utils.previews
@@ -60,24 +60,6 @@ class Utilities:
     @staticmethod
     def resolve_path(asset: AssetDescription) -> str:
         return ASSETS.resolve_path(asset.id)
-
-
-class AddAssetThumbnail(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.add_asset_thumbnail'
-    bl_label = 'Add Asset Item'
-    bl_options = {'INTERNAL'}
-
-    asset_id: bpy.props.StringProperty()
-    update_time: bpy.props.IntProperty()
-
-    def execute(self, context):
-        search_result = context.scene.mmd_uuunyaa_tools_asset_search.result
-        if search_result.update_time != self.update_time:
-            return {'FINISHED'}
-
-        asset_item = search_result.asset_items.add()
-        asset_item.id = self.asset_id
-        return {'FINISHED'}
 
 
 class AssetSearch(bpy.types.Operator):
@@ -172,17 +154,41 @@ class AssetDownload(bpy.types.Operator):
 
 class AssetDownloadCancel(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.asset_download_cancel'
-    bl_label = 'Download Cancel Asset'
+    bl_label = 'Cancel Asset Download'
     bl_options = {'INTERNAL'}
 
     asset_id: bpy.props.StringProperty()
 
     @classmethod
     def poll(cls, context):
-        return False
+        return True
 
     def execute(self, context):
         print(f'do: {self.bl_idname}')
+
+        asset = ASSETS[self.asset_id]
+        CONTENT_CACHE.cancel_fetch(asset.download_action)
+
+        return {'FINISHED'}
+
+
+class AssetCacheRemove(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.asset_cache_remove'
+    bl_label = 'Remove Cached Asset'
+    bl_options = {'INTERNAL'}
+
+    asset_id: bpy.props.StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        print(f'do: {self.bl_idname}')
+
+        asset = ASSETS[self.asset_id]
+        CONTENT_CACHE.remove_content(asset.download_action)
+
         return {'FINISHED'}
 
 
@@ -205,8 +211,8 @@ class AssetImport(bpy.types.Operator):
 
         try:
             ImportActionExecutor.execute_import_action(asset, content.filepath if content is not None else None)
-        except MessageException as e:
-            self.report(type={'ERROR'}, message=str(e))
+        except MessageException as ex:
+            self.report(type={'ERROR'}, message=str(ex))
 
         return {'FINISHED'}
 
@@ -246,8 +252,6 @@ class AssetDetailPopup(bpy.types.Operator):
             split.label(text=title)
             label_multiline(split.column(align=True), text=text, width=int(600*(1-split_factor)))
 
-        self.asset_name = asset.name
-
         col = layout.column(align=True)
 
         grid = col.split(factor=0.5)
@@ -278,7 +282,10 @@ class AssetDetailPopup(bpy.types.Operator):
                 text=content.filepath,
                 icon='FILEBROWSER'
             ).filepath = content.filepath
-            layout.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
+
+            row = layout.split(factor=0.9, align=True)
+            row.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
+            row.operator(AssetCacheRemove.bl_idname, text='', icon='TRASH').asset_id = asset.id
 
         elif asset_state is AssetState.EXTRACTED:
             asset_path = Utilities.resolve_path(asset)
@@ -352,7 +359,7 @@ class AssetSearchPanel(bpy.types.Panel):
             elif asset_state is AssetState.EXTRACTED:
                 icon = 'SOLO_ON'
             elif asset_state is AssetState.FAILED:
-                icon = 'SORTTIME'
+                icon = 'ERROR'
             else:
                 icon = 'ERROR'
 

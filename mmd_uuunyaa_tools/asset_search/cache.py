@@ -12,7 +12,7 @@ import traceback
 from abc import ABC, abstractmethod
 from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
-from typing import Callable, Dict, List, OrderedDict, Set, Union
+from typing import Callable, Dict, List, OrderedDict, Union
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
 from mmd_uuunyaa_tools.asset_search.url_resolvers import URLResolver, URLResolverABC
@@ -59,6 +59,7 @@ class Task:
         RUNNING = 2
         SUCCESS = 3
         FAILURE = 4
+        CANCELED = 5
 
     url: URL
     state: State
@@ -86,6 +87,10 @@ class Task:
 class CacheABC(ABC):
     @abstractmethod
     def cancel_fetch(self, url: URL):
+        pass
+
+    @abstractmethod
+    def remove_content(self, url: URL) -> bool:
         pass
 
     @abstractmethod
@@ -166,7 +171,7 @@ class ContentCache(CacheABC):
                 key: {
                     'id': value.id,
                     'state': value.state.name,
-                    'filepath': os.path.basename(value.filepath),
+                    'filepath': os.path.basename(value.filepath) if value.filepath else '',
                     'type': value.type,
                     'length': value.length
                 } for key, value in self._contents.items()
@@ -270,8 +275,27 @@ class ContentCache(CacheABC):
         return task
 
     def cancel_fetch(self, url: URL):
-        print('CANCEL!!!')
-        pass
+        with self._lock:
+            task = self.try_get_task(url)
+            if task is None:
+                return
+
+            if task.state != Task.State.RUNNING:
+                return
+
+            task.state = Task.State.CANCELED
+
+    def remove_content(self, url: URL) -> bool:
+        with self._lock:
+            content = self.try_get_content(url)
+            if content is None:
+                return False
+
+            del self._contents[content.id]
+
+            self._schedule_save_contents()
+
+        return True
 
     def try_get_content(self, url: URL) -> Union[Content, None]:
         content_id = Content.to_content_id(url)
@@ -316,21 +340,22 @@ class ContentCache(CacheABC):
         with self._lock:
             content = self.try_get_content(url)
             if content is not None:
-                return self._executor.submit(self._invoke_callback, callback, content)
+                if content.state in {Content.State.CACHED, Content.State.FETCHING}:
+                    return self._executor.submit(self._invoke_callback, callback, content)
+
+                self.remove_content(url)
 
             elif url in self._tasks:
                 task = self._tasks[url]
-                if task.state not in [Task.State.QUEUING, Task.State.RUNNING]:
-                    raise ValueError(f'task (={task.url}) is invalid state (={task.state})')
 
-                task.callbacks.append(callback)
-                return task.future
+                if task.state in {Task.State.QUEUING, Task.State.RUNNING}:
+                    task.callbacks.append(callback)
+                    return task.future
 
-            else:
-                task = Task(url, Task.State.QUEUING, [callback])
-                task.future = self._executor.submit(self._fetch, task)
-                self._tasks[url] = task
-                return task.future
+            task = Task(url, Task.State.QUEUING, [callback])
+            task.future = self._executor.submit(self._fetch, task)
+            self._tasks[url] = task
+            return task.future
 
 
 class ReloadableContentCache(CacheABC):
@@ -364,6 +389,9 @@ class ReloadableContentCache(CacheABC):
 
     def cancel_fetch(self, url: URL):
         self._cache.cancel_fetch(url)
+
+    def remove_content(self, url: URL) -> bool:
+        return self._cache.remove_content(url)
 
     def try_get_content(self, url: URL) -> Union[Content, None]:
         return self._cache.try_get_content(url)
