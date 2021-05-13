@@ -15,6 +15,8 @@ from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
 from mmd_uuunyaa_tools.utilities import label_multiline, to_human_friendly_text, to_int32
 
+PREVIEWS: Union[bpy.utils.previews.ImagePreviewCollection, None]
+
 
 class AssetState(Enum):
     INITIALIZED = 0
@@ -75,7 +77,7 @@ class AssetSearch(bpy.types.Operator):
         asset_item = search_result.asset_items.add()
         asset_item.id = asset.id
 
-        global PREVIEWS
+        global PREVIEWS  # pylint: disable=global-statement
         if asset.thumbnail_url not in PREVIEWS:
             PREVIEWS.load(asset.thumbnail_url, content.filepath, 'IMAGE')
 
@@ -142,7 +144,7 @@ class AssetDownload(bpy.types.Operator):
 
     asset_id: bpy.props.StringProperty()
 
-    def __on_fetched(self, context, asset, content):
+    def __on_fetched(self, _, asset, content):
         print(f'done: {asset.name}, {asset.id}, {content.state}, {content.id}')
 
     def execute(self, context):
@@ -302,7 +304,19 @@ class AssetDetailPopup(bpy.types.Operator):
 class AssetSearchQueryTags(bpy.types.UIList):
     bl_idname = 'UUUNYAA_UL_mmd_uuunyaa_tools_asset_search_query_tags'
 
-    def draw_item(self, context, layout, data, item, icon, active_data, active_propname, index):
+    def draw_item(
+        self,
+        context,
+        layout,
+        data,
+        item,
+        icon,
+        active_data,
+        active_property,
+        index: int = 0,
+        flt_flag: int = 0
+    ):
+        # pylint: disable=too-many-arguments
         layout.prop(item, 'enabled', text=item.name, index=index)
 
 
@@ -314,6 +328,8 @@ class AssetSearchPanel(bpy.types.Panel):
     bl_category = 'Assets'
 
     def draw(self, context):
+        # pylint: disable=too-many-locals
+
         search = context.scene.mmd_uuunyaa_tools_asset_search
         query = search.query
         layout = self.layout
@@ -343,7 +359,7 @@ class AssetSearchPanel(bpy.types.Panel):
 
         asset_items = context.scene.mmd_uuunyaa_tools_asset_search.result.asset_items
 
-        global PREVIEWS
+        global PREVIEWS  # pylint: disable=global-statement
 
         grid = layout.grid_flow(row_major=True)
         for asset_item in asset_items:
@@ -376,12 +392,12 @@ class AssetSearchPanel(bpy.types.Panel):
 
     @staticmethod
     def register():
-        global PREVIEWS
-        PREVIEWS = bpy.utils.previews.new()
+        global PREVIEWS  # pylint: disable=global-statement
+        PREVIEWS = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
     @staticmethod
     def unregister():
-        global PREVIEWS
+        global PREVIEWS  # pylint: disable=global-statement
         if PREVIEWS is not None:
             bpy.utils.previews.remove(PREVIEWS)
 
@@ -434,7 +450,8 @@ class AssetsOperatorPanel(bpy.types.Panel):
         box.prop(props, 'repo', text='Repository')
         box.prop(props, 'query', text='Query')
         box.prop(props, 'output_json', text='Write to')
-        op = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')
+
+        op = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')  # pylint: disable=invalid-name
         op.repo = props.repo
         op.query = props.query
         op.output_json = props.output_json

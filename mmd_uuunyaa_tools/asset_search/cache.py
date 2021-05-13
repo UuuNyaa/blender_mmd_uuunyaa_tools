@@ -23,6 +23,8 @@ Callback = Callable[['Content'], None]
 
 
 class Content:
+    # pylint: disable=too-few-public-methods
+
     class State(Enum):
         FETCHING = 1
         CACHED = 2
@@ -42,7 +44,8 @@ class Content:
         type: str = None,
         length: int = 0,
     ):
-        self.id = id
+        # pylint: disable=too-many-arguments,redefined-builtin
+        self.id = id  # pylint: disable=invalid-name
         self.state = state
         self.filepath = filepath
         self.type = type
@@ -54,6 +57,8 @@ class Content:
 
 
 class Task:
+    # pylint: disable=too-few-public-methods
+
     class State(Enum):
         QUEUING = 1
         RUNNING = 2
@@ -73,11 +78,11 @@ class Task:
         self,
         url: URL,
         state: State,
-        callbacks: List[Callback] = [],
+        callbacks: List[Callback] = None,
     ):
         self.url = url
         self.state = state
-        self.callbacks = callbacks
+        self.callbacks = [] if callbacks is None else callbacks
         self.future = None
         self.content_id = Content.to_content_id(url)
         self.fetched_size = 0
@@ -107,6 +112,8 @@ class CacheABC(ABC):
 
 
 class ContentCache(CacheABC):
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(
         self,
         cache_folder: str,
@@ -147,8 +154,8 @@ class ContentCache(CacheABC):
             return
 
         with self._lock:
-            with open(contents_json_path, 'r') as f:
-                content_json = json.load(f, object_pairs_hook=OrderedDict)
+            with open(contents_json_path, 'r') as file:
+                content_json = json.load(file, object_pairs_hook=OrderedDict)
 
             self._contents = OrderedDict({
                 key: Content(
@@ -176,8 +183,8 @@ class ContentCache(CacheABC):
                     'length': value.length
                 } for key, value in self._contents.items()
             }
-            with open(contents_json_path, 'w') as f:
-                json.dump(content_json, f)
+            with open(contents_json_path, 'w') as file:
+                json.dump(content_json, file)
 
     def _schedule_save_contents(self):
         if self._contents_save_timer is not None:
@@ -190,6 +197,7 @@ class ContentCache(CacheABC):
         return os.path.join(self.cache_folder, content_id)
 
     def _fetch(self, task: Task):
+        # pylint: disable=too-many-statements
         with self._lock:
             if task.state is not Task.State.QUEUING:
                 raise ValueError(f'task (={task.url}) is invalid state (={task.state})')
@@ -235,7 +243,7 @@ class ContentCache(CacheABC):
                 content.length = content_length
                 content.type = content_type
 
-        except:
+        except:  # pylint: disable=bare-except
             traceback.print_exc()
             with self._lock:
                 content.state = Content.State.FAILED
@@ -260,7 +268,7 @@ class ContentCache(CacheABC):
     def _invoke_callback(callback, content):
         try:
             callback(content)
-        except:
+        except:  # pylint: disable=bare-except
             traceback.print_exc()
 
     def _invoke_callbacks(self, task: Task):
@@ -321,7 +329,7 @@ class ContentCache(CacheABC):
                     if os.path.exists(content.file_path):
                         try:
                             os.remove(content.file_path)
-                        except:
+                        except:  # pylint: disable=bare-except
                             traceback.print_exc()
 
                     excess_cache_size -= content.length
@@ -366,10 +374,10 @@ class ReloadableContentCache(CacheABC):
 
     def delete_cache_object(self):
         if self._cache is not None:
-            with self._cache._lock:
+            with self._cache._lock:  # pylint: disable=protected-access
                 try:
                     del self._cache
-                except:
+                except:  # pylint: disable=bare-except
                     traceback.print_exc()
             self._cache = None
 
