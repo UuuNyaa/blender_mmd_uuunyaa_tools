@@ -711,7 +711,7 @@ class FabricSilkMaterialTuner(MaterialTunerABC):
             'Impurity': 0.100,
             'Scale': 100.000,
             'Angle': 0.000,
-            'Strength': 0.800,
+            'Strength': 0.300,
             'Hole Alpha': 0.000,
             'Gaps': 0.300,
             'Warp': 1.000,
