@@ -143,3 +143,83 @@ class MMDArmatureObject(ArmatureObjectABC):
         else:
             mmd_edit_bones['上半身'].tail = mmd_edit_bones['首'].head
             mmd_edit_bones['首'].tail = mmd_edit_bones['頭'].head
+
+    def clean_koikatsu_armature_prepare(self):
+        mmd_pose_bones = self.pose_bones
+
+        mmd_bone_name_mapping = {
+            'cf_j_shoulder_L': '左肩',
+            'cf_j_shoulder_R': '右肩',
+        }
+
+        mmd_bone_name_j_mapping = {
+            '両目x': '両目',
+            '右目x': '右目',
+            '左目x': '左目',
+            '左肩': '_左肩',
+        }
+
+        for pose_bone in mmd_pose_bones:
+
+            mmd_bone_name = pose_bone.name
+            if mmd_bone_name in mmd_bone_name_mapping:
+                pose_bone.mmd_bone.name_j = mmd_bone_name_mapping[mmd_bone_name]
+                continue
+
+            mmd_bone_name_j = pose_bone.mmd_bone.name_j
+            if mmd_bone_name_j in mmd_bone_name_j_mapping:
+                pose_bone.mmd_bone.name_j = mmd_bone_name_j_mapping[mmd_bone_name_j]
+
+    def clean_koikatsu_armature(self):
+        mmd_edit_bones = self.edit_bones
+
+        strict_edit_bones = self.strict_edit_bones
+        strict_edit_bones['左肩'].tail = strict_edit_bones['左腕'].head
+        strict_edit_bones['左腕'].tail = strict_edit_bones['左ひじ'].head
+        strict_edit_bones['左ひじ'].tail = strict_edit_bones['左手首'].head
+        strict_edit_bones['左手首'].tail = mmd_edit_bones['a_n_hand_L'].head
+
+        strict_edit_bones['左親指０'].tail = strict_edit_bones['左親指１'].head
+        strict_edit_bones['左親指１'].tail = strict_edit_bones['左親指２'].head
+        strict_edit_bones['左親指２'].tail = mmd_edit_bones['cf_j_thumb04_L'].head
+
+        strict_edit_bones['左人指１'].tail = strict_edit_bones['左人指２'].head
+        strict_edit_bones['左人指２'].tail = strict_edit_bones['左人指３'].head
+        strict_edit_bones['左人指３'].tail = mmd_edit_bones['cf_j_index04_L'].head
+
+        strict_edit_bones['左中指１'].tail = strict_edit_bones['左中指２'].head
+        strict_edit_bones['左中指２'].tail = strict_edit_bones['左中指３'].head
+        strict_edit_bones['左中指３'].tail = mmd_edit_bones['cf_j_middle04_L'].head
+
+        strict_edit_bones['左薬指１'].tail = strict_edit_bones['左薬指２'].head
+        strict_edit_bones['左薬指２'].tail = strict_edit_bones['左薬指３'].head
+        strict_edit_bones['左薬指３'].tail = mmd_edit_bones['cf_j_ring04_L'].head
+
+        strict_edit_bones['左小指１'].tail = strict_edit_bones['左小指２'].head
+        strict_edit_bones['左小指２'].tail = strict_edit_bones['左小指３'].head
+        strict_edit_bones['左小指３'].tail = mmd_edit_bones['cf_j_little04_L'].head
+
+        strict_edit_bones['右肩'].tail = strict_edit_bones['右腕'].head
+        strict_edit_bones['右腕'].tail = strict_edit_bones['右ひじ'].head
+        strict_edit_bones['右ひじ'].tail = strict_edit_bones['右手首'].head
+        strict_edit_bones['右手首'].tail = mmd_edit_bones['a_n_hand_R'].head
+
+        strict_edit_bones['右親指０'].tail = strict_edit_bones['右親指１'].head
+        strict_edit_bones['右親指１'].tail = strict_edit_bones['右親指２'].head
+        strict_edit_bones['右親指２'].tail = mmd_edit_bones['cf_j_thumb04_R'].head
+
+        strict_edit_bones['右人指１'].tail = strict_edit_bones['右人指２'].head
+        strict_edit_bones['右人指２'].tail = strict_edit_bones['右人指３'].head
+        strict_edit_bones['右人指３'].tail = mmd_edit_bones['cf_j_index04_R'].head
+
+        strict_edit_bones['右中指１'].tail = strict_edit_bones['右中指２'].head
+        strict_edit_bones['右中指２'].tail = strict_edit_bones['右中指３'].head
+        strict_edit_bones['右中指３'].tail = mmd_edit_bones['cf_j_middle04_R'].head
+
+        strict_edit_bones['右薬指１'].tail = strict_edit_bones['右薬指２'].head
+        strict_edit_bones['右薬指２'].tail = strict_edit_bones['右薬指３'].head
+        strict_edit_bones['右薬指３'].tail = mmd_edit_bones['cf_j_ring04_R'].head
+
+        strict_edit_bones['右小指１'].tail = strict_edit_bones['右小指２'].head
+        strict_edit_bones['右小指２'].tail = strict_edit_bones['右小指３'].head
+        strict_edit_bones['右小指３'].tail = mmd_edit_bones['cf_j_little04_R'].head

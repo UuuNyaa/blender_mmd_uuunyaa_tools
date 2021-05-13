@@ -19,6 +19,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     is_clean_armature: bpy.props.BoolProperty(name='Clean Armature', default=True)
+    is_clean_koikatsu_armature: bpy.props.BoolProperty(name='Clean Koikatsu Armature', default=False)
 
     @classmethod
     def poll(cls, context: bpy.types.Context):
@@ -64,7 +65,15 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         mmd_object.select = True
         metarig_object.select = True
 
+        if self.is_clean_koikatsu_armature:
+            mmd_armature_object.clean_koikatsu_armature_prepare()
+            mmd_armature_object = MMDArmatureObject(mmd_object)
+
         bpy.ops.object.mode_set(mode='EDIT')
+
+        if self.is_clean_koikatsu_armature:
+            mmd_armature_object.clean_koikatsu_armature()
+
         if self.is_clean_armature:
             mmd_armature_object.clean_armature()
 
