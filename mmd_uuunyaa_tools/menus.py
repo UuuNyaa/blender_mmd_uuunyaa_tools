@@ -4,7 +4,12 @@
 
 import bpy
 
-from mmd_uuunyaa_tools.operators import SelectRelatedBones, SelectRelatedObjects, SelectRelatedPoseBones, RemoveUnusedVertexGroups
+from mmd_uuunyaa_tools.operators import (RemoveUnusedShapeKeys,
+                                         RemoveUnusedVertexGroups,
+                                         SelectRelatedBones,
+                                         SelectRelatedObjects,
+                                         SelectRelatedPoseBones,
+                                         SelectShapeKeyTargetVertices)
 
 
 class SelectRelatedObjectsMenu(bpy.types.Menu):
@@ -15,15 +20,15 @@ class SelectRelatedObjectsMenu(bpy.types.Menu):
         pass
 
     @staticmethod
-    def draw_object_menu(this, context):
+    def draw_object_menu(this, _):
         this.layout.operator(SelectRelatedObjects.bl_idname)
 
     @staticmethod
-    def draw_bone_menu(this, context):
+    def draw_bone_menu(this, _):
         this.layout.operator(SelectRelatedBones.bl_idname)
 
     @staticmethod
-    def draw_pose_bone_menu(this, context):
+    def draw_pose_bone_menu(this, _):
         this.layout.operator(SelectRelatedPoseBones.bl_idname)
 
     @staticmethod
@@ -47,7 +52,7 @@ class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
         pass
 
     @staticmethod
-    def draw_menu(this, context):
+    def draw_menu(this, _):
         this.layout.operator(RemoveUnusedVertexGroups.bl_idname)
 
     @staticmethod
@@ -57,3 +62,43 @@ class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
     @staticmethod
     def unregister():
         bpy.types.MESH_MT_vertex_group_context_menu.remove(RemoveUnusedVertexGroupsMenu.draw_menu)
+
+
+class SelectShapeKeyTargetVerticesMenu(bpy.types.Menu):
+    bl_idname = 'SHAPEKEY_MT_mmd_uuunyaa_tools_select_shape_key_target_vertices'
+    bl_label = 'MMD UuuNyaa'
+
+    def draw(self, context):
+        pass
+
+    @staticmethod
+    def draw_menu(this, _):
+        this.layout.operator(SelectShapeKeyTargetVertices.bl_idname)
+
+    @staticmethod
+    def register():
+        bpy.types.MESH_MT_shape_key_context_menu.append(SelectShapeKeyTargetVerticesMenu.draw_menu)
+
+    @staticmethod
+    def unregister():
+        bpy.types.MESH_MT_shape_key_context_menu.remove(SelectShapeKeyTargetVerticesMenu.draw_menu)
+
+
+class RemoveUnusedShapeKeysMenu(bpy.types.Menu):
+    bl_idname = 'VGROUP_MT_mmd_uuunyaa_tools_remove_unused_shape_keys'
+    bl_label = 'MMD UuuNyaa'
+
+    def draw(self, context):
+        pass
+
+    @staticmethod
+    def draw_menu(this, _):
+        this.layout.operator(RemoveUnusedShapeKeys.bl_idname)
+
+    @staticmethod
+    def register():
+        bpy.types.MESH_MT_shape_key_context_menu.append(RemoveUnusedShapeKeysMenu.draw_menu)
+
+    @staticmethod
+    def unregister():
+        bpy.types.MESH_MT_shape_key_context_menu.remove(RemoveUnusedShapeKeysMenu.draw_menu)
