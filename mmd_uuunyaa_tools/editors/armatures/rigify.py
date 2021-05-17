@@ -735,8 +735,6 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         leg_l_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_MMD_UUUNYAA].data_path}'
         bind_fk2ik('thigh_fk.L', 'thigh_ik.L', leg_l_mmd_uuunyaa_data_path)
-        bind_fk2ik('shin_fk.L', 'MCH-shin_ik.L', leg_l_mmd_uuunyaa_data_path)
-        bind_fk2ik('foot_fk.L', 'MCH-thigh_ik_target.L', leg_l_mmd_uuunyaa_data_path)
 
         shin_ik_l_bone = pose_bones['MCH-shin_ik.L'] if 'MCH-shin_ik.L' in pose_bones else pose_bones['MCH-thigh_ik.L']
         edit_constraints(shin_ik_l_bone, 'IK', iterations=200)
@@ -746,8 +744,6 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         leg_r_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_MMD_UUUNYAA].data_path}'
         bind_fk2ik('thigh_fk.R', 'thigh_ik.R', leg_r_mmd_uuunyaa_data_path)
-        bind_fk2ik('shin_fk.R', 'MCH-shin_ik.R', leg_r_mmd_uuunyaa_data_path)
-        bind_fk2ik('foot_fk.R', 'MCH-thigh_ik_target.R', leg_r_mmd_uuunyaa_data_path)
 
         shin_ik_r_bone = pose_bones['MCH-shin_ik.R'] if 'MCH-shin_ik.R' in pose_bones else pose_bones['MCH-thigh_ik.R']
         edit_constraints(shin_ik_r_bone, 'IK', iterations=200)
