@@ -4,10 +4,8 @@
 
 from abc import ABC, abstractmethod
 
-from mmd_uuunyaa_tools.asset_search.actions import DownloadActionExecutor
-
-
 import requests
+from mmd_uuunyaa_tools.asset_search.actions import DownloadActionExecutor
 
 
 class URLResolverABC(ABC):

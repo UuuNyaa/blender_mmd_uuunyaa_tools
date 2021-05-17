@@ -48,7 +48,7 @@ class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
     bl_idname = 'VGROUP_MT_mmd_uuunyaa_tools_remove_unused_vertex_groups'
     bl_label = 'MMD UuuNyaa'
 
-    def draw(self, context):
+    def draw(self, _):
         pass
 
     @staticmethod
@@ -68,7 +68,7 @@ class SelectShapeKeyTargetVerticesMenu(bpy.types.Menu):
     bl_idname = 'SHAPEKEY_MT_mmd_uuunyaa_tools_select_shape_key_target_vertices'
     bl_label = 'MMD UuuNyaa'
 
-    def draw(self, context):
+    def draw(self, _):
         pass
 
     @staticmethod

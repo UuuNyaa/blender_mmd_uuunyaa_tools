@@ -17,7 +17,7 @@ class TuneLighting(bpy.types.Operator):
     )
 
     @classmethod
-    def poll(cls, context):
+    def poll(cls, _):
         return True
 
     def execute(self, context):

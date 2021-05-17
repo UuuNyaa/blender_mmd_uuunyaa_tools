@@ -59,8 +59,8 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         default='{id}.json'
     )
 
-    def draw(self, context):
-        layout = self.layout
+    def draw(self, _):
+        layout = self.layout  # pylint: disable=no-member
 
         col = layout.box().column(align=True)
         col.prop(self, 'asset_jsons_folder')

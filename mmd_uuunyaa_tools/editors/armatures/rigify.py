@@ -5,16 +5,17 @@
 # pylint: disable=too-many-lines
 
 import math
-from typing import Dict, Iterable
+from typing import Dict, Iterable, Tuple
 
 import bpy
 from mathutils import Color, Euler, Matrix, Vector
 from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
                                                  ControlType, DataPath,
-                                                 GroupType, MMDBindInfo,
-                                                 MMDBindType, MMDBoneInfo,
-                                                 MMDBoneType, PoseUtil,
-                                                 RichArmatureObjectABC, DriverVariable)
+                                                 DriverVariable, GroupType,
+                                                 MMDBindInfo, MMDBindType,
+                                                 MMDBoneInfo, MMDBoneType,
+                                                 PoseUtil,
+                                                 RichArmatureObjectABC)
 from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
 
 
@@ -299,7 +300,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
     def toe_r_mmd_rigify(self, value):
         self._set_property(ControlType.TOE_R_MMD_UUUNYAA, value)
 
-    def _add_upper_arm_twist_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_upper_arm_twist_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         # add upper arm twist (腕捩)
         upper_arm_twist_fk_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_upper_arm_twist_fk.L')
         upper_arm_twist_fk_l_bone.layers = [i in {8} for i in range(32)]
@@ -321,7 +322,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return upper_arm_twist_fk_l_bone, upper_arm_twist_fk_r_bone
 
-    def _add_wrist_twist_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_wrist_twist_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         # add wrist twist (手捩)
         wrist_twist_fk_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_wrist_twist_fk.L')
         wrist_twist_fk_l_bone.layers = [i in {8} for i in range(32)]
@@ -343,7 +344,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return wrist_twist_fk_l_bone, wrist_twist_fk_r_bone
 
-    def _add_leg_ik_parent_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_leg_ik_parent_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         # add Leg IKP (足IK親) bone
         leg_ik_parent_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_leg_ik_parent.L')
         leg_ik_parent_l_bone.layers = [i in {15} for i in range(32)]
@@ -373,7 +374,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return leg_ik_parent_l_bone, leg_ik_parent_r_bone
 
-    def _add_toe_ik_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_toe_ik_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         # add toe IK (つま先ＩＫ)
         toe_ik_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_toe_ik.L')
         toe_ik_l_bone.layers = [i in {15} for i in range(32)]
@@ -391,7 +392,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return toe_ik_l_bone, toe_ik_r_bone
 
-    def _add_eye_fk_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone, bpy.types.EditBone):
+    def _add_eye_fk_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone, bpy.types.EditBone]:
         rig_eyes_fk_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_eyes_fk')
         rig_eyes_fk_bone.head = rig_edit_bones['ORG-spine.006'].tail + rig_edit_bones['ORG-spine.006'].vector
         rig_eyes_fk_bone.head.y = rig_edit_bones['ORG-eye.L'].head.y
@@ -425,7 +426,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return rig_edit_bones['torso']
 
-    def _add_root_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_root_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         # add center (センター) bone
         thigh_center = self.to_center(rig_edit_bones['ORG-thigh.L'].head, rig_edit_bones['ORG-thigh.L'].head)
 
@@ -444,7 +445,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return center_bone, groove_bone
 
-    def _add_shoulder_parent_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_shoulder_parent_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         shoulder_parent_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_parent.L')
         shoulder_parent_l_bone.head = rig_edit_bones['ORG-shoulder.L'].head
         shoulder_parent_l_bone.tail = shoulder_parent_l_bone.head + Vector([0, 0, rig_edit_bones['ORG-shoulder.L'].length/2])
@@ -463,7 +464,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return shoulder_parent_l_bone, shoulder_parent_r_bone
 
-    def _add_shoulder_cancel_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_shoulder_cancel_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         shoulder_cancel_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_cancel.L')
         shoulder_cancel_l_bone.head = rig_edit_bones['ORG-shoulder.L'].tail
         shoulder_cancel_l_bone.tail = shoulder_cancel_l_bone.head + Vector([0, 0, rig_edit_bones['ORG-shoulder.L'].length/2])
@@ -480,7 +481,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return shoulder_cancel_l_bone, shoulder_cancel_r_bone
 
-    def _add_shoulder_cancel_dummy_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_shoulder_cancel_dummy_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         shoulder_cancel_dummy_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_cancel_dummy.L')
         shoulder_cancel_dummy_l_bone.head = rig_edit_bones['ORG-shoulder.L'].head
         shoulder_cancel_dummy_l_bone.tail = shoulder_cancel_dummy_l_bone.head + Vector([0, 0, rig_edit_bones['ORG-shoulder.L'].length/2])
@@ -497,7 +498,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         return shoulder_cancel_dummy_l_bone, shoulder_cancel_dummy_r_bone
 
-    def _add_shoulder_cancel_shadow_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> (bpy.types.EditBone, bpy.types.EditBone):
+    def _add_shoulder_cancel_shadow_bones(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> Tuple[bpy.types.EditBone, bpy.types.EditBone]:
         shoulder_cancel_shadow_l_bone = self.get_or_create_bone(rig_edit_bones, 'mmd_uuunyaa_shoulder_cancel_shadow.L')
         shoulder_cancel_shadow_l_bone.head = rig_edit_bones['ORG-shoulder.L'].head
         shoulder_cancel_shadow_l_bone.tail = shoulder_cancel_shadow_l_bone.head + Vector([0, 0, rig_edit_bones['ORG-shoulder.L'].length/2])

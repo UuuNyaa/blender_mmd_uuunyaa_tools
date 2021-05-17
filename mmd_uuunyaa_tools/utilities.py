@@ -41,22 +41,22 @@ def get_preferences():
 
 
 def sanitize_path_fragment(path_fragment: str) -> str:
-    illegalRe = r'[\/\?<>\\:\*\|"]'
-    controlRe = r'[\x00-\x1f\x80-\x9f]'
-    reservedRe = r'^\.+$'
-    windowsReservedRe = r'^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$'
-    windowsTrailingRe = r'[\. ]+$'
+    illegal_re = r'[\/\?<>\\:\*\|"]'
+    control_re = r'[\x00-\x1f\x80-\x9f]'
+    reserved_re = r'^\.+$'
+    windows_reserved_re = r'^(con|prn|aux|nul|com[0-9]|lpt[0-9])(\..*)?$'
+    windows_trailing_re = r'[\. ]+$'
 
     return re.sub(
-        windowsTrailingRe, '',
+        windows_trailing_re, '',
         re.sub(
-            windowsReservedRe, '',
+            windows_reserved_re, '',
             re.sub(
-                reservedRe, '',
+                reserved_re, '',
                 re.sub(
-                    controlRe, '',
+                    control_re, '',
                     re.sub(
-                        illegalRe, '',
+                        illegal_re, '',
                         path_fragment
                     )
                 )
@@ -66,7 +66,7 @@ def sanitize_path_fragment(path_fragment: str) -> str:
 
 
 def is_mmd_tools_installed() -> bool:
-    return importlib.find_loader('mmd_tools')
+    return importlib.find_loader('mmd_tools')  # pylint: disable=deprecated-method
 
 
 def import_mmd_tools():

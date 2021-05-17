@@ -212,7 +212,7 @@ class ImportActionExecutor:
 
         namespace = 'rarfile'
         loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'rarfile', 'rarfile.py'))
-        rarfile = loader.load_module(namespace)
+        rarfile = loader.load_module(namespace)  # pylint: disable=deprecated-method
 
         try:
             with rarfile.RarFile(rar_file_path) as rar:
@@ -234,7 +234,7 @@ class ImportActionExecutor:
 
         namespace = 'x7zipfile'
         loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'x7zipfile', 'x7zipfile.py'))
-        x7zipfile = loader.load_module(namespace)
+        x7zipfile = loader.load_module(namespace)  # pylint: disable=deprecated-method
 
         try:
             with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip_file:

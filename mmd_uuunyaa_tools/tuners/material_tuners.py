@@ -5,7 +5,7 @@
 # pylint: disable=too-many-lines
 
 import os
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 import bpy
 from bpy.types import (NodeFrame, NodeSocket, ShaderNode, ShaderNodeBsdfGlass,
@@ -36,7 +36,7 @@ class MaterialUtilities:
         return ((color+0.055)/1.055)**2.4
 
     @staticmethod
-    def hex_to_rgba(hex_int: int, alpha=1.0) -> (float, float, float, float):
+    def hex_to_rgba(hex_int: int, alpha=1.0) -> Tuple[float, float, float, float]:
         # pylint: disable=invalid-name
         # r,g,b is commonly used
         r = (hex_int & 0xff0000) >> 16
@@ -49,7 +49,7 @@ class MaterialUtilities:
         return label.replace(' ', '_').lower()
 
     @staticmethod
-    def grid_to_position(grid_x: int, grid_y: int) -> (int, int):
+    def grid_to_position(grid_x: int, grid_y: int) -> Tuple[int, int]:
         return (grid_x * 300, grid_y * 400)
 
     @staticmethod

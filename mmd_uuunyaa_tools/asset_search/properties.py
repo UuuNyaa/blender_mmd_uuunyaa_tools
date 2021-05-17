@@ -2,17 +2,15 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Dict
-
 import bpy
-from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetType
+from mmd_uuunyaa_tools.asset_search.assets import AssetType
 
 
-def update_search_query(property, context):
+def update_search_query(_, context):
     if context.scene.mmd_uuunyaa_tools_asset_search.query.is_updating:
         return
 
-    bpy.ops.mmd_uuunyaa_tools.asset_search()
+    bpy.ops.mmd_uuunyaa_tools.asset_search()  # pylint: disable=no-member
 
 
 class TagItem(bpy.types.PropertyGroup):
@@ -52,7 +50,7 @@ class AssetSearchProperties(bpy.types.PropertyGroup):
 
     @staticmethod
     def register():
-        bpy.types.Scene.mmd_uuunyaa_tools_asset_search = bpy.props.PointerProperty(type=AssetSearchProperties)
+        bpy.types.Scene.mmd_uuunyaa_tools_asset_search = bpy.props.PointerProperty(type=AssetSearchProperties)  # pylint: disable=assignment-from-no-return
 
     @staticmethod
     def unregister():

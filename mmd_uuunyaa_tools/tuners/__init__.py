@@ -4,7 +4,7 @@
 
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, NamedTuple
+from typing import Dict, NamedTuple, Tuple
 
 import bpy
 import bpy.utils.previews
@@ -35,7 +35,7 @@ class TunerDescription(NamedTuple):
 
 
 class TunerRegistry:
-    def __init__(self, *tuners: (int, TunerABC)):
+    def __init__(self, *tuners: Tuple[int, TunerABC]):
         self.previews = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
         self.tuners: Dict[str, TunerDescription] = {}

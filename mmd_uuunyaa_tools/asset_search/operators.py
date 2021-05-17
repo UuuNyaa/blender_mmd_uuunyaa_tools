@@ -20,7 +20,7 @@ def load_cat_asset_json():
         namespace,
         os.path.join(PACKAGE_PATH, 'externals', 'blender_mmd_assets', 'cat_asset_json.py')
     )
-    return loader.load_module(namespace)
+    return loader.load_module(namespace)  # pylint: disable=deprecated-method
 
 
 class ReloadAssetJsons(bpy.types.Operator):

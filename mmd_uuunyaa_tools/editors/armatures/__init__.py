@@ -8,7 +8,7 @@ import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Iterable, List, Set, Union
+from typing import Dict, Iterable, List, Union
 
 import bpy
 import rna_prop_ui

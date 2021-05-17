@@ -262,6 +262,7 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context):
+        # pylint: disable=too-many-branches
         for obj in context.selected_objects:
             if obj.type != 'MESH':
                 continue

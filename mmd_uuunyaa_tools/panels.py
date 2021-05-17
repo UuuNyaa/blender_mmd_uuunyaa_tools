@@ -21,7 +21,7 @@ class OperatorPanel(bpy.types.Panel):
     bl_category = 'MMD'
     bl_context = ''
 
-    def draw(self, context):
+    def draw(self, _):
         layout = self.layout
 
         col = layout.column(align=True)

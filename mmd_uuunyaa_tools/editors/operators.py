@@ -2,13 +2,14 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Iterable, Union
+from typing import Iterable, Tuple, Union
 
 import bpy
 from mmd_uuunyaa_tools.editors.armatures.autorig import AutoRigArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.metarig import MetarigArmatureObject
 from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
-from mmd_uuunyaa_tools.editors.armatures.rigify import MMDRigifyArmatureObject, RigifyArmatureObject
+from mmd_uuunyaa_tools.editors.armatures.rigify import (
+    MMDRigifyArmatureObject, RigifyArmatureObject)
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 
 
@@ -100,7 +101,7 @@ class MMDRigifyIntegrate(bpy.types.Operator):
     mmd_dummy_bone_layer: bpy.props.IntProperty(name='MMD dummy bone layer', default=27, min=0, max=31)
 
     @classmethod
-    def find_armature_objects(cls, objects: Iterable[bpy.types.Object]) -> (Union[bpy.types.Object, None], Union[bpy.types.Object, None]):
+    def find_armature_objects(cls, objects: Iterable[bpy.types.Object]) -> Tuple[Union[bpy.types.Object, None], Union[bpy.types.Object, None]]:
         mmd_tools = import_mmd_tools()
 
         rigify_object: Union[bpy.types.Object, None] = None

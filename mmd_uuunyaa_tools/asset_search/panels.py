@@ -5,7 +5,7 @@
 import functools
 import time
 from enum import Enum
-from typing import List, Union
+from typing import List, Tuple, Union
 
 import bpy
 import bpy.utils.previews
@@ -37,7 +37,7 @@ class Utilities:
         )
 
     @staticmethod
-    def get_asset_state(asset: AssetDescription) -> (AssetState, Union[Content, None], Union[Task, None]):
+    def get_asset_state(asset: AssetDescription) -> Tuple[AssetState, Union[Content, None], Union[Task, None]]:
         if ASSETS.is_extracted(asset.id):
             return (AssetState.EXTRACTED, None, None)
 
