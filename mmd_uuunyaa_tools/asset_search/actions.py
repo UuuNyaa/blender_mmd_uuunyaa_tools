@@ -292,6 +292,19 @@ class ImportActionExecutor:
         )
 
     @staticmethod
+    def import_world(blend_file_path, world_name, asset=None):
+        asset_path, _ = _Utilities.resolve_path(asset)
+
+        print(f'import_world({blend_file_path},{world_name},{asset_path})')
+
+        bpy.ops.wm.append(
+            directory=os.path.join(asset_path, blend_file_path, 'World'),
+            files=[{'name': world_name}],
+        )
+
+        bpy.context.scene.world = bpy.data.worlds[world_name]
+
+    @staticmethod
     def import_pmx(pmx_file_path, scale=0.08, asset=None):
         asset_path, _ = _Utilities.resolve_path(asset)
 
@@ -363,6 +376,7 @@ class ImportActionExecutor:
             'unrar': functools.partial(ImportActionExecutor.unrar, rar_file_path=target_file, asset=asset),
             'link': functools.partial(ImportActionExecutor.link, from_path=target_file, asset=asset),
             'import_collections': functools.partial(ImportActionExecutor.import_collections, asset=asset),
+            'import_world': functools.partial(ImportActionExecutor.import_world, asset=asset),
             'import_pmx': functools.partial(ImportActionExecutor.import_pmx, asset=asset),
             'import_vmd': functools.partial(ImportActionExecutor.import_vmd, asset=asset),
             'import_vpd': functools.partial(ImportActionExecutor.import_vpd, asset=asset),

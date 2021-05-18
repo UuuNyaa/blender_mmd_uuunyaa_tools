@@ -8,7 +8,7 @@ import os
 import traceback
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict
+from typing import Any, Dict, Tuple
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
 from mmd_uuunyaa_tools.utilities import get_preferences
@@ -22,6 +22,7 @@ class AssetType(Enum):
     POSE_MMD = 'Pose (.vpd)'
     LIGHTING = 'Lighting'
     MATERIAL = 'Material'
+    WORLD_BLENDER = 'World (.blend)'
 
 
 class AssetDescription:
@@ -100,9 +101,11 @@ class _Utilities:
         def encoder(obj):
             if isinstance(obj, datetime):
                 return obj.astimezone(tz=timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
-            elif isinstance(obj, Enum):
+
+            if isinstance(obj, Enum):
                 return obj.name
-            elif isinstance(obj, set):
+
+            if isinstance(obj, set):
                 return list(obj)
 
             raise TypeError(repr(obj) + ' is not JSON serializable')
@@ -125,7 +128,7 @@ class _Utilities:
         }
 
     @staticmethod
-    def resolve_path(asset: AssetDescription) -> (str, str):
+    def resolve_path(asset: AssetDescription) -> Tuple[str, str]:
         preferences = get_preferences()
         asset_extract_root_folder = preferences.asset_extract_root_folder
         asset_extract_folder = preferences.asset_extract_folder
@@ -186,18 +189,19 @@ class AssetRegistry:
         json_paths.sort()
         for json_path in json_paths:
             try:
-                with open(json_path, encoding='utf-8') as f:
-                    for asset in json.load(f)['assets']:
-                        self.add(_Utilities.from_dict(asset))
-            except:
+                with open(json_path, encoding='utf-8') as file:
+                    for asset in json.load(file)['assets']:
+                        try:
+                            self.add(_Utilities.from_dict(asset))
+                        except:  # pylint: disable=bare-except
+                            traceback.print_exc()
+            except:  # pylint: disable=bare-except
                 traceback.print_exc()
 
     def is_extracted(self, id: str) -> bool:
-        # TODO cache
         return _Utilities.is_extracted(self[id])
 
     def resolve_path(self, id: str) -> str:
-        # TODO cache
         asset_dir, _ = _Utilities.resolve_path(self[id])
         return asset_dir
 
