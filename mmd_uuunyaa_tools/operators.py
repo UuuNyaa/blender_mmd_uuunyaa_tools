@@ -3,6 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import re
+from typing import Set
 
 import bmesh
 import bpy
@@ -261,16 +262,21 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
 
-    def execute(self, context):
+    def execute(self, context: bpy.types.Context):
         # pylint: disable=too-many-branches
+        obj: bpy.types.Object
         for obj in context.selected_objects:
             if obj.type != 'MESH':
                 continue
 
-            used_vertex_group_indices = set()
+            used_vertex_group_indices: Set[int] = set()
+
+            mesh: bpy.types.Mesh = obj.data
 
             # Used groups from weight paint
-            for vertex in obj.data.vertices:
+            vertex: bpy.types.MeshVertex
+            for vertex in mesh.vertices:
+                vertex_group: bpy.types.VertexGroupElement
                 for vertex_group in vertex.groups:
                     if vertex_group.weight < self.weight_threshold:
                         continue
@@ -293,8 +299,9 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
                 used_vertex_group_indices.add(vertex_group_index)
 
             # Used groups from shape keys
-            if obj.data.shape_keys:
-                for key_block in obj.data.shape_keys.key_blocks:
+            if mesh.shape_keys:
+                key_block: bpy.types.ShapeKey
+                for key_block in mesh.shape_keys.key_blocks:
                     if not key_block.vertex_group:
                         continue
 
@@ -314,7 +321,7 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
 
 class SelectShapeKeyTargetVertices(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_shape_key_target_vertices'
-    bl_label = 'Seleft Shape Key Target Vertices'
+    bl_label = 'Select Shape Key Target Vertices'
     bl_description = 'Select shape key target vertices from the active meshes'
     bl_options = {'REGISTER', 'UNDO'}
 
