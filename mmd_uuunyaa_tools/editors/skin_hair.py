@@ -11,26 +11,24 @@ import bpy_extras
 from mathutils import Quaternion, Vector
 
 
-def create_bush(
-    length: float,
+def create_skin_hair(  # pylint: disable=too-many-arguments
     width: float,
     height: float,
     max_bend_angle: float,
-    number_of_cuts: int,
+    length: float,
     length_around_factor: float,
+    length_threshold: float,
+    number_of_cuts: int,
     pitch: float,
-    fluctuation: float,
+    fluctuation_factor: float,
     thickness: float,
     segments: int,
 ) -> Tuple[List[Vector], List[Tuple[int, int, int, int]]]:
+    # pylint: disable=too-many-locals
     vertices: List[Vector] = []
     faces: List[Tuple[int, int, int, int]] = []
 
-    segment_cos = [math.cos(i * math.pi * 2 / segments) for i in range(segments)]
-    segment_sin = [math.sin(i * math.pi * 2 / segments) for i in range(segments)]
-
-    def sprout(position: Vector, length: float):
-
+    def sprout(position: Vector, length: float, number_of_cuts: int):
         quaternion = Quaternion()
         vertices.extend(calc_edge_vertices(position, quaternion, thickness, 0))
 
@@ -64,6 +62,9 @@ def create_bush(
 
         yield (target[-1], target[0])
 
+    segment_cos = [math.cos(i * math.pi * 2 / segments) for i in range(segments)]
+    segment_sin = [math.sin(i * math.pi * 2 / segments) for i in range(segments)]
+
     def calc_edge_vertices(origin: Vector, rotation: Quaternion, radius: float, length: float) -> List[Vector]:
         return [
             origin + rotation @ Vector([radius * segment_cos[i], length, radius * segment_sin[i]])
@@ -75,48 +76,56 @@ def create_bush(
             return
 
         value = start
+        count: int = 0
+        while value < stop:
+            value = float(start + count * step)
+            yield value
+            count += 1
 
-        if step > 0:
-            count: int = 0
-            while value < stop:
-                value = float(start + count * step)
-                yield value
-                count += 1
-        else:
-            count: int = 0
-            while value > stop:
-                value = float(start + count * step)
-                yield value
-                count += 1
+    fluctuation = pitch * fluctuation_factor
+    min_number_of_cuts = min(number_of_cuts, 2)
 
     for xpos in frange(-width/2, +width/2, pitch):
         xpos_factor = 1-(2*xpos/width)**2 * (1-length_around_factor)
         for zpos in frange(-height/2, +height/2, pitch):
             zpos_factor = 1-(2*zpos/height)**2 * (1-length_around_factor)
+
+            target_length = length * xpos_factor * zpos_factor
+            if target_length < length_threshold:
+                continue
+
+            target_number_of_cuts = max(min_number_of_cuts, math.ceil(number_of_cuts * target_length / length))
+
             theta = random.random() * math.pi * 2
             band = random.random() * fluctuation
-            sprout(Vector([
-                xpos + band * math.cos(theta),
-                0,
-                zpos + band * math.sin(theta)
-            ]), length * xpos_factor * zpos_factor)
+
+            sprout(
+                Vector([
+                    xpos + band * math.cos(theta),
+                    0,
+                    zpos + band * math.sin(theta)
+                ]),
+                target_length,
+                target_number_of_cuts
+            )
     return vertices, faces
 
 
-class AddBushMesh(bpy.types.Operator, bpy_extras.object_utils.AddObjectHelper):
-    bl_idname = 'mmd_uuunyaa_tools.add_bush_mesh'
-    bl_label = 'Bush'
-    bl_description = 'Construct a bush mesh'
+class AddSkinHairMesh(bpy.types.Operator, bpy_extras.object_utils.AddObjectHelper):
+    bl_idname = 'mmd_uuunyaa_tools.add_skin_hair_mesh'
+    bl_label = 'SkinHair'
+    bl_description = 'Construct a skin hair mesh'
     bl_options = {'REGISTER', 'UNDO'}
 
-    length: bpy.props.FloatProperty(default=0.04, min=0.0, precision=2, unit='LENGTH')
     width: bpy.props.FloatProperty(default=0.006, min=0.0, precision=4, unit='LENGTH')
     height: bpy.props.FloatProperty(default=0.025, min=0.0, precision=4, unit='LENGTH')
+    pitch: bpy.props.FloatProperty(default=0.001, min=0.0, precision=5, unit='LENGTH')
+    length: bpy.props.FloatProperty(default=0.04, min=0.0, precision=2, unit='LENGTH')
     max_bend_angle: bpy.props.FloatProperty(default=math.pi / 4, min=-math.pi, max=+math.pi, unit='ROTATION')
     number_of_cuts: bpy.props.IntProperty(default=20, min=1)
+    fluctuation_factor: bpy.props.FloatProperty(default=0.5, min=0.0, precision=1)
     length_around_factor: bpy.props.FloatProperty(default=1.0, min=0.0, precision=2)
-    pitch: bpy.props.FloatProperty(default=0.001, min=0.0, precision=5, unit='LENGTH')
-    fluctuation: bpy.props.FloatProperty(default=0.0004, min=0.0, precision=4, unit='LENGTH')
+    length_threshold: bpy.props.FloatProperty(default=0.001, min=0.0, precision=3, unit='LENGTH')
     thickness: bpy.props.FloatProperty(default=0.00004, min=0.0, precision=5, unit='LENGTH')
     segments: bpy.props.IntProperty(default=3, min=3)
 
@@ -125,41 +134,42 @@ class AddBushMesh(bpy.types.Operator, bpy_extras.object_utils.AddObjectHelper):
         return context.mode == 'OBJECT'
 
     def execute(self, context: bpy.types.Context):
-        verts, faces = create_bush(
-            self.length,
+        verts, faces = create_skin_hair(
             self.width,
             self.height,
             self.max_bend_angle,
-            self.number_of_cuts,
+            self.length,
             self.length_around_factor,
+            self.length_threshold,
+            self.number_of_cuts,
             self.pitch,
-            self.fluctuation,
+            self.fluctuation_factor,
             self.thickness,
             self.segments,
         )
-        mesh = bpy.data.meshes.new('Bush')
+        mesh = bpy.data.meshes.new('Skin Hair')
         mesh.from_pydata(verts, [], faces)
         bpy_extras.object_utils.object_data_add(context, mesh, operator=self)
 
         return {'FINISHED'}
 
 
-class VIEW3D_MT_uuunyaa_mesh_extras(bpy.types.Menu):
-    bl_idname = "VIEW3D_MT_uuunyaa_mesh_extras"
-    bl_label = "UuuNyaa"
+class UuuNyaaMeshExtrasMenu(bpy.types.Menu):
+    bl_idname = 'VIEW3D_MT_uuunyaa_mesh_extras'
+    bl_label = 'UuuNyaa'
 
     def draw(self, context):
         self.layout.operator_context = 'INVOKE_REGION_WIN'
-        self.layout.operator(AddBushMesh.bl_idname, text='Bush')
+        self.layout.operator(AddSkinHairMesh.bl_idname, text='Skin Hair')
 
     @staticmethod
     def draw_menu(this, _):
-        this.layout.menu(VIEW3D_MT_uuunyaa_mesh_extras.bl_idname, text='UuuNyaa Extras')
+        this.layout.menu(UuuNyaaMeshExtrasMenu.bl_idname, text='UuuNyaa Extras')
 
     @staticmethod
     def register():
-        bpy.types.VIEW3D_MT_mesh_add.append(VIEW3D_MT_uuunyaa_mesh_extras.draw_menu)
+        bpy.types.VIEW3D_MT_mesh_add.append(UuuNyaaMeshExtrasMenu.draw_menu)
 
     @staticmethod
     def unregister():
-        bpy.types.VIEW3D_MT_mesh_add.remove(VIEW3D_MT_uuunyaa_mesh_extras.draw_menu)
+        bpy.types.VIEW3D_MT_mesh_add.remove(UuuNyaaMeshExtrasMenu.draw_menu)
