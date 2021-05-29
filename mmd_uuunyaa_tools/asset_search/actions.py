@@ -210,14 +210,14 @@ class ImportActionExecutor:
         if _Utilities.is_extracted(asset):
             return
 
-        namespace = 'rarfile'
-        loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'rarfile', 'rarfile.py'))
-        rarfile = loader.load_module(namespace)  # pylint: disable=deprecated-method
+        namespace = 'xrarfile'
+        loader = importlib.machinery.SourceFileLoader(namespace, os.path.join(PACKAGE_PATH, 'externals', 'xrarfile', 'xrarfile.py'))
+        xrarfile = loader.load_module(namespace)  # pylint: disable=deprecated-method
 
         try:
-            with rarfile.RarFile(rar_file_path) as rar:
+            with xrarfile.XRarFile(rar_file_path) as rar:
                 rar.extractall(path=asset_path, pwd=password)
-        except rarfile.RarCannotExec as ex:
+        except xrarfile.XRarCannotExec as ex:
             raise MessageException('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.') from ex
 
         _Utilities.write_json(asset)
