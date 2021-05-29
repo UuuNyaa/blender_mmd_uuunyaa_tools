@@ -90,8 +90,6 @@ class x7ZipInfo:
         CRC
             CRC-32 of uncompressed file, unsigned int.
 
-            RAR5: may be None.
-
     """
     filename: Union[str, None]
     date_time: Union[Tuple[int, int, int, int, int, int], None] = None
@@ -209,7 +207,7 @@ class _Executor:
         else:
             raise x7ZipExecError(error_message)
 
-    _parsers: Tuple[str, int, Callable[[str], str]] = [
+    _parsers: List[Tuple[str, str, Callable[[str], str], int]] = [
         (
             param[0],
             param[1],
@@ -360,7 +358,7 @@ class x7ZipFile:
         Parameters:
 
             name
-                file name or RarInfo instance.
+                file name or x7ZipInfo instance.
             mode
                 must be 'r'
             pwd
