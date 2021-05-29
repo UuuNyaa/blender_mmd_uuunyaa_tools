@@ -69,7 +69,7 @@ class DownloadActionExecutor:
 
         match = re.search(r'<a +href="([^"]+)">Click here if your download does not start within a few seconds.</a>', response.text)
         if match is None:
-            raise ValueError('Failed to download assets from SmutBase. SmutBase response format may have changed.')
+            raise ValueError('Failed to download assets from SmutBase. The response format may have changed.')
 
         return session.get(match.group(1).replace('&amp;', '&'), stream=True)
 
@@ -133,13 +133,13 @@ class DownloadActionExecutor:
 
     @staticmethod
     def uploader(url: str, password=None) -> requests.models.Response:
-        error_message = 'Failed to download assets from uploader.jp. uploader.jp response format may have changed.'
+        error_message = 'Failed to download assets from uploader.jp. The response format may have changed.'
         session = requests.Session()
 
         if password is None:
             response = session.get(url)
         else:
-            response = session.post(url, data={'password': password})
+            response = session.post(url, data={'password': password, 'q': 'age_confirmation'})
         response.raise_for_status()
 
         match = re.search(r'<input +type="hidden" +name="token" value="([^"]+)" ', response.text)
