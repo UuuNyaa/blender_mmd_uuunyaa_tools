@@ -69,7 +69,8 @@ class AssetSearch(bpy.types.Operator):
     bl_label = 'Search Asset'
     bl_options = {'INTERNAL'}
 
-    def _on_thumbnail_fetched(self, context, region, update_time, asset, content):
+    @staticmethod
+    def _on_thumbnail_fetched(context, region, update_time, asset, content):
         search_result = context.scene.mmd_uuunyaa_tools_asset_search.result
         if search_result.update_time != update_time:
             return
@@ -84,6 +85,8 @@ class AssetSearch(bpy.types.Operator):
         region.tag_redraw()
 
     def execute(self, context):
+        # pylint: disable: too-many-locals
+
         max_search_result_count = 50
 
         query = context.scene.mmd_uuunyaa_tools_asset_search.query
@@ -98,7 +101,7 @@ class AssetSearch(bpy.types.Operator):
         search_results: List[AssetDescription] = []
         search_results = [
             asset for asset in ASSETS.values() if (
-                (query_type == AssetType.ALL.name or query_type == asset.type.name)
+                query_type in {AssetType.ALL.name, asset.type.name}
                 and enabled_tag_count == len(asset.tag_names & enabled_tag_names)
                 and query_text in asset.keywords
                 and (Utilities.is_importable(asset) if query_is_cached else True)
@@ -144,7 +147,8 @@ class AssetDownload(bpy.types.Operator):
 
     asset_id: bpy.props.StringProperty()
 
-    def __on_fetched(self, _, asset, content):
+    @staticmethod
+    def __on_fetched(_, asset, content):
         print(f'done: {asset.name}, {asset.id}, {content.state}, {content.id}')
 
     def execute(self, context):
@@ -261,7 +265,7 @@ class AssetDetailPopup(bpy.types.Operator):
         draw_title(grid, 'ID:', factor=0.11*2).operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
 
         draw_titled_label(col, title='Name:', text=asset.name)
-        draw_titled_label(col, title='Aliases:', text=', '.join([p for p in asset.aliases.values()]))
+        draw_titled_label(col, title='Aliases:', text=', '.join(list(asset.aliases.values())))
         draw_titled_label(col, title='Tags:', text=asset.tags_text())
         draw_titled_label(col, title='Updated at:', text=asset.updated_at.strftime('%Y-%m-%d %H:%M:%S %Z'))
         draw_titled_label(col, title='Note:', text=asset.note)
@@ -359,11 +363,20 @@ class AssetSearchPanel(bpy.types.Panel):
 
         asset_items = context.scene.mmd_uuunyaa_tools_asset_search.result.asset_items
 
+        display_count = 0
+
         global PREVIEWS  # pylint: disable=global-statement
 
         grid = layout.grid_flow(row_major=True)
         for asset_item in asset_items:
+            if asset_item.id not in ASSETS:
+                continue
+
             asset = ASSETS[asset_item.id]
+
+            if asset.thumbnail_url not in PREVIEWS:
+                continue
+
             (asset_state, _, _) = Utilities.get_asset_state(asset)
 
             if asset_state is AssetState.INITIALIZED:
@@ -382,8 +395,17 @@ class AssetSearchPanel(bpy.types.Panel):
             box = grid.box().column(align=True)
             box.template_icon(PREVIEWS[asset.thumbnail_url].icon_id, scale=6.0)
             box.operator(AssetDetailPopup.bl_idname, text=asset.name, icon=icon).asset_id = asset.id
+            display_count += 1
 
-        loading_count = search.result.count - len(asset_items)
+        asset_item_count = len(asset_items)
+
+        if display_count != asset_item_count:
+            row = layout.row()
+            row.alignment = 'CENTER'
+            row.label(text='Invalid search result, Please search again.')
+            return
+
+        loading_count = search.result.count - asset_item_count
         if loading_count > 0:
             row = layout.row()
             row.alignment = 'CENTER'

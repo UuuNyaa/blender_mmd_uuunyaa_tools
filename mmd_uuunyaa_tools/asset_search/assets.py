@@ -8,7 +8,7 @@ import os
 import traceback
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, ItemsView, Tuple, ValuesView
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
 from mmd_uuunyaa_tools.utilities import get_preferences
@@ -173,13 +173,16 @@ class AssetRegistry:
     def add(self, asset: AssetDescription):
         self.assets[asset.id] = asset
 
-    def __getitem__(self, id: str):
-        return self.assets[id]
+    def __contains__(self, identifier: str) -> bool:
+        return identifier in self.assets
 
-    def items(self):
+    def __getitem__(self, identifier: str) -> AssetDescription:
+        return self.assets[identifier]
+
+    def items(self) -> ItemsView[str, AssetDescription]:
         return self.assets.items()
 
-    def values(self):
+    def values(self) -> ValuesView[AssetDescription]:
         return self.assets.values()
 
     def reload(self, asset_jsons_folder: str):
@@ -198,11 +201,11 @@ class AssetRegistry:
             except:  # pylint: disable=bare-except
                 traceback.print_exc()
 
-    def is_extracted(self, id: str) -> bool:
-        return _Utilities.is_extracted(self[id])
+    def is_extracted(self, identifier: str) -> bool:
+        return _Utilities.is_extracted(self[identifier])
 
-    def resolve_path(self, id: str) -> str:
-        asset_dir, _ = _Utilities.resolve_path(self[id])
+    def resolve_path(self, identifier: str) -> str:
+        asset_dir, _ = _Utilities.resolve_path(self[identifier])
         return asset_dir
 
 
