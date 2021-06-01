@@ -194,10 +194,12 @@ class ImportActionExecutor:
 
         with zipfile.ZipFile(zip_file_path) as zip_file:
             for info in zip_file.infolist():
-                orig_codec = 'utf-8' if info.flag_bits & 0x800 else 'cp437'
-                info.filename = info.orig_filename.encode(orig_codec).decode(encoding)
+                if info.flag_bits ^ 0x800:
+                    info.filename = info.orig_filename.encode('cp437').decode(encoding)
+
                 if os.sep != '/' and os.sep in info.filename:
                     info.filename = info.filename.replace(os.sep, '/')
+
                 zip_file.extract(info, path=asset_path, pwd=pwd)
 
         _Utilities.write_json(asset)
