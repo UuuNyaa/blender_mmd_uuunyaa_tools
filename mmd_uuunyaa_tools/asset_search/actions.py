@@ -29,7 +29,7 @@ class RestrictionChecker(ast.NodeVisitor):
     def visit(self, node: ast.AST):
         node_name = node.__class__.__name__
 
-        if node_name not in {'Module', 'Expr', 'Call', 'Name', 'Str', 'JoinedStr', 'FormattedValue', 'Load', 'Num', 'keyword'}:
+        if node_name not in {'Module', 'Expr', 'Call', 'Constant', 'Name', 'Str', 'JoinedStr', 'FormattedValue', 'Load', 'Num', 'keyword'}:
             raise NotImplementedError(ast.dump(node))
 
         if node_name == 'Call':
@@ -389,10 +389,18 @@ class ImportActionExecutor:
 
         RestrictionChecker(*(functions.keys())).visit(tree)
 
-        exec(  # pylint: disable=exec-used
-            compile(tree, '<source>', 'exec'),
-            {'__builtins__': {}},
-            {
-                **functions
-            }
-        )
+        try:
+            exec(  # pylint: disable=exec-used
+                compile(tree, '<source>', 'exec'),
+                {'__builtins__': {}},
+                {
+                    **functions
+                }
+            )
+        except FileNotFoundError as ex:
+            if os.sys.platform == 'win32':
+                message = str(ex)
+                if message.startswith('[Errno 2] No such file or directory: ') and len(message) > 260+38:
+                    raise MessageException('The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences.') from ex
+
+            raise
