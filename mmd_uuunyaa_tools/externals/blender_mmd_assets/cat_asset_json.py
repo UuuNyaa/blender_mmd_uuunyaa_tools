@@ -13,7 +13,7 @@ import sys
 import requests
 
 
-class markdown:
+class Markdown:
     @staticmethod
     def parse_line(markdown_line):
         # image
@@ -48,8 +48,9 @@ class markdown:
             markdown_line = markdown_line.rstrip()
             if markdown_line.startswith('```'):
                 continue
-            elif not markdown_line.startswith('#'):
-                lines.append(markdown.parse_line(markdown_line))
+
+            if not markdown_line.startswith('#'):
+                lines.append(Markdown.parse_line(markdown_line))
                 continue
 
             match = re.fullmatch(r'^(#+)\s+(.+)$', markdown_line)
@@ -78,13 +79,13 @@ class markdown:
     def traverse_blocks(blocks):
         yield blocks
         for block in blocks['children']:
-            for child in markdown.traverse_blocks(block):
+            for child in Markdown.traverse_blocks(block):
                 yield child
 
     @staticmethod
     def to_markdown(blocks):
         result = ''
-        for block in markdown.traverse_blocks(blocks):
+        for block in Markdown.traverse_blocks(blocks):
             if block['header']:
                 if result:
                     result += '\n'
@@ -97,7 +98,7 @@ class markdown:
 
 
 def to_asset(issue):
-    blocks = markdown.parse(issue['body'])
+    blocks = Markdown.parse(issue['body'])
 
     tags = {
         label: tag for label, tag in issue['labels'].items()
@@ -126,7 +127,7 @@ def to_asset(issue):
         'updated_at': issue['updated_at'],
     }
 
-    for block in markdown.traverse_blocks(blocks):
+    for block in Markdown.traverse_blocks(blocks):
         if block['header'] == 'aliases':
             asset['aliases'] = {
                 line['language']: line['representation']
@@ -134,9 +135,12 @@ def to_asset(issue):
                 if line['type'] == 'alias'
             }
         elif block['header']:
-            line = block['lines'][0]
-            asset[block['header']] = line['url'] if line['type'] == 'image' else '\n'.join([line['markdown'] for line in block['lines']])
-
+            lines = block['lines']
+            if len(lines) > 0 and lines[0]['type'] == 'image':
+                content = lines[0]['url']
+            else:
+                content = '\n'.join([line['markdown'] for line in lines])
+            asset[block['header']] = content
     return asset
 
 
@@ -229,9 +233,9 @@ def fetch_assets(session, repo, query):
 
 if __name__ == '__main__':
     if len(sys.argv) not in {2, 3}:
-        print(f'ERROR: invalid arguments: {[a for a in sys.argv]}', file=sys.stderr)
+        print(f'ERROR: invalid arguments: {sys.argv}', file=sys.stderr)
         print('USAGE: python cat_asset_json.py REPO_USER/REPO_PATH [QUERY]')
-        exit(1)
+        sys.exit(1)
 
     token = os.environ.get('GITHUB_TOKEN')
     repo = sys.argv[1]
