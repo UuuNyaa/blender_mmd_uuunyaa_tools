@@ -111,7 +111,7 @@ def create_skin_hair(  # pylint: disable=too-many-arguments
     return vertices, faces
 
 
-class AddSkinHairMesh(bpy.types.Operator, bpy_extras.object_utils.AddObjectHelper):
+class AddSkinHairMesh(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.add_skin_hair_mesh'
     bl_label = 'SkinHair'
     bl_description = 'Construct a skin hair mesh'
@@ -128,6 +128,26 @@ class AddSkinHairMesh(bpy.types.Operator, bpy_extras.object_utils.AddObjectHelpe
     length_threshold: bpy.props.FloatProperty(default=0.001, min=0.0, precision=3, unit='LENGTH')
     thickness: bpy.props.FloatProperty(default=0.00004, min=0.0, precision=5, unit='LENGTH')
     segments: bpy.props.IntProperty(default=3, min=3)
+
+    align: bpy.props.EnumProperty(
+        name="Align",
+        items=(
+            ('WORLD', "World", "Align the new object to the world"),
+            ('VIEW', "View", "Align the new object to the view"),
+            ('CURSOR', "3D Cursor", "Use the 3D cursor orientation for the new object"),
+        ),
+        default='WORLD',
+        update=lambda p, _: p.rotation.zero() if p.align == 'WORLD' else None,
+    )
+
+    location: bpy.props.FloatVectorProperty(
+        name="Location",
+        subtype='TRANSLATION',
+    )
+    rotation: bpy.props.FloatVectorProperty(
+        name="Rotation",
+        subtype='EULER',
+    )
 
     @classmethod
     def poll(cls, context):
