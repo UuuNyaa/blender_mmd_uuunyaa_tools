@@ -2,6 +2,7 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+from abc import ABC
 from typing import Iterable, Tuple, Union
 
 import bpy
@@ -88,18 +89,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class MMDRigifyIntegrate(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_integrate'
-    bl_label = 'Integrate Rigify and MMD Armatures'
-    bl_description = 'Integrate Rigify and MMD armatures.'
-    bl_options = {'REGISTER', 'UNDO'}
-
-    is_join_armatures: bpy.props.BoolProperty(name='Join Aarmtures', description='Join MMD and Rigify armatures', default=True)
-    mmd_main_bone_layer: bpy.props.IntProperty(name='MMD main bone layer', default=24, min=0, max=31)
-    mmd_others_bone_layer: bpy.props.IntProperty(name='MMD others bone layer', default=25, min=0, max=31)
-    mmd_shadow_bone_layer: bpy.props.IntProperty(name='MMD shadow bone layer', default=26, min=0, max=31)
-    mmd_dummy_bone_layer: bpy.props.IntProperty(name='MMD dummy bone layer', default=27, min=0, max=31)
-
+class MMDRigifyOperatorABC:
     @classmethod
     def find_armature_objects(cls, objects: Iterable[bpy.types.Object]) -> Tuple[Union[bpy.types.Object, None], Union[bpy.types.Object, None]]:
         mmd_tools = import_mmd_tools()
@@ -144,11 +134,6 @@ class MMDRigifyIntegrate(bpy.types.Operator):
             mmd_bones[mmd_bone_name].layers[23] = True
 
     @staticmethod
-    def set_view_layers(rigify_armature_object: bpy.types.Object):
-        rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
-        rig_armature.layers = [i in {0, 3, 4, 5, 8, 11, 13, 16, 28} for i in range(32)]
-
-    @staticmethod
     def adjust_bone_groups(rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
         # copy bone groups Rigify -> MMD
         rig_bone_groups = rigify_armature_object.pose_bone_groups
@@ -184,12 +169,15 @@ class MMDRigifyIntegrate(bpy.types.Operator):
                 continue
             pose_bones.bone_group_index = bone_group_mapping[pose_bones.bone_group_index]
 
-    def join_armatures(self, rigify_armature_object: RigifyArmatureObject, mmd_armature_object: MMDArmatureObject):
-        mmd_main_bone_layer = self.mmd_main_bone_layer
-        mmd_others_bone_layer = self.mmd_others_bone_layer
-        mmd_shadow_bone_layer = self.mmd_shadow_bone_layer
-        mmd_dummy_bone_layer = self.mmd_dummy_bone_layer
-
+    @staticmethod
+    def join_armatures(
+        rigify_armature_object: RigifyArmatureObject,
+        mmd_armature_object: MMDArmatureObject,
+        mmd_main_bone_layer: int,
+        mmd_others_bone_layer: int,
+        mmd_shadow_bone_layer: int,
+        mmd_dummy_bone_layer: int,
+    ):
         mmd_armature = mmd_armature_object.raw_armature
         mmd_armature.layers = [i in {0, 8, 9, 23, mmd_main_bone_layer, mmd_others_bone_layer, mmd_shadow_bone_layer, mmd_dummy_bone_layer} for i in range(32)]
 
@@ -228,8 +216,26 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         mmd_armature_object.raw_object.show_x_ray = True
 
-    def invoke(self, context, event):
+    def invoke(self, context, _):
         return context.window_manager.invoke_props_dialog(self)
+
+
+class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_integrate'
+    bl_label = 'Integrate Rigify and MMD Armatures'
+    bl_description = 'Integrate Rigify and MMD armatures.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    is_join_armatures: bpy.props.BoolProperty(name='Join Aarmtures', description='Join MMD and Rigify armatures', default=True)
+    mmd_main_bone_layer: bpy.props.IntProperty(name='MMD main bone layer', default=24, min=0, max=31)
+    mmd_others_bone_layer: bpy.props.IntProperty(name='MMD others bone layer', default=25, min=0, max=31)
+    mmd_shadow_bone_layer: bpy.props.IntProperty(name='MMD shadow bone layer', default=26, min=0, max=31)
+    mmd_dummy_bone_layer: bpy.props.IntProperty(name='MMD dummy bone layer', default=27, min=0, max=31)
+
+    @staticmethod
+    def set_view_layers(rigify_armature_object: bpy.types.Object):
+        rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
+        rig_armature.layers = [i in {0, 3, 4, 5, 8, 11, 13, 16, 28} for i in range(32)]
 
     def execute(self, context: bpy.types.Context):
         rigify_armature_raw_object, mmd_armature_raw_object = self.find_armature_objects(context.selected_objects)
@@ -253,7 +259,66 @@ class MMDRigifyIntegrate(bpy.types.Operator):
 
         if self.is_join_armatures:
             self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
-            self.join_armatures(rigify_armature_object, mmd_armature_object)
+            self.join_armatures(
+                rigify_armature_object, mmd_armature_object,
+                self.mmd_main_bone_layer,
+                self.mmd_others_bone_layer,
+                self.mmd_shadow_bone_layer,
+                self.mmd_dummy_bone_layer,
+            )
+            rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_raw_object)
+
+        rigify_armature_object.assign_mmd_bone_names()
+
+        return {'FINISHED'}
+
+
+class MMDRigifyBind(bpy.types.Operator, MMDRigifyOperatorABC):
+    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_bind'
+    bl_label = 'Bind MMD to Rigify'
+    bl_description = 'Bind MMD to Rigify.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    is_join_armatures: bpy.props.BoolProperty(name='Join Aarmtures', description='Join MMD and Rigify armatures', default=True)
+    mmd_main_bone_layer: bpy.props.IntProperty(name='MMD main bone layer', default=24, min=0, max=31)
+    mmd_others_bone_layer: bpy.props.IntProperty(name='MMD others bone layer', default=25, min=0, max=31)
+    mmd_shadow_bone_layer: bpy.props.IntProperty(name='MMD shadow bone layer', default=26, min=0, max=31)
+    mmd_dummy_bone_layer: bpy.props.IntProperty(name='MMD dummy bone layer', default=27, min=0, max=31)
+
+    @staticmethod
+    def set_view_layers(rigify_armature_object: bpy.types.Object):
+        rig_armature: bpy.types.Armature = rigify_armature_object.raw_armature
+        rig_armature.layers = [i in {0, 3, 5, 7, 10, 13, 16, 28} for i in range(32)]
+
+    def execute(self, context: bpy.types.Context):
+        rigify_armature_raw_object, mmd_armature_raw_object = self.find_armature_objects(context.selected_objects)
+
+        rigify_armature_object = MMDRigifyArmatureObject(rigify_armature_raw_object)
+        mmd_armature_object = MMDArmatureObject(mmd_armature_raw_object)
+
+        self.change_mmd_bone_layer(mmd_armature_object)
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        rigify_armature_object.remove_unused_face_bones()
+        rigify_armature_object.fit_bone_rotations(mmd_armature_object)
+        rigify_armature_object.bind_mmd_bone_structure(mmd_armature_object)
+
+        bpy.ops.object.mode_set(mode='POSE')
+        rigify_armature_object.bind_mmd_pose_behavior()
+        rigify_armature_object.bind_bones(mmd_armature_object)
+
+        bpy.ops.object.mode_set(mode='OBJECT')
+        self.set_view_layers(rigify_armature_object)
+
+        if self.is_join_armatures:
+            self.adjust_bone_groups(rigify_armature_object, mmd_armature_object)
+            self.join_armatures(
+                rigify_armature_object, mmd_armature_object,
+                self.mmd_main_bone_layer,
+                self.mmd_others_bone_layer,
+                self.mmd_shadow_bone_layer,
+                self.mmd_dummy_bone_layer,
+            )
             rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_raw_object)
 
         rigify_armature_object.assign_mmd_bone_names()

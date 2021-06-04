@@ -9,6 +9,7 @@ from mmd_uuunyaa_tools.editors.operators import (MMDArmatureAddMetarig,
                                                  MMDAutoRigApplyMMDRestPose,
                                                  MMDAutoRigConvert,
                                                  MMDRigifyApplyMMDRestPose,
+                                                 MMDRigifyBind,
                                                  MMDRigifyConvert,
                                                  MMDRigifyIntegrate)
 
@@ -42,6 +43,12 @@ class OperatorPanel(bpy.types.Panel):
         row.operator(MMDRigifyIntegrate.bl_idname, text='Integrate Armatures', icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
         row.operator(MMDRigifyIntegrate.bl_idname, text='', icon='WINDOW')
+
+        row = col.split(factor=0.9, align=True)
+        row.operator_context = 'EXEC_DEFAULT'
+        row.operator(MMDRigifyBind.bl_idname, text='Bind Armatures', icon='GROUP_BONE').is_join_armatures = True
+        row.operator_context = 'INVOKE_DEFAULT'
+        row.operator(MMDRigifyBind.bl_idname, text='', icon='WINDOW')
 
         col = layout.column(align=True)
         col.label(text='Rigify to MMD:', icon='OUTLINER_OB_ARMATURE')
