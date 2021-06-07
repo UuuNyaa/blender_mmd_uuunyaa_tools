@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.asset_search.assets import AssetType
+from mmd_uuunyaa_tools.asset_search.assets import AssetType, AssetUpdater
 
 
 def update_search_query(_, context):
@@ -58,9 +58,9 @@ class AssetSearchProperties(bpy.types.PropertyGroup):
 
 
 class AssetOperatorProperties(bpy.types.PropertyGroup):
-    repo: bpy.props.StringProperty(default='UuuNyaa/blender_mmd_assets')
-    query: bpy.props.StringProperty(default="{'state': 'open', 'milestone': 1, 'labels': 'Official'}")
-    output_json: bpy.props.StringProperty(default='assets.json')
+    repo: bpy.props.StringProperty(default=AssetUpdater.default_repo)
+    query: bpy.props.StringProperty(default=AssetUpdater.default_query)
+    output_json: bpy.props.StringProperty(default=AssetUpdater.default_assets_json)
 
     debug_expanded: bpy.props.BoolProperty(default=False)
     debug_issue_number: bpy.props.IntProperty(default=1)

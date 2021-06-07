@@ -2,7 +2,9 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+import ast
 import glob
+import importlib
 import json
 import os
 import traceback
@@ -10,7 +12,8 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, ItemsView, Tuple, ValuesView
 
-from mmd_uuunyaa_tools import REGISTER_HOOKS
+import requests
+from mmd_uuunyaa_tools import REGISTER_HOOKS, PACKAGE_PATH
 from mmd_uuunyaa_tools.utilities import get_preferences
 
 
@@ -185,10 +188,12 @@ class AssetRegistry:
     def values(self) -> ValuesView[AssetDescription]:
         return self.assets.values()
 
-    def reload(self, asset_jsons_folder: str):
+    def reload(self):
+        preferences = get_preferences()
+
         self.assets.clear()
 
-        json_paths = glob.glob(os.path.join(asset_jsons_folder, '*.json'))
+        json_paths = glob.glob(os.path.join(preferences.asset_jsons_folder, '*.json'))
         json_paths.sort()
         for json_path in json_paths:
             try:
@@ -209,12 +214,72 @@ class AssetRegistry:
         return asset_dir
 
 
+class AssetUpdater:
+    default_repo = 'UuuNyaa/blender_mmd_assets'
+    default_query = '{"state": "open", "milestone": 1, "labels": "Official"}'
+    default_assets_json = 'assets.json'
+
+    @staticmethod
+    def load_cat_asset_json():
+        namespace = 'cat_asset_json'
+        loader = importlib.machinery.SourceFileLoader(
+            namespace,
+            os.path.join(PACKAGE_PATH, 'externals', 'blender_mmd_assets', 'cat_asset_json.py')
+        )
+        return loader.load_module(namespace)  # pylint: disable=deprecated-method
+
+    @staticmethod
+    def write_assets_json(assets_json_object, output_json: str):
+        preferences = get_preferences()
+        with open(os.path.join(preferences.asset_jsons_folder, output_json), mode='wt', encoding='utf-8') as file:
+            json.dump(assets_json_object, file, ensure_ascii=False, indent=2)
+
+    @staticmethod
+    def delete_assets_json(delete_json: str) -> bool:
+        preferences = get_preferences()
+        json_path = os.path.join(preferences.asset_jsons_folder, delete_json)
+
+        if not os.path.exists(json_path):
+            return False
+
+        os.remove(json_path)
+        return True
+
+    @staticmethod
+    def fetch_assets_json_by_query(repo: str, query_text: str):
+        query = ast.literal_eval(query_text)
+        cat_asset_json = AssetUpdater.load_cat_asset_json()
+
+        session = requests.Session()
+        return cat_asset_json.wrap_assets(cat_asset_json.fetch_assets(session, repo, query))
+
+    @staticmethod
+    def fetch_assets_json_by_issue_number(repo: str, issue_number: int):
+        cat_asset_json = AssetUpdater.load_cat_asset_json()
+
+        session = requests.Session()
+        return cat_asset_json.wrap_assets([
+            cat_asset_json.fetch_asset(session, repo, issue_number)
+        ])
+
+
 ASSETS = AssetRegistry()
 
 
 def initialize_asset_registory():
     preferences = get_preferences()
-    ASSETS.reload(preferences.asset_jsons_folder)
+
+    if preferences.asset_json_update_on_startup_enabled:
+        try:
+            print(f"Asset Auto Update: repo='{preferences.asset_json_update_repo}', query='{preferences.asset_json_update_query}'")
+            AssetUpdater.write_assets_json(
+                AssetUpdater.fetch_assets_json_by_query(preferences.asset_json_update_repo, preferences.asset_json_update_query),
+                AssetUpdater.default_assets_json
+            )
+        except:  # pylint: disable=bare-except
+            traceback.print_exc()
+
+    ASSETS.reload()
 
 
 REGISTER_HOOKS.append(initialize_asset_registory)

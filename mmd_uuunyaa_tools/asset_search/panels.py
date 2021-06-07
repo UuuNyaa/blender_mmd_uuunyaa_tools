@@ -13,7 +13,7 @@ from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor, Message
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
-from mmd_uuunyaa_tools.utilities import label_multiline, to_human_friendly_text, to_int32
+from mmd_uuunyaa_tools.utilities import get_preferences, label_multiline, to_human_friendly_text, to_int32
 
 PREVIEWS: Union[bpy.utils.previews.ImagePreviewCollection, None]
 
@@ -85,9 +85,11 @@ class AssetSearch(bpy.types.Operator):
         region.tag_redraw()
 
     def execute(self, context):
-        # pylint: disable: too-many-locals
+        # pylint: disable=too-many-locals
 
-        max_search_result_count = 50
+        preferences = get_preferences()
+
+        max_search_result_count = preferences.asset_search_results_max_display_count
 
         query = context.scene.mmd_uuunyaa_tools_asset_search.query
         query_type = query.type
@@ -440,9 +442,13 @@ class AssetsOperatorPanel(bpy.types.Panel):
         box.label(text='Reload local asset JSON files')
         box.operator(ReloadAssetJsons.bl_idname, icon='FILE_REFRESH')
 
+        preferences = get_preferences()
+
         box = col.box().column(align=True)
         box.label(text='Download and Update to the latest assets')
-        box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
+        operator = box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
+        operator.repo = preferences.asset_json_update_repo
+        operator.query = preferences.asset_json_update_query
 
         props = context.scene.mmd_uuunyaa_tools_asset_operator
 
@@ -473,7 +479,7 @@ class AssetsOperatorPanel(bpy.types.Panel):
         box.prop(props, 'query', text='Query')
         box.prop(props, 'output_json', text='Write to')
 
-        op = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')  # pylint: disable=invalid-name
-        op.repo = props.repo
-        op.query = props.query
-        op.output_json = props.output_json
+        operator = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')
+        operator.repo = props.repo
+        operator.query = props.query
+        operator.output_json = props.output_json
