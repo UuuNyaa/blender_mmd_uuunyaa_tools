@@ -45,7 +45,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
 
     asset_json_update_on_startup_enabled: bpy.props.BoolProperty(
         name='Asset JSON Auto Update on Startup',
-        default=False
+        default=True
     )
 
     asset_cache_folder: bpy.props.StringProperty(
