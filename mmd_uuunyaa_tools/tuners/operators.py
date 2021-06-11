@@ -3,7 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
+from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
+                                      material_tuners)
 
 
 class TuneLighting(bpy.types.Operator):
@@ -59,4 +60,38 @@ class TuneMaterial(bpy.types.Operator):
 
     def execute(self, context):
         material_tuners.TUNERS[self.material](context.object.active_material).execute()
+        return {'FINISHED'}
+
+
+class AttachMaterialAdjuster(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.attach_material_adjuster'
+    bl_label = 'Attach Material Adjuster'
+    bl_description = 'Attach Adjuster to selected material.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    adjuster_name: bpy.props.StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.object.active_material
+
+    def execute(self, context):
+        material_adjusters.ADJUSTERS[self.adjuster_name](context.object.active_material).attach()
+        return {'FINISHED'}
+
+
+class DetachMaterialAdjuster(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.detach_material_adjuster'
+    bl_label = 'Detach Material Adjuster'
+    bl_description = 'Detach Adjuster from selected material.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    adjuster_name: bpy.props.StringProperty()
+
+    @classmethod
+    def poll(cls, context):
+        return context.object.active_material
+
+    def execute(self, context):
+        material_adjusters.ADJUSTERS[self.adjuster_name](context.object.active_material).detach_and_clean()
         return {'FINISHED'}

@@ -3,9 +3,8 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from bpy.types import ShaderNodeGroup, ShaderNodeValue
-from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_tuners,
-                                      operators)
+from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
+                                      material_tuners, operators)
 from mmd_uuunyaa_tools.tuners.utilities import NodeUtilities
 
 
@@ -36,7 +35,7 @@ class SkyPanel(bpy.types.Panel):
         if not scene_has_irradiance_volumes:
             layout.label(text='IrradianceVolume not found. Please add it.', icon='ERROR')
 
-        self._draw_setting_node_properties(utilities, layout, node_frame)
+        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_frame=node_frame))
 
         col = layout.column(align=True)
         col.label(text='for Eevee lighting, check Render Properties.')
@@ -58,25 +57,6 @@ class SkyPanel(bpy.types.Panel):
                 return True
 
         return False
-
-    def _draw_setting_node_properties(self, utilities, layout, node_frame):
-        for node in utilities.list_nodes(node_frame=node_frame):
-            if isinstance(node, ShaderNodeGroup):
-                pass
-            elif utilities.is_setting_node(node):
-                pass
-            else:
-                continue
-            col = layout.box().column(align=True)
-            col.label(text=node.label)
-            if isinstance(node, ShaderNodeValue):
-                for node_output in node.outputs:
-                    col.prop(node_output, 'default_value', text=node_output.name)
-            else:
-                for node_input in node.inputs:
-                    if node_input.is_linked:
-                        continue
-                    col.prop(node_input, 'default_value', text=node_input.name)
 
 
 class LightingPanel(bpy.types.Panel):
@@ -151,9 +131,44 @@ class MaterialPanel(bpy.types.Panel):
         if node_frame is None:
             return
 
-        for node in utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame):
-            layout.label(text=node.label)
-            for node_input in node.inputs:
-                if node_input.is_linked:
-                    continue
-                layout.prop(node_input, 'default_value', text=node_input.name)
+        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
+
+
+class MaterialAdjusterPanel(bpy.types.Panel):
+    bl_idname = 'UUUNYAA_PT_material_adjuster_panel'
+    bl_label = 'MMD UuuNyaa Material Adjuster'
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = 'material'
+
+    @classmethod
+    def poll(cls, context):
+        return context.object.active_material
+
+    def draw(self, context):
+        material = context.active_object.active_material
+
+        layout = self.layout
+        col = layout.column(align=True)
+
+        utilities = material_adjusters.MaterialAdjusterUtilities(material)
+        if not utilities.check_attachable():
+            col.label(text=f'{material.name} is unsupported. Select other material to be output from Principled BSDF.', icon='ERROR')
+            return
+
+        grid = col.grid_flow(row_major=True, columns=2)
+
+        def draw_operator(layout, class_, text, icon):
+            if utilities.check_attached(class_.get_name()):
+                layout.operator(operators.DetachMaterialAdjuster.bl_idname, text=text, icon='X').adjuster_name = class_.get_name()
+            else:
+                layout.operator(operators.AttachMaterialAdjuster.bl_idname, text=text, icon=icon).adjuster_name = class_.get_name()
+
+        draw_operator(grid, material_adjusters.SubsurfaceAdjuster,  text='Subsurface', icon='SHADING_RENDERED')
+        draw_operator(grid, material_adjusters.WetAdjuster,  text='Wet', icon='MOD_FLUIDSIM')
+
+        node_frame = utilities.find_adjusters_node_frame()
+        if node_frame is None:
+            return
+
+        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
