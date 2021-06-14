@@ -6,7 +6,6 @@ import os
 from typing import Union
 
 from bpy.types import Object
-
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.utilities import ObjectAppender, ObjectMarker
@@ -70,6 +69,20 @@ class LeftAccentLightingTuner(LightingTunerABC):
         self.add_lights(self.get_id())
 
 
+class DoubleSideAccentLightingTuner(LightingTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'LIGHTING_DOUBLE_SIDE_ACCENT'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return 'Double Side Accent'
+
+    def execute(self):
+        self.reset()
+        self.add_lights(self.get_id())
+
+
 class GodRayLightingTuner(LightingTunerABC):
     @classmethod
     def get_id(cls) -> str:
@@ -115,6 +128,7 @@ class LightProbeGridLightingTuner(LightingTunerABC):
 TUNERS = TunerRegistry(
     (0, ResetLightingTuner),
     (1, LeftAccentLightingTuner),
+    (5, DoubleSideAccentLightingTuner),
     (2, GodRayLightingTuner),
     (3, BacklightLightingTuner),
     (4, LightProbeGridLightingTuner),
