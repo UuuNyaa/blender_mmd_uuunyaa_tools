@@ -19,6 +19,7 @@ import os
 import traceback
 
 from mmd_uuunyaa_tools import auto_load
+from mmd_uuunyaa_tools import m17n
 
 bl_info = {
     "name": "mmd_uuunyaa_tools",
