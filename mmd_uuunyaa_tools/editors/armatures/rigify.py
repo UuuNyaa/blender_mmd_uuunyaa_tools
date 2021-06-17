@@ -5,7 +5,7 @@
 # pylint: disable=too-many-lines
 
 import math
-from typing import Dict, Iterable, Set, Tuple
+from typing import Dict, Set, Tuple
 
 import bpy
 from mathutils import Color, Euler, Matrix, Vector

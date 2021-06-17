@@ -4,6 +4,7 @@
 
 import bpy
 
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.operators import (RemoveUnusedShapeKeys,
                                          RemoveUnusedVertexGroups,
                                          SelectRelatedBones,
@@ -14,7 +15,7 @@ from mmd_uuunyaa_tools.operators import (RemoveUnusedShapeKeys,
 
 class SelectRelatedObjectsMenu(bpy.types.Menu):
     bl_idname = 'VIEW3D_MT_mmd_uuunyaa_tools_select_related_objects'
-    bl_label = 'MMD UuuNyaa'
+    bl_label = _('MMD UuuNyaa')
 
     def draw(self, context):
         pass
@@ -46,7 +47,7 @@ class SelectRelatedObjectsMenu(bpy.types.Menu):
 
 class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
     bl_idname = 'VGROUP_MT_mmd_uuunyaa_tools_remove_unused_vertex_groups'
-    bl_label = 'MMD UuuNyaa'
+    bl_label = _('MMD UuuNyaa')
 
     def draw(self, _):
         pass
@@ -66,7 +67,7 @@ class RemoveUnusedVertexGroupsMenu(bpy.types.Menu):
 
 class SelectShapeKeyTargetVerticesMenu(bpy.types.Menu):
     bl_idname = 'SHAPEKEY_MT_mmd_uuunyaa_tools_select_shape_key_target_vertices'
-    bl_label = 'MMD UuuNyaa'
+    bl_label = _('MMD UuuNyaa')
 
     def draw(self, _):
         pass
@@ -86,7 +87,7 @@ class SelectShapeKeyTargetVerticesMenu(bpy.types.Menu):
 
 class RemoveUnusedShapeKeysMenu(bpy.types.Menu):
     bl_idname = 'VGROUP_MT_mmd_uuunyaa_tools_remove_unused_shape_keys'
-    bl_label = 'MMD UuuNyaa'
+    bl_label = _('MMD UuuNyaa')
 
     def draw(self, context):
         pass

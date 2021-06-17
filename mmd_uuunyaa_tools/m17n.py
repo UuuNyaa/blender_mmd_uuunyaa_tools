@@ -21,6 +21,8 @@ def unregister():
 
 translation_dict = {
   "en_US": {
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:18 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:50 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:70 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:90
+    ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "Convert Materials for Eevee",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:20
@@ -67,40 +69,254 @@ translation_dict = {
     ("Operator", "Remove Unused Shape Keys"): "Remove Unused Shape Keys",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:373
     ("*", "Remove unused shape keys from the active meshes"): "Remove unused shape keys from the active meshes",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:31
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "Render:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:36
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:35
     ("*", "MMD to Rigify:"): "MMD to Rigify:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:39
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:38
     ("Operator", "Add Metarig"): "Add Metarig",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:45
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:44
     ("Operator", "Integrate Armatures"): "Integrate Armatures",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:51
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:50
     ("Operator", "Convert Armatures"): "Convert Armatures",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:56
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "Rigify to MMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:57 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:62
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:56 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "Convert to MMD compatible",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:59 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:64
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:58 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:63
     ("Operator", "Apply MMD rest pose"): "Apply MMD rest pose",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:61
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(Experimental) Auto-Rig to MMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:66
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:65
     ("*", "UI Panels"): "UI Panels",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:68
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:67
     ("*", "World > MMD UuuNyaa Lighting Panel"): "World > MMD UuuNyaa Lighting Panel",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:69
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:68
     ("*", "Material > MMD UuuNyaa Material Panel"): "Material > MMD UuuNyaa Material Panel",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:21
+    ("*", "Asset Search Results Max. Display Count"): "Asset Search Results Max. Display Count",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:22
+    ("*", "Larger value is slower"): "Larger value is slower",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:29
+    ("*", "Asset JSONs Folder"): "Asset JSONs Folder",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:30
+    ("*", "Path to asset list JSON files"): "Path to asset list JSON files",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:36
+    ("*", "Asset JSON Update Repo"): "Asset JSON Update Repo",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:37
+    ("*", "Specify the github repository which to retrieve the assets"): "Specify the github repository which to retrieve the assets",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:42
+    ("*", "Asset JSON Update Query"): "Asset JSON Update Query",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:43
+    ("*", "Specify the filter conditions for retrieving assets"): "Specify the filter conditions for retrieving assets",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:48
+    ("*", "Asset JSON Auto Update on Startup"): "Asset JSON Auto Update on Startup",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:60
+    ("*", "Asset Max. Cache Size (MB)"): "Asset Max. Cache Size (MB)",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:61
+    ("*", "Maximum size (Mega bytes) of the cache folder"): "Maximum size (Mega bytes) of the cache folder",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:68
+    ("*", "Asset Extract Root Folder"): "Asset Extract Root Folder",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:69
+    ("*", "Path to extract the downloaded assets"): "Path to extract the downloaded assets",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:75
+    ("*", "Asset Extract Folder"): "Asset Extract Folder",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:82
+    ("*", "Asset Extract Json"): "Asset Extract Json",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:100
+    ("*", "Browse Assets"): "Browse Assets",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:104
+    ("*", "Query Examples"): "Query Examples",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:112
+    ("*", "Asset Cache Usage:"): "Asset Cache Usage:",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:25
+    ("*", "Reset"): "Reset",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
+    ("*", "Left Accent"): "Left Accent",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:80
+    ("*", "Double Side Accent"): "Double Side Accent",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:94
+    ("*", "God Ray"): "God Ray",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:108
+    ("*", "Backlight"): "Backlight",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:122
+    ("*", "Light Probe Grid"): "Light Probe Grid",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:58 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:258
+    ("*", "Wet Adjuster"): "Wet Adjuster",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:61
+    ("*", "Specular"): "Specular",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:62 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:645
+    ("*", "Roughness"): "Roughness",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:63 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:169
+    ("*", "Wet"): "Wet",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:103 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:255
+    ("*", "Subsurface Adjuster"): "Subsurface Adjuster",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:106
+    ("*", "Min"): "Min",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:107
+    ("*", "Max"): "Max",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:108
+    ("*", "Blood Color"): "Blood Color",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:109 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:168
+    ("*", "Subsurface"): "Subsurface",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:110
+    ("*", "Subsurface Color"): "Subsurface Color",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:48
+    ("*", "Transparent"): "Transparent",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:73
+    ("*", "Eye Highlight"): "Eye Highlight",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:98
+    ("*", "Eye White"): "Eye White",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:123
+    ("*", "Eye Iris"): "Eye Iris",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:153
+    ("*", "Eye Lash"): "Eye Lash",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:181
+    ("*", "Hair Matte"): "Hair Matte",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:209
+    ("*", "Skin Mucosa"): "Skin Mucosa",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:261 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:222
+    ("*", "Skin Bump"): "Skin Bump",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:303
+    ("*", "Metal Noble"): "Metal Noble",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:331
+    ("*", "Metal Base"): "Metal Base",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:358
+    ("*", "Stone Gem"): "Stone Gem",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:389 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:228
+    ("*", "Fabric Bump"): "Fabric Bump",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:420
+    ("*", "Fabric Wave"): "Fabric Wave",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:453
+    ("*", "Fabric Cotton"): "Fabric Cotton",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:456 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:527 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:598
+    ("*", "Color"): "Color",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:457 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:528 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:599
+    ("*", "Alpha"): "Alpha",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:458 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:529 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:601 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:650
+    ("*", "Vector"): "Vector",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:459 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:530
+    ("*", "Impurity"): "Impurity",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:460 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:531 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:603 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:647
+    ("*", "Scale"): "Scale",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:461 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:532
+    ("*", "Angle"): "Angle",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:462 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:533 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:648
+    ("*", "Strength"): "Strength",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:463 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:534 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:600
+    ("*", "Hole Alpha"): "Hole Alpha",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:464 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:535
+    ("*", "Gaps"): "Gaps",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:465 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:536
+    ("*", "Warp"): "Warp",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:466 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:537
+    ("*", "Woof"): "Woof",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:467 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:538
+    ("*", "Distortion"): "Distortion",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:468 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:539
+    ("*", "Fibers"): "Fibers",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:469 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:540
+    ("*", "Fuzziness"): "Fuzziness",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:470 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:541
+    ("*", "Errors"): "Errors",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:524
+    ("*", "Fabric Silk"): "Fabric Silk",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:595
+    ("*", "Fabric Knit"): "Fabric Knit",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:602
+    ("*", "Random Hue"): "Random Hue",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:604
+    ("*", "X Compression"): "X Compression",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:640
+    ("*", "Fabric Leather"): "Fabric Leather",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:643
+    ("*", "Primary Color"): "Primary Color",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:644
+    ("*", "Secondary Color"): "Secondary Color",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:646
+    ("*", "Old/New"): "Old/New",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:649
+    ("*", "Tartiary Detail"): "Tartiary Detail",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:689
+    ("*", "Plastic Gloss"): "Plastic Gloss",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:717
+    ("*", "Plastic Bump"): "Plastic Bump",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:749
+    ("*", "Plastic Matte"): "Plastic Matte",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:777
+    ("*", "Plastic Emission"): "Plastic Emission",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:806
+    ("*", "Liquid Water"): "Liquid Water",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:833
+    ("*", "Liquid Cloudy"): "Liquid Cloudy",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:13
+    ("Operator", "Tune Lighting"): "Tune Lighting",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:14
+    ("*", "Tune selected lighting."): "Tune selected lighting.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:32
+    ("Operator", "Freeze Lighting"): "Freeze Lighting",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:33
+    ("*", "Freeze active lighting."): "Freeze active lighting.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:50
+    ("Operator", "Tune Material"): "Tune Material",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:51
+    ("*", "Tune selected material."): "Tune selected material.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:69
+    ("Operator", "Attach Material Adjuster"): "Attach Material Adjuster",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:70
+    ("*", "Attach Adjuster to selected material."): "Attach Adjuster to selected material.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:86
+    ("Operator", "Detach Material Adjuster"): "Detach Material Adjuster",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:87
+    ("*", "Detach Adjuster from selected material."): "Detach Adjuster from selected material.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:14
+    ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:32
+    ("*", "UuuNyaa World not found."): "UuuNyaa World not found.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:37
+    ("*", "IrradianceVolume not found. Please add it."): "IrradianceVolume not found. Please add it.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:42
+    ("*", "for Eevee lighting, check Render Properties."): "for Eevee lighting, check Render Properties.",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:47
+    ("*", "Bake Indirect Lighting"): "Bake Indirect Lighting",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:65
+    ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa Lighting",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:104
+    ("*", "MMD UuuNyaa Material"): "MMD UuuNyaa Material",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:140
+    ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaa Material Adjuster",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:219
+    ("*", "Skin Color Adjust"): "Skin Color Adjust",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:225
+    ("*", "Fabric Woven Texture"): "Fabric Woven Texture",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:231
+    ("*", "Wave Bump"): "Wave Bump",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:234
+    ("*", "Magic Bump"): "Magic Bump",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:237
+    ("*", "Shadowless BSDF"): "Shadowless BSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:240
+    ("*", "Gem BSDF"): "Gem BSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:243
+    ("*", "Liquid BSDF"): "Liquid BSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:246
+    ("*", "Knit Texture"): "Knit Texture",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:249
+    ("*", "Leather Texture"): "Leather Texture",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:252
+    ("*", "MMDTexUV"): "MMDTexUV",
   },
   "ja_JP": {
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:18 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:50 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:70 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/menus.py:90
+    ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:20
-    ("*", "Convert materials of selected objects for Eevee."): "選択中オブジェクトのマテリアルをEevee用に変換",
+    ("*", "Convert materials of selected objects for Eevee."): "選択中オブジェクトマテリアルをEevee用に変換",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:43
     ("Operator", "Setup Render Engine for Eevee"): "レンダーエンジンをEevee用に設定",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:44
-    ("*", "Setup render engine properties for Eevee."): "レンダーエンジンのプロパティをEevee用に設定",
+    ("*", "Setup render engine properties for Eevee."): "レンダーエンジンプロパティをEevee用に設定",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:47
     ("*", "Use Bloom"): "ブルームを使用",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:48
@@ -112,129 +328,272 @@ translation_dict = {
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:110
     ("*", "Show message box."): "メッセージボックスを表示",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:131
-    ("Operator", "Select Related Objects"): "関連するオブジェクトを選択",
+    ("Operator", "Select Related Objects"): "関連オブジェクトを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:132
-    ("*", "Select related objects."): "関連するオブジェクトを選択",
+    ("*", "Select related objects."): "関連オブジェクトを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:187
-    ("Operator", "Select Related Bones"): "関連するボーンを選択",
+    ("Operator", "Select Related Bones"): "関連ボーンを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:188
-    ("*", "Select related bones."): "関連するボーンを選択",
+    ("*", "Select related bones."): "関連ボーンを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:222
-    ("Operator", "Select Related Pose Bones"): "関連するポーズボーンを選択",
+    ("Operator", "Select Related Pose Bones"): "関連ポーズボーンを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:223
-    ("*", "Select related pose bones."): "関連するポーズボーンを選択",
+    ("*", "Select related pose bones."): "関連ポーズボーンを選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:257
     ("Operator", "Remove Unused Vertex Groups"): "未使用頂点グループをすべて削除",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:258
-    ("*", "Remove unused vertex groups from the active meshes"): "アクティブなメッシュから未使用頂点グループをすべて削除",
+    ("*", "Remove unused vertex groups from the active meshes"): "アクティブメッシュから未使用頂点グループをすべて削除",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:261
     ("*", "Weight Threshold"): "ウエイトしきい値",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:325
     ("Operator", "Select Shape Key Target Vertices"): "シェイプキー対象の頂点を選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:326
-    ("*", "Select shape key target vertices from the active meshes"): "アクティブなメッシュのシェイプキー対象の頂点を選択",
+    ("*", "Select shape key target vertices from the active meshes"): "アクティブメッシュのシェイプキー対象の頂点を選択",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:329 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:376
     ("*", "Distance Threshold"): "距離しきい値",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:372
     ("Operator", "Remove Unused Shape Keys"): "未使用シェイプキーをすべて削除",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:373
-    ("*", "Remove unused shape keys from the active meshes"): "アクティブなメッシュから未使用シェイプキーをすべて削除",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:31
+    ("*", "Remove unused shape keys from the active meshes"): "アクティブメッシュから未使用シェイプキーをすべて削除",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "レンダー:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:36
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:35
     ("*", "MMD to Rigify:"): "MMDからRigify:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:39
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:38
     ("Operator", "Add Metarig"): "メタリグを追加",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:45
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:44
     ("Operator", "Integrate Armatures"): "アーマチュアを統合",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:51
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:50
     ("Operator", "Convert Armatures"): "アーマチュアを変換",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:56
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:57 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:62
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:56 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "MMD互換へ変換",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:59 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:64
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:58 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:63
     ("Operator", "Apply MMD rest pose"): "MMDレストポーズを適用",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:61
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:66
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:65
     ("*", "UI Panels"): "UIパネル",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:68
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:67
     ("*", "World > MMD UuuNyaa Lighting Panel"): "ワールド>MMD UuuNyaa Lightingパネル",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:69
-    ("*", "Material > MMD UuuNyaa Material Panel"): "マテリアル>MMD UuuNyaa Materialパネル",
-  },
-  "zh_CN": {
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:19
-    ("Operator", "Convert Materials for Eevee"): "Convert Materials for Eevee",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:20
-    ("*", "Convert materials of selected objects for Eevee."): "Convert materials of selected objects for Eevee.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:43
-    ("Operator", "Setup Render Engine for Eevee"): "Setup Render Engine for Eevee",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:44
-    ("*", "Setup render engine properties for Eevee."): "Setup render engine properties for Eevee.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:47
-    ("*", "Use Bloom"): "Use Bloom",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:48
-    ("*", "Use Motion Blur"): "Use Motion Blur",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:49
-    ("*", "Use Film Transparent"): "Use Film Transparent",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:109
-    ("Operator", "Show Message Box"): "Show Message Box",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:110
-    ("*", "Show message box."): "Show message box.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:131
-    ("Operator", "Select Related Objects"): "Select Related Objects",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:132
-    ("*", "Select related objects."): "Select related objects.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:187
-    ("Operator", "Select Related Bones"): "Select Related Bones",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:188
-    ("*", "Select related bones."): "Select related bones.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:222
-    ("Operator", "Select Related Pose Bones"): "Select Related Pose Bones",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:223
-    ("*", "Select related pose bones."): "Select related pose bones.",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:257
-    ("Operator", "Remove Unused Vertex Groups"): "Remove Unused Vertex Groups",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:258
-    ("*", "Remove unused vertex groups from the active meshes"): "Remove unused vertex groups from the active meshes",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:261
-    ("*", "Weight Threshold"): "Weight Threshold",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:325
-    ("Operator", "Select Shape Key Target Vertices"): "Select Shape Key Target Vertices",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:326
-    ("*", "Select shape key target vertices from the active meshes"): "Select shape key target vertices from the active meshes",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:329 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:376
-    ("*", "Distance Threshold"): "Distance Threshold",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:372
-    ("Operator", "Remove Unused Shape Keys"): "Remove Unused Shape Keys",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/operators.py:373
-    ("*", "Remove unused shape keys from the active meshes"): "Remove unused shape keys from the active meshes",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:31
-    ("*", "Render:"): "Render:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:36
-    ("*", "MMD to Rigify:"): "MMD to Rigify:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:39
-    ("Operator", "Add Metarig"): "Add Metarig",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:45
-    ("Operator", "Integrate Armatures"): "Integrate Armatures",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:51
-    ("Operator", "Convert Armatures"): "Convert Armatures",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:56
-    ("*", "Rigify to MMD:"): "Rigify to MMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:57 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:62
-    ("Operator", "Convert to MMD compatible"): "Convert to MMD compatible",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:59 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:64
-    ("Operator", "Apply MMD rest pose"): "Apply MMD rest pose",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:61
-    ("*", "(Experimental) Auto-Rig to MMD:"): "(Experimental) Auto-Rig to MMD:",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:66
-    ("*", "UI Panels"): "UI Panels",
     #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:68
-    ("*", "World > MMD UuuNyaa Lighting Panel"): "World > MMD UuuNyaa Lighting Panel",
-    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/panels.py:69
-    ("*", "Material > MMD UuuNyaa Material Panel"): "Material > MMD UuuNyaa Material Panel",
+    ("*", "Material > MMD UuuNyaa Material Panel"): "マテリアル>MMD UuuNyaa Materialパネル",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:21
+    ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:22
+    ("*", "Larger value is slower"): "大きい値ほど遅い",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:29
+    ("*", "Asset JSONs Folder"): "アセットJSONフォルダー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:30
+    ("*", "Path to asset list JSON files"): "アセットJSONファイルのパス",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:36
+    ("*", "Asset JSON Update Repo"): "アセットJSON更新リポジトリ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:37
+    ("*", "Specify the github repository which to retrieve the assets"): "アセットを取得するgithubリポジトリを指定",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:42
+    ("*", "Asset JSON Update Query"): "アセットJSON更新クエリ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:43
+    ("*", "Specify the filter conditions for retrieving assets"): "アセットを取得するフィルタ条件を指定",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:48
+    ("*", "Asset JSON Auto Update on Startup"): "起動時にアセットJSONを更新する",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:60
+    ("*", "Asset Max. Cache Size (MB)"): "アセット最大キャッシュサイズ(MB)",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:61
+    ("*", "Maximum size (Mega bytes) of the cache folder"): "キャッシュフォルダーの最大サイズ(メガバイト)",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:68
+    ("*", "Asset Extract Root Folder"): "アセット展開ルートフォルダー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:69
+    ("*", "Path to extract the downloaded assets"): "ダウンロードしたアセットの展開先パス",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:75
+    ("*", "Asset Extract Folder"): "アセット展開先フォルダー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:82
+    ("*", "Asset Extract Json"): "アセット展開JSON",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:100
+    ("*", "Browse Assets"): "アセットを閲覧",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:104
+    ("*", "Query Examples"): "クエリ例",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/preferences.py:112
+    ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:25
+    ("*", "Reset"): "リセット",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
+    ("*", "Left Accent"): "左アクセント",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:80
+    ("*", "Double Side Accent"): "両側アクセント",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:94
+    ("*", "God Ray"): "ゴッドレイ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:108
+    ("*", "Backlight"): "バックライト",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/lighting_tuners.py:122
+    ("*", "Light Probe Grid"): "イラディアンスボリューム",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:58 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:258
+    ("*", "Wet Adjuster"): "ウエット調節器",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:61
+    ("*", "Specular"): "スペキュラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:62 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:645
+    ("*", "Roughness"): "粗さ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:63 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:169
+    ("*", "Wet"): "ウェット",
+    ("Operator", "Wet"): "ウェット",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:103 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:255
+    ("*", "Subsurface Adjuster"): "サブサーフェス調節器",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:106
+    ("*", "Min"): "最小",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:107
+    ("*", "Max"): "最大",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:108
+    ("*", "Blood Color"): "血液カラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:109 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:168
+    ("*", "Subsurface"): "サブサーフェス",
+    ("Operator", "Subsurface"): "サブサーフェス",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_adjusters.py:110
+    ("*", "Subsurface Color"): "サブサーフェスカラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:48
+    ("*", "Transparent"): "伝播",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:73
+    ("*", "Eye Highlight"): "目ハイライト",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:98
+    ("*", "Eye White"): "白目",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:123
+    ("*", "Eye Iris"): "虹彩",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:153
+    ("*", "Eye Lash"): "まつ毛",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:181
+    ("*", "Hair Matte"): "髪 つや消し",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:209
+    ("*", "Skin Mucosa"): "粘膜",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:261 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:222
+    ("*", "Skin Bump"): "肌 凹凸",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:303
+    ("*", "Metal Noble"): "貴金属",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:331
+    ("*", "Metal Base"): "卑金属",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:358
+    ("*", "Stone Gem"): "石 宝石",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:389 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:228
+    ("*", "Fabric Bump"): "布地 凹凸",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:420
+    ("*", "Fabric Wave"): "布地 波形",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:453
+    ("*", "Fabric Cotton"): "布地 綿",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:456 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:527 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:598
+    ("*", "Color"): "カラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:457 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:528 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:599
+    ("*", "Alpha"): "アルファ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:458 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:529 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:601 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:650
+    ("*", "Vector"): "ベクトル",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:459 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:530
+    ("*", "Impurity"): "不純物",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:460 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:531 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:603 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:647
+    ("*", "Scale"): "スケール",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:461 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:532
+    ("*", "Angle"): "角度",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:462 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:533 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:648
+    ("*", "Strength"): "強さ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:463 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:534 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:600
+    ("*", "Hole Alpha"): "穴アルファ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:464 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:535
+    ("*", "Gaps"): "すき間",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:465 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:536
+    ("*", "Warp"): "縦糸",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:466 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:537
+    ("*", "Woof"): "横糸",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:467 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:538
+    ("*", "Distortion"): "歪み",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:468 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:539
+    ("*", "Fibers"): "繊維",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:469 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:540
+    ("*", "Fuzziness"): "曖昧さ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:470 /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:541
+    ("*", "Errors"): "誤差",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:524
+    ("*", "Fabric Silk"): "布地 絹",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:595
+    ("*", "Fabric Knit"): "編物",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:602
+    ("*", "Random Hue"): "ランダム色相",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:604
+    ("*", "X Compression"): "X圧縮",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:640
+    ("*", "Fabric Leather"): "革",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:643
+    ("*", "Primary Color"): "プライマリーカラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:644
+    ("*", "Secondary Color"): "セカンダリーカラー",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:646
+    ("*", "Old/New"): "古い/新しい",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:649
+    ("*", "Tartiary Detail"): "詳細さ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:689
+    ("*", "Plastic Gloss"): "プラスチック 光沢",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:717
+    ("*", "Plastic Bump"): "プラスチック 凹凸",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:749
+    ("*", "Plastic Matte"): "プラスチック つや消し",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:777
+    ("*", "Plastic Emission"): "プラスチック 発光",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:806
+    ("*", "Liquid Water"): "水",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/material_tuners.py:833
+    ("*", "Liquid Cloudy"): "液体 白濁",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:13
+    ("Operator", "Tune Lighting"): "ライト調整",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:14
+    ("*", "Tune selected lighting."): "選択中ライトを調整",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:32
+    ("Operator", "Freeze Lighting"): "ライトを凍結",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:33
+    ("*", "Freeze active lighting."): "選択中ライトを凍結",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:50
+    ("Operator", "Tune Material"): "マテリアル調整",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:51
+    ("*", "Tune selected material."): "選択中マテリアルを調整",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:69
+    ("Operator", "Attach Material Adjuster"): "マテリアル調整器を付加",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:70
+    ("*", "Attach Adjuster to selected material."): "選択中マテリアルに調整器を付加",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:86
+    ("Operator", "Detach Material Adjuster"): "マテリアル調整器を除去",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/operators.py:87
+    ("*", "Detach Adjuster from selected material."): "選択中マテリアルから調整器を除去",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:14
+    ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:32
+    ("*", "UuuNyaa World not found."): "UuuNyaaワールドが見つからない",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:37
+    ("*", "IrradianceVolume not found. Please add it."): "イラディアンスボリュームが見つからないので追加してください",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:42
+    ("*", "for Eevee lighting, check Render Properties."): "Eevee照明用 レンダープロパティを確認",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:47
+    ("*", "Bake Indirect Lighting"): "間接照明をベイク",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:65
+    ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa照明",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:104
+    ("*", "MMD UuuNyaa Material"): "MMD UuuNyaaマテリアル",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/panels.py:140
+    ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaaマテリアル調整器",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:219
+    ("*", "Skin Color Adjust"): "スキンカラー調整",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:225
+    ("*", "Fabric Woven Texture"): "布地織物テクスチャ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:231
+    ("*", "Wave Bump"): "波形バンプ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:234
+    ("*", "Magic Bump"): "マジックバンプ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:237
+    ("*", "Shadowless BSDF"): "影なしBSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:240
+    ("*", "Gem BSDF"): "宝石BSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:243
+    ("*", "Liquid BSDF"): "液体BSDF",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:246
+    ("*", "Knit Texture"): "編み物Bテクスチャ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:249
+    ("*", "Leather Texture"): "革テクスチャ",
+    #: /home/hobby/Workspace/Blender/AddOns/uuunyaa/blender_mmd_uuunyaa_tools/mmd_uuunyaa_tools/tuners/utilities.py:252
+    ("*", "MMDTexUV"): "MMDTexUV",
   },
+  "zh_CN": {},
 }
 # ##### END AUTOGENERATED I18N SECTION #####

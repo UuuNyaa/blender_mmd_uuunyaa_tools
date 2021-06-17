@@ -12,7 +12,6 @@ from mmd_uuunyaa_tools.editors.operators import (MMDArmatureAddMetarig,
                                                  MMDRigifyBind,
                                                  MMDRigifyConvert,
                                                  MMDRigifyIntegrate)
-
 from mmd_uuunyaa_tools.m17n import _
 
 

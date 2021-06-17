@@ -4,6 +4,7 @@
 
 # pylint: disable=too-many-lines
 
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.tuners.material_adjusters import (SubsurfaceAdjuster,
                                                          WetAdjuster)
@@ -21,7 +22,7 @@ class ResetMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Reset'
+        return _('Reset')
 
     def execute(self):
         self.reset()
@@ -44,7 +45,7 @@ class TransparentMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Transparent'
+        return _('Transparent')
 
     def execute(self):
         self.reset()
@@ -69,7 +70,7 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Eye Highlight'
+        return _('Eye Highlight')
 
     def execute(self):
         self.reset()
@@ -94,7 +95,7 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Eye White'
+        return _('Eye White')
 
     def execute(self):
         self.reset()
@@ -119,7 +120,7 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Eye Iris'
+        return _('Eye Iris')
 
     def execute(self):
         self.reset()
@@ -149,7 +150,7 @@ class EyeLashMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Eye Lash'
+        return _('Eye Lash')
 
     def execute(self):
         self.reset()
@@ -177,7 +178,7 @@ class HairMatteMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Hair Matte'
+        return _('Hair Matte')
 
     def execute(self):
         self.reset()
@@ -205,7 +206,7 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Skin Mucosa'
+        return _('Skin Mucosa')
 
     def execute(self):
         self.reset()
@@ -257,7 +258,7 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Skin Bump'
+        return _('Skin Bump')
 
     def execute(self):
         self.reset()
@@ -299,7 +300,7 @@ class MetalNobleMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Metal Noble'
+        return _('Metal Noble')
 
     def execute(self):
         self.reset()
@@ -327,7 +328,7 @@ class MetalBaseMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Metal Base'
+        return _('Metal Base')
 
     def execute(self):
         self.reset()
@@ -354,7 +355,7 @@ class StoneGemMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Stone Gem'
+        return _('Stone Gem')
 
     def execute(self):
         self.reset()
@@ -385,7 +386,7 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Bump'
+        return _('Fabric Bump')
 
     def execute(self):
         self.reset()
@@ -416,7 +417,7 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Wave'
+        return _('Fabric Wave')
 
     def execute(self):
         self.reset()
@@ -449,7 +450,25 @@ class FabricCottonMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Cotton'
+        return _('Fabric Cotton')
+
+    translation_properties = [
+        _('Color'),
+        _('Alpha'),
+        _('Vector'),
+        _('Impurity'),
+        _('Scale'),
+        _('Angle'),
+        _('Strength'),
+        _('Hole Alpha'),
+        _('Gaps'),
+        _('Warp'),
+        _('Woof'),
+        _('Distortion'),
+        _('Fibers'),
+        _('Fuzziness'),
+        _('Errors'),
+    ]
 
     def execute(self):
         self.reset()
@@ -502,7 +521,25 @@ class FabricSilkMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Silk'
+        return _('Fabric Silk')
+
+    translation_properties = [
+        _('Color'),
+        _('Alpha'),
+        _('Vector'),
+        _('Impurity'),
+        _('Scale'),
+        _('Angle'),
+        _('Strength'),
+        _('Hole Alpha'),
+        _('Gaps'),
+        _('Warp'),
+        _('Woof'),
+        _('Distortion'),
+        _('Fibers'),
+        _('Fuzziness'),
+        _('Errors'),
+    ]
 
     def execute(self):
         self.reset()
@@ -555,7 +592,17 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Knit'
+        return _('Fabric Knit')
+
+    translation_properties = [
+        _('Color'),
+        _('Alpha'),
+        _('Hole Alpha'),
+        _('Vector'),
+        _('Random Hue'),
+        _('Scale'),
+        _('X Compression'),
+    ]
 
     def execute(self):
         self.reset()
@@ -590,7 +637,18 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Fabric Leather'
+        return _('Fabric Leather')
+
+    translation_properties = [
+        _('Primary Color'),
+        _('Secondary Color'),
+        _('Roughness'),
+        _('Old/New'),
+        _('Scale'),
+        _('Strength'),
+        _('Tartiary Detail'),
+        _('Vector'),
+    ]
 
     def execute(self):
         self.reset()
@@ -628,7 +686,7 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Plastic Gloss'
+        return _('Plastic Gloss')
 
     def execute(self):
         self.reset()
@@ -656,7 +714,7 @@ class PlasticBumpMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Plastic Bump'
+        return _('Plastic Bump')
 
     def execute(self):
         self.reset()
@@ -688,7 +746,7 @@ class PlasticMatteMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Plastic Matte'
+        return _('Plastic Matte')
 
     def execute(self):
         self.reset()
@@ -716,7 +774,7 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Plastic Emission'
+        return _('Plastic Emission')
 
     def execute(self):
         self.reset()
@@ -745,7 +803,7 @@ class LiquidWaterMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Liquid Water'
+        return _('Liquid Water')
 
     def execute(self):
         self.reset()
@@ -772,7 +830,7 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Liquid Cloudy'
+        return _('Liquid Cloudy')
 
     def execute(self):
         self.reset()

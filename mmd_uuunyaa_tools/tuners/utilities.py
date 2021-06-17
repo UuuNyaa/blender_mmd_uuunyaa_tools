@@ -13,6 +13,7 @@ from bpy.types import (NodeFrame, NodeSocket, ShaderNode, ShaderNodeBsdfGlass,
                        ShaderNodeRGBCurve, ShaderNodeTexImage, ShaderNodeValue,
                        ShaderNodeVertexColor)
 from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.m17n import _
 
 PATH_BLENDS_UUUNYAA_MATERIALS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Materials.blend')
 
@@ -215,46 +216,46 @@ class MaterialUtilities(NodeUtilities):
         return self.find_node(ShaderNodeTexImage, label='Mmd Base Tex')
 
     def get_skin_color_adjust_node(self) -> ShaderNodeRGBCurve:
-        return self.get_node_group('Skin Color Adjust', label='Skin Color Adjust')
+        return self.get_node_group(_('Skin Color Adjust'), label='Skin Color Adjust')
 
     def get_skin_bump_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Skin Bump', label='Skin Bump')
+        return self.get_node_group(_('Skin Bump'), label='Skin Bump')
 
     def get_fabric_woven_texture_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Fabric Woven Texture', label='Fabric Woven Texture')
+        return self.get_node_group(_('Fabric Woven Texture'), label='Fabric Woven Texture')
 
     def get_fabric_bump_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Fabric Bump', label='Fabric Bump')
+        return self.get_node_group(_('Fabric Bump'), label='Fabric Bump')
 
     def get_wave_bump_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Wave Bump', label='Wave Bump')
+        return self.get_node_group(_('Wave Bump'), label='Wave Bump')
 
     def get_magic_bump_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Magic Bump', label='Magic Bump')
+        return self.get_node_group(_('Magic Bump'), label='Magic Bump')
 
     def get_shadowless_bsdf_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Shadowless BSDF', label='Shadowless BSDF')
+        return self.get_node_group(_('Shadowless BSDF'), label='Shadowless BSDF')
 
     def get_gem_bsdf_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Gem BSDF', label='Gem BSDF')
+        return self.get_node_group(_('Gem BSDF'), label='Gem BSDF')
 
     def get_liquid_bsdf_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Liquid BSDF', label='Liquid BSDF')
+        return self.get_node_group(_('Liquid BSDF'), label='Liquid BSDF')
 
     def get_knit_texture_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Knit Texture', label='Knit Texture')
+        return self.get_node_group(_('Knit Texture'), label='Knit Texture')
 
     def get_leather_texture_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Leather Texture', label='Leather Texture')
+        return self.get_node_group(_('Leather Texture'), label='Leather Texture')
 
     def get_tex_uv(self) -> ShaderNodeGroup:
-        return self.get_node_group('MMDTexUV', name='mmd_tex_uv')
+        return self.get_node_group(_('MMDTexUV'), name='mmd_tex_uv')
 
     def get_subsurface_adjuster_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Subsurface Adjuster', label='Subsurface Adjuster')
+        return self.get_node_group(_('Subsurface Adjuster'), label='Subsurface Adjuster')
 
     def get_wet_adjuster_node(self) -> ShaderNodeGroup:
-        return self.get_node_group('Wet Adjuster', label='Wet Adjuster')
+        return self.get_node_group(_('Wet Adjuster'), label='Wet Adjuster')
 
     _adjusters_node_frame_label = 'UuuNyaa Adjusters'
     _adjusters_node_frame_name = 'uuunyaa_adjusters_node_frame'
