@@ -5,12 +5,12 @@
 import bpy
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetUpdater
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE
+from mmd_uuunyaa_tools.m17n import _
 
 
 class ReloadAssetJsons(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.reload_asset_jsons'
-    bl_label = 'Reload Asset JSONs'
-    bl_description = 'Reload asset JSONs.'
+    bl_label = _('Reload Asset JSONs')
     bl_options = {'INTERNAL'}
 
     def execute(self, context):
@@ -20,8 +20,7 @@ class ReloadAssetJsons(bpy.types.Operator):
 
 class UpdateAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.update_asset_json'
-    bl_label = 'Update Assets JSON'
-    bl_description = 'Update assets JSON.'
+    bl_label = _('Update Assets JSON')
     bl_options = {'INTERNAL'}
 
     repo: bpy.props.StringProperty(default=AssetUpdater.default_repo)
@@ -38,8 +37,7 @@ class UpdateAssetJson(bpy.types.Operator):
 
 class UpdateDebugAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.update_debug_asset_json'
-    bl_label = 'Update Debug Asset JSON'
-    bl_description = 'Update debug asset JSON.'
+    bl_label = _('Update Debug Asset JSON')
     bl_options = {'INTERNAL'}
 
     repo: bpy.props.StringProperty(default=AssetUpdater.default_repo)
@@ -56,8 +54,7 @@ class UpdateDebugAssetJson(bpy.types.Operator):
 
 class DeleteDebugAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.delete_debug_asset_json'
-    bl_label = 'Delete Debug Asset JSON'
-    bl_description = 'Delete debug asset JSON.'
+    bl_label = _('Delete Debug Asset JSON')
     bl_options = {'INTERNAL'}
 
     delete_json: bpy.props.StringProperty(default='ZDEBUG.json')
@@ -72,8 +69,7 @@ class DeleteDebugAssetJson(bpy.types.Operator):
 
 class DeleteCachedFiles(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.delete_cached_files'
-    bl_label = 'Delete Asset Cached Files'
-    bl_description = 'Delete cached files.'
+    bl_label = _('Delete Asset Cached Files')
     bl_options = {'INTERNAL'}
 
     def execute(self, context):

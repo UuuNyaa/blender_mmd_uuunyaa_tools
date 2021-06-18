@@ -8,6 +8,7 @@ from typing import Set
 import bmesh
 import bpy
 
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
                                          is_mmd_tools_installed,
                                          label_multiline)
@@ -15,8 +16,8 @@ from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
 
 class ConvertMaterialsForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_materials_for_eevee'
-    bl_label = 'Convert Shaders for Eevee'
-    bl_description = 'Convert materials of selected objects for Eevee.'
+    bl_label = _('Convert Materials for Eevee')
+    bl_description = _('Convert materials of selected objects for Eevee.')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -39,13 +40,13 @@ class ConvertMaterialsForEevee(bpy.types.Operator):
 
 class SetupRenderEngineForEevee(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.setup_render_engine_for_eevee'
-    bl_label = 'Setup Render Engine for Eevee'
-    bl_description = 'Setup render engine properties for Eevee.'
+    bl_label = _('Setup Render Engine for Eevee')
+    bl_description = _('Setup render engine properties for Eevee.')
     bl_options = {'REGISTER', 'UNDO'}
 
-    use_bloom: bpy.props.BoolProperty(name='Use Bloom', default=True)
-    use_motion_blur: bpy.props.BoolProperty(name='Use Motion Blur', default=False)
-    film_transparent: bpy.props.BoolProperty(name='Use Film Transparent', default=False)
+    use_bloom: bpy.props.BoolProperty(name=_('Use Bloom'), default=True)
+    use_motion_blur: bpy.props.BoolProperty(name=_('Use Motion Blur'), default=False)
+    film_transparent: bpy.props.BoolProperty(name=_('Use Film Transparent'), default=False)
 
     @classmethod
     def poll(cls, context):
@@ -105,8 +106,7 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
 
 class ShowMessageBox(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.show_message_box'
-    bl_label = 'Show Message Box'
-    bl_description = 'Show message box.'
+    bl_label = _('Show Message Box')
     bl_options = {'INTERNAL'}
 
     icon: bpy.props.StringProperty(default='INFO')
@@ -127,8 +127,7 @@ class ShowMessageBox(bpy.types.Operator):
 
 class SelectRelatedObjects(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_objects'
-    bl_label = 'Select Related Objects'
-    bl_description = 'Select related objects.'
+    bl_label = _('Select Related Objects')
     bl_options = {'REGISTER', 'UNDO'}
 
     type_to_name_func = {
@@ -183,8 +182,7 @@ class SelectRelatedObjects(bpy.types.Operator):
 
 class SelectRelatedBones(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_bones'
-    bl_label = 'Select Related Bones'
-    bl_description = 'Select related bones.'
+    bl_label = _('Select Related Bones')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -218,8 +216,7 @@ class SelectRelatedBones(bpy.types.Operator):
 
 class SelectRelatedPoseBones(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_pose_bones'
-    bl_label = 'Select Related Pose Bones'
-    bl_description = 'Select related pose bones.'
+    bl_label = _('Select Related Pose Bones')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -253,11 +250,11 @@ class SelectRelatedPoseBones(bpy.types.Operator):
 
 class RemoveUnusedVertexGroups(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.remove_unused_vertex_groups'
-    bl_label = 'Remove Unused Vertex Groups'
-    bl_description = 'Remove unused vertex groups from the active meshes'
+    bl_label = _('Remove Unused Vertex Groups')
+    bl_description = _('Remove unused vertex groups from the active meshes')
     bl_options = {'REGISTER', 'UNDO'}
 
-    weight_threshold: bpy.props.FloatProperty(name='Weight Threshold', default=0.0, min=0.0, max=1.0)
+    weight_threshold: bpy.props.FloatProperty(name=_('Weight Threshold'), default=0.0, min=0.0, max=1.0)
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
@@ -321,11 +318,11 @@ class RemoveUnusedVertexGroups(bpy.types.Operator):
 
 class SelectShapeKeyTargetVertices(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_shape_key_target_vertices'
-    bl_label = 'Select Shape Key Target Vertices'
-    bl_description = 'Select shape key target vertices from the active meshes'
+    bl_label = _('Select Shape Key Target Vertices')
+    bl_description = _('Select shape key target vertices from the active meshes')
     bl_options = {'REGISTER', 'UNDO'}
 
-    distance_threshold: bpy.props.FloatProperty(name='Distance Threshold', default=0.0, min=0.0)
+    distance_threshold: bpy.props.FloatProperty(name=_('Distance Threshold'), default=0.0, min=0.0)
 
     @classmethod
     def poll(cls, context):
@@ -368,11 +365,11 @@ class SelectShapeKeyTargetVertices(bpy.types.Operator):
 
 class RemoveUnusedShapeKeys(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.remove_unused_shape_keys'
-    bl_label = 'Remove Unused Shape Keys'
-    bl_description = 'Remove unused shape keys from the active meshes'
+    bl_label = _('Remove Unused Shape Keys')
+    bl_description = _('Remove unused shape keys from the active meshes')
     bl_options = {'REGISTER', 'UNDO'}
 
-    distance_threshold: bpy.props.FloatProperty(name='Distance Threshold', default=0.0, min=0.0)
+    distance_threshold: bpy.props.FloatProperty(name=_('Distance Threshold'), default=0.0, min=0.0)
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)

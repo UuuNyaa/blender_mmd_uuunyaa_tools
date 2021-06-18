@@ -3,6 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
+from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
                                       material_tuners, operators)
 from mmd_uuunyaa_tools.tuners.utilities import NodeUtilities
@@ -10,7 +11,7 @@ from mmd_uuunyaa_tools.tuners.utilities import NodeUtilities
 
 class SkyPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_sky_panel'
-    bl_label = 'MMD UuuNyaa Sky'
+    bl_label = _('MMD UuuNyaa Sky')
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = 'world'
@@ -18,6 +19,11 @@ class SkyPanel(bpy.types.Panel):
     @classmethod
     def poll(cls, context):
         return context.scene.world is not None
+
+    translation_properties = [
+        _('Light Strength'),
+        _('Image Strength'),
+    ]
 
     def draw(self, context: bpy.types.Context):
         world: bpy.types.World = context.scene.world
@@ -28,22 +34,22 @@ class SkyPanel(bpy.types.Panel):
 
         node_frame = utilities.find_node_frame()
         if node_frame is None:
-            layout.label(text='UuuNyaa World not found.')
+            layout.label(text=_('UuuNyaa World not found.'))
             return
 
         scene_has_irradiance_volumes = self._scene_has_irradiance_volumes()
         if not scene_has_irradiance_volumes:
-            layout.label(text='IrradianceVolume not found. Please add it.', icon='ERROR')
+            layout.label(text=_('IrradianceVolume not found. Please add it.'), icon='ERROR')
 
         utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_frame=node_frame))
 
         col = layout.column(align=True)
-        col.label(text='for Eevee lighting, check Render Properties.')
+        col.label(text=_('for Eevee lighting, check Render Properties.'))
 
         if not scene_has_irradiance_volumes:
             return
 
-        col.operator('scene.light_cache_bake', text='Bake Indirect Lighting', icon='RENDER_STILL')
+        col.operator('scene.light_cache_bake', text=_('Bake Indirect Lighting'), icon='RENDER_STILL')
 
     @staticmethod
     def _scene_has_irradiance_volumes():
@@ -61,7 +67,7 @@ class SkyPanel(bpy.types.Panel):
 
 class LightingPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_lighting_panel'
-    bl_label = 'MMD UuuNyaa Lighting'
+    bl_label = _('MMD UuuNyaa Lighting')
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = 'world'
@@ -100,7 +106,7 @@ class LightingPanel(bpy.types.Panel):
 
 class MaterialPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_material_panel'
-    bl_label = 'MMD UuuNyaa Material'
+    bl_label = _('MMD UuuNyaa Material')
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = 'material'
@@ -136,7 +142,7 @@ class MaterialPanel(bpy.types.Panel):
 
 class MaterialAdjusterPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_material_adjuster_panel'
-    bl_label = 'MMD UuuNyaa Material Adjuster'
+    bl_label = _('MMD UuuNyaa Material Adjuster')
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = 'material'
@@ -153,7 +159,9 @@ class MaterialAdjusterPanel(bpy.types.Panel):
 
         utilities = material_adjusters.MaterialAdjusterUtilities(material)
         if not utilities.check_attachable():
-            col.label(text=f'{material.name} is unsupported. Select other material to be output from Principled BSDF.', icon='ERROR')
+            col.label(text=iface_('{material_name} is unsupported. Select other material to be output from Principled BSDF.').format(
+                material_name=material.name
+            ), icon='ERROR')
             return
 
         grid = col.grid_flow(row_major=True, columns=2)
@@ -164,8 +172,8 @@ class MaterialAdjusterPanel(bpy.types.Panel):
             else:
                 layout.operator(operators.AttachMaterialAdjuster.bl_idname, text=text, icon=icon).adjuster_name = class_.get_name()
 
-        draw_operator(grid, material_adjusters.SubsurfaceAdjuster,  text='Subsurface', icon='SHADING_RENDERED')
-        draw_operator(grid, material_adjusters.WetAdjuster,  text='Wet', icon='MOD_FLUIDSIM')
+        draw_operator(grid, material_adjusters.SubsurfaceAdjuster,  text=_('Subsurface'), icon='SHADING_RENDERED')
+        draw_operator(grid, material_adjusters.WetAdjuster,  text=_('Wet'), icon='MOD_FLUIDSIM')
 
         node_frame = utilities.find_adjusters_node_frame()
         if node_frame is None:

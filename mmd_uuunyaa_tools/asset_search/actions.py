@@ -19,6 +19,7 @@ import bpy
 import requests
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.asset_search.assets import AssetDescription, _Utilities
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import MessageException
 
 
@@ -69,7 +70,7 @@ class DownloadActionExecutor:
 
         match = re.search(r'<a +href="([^"]+)">Click here if your download does not start within a few seconds.</a>', response.text)
         if match is None:
-            raise ValueError('Failed to download assets from SmutBase. The response format may have changed.')
+            raise ValueError(_('Failed to download assets from SmutBase. The response format may have changed.'))
 
         return session.get(match.group(1).replace('&amp;', '&'), stream=True)
 
@@ -96,7 +97,7 @@ class DownloadActionExecutor:
 
         download_json = json.loads(response.text)
         if 'url' not in download_json:
-            raise ValueError('Failed to download assets from BowlRoll. Incorrect download key.')
+            raise ValueError(_('Failed to download assets from BowlRoll. Incorrect download key.'))
 
         return session.get(download_json['url'], stream=True)
 
@@ -112,7 +113,7 @@ class DownloadActionExecutor:
             if 'id' in query and parsed.hostname == 'drive.google.com':
                 file_id = query['id'][0]
             else:
-                raise ValueError('Failed to download assets from Google Drive. Incorrect download key.')
+                raise ValueError(_('Failed to download assets from Google Drive. Incorrect download key.'))
 
         download_url = urllib.parse.urljoin(url, '/uc')
 
@@ -133,7 +134,7 @@ class DownloadActionExecutor:
 
     @staticmethod
     def uploader(url: str, password=None) -> requests.models.Response:
-        error_message = 'Failed to download assets from uploader.jp. The response format may have changed.'
+        error_message = _('Failed to download assets from uploader.jp. The response format may have changed.')
         session = requests.Session()
 
         if password is None:
@@ -222,7 +223,7 @@ class ImportActionExecutor:
             with xrarfile.XRarFile(rar_file_path) as rar:
                 rar.extractall(path=asset_path, pwd=password)
         except xrarfile.XRarCannotExec as ex:
-            raise MessageException('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.') from ex
+            raise MessageException(_('Failed to execute unrar or WinRAR\nPlease install unrar or WinRAR and setup the PATH properly.')) from ex
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -244,7 +245,7 @@ class ImportActionExecutor:
             with x7zipfile.x7ZipFile(zip_file_path, pwd=password) as zip_file:
                 zip_file.extractall(path=asset_path)
         except x7zipfile.x7ZipCannotExec as ex:
-            raise MessageException('Failed to execute 7z\nPlease install p7zip-full or 7-zip and setup the PATH properly.') from ex
+            raise MessageException(_('Failed to execute 7z\nPlease install p7zip-full or 7-zip and setup the PATH properly.')) from ex
 
         _Utilities.write_json(asset)
         ImportActionExecutor.chmod_recursively(asset_path, stat.S_IWRITE)
@@ -318,7 +319,7 @@ class ImportActionExecutor:
         except AttributeError as ex:
             if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_model" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
+            raise MessageException(_('Failed to invoke mmd_tools\nPlease install mmd_tools.')) from ex
 
     @staticmethod
     def import_vmd(vmd_file_path, scale=0.08, asset=None):
@@ -330,11 +331,11 @@ class ImportActionExecutor:
         except AttributeError as ex:
             if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_vmd" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
+            raise MessageException(_('Failed to invoke mmd_tools\nPlease install mmd_tools.')) from ex
         except RuntimeError as ex:
             if str(ex) != 'Operator bpy.ops.mmd_tools.import_vmd.poll() failed, context is incorrect':
                 raise
-            raise MessageException('Select an object.\nThe target object for motion import is not selected.') from ex
+            raise MessageException(_('Select an object.\nThe target object for motion import is not selected.')) from ex
 
     @staticmethod
     def import_vpd(vpd_file_path, scale=0.08, asset=None):
@@ -346,11 +347,11 @@ class ImportActionExecutor:
         except AttributeError as ex:
             if str(ex) != 'Calling operator "bpy.ops.mmd_tools.import_vpd" error, could not be found':
                 raise
-            raise MessageException('Failed to invoke mmd_tools\nPlease install mmd_tools.') from ex
+            raise MessageException(_('Failed to invoke mmd_tools\nPlease install mmd_tools.')) from ex
         except RuntimeError as ex:
             if str(ex) != 'Operator bpy.ops.mmd_tools.import_vpd.poll() failed, context is incorrect':
                 raise
-            raise MessageException('Select an object.\nThe target object for pose import is not selected.') from ex
+            raise MessageException(_('Select an object.\nThe target object for pose import is not selected.')) from ex
 
     @staticmethod
     def delete_objects(prefix=None, suffix=None, recursive=False):
@@ -401,6 +402,6 @@ class ImportActionExecutor:
             if os.sys.platform == 'win32':
                 message = str(ex)
                 if message.startswith('[Errno 2] No such file or directory: ') and len(message) > 260+38:
-                    raise MessageException('The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences.') from ex
+                    raise MessageException(_('The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences.')) from ex
 
             raise

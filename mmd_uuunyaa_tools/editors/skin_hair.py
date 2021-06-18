@@ -9,6 +9,7 @@ from typing import Iterable, List, Tuple
 import bpy
 import bpy_extras
 from mathutils import Quaternion, Vector
+from mmd_uuunyaa_tools.m17n import _
 
 
 def create_skin_hair(  # pylint: disable=too-many-arguments
@@ -113,8 +114,8 @@ def create_skin_hair(  # pylint: disable=too-many-arguments
 
 class AddSkinHairMesh(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.add_skin_hair_mesh'
-    bl_label = 'SkinHair'
-    bl_description = 'Construct a skin hair mesh'
+    bl_label = _('Add Skin Hair Mesh')
+    bl_description = _('Construct a skin hair mesh')
     bl_options = {'REGISTER', 'UNDO'}
 
     width: bpy.props.FloatProperty(default=0.006, min=0.0, precision=4, unit='LENGTH')
@@ -130,22 +131,22 @@ class AddSkinHairMesh(bpy.types.Operator):
     segments: bpy.props.IntProperty(default=3, min=3)
 
     align: bpy.props.EnumProperty(
-        name="Align",
+        name=_('Align'),
         items=(
-            ('WORLD', "World", "Align the new object to the world"),
-            ('VIEW', "View", "Align the new object to the view"),
-            ('CURSOR', "3D Cursor", "Use the 3D cursor orientation for the new object"),
+            ('WORLD', _('World'), _('Align the new object to the world')),
+            ('VIEW', _('View'), _('Align the new object to the view')),
+            ('CURSOR', _('3D Cursor'), _('Use the 3D cursor orientation for the new object')),
         ),
         default='WORLD',
         update=lambda p, _: p.rotation.zero() if p.align == 'WORLD' else None,
     )
 
     location: bpy.props.FloatVectorProperty(
-        name="Location",
+        name=_('Location'),
         subtype='TRANSLATION',
     )
     rotation: bpy.props.FloatVectorProperty(
-        name="Rotation",
+        name=_('Rotation'),
         subtype='EULER',
     )
 
@@ -176,15 +177,15 @@ class AddSkinHairMesh(bpy.types.Operator):
 
 class UuuNyaaMeshExtrasMenu(bpy.types.Menu):
     bl_idname = 'VIEW3D_MT_uuunyaa_mesh_extras'
-    bl_label = 'UuuNyaa'
+    bl_label = _('UuuNyaa')
 
-    def draw(self, context):
+    def draw(self, _context):
         self.layout.operator_context = 'INVOKE_REGION_WIN'
-        self.layout.operator(AddSkinHairMesh.bl_idname, text='Skin Hair')
+        self.layout.operator(AddSkinHairMesh.bl_idname, text=_('Skin Hair'))
 
     @staticmethod
-    def draw_menu(this, _):
-        this.layout.menu(UuuNyaaMeshExtrasMenu.bl_idname, text='UuuNyaa Extras')
+    def draw_menu(this, _context):
+        this.layout.menu(UuuNyaaMeshExtrasMenu.bl_idname, text=_('UuuNyaa Extras'))
 
     @staticmethod
     def register():

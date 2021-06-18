@@ -13,6 +13,7 @@ from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor, Message
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
+from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.utilities import get_preferences, label_multiline, to_human_friendly_text, to_int32
 
 PREVIEWS: Union[bpy.utils.previews.ImagePreviewCollection, None]
@@ -263,48 +264,48 @@ class AssetDetailPopup(bpy.types.Operator):
         col = layout.column(align=True)
 
         grid = col.split(factor=0.5)
-        draw_title(grid, 'Type:', factor=0.11*2).label(text=asset.type.value)
-        draw_title(grid, 'ID:', factor=0.11*2).operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
+        draw_title(grid, _('Type:'), factor=0.11*2).label(text=asset.type.value)
+        draw_title(grid, _('ID:'), factor=0.11*2).operator('wm.url_open', text=asset.id, icon='URL').url = asset.url
 
-        draw_titled_label(col, title='Name:', text=asset.name)
-        draw_titled_label(col, title='Aliases:', text=', '.join(list(asset.aliases.values())))
-        draw_titled_label(col, title='Tags:', text=asset.tags_text())
-        draw_titled_label(col, title='Updated at:', text=asset.updated_at.strftime('%Y-%m-%d %H:%M:%S %Z'))
-        draw_titled_label(col, title='Note:', text=asset.note)
+        draw_titled_label(col, title=_('Name:'), text=asset.name)
+        draw_titled_label(col, title=_('Aliases:'), text=', '.join(list(asset.aliases.values())))
+        draw_titled_label(col, title=_('Tags:'), text=asset.tags_text())
+        draw_titled_label(col, title=_('Updated at:'), text=asset.updated_at.strftime('%Y-%m-%d %H:%M:%S %Z'))
+        draw_titled_label(col, title=_('Note:'), text=asset.note)
 
-        draw_title(col, 'Source:').operator('wm.url_open', text=asset.source_url, icon='URL').url = asset.source_url
+        draw_title(col, _('Source:')).operator('wm.url_open', text=asset.source_url, icon='URL').url = asset.source_url
 
         (asset_state, content, task) = Utilities.get_asset_state(asset)
 
         if asset_state is AssetState.INITIALIZED:
-            layout.operator(AssetDownload.bl_idname, text='Download', icon='TRIA_DOWN_BAR').asset_id = asset.id
+            layout.operator(AssetDownload.bl_idname, text=_('Download'), icon='TRIA_DOWN_BAR').asset_id = asset.id
 
         elif asset_state is AssetState.DOWNLOADING:
-            draw_titled_label(layout, title='Cache:', text=f'Downloading {to_human_friendly_text(task.fetched_size)}B / {to_human_friendly_text(task.content_length)}B')
-            layout.operator(AssetDownloadCancel.bl_idname, text='Cancel', icon='CANCEL').asset_id = asset.id
+            draw_titled_label(layout, title=_('Cache:'), text=f'{iface_("Downloading")} {to_human_friendly_text(task.fetched_size)}B / {to_human_friendly_text(task.content_length)}B')
+            layout.operator(AssetDownloadCancel.bl_idname, text=_('Cancel'), icon='CANCEL').asset_id = asset.id
 
         elif asset_state is AssetState.CACHED:
-            draw_title(layout, 'Cache:').label(text=f'{to_human_friendly_text(content.length)}B   ({content.type})')
-            draw_title(layout, 'Path:').operator(
+            draw_title(layout, _('Cache:')).label(text=f'{to_human_friendly_text(content.length)}B   ({content.type})')
+            draw_title(layout, _('Path:')).operator(
                 'wm.path_open',
                 text=content.filepath,
                 icon='FILEBROWSER'
             ).filepath = content.filepath
 
             row = layout.split(factor=0.9, align=True)
-            row.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
+            row.operator(AssetImport.bl_idname, text=_('Import'), icon='IMPORT').asset_id = asset.id
             row.operator(AssetCacheRemove.bl_idname, text='', icon='TRASH').asset_id = asset.id
 
         elif asset_state is AssetState.EXTRACTED:
             asset_path = Utilities.resolve_path(asset)
-            draw_title(layout, 'Path:').operator('wm.path_open', text=asset_path, icon='FILEBROWSER').filepath = asset_path
-            layout.operator(AssetImport.bl_idname, text='Import', icon='IMPORT').asset_id = asset.id
+            draw_title(layout, _('Path:')).operator('wm.path_open', text=asset_path, icon='FILEBROWSER').filepath = asset_path
+            layout.operator(AssetImport.bl_idname, text=_('Import'), icon='IMPORT').asset_id = asset.id
 
         elif asset_state is AssetState.FAILED:
-            layout.operator(AssetDownload.bl_idname, text='Retry', icon='FILE_REFRESH').asset_id = asset.id
+            layout.operator(AssetDownload.bl_idname, text=_('Retry'), icon='FILE_REFRESH').asset_id = asset.id
 
         else:
-            layout.operator(AssetDownload.bl_idname, text='Retry', icon='FILE_REFRESH').asset_id = asset.id
+            layout.operator(AssetDownload.bl_idname, text=_('Retry'), icon='FILE_REFRESH').asset_id = asset.id
 
 
 class AssetSearchQueryTags(bpy.types.UIList):
@@ -328,7 +329,7 @@ class AssetSearchQueryTags(bpy.types.UIList):
 
 class AssetSearchPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_mmd_uuunyaa_tools_asset_search'
-    bl_label = 'UuuNyaa Asset Search'
+    bl_label = _('UuuNyaa Asset Search')
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Assets'
@@ -340,15 +341,15 @@ class AssetSearchPanel(bpy.types.Panel):
         query = search.query
         layout = self.layout
 
-        layout.prop(query, 'type', text='Asset type')
-        layout.prop(query, 'text', text='Query', icon='VIEWZOOM')
+        layout.prop(query, 'type', text=_('Asset type'))
+        layout.prop(query, 'text', text=_('Query'), icon='VIEWZOOM')
         if query.tags is not None:
             col = layout.column()
             row = col.row()
-            row.label(text='Tags:')
+            row.label(text=_('Tags:'))
             row = row.row()
             row.alignment = 'RIGHT'
-            row.prop(query, 'is_cached', text='Cached')
+            row.prop(query, 'is_cached', text=_('Cached'))
             col.template_list(
                 AssetSearchQueryTags.bl_idname, '',
                 query, 'tags',
@@ -361,7 +362,10 @@ class AssetSearchPanel(bpy.types.Panel):
 
         row = layout.row()
         row.alignment = 'RIGHT'
-        row.label(text=f'{search.result.count} of {search.result.hit_count} results')
+        row.label(text=iface_('{search_result_count} of {search_result_hit_count} results').format(
+            search_result_count=search.result.count,
+            search_result_hit_count=search.result.hit_count,
+        ))
 
         asset_items = context.scene.mmd_uuunyaa_tools_asset_search.result.asset_items
 
@@ -379,7 +383,7 @@ class AssetSearchPanel(bpy.types.Panel):
             if asset.thumbnail_url not in PREVIEWS:
                 continue
 
-            (asset_state, _, _) = Utilities.get_asset_state(asset)
+            (asset_state, _content, _task) = Utilities.get_asset_state(asset)
 
             if asset_state is AssetState.INITIALIZED:
                 icon = 'NONE'
@@ -404,22 +408,25 @@ class AssetSearchPanel(bpy.types.Panel):
         if display_count != asset_item_count:
             row = layout.row()
             row.alignment = 'CENTER'
-            row.label(text='Invalid search result, Please search again.')
+            row.label(text=_('Invalid search result, Please search again.'))
             return
 
         loading_count = search.result.count - asset_item_count
         if loading_count > 0:
             row = layout.row()
             row.alignment = 'CENTER'
-            row.label(text=f"Loading {loading_count} item{'s' if loading_count > 1 else ''}...")
+            row.label(text=iface_('Loading {loading_count} item{plural_form_suffix}...').format(
+                loading_count=loading_count,
+                plural_form_suffix='s' if loading_count > 1 else ''
+            ))
             return
 
-    @staticmethod
+    @ staticmethod
     def register():
         global PREVIEWS  # pylint: disable=global-statement
         PREVIEWS = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
-    @staticmethod
+    @ staticmethod
     def unregister():
         global PREVIEWS  # pylint: disable=global-statement
         if PREVIEWS is not None:
@@ -428,7 +435,7 @@ class AssetSearchPanel(bpy.types.Panel):
 
 class AssetsOperatorPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_assets_operator_panel'
-    bl_label = 'UuuNyaa Assets Operator'
+    bl_label = _('UuuNyaa Assets Operator')
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'Assets'
@@ -439,13 +446,13 @@ class AssetsOperatorPanel(bpy.types.Panel):
 
         col = layout.column()
         box = col.box().column(align=True)
-        box.label(text='Reload local asset JSON files')
+        box.label(text=_('Reload local asset JSON files'))
         box.operator(ReloadAssetJsons.bl_idname, icon='FILE_REFRESH')
 
         preferences = get_preferences()
 
         box = col.box().column(align=True)
-        box.label(text='Download and Update to the latest assets')
+        box.label(text=_('Download and Update to the latest assets'))
         operator = box.operator(UpdateAssetJson.bl_idname, icon='TRIA_DOWN_BAR')
         operator.repo = preferences.asset_json_update_repo
         operator.query = preferences.asset_json_update_query
@@ -459,27 +466,27 @@ class AssetsOperatorPanel(bpy.types.Panel):
             icon_only=True,
             emboss=False,
         )
-        row.label(text='Debug')
+        row.label(text=_('Debug'))
 
         if not props.debug_expanded:
             return
 
         box = col.box().column()
-        box.label(text='Fetch an asset for debug', icon='MODIFIER')
-        box.column(align=True).prop(props, 'debug_issue_number', text='issue #')
+        box.label(text=_('Fetch an asset for debug'), icon='MODIFIER')
+        box.column(align=True).prop(props, 'debug_issue_number', text=_('issue #'))
 
         row = box.row(align=True)
         row.operator(DeleteDebugAssetJson.bl_idname, icon='CANCEL')
         row.operator(UpdateDebugAssetJson.bl_idname, icon='TRIA_DOWN_BAR').issue_number = props.debug_issue_number
 
         box = col.box().column()
-        box.label(text='Download and Update to the latest filterd assets for debug', icon='FILTER')
+        box.label(text=_('Download and Update to the latest filterd assets for debug'), icon='FILTER')
 
-        box.prop(props, 'repo', text='Repository')
-        box.prop(props, 'query', text='Query')
-        box.prop(props, 'output_json', text='Write to')
+        box.prop(props, 'repo', text=_('Repository'))
+        box.prop(props, 'query', text=_('Query'))
+        box.prop(props, 'output_json', text=_('Write to'))
 
-        operator = box.operator(UpdateAssetJson.bl_idname, text='Update Assets JSON by query', icon='TRIA_DOWN_BAR')
+        operator = box.operator(UpdateAssetJson.bl_idname, text=_('Update Assets JSON by query'), icon='TRIA_DOWN_BAR')
         operator.repo = props.repo
         operator.query = props.query
         operator.output_json = props.output_json

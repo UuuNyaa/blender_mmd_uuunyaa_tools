@@ -7,6 +7,7 @@ from typing import Union
 
 from bpy.types import Object
 from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.utilities import ObjectAppender, ObjectMarker
 
@@ -49,7 +50,7 @@ class ResetLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Reset'
+        return _('Reset')
 
     def execute(self):
         self.reset()
@@ -62,7 +63,7 @@ class LeftAccentLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Left Accent'
+        return _('Left Accent')
 
     def execute(self):
         self.reset()
@@ -76,7 +77,7 @@ class DoubleSideAccentLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Double Side Accent'
+        return _('Double Side Accent')
 
     def execute(self):
         self.reset()
@@ -90,7 +91,7 @@ class GodRayLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'God Ray'
+        return _('God Ray')
 
     def execute(self):
         self.reset()
@@ -104,7 +105,7 @@ class BacklightLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Backlight'
+        return _('Backlight')
 
     def execute(self):
         self.reset()
@@ -118,7 +119,7 @@ class LightProbeGridLightingTuner(LightingTunerABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Light Probe Grid'
+        return _('Light Probe Grid')
 
     def execute(self):
         self.reset()

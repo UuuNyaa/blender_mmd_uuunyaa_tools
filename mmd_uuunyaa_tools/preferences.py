@@ -9,42 +9,43 @@ import tempfile
 import bpy
 
 from mmd_uuunyaa_tools import utilities
-from mmd_uuunyaa_tools.asset_search.operators import DeleteCachedFiles
 from mmd_uuunyaa_tools.asset_search.assets import AssetUpdater
+from mmd_uuunyaa_tools.asset_search.operators import DeleteCachedFiles
+from mmd_uuunyaa_tools.m17n import _
 
 
 class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     bl_idname = __package__
 
     asset_search_results_max_display_count: bpy.props.IntProperty(
-        name='Asset Search Results Max. Display Count',
-        description='Larger value is slower',
+        name=_('Asset Search Results Max. Display Count'),
+        description=_('Larger value is slower'),
         min=10,
         soft_max=200,
         default=50,
     )
 
     asset_jsons_folder: bpy.props.StringProperty(
-        name='Asset JSONs Folder',
-        description='Path to asset list JSON files',
+        name=_('Asset JSONs Folder'),
+        description=_('Path to asset list JSON files'),
         subtype='DIR_PATH',
         default=os.path.join(os.path.dirname(__file__), 'asset_jsons')
     )
 
     asset_json_update_repo: bpy.props.StringProperty(
-        name='Asset JSON Update Repo',
-        description='Specify the github repository which to retrieve the assets',
+        name=_('Asset JSON Update Repository'),
+        description=_('Specify the github repository which to retrieve the assets'),
         default=AssetUpdater.default_repo
     )
 
     asset_json_update_query: bpy.props.StringProperty(
-        name='Asset JSON Update Query',
-        description='Specify the filter conditions for retrieving assets',
+        name=_('Asset JSON Update Query'),
+        description=_('Specify the filter conditions for retrieving assets'),
         default=AssetUpdater.default_query
     )
 
     asset_json_update_on_startup_enabled: bpy.props.BoolProperty(
-        name='Asset JSON Auto Update on Startup',
+        name=_('Asset JSON Auto Update on Startup'),
         default=True
     )
 
@@ -56,36 +57,36 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     )
 
     asset_max_cache_size: bpy.props.IntProperty(
-        name='Asset Max. Cache Size (MB)',
-        description='Maximum size (Mega bytes) of the cache folder',
+        name=_('Asset Max. Cache Size (MB)'),
+        description=_('Maximum size (Mega bytes) of the cache folder'),
         min=100,
         soft_max=1_000_000,
         default=10_000,
     )
 
     asset_extract_root_folder: bpy.props.StringProperty(
-        name='Asset Extract Root Folder',
-        description='Path to extract the downloaded assets',
+        name=_('Asset Extract Root Folder'),
+        description=_('Path to extract the downloaded assets'),
         subtype='DIR_PATH',
         default=os.path.join(pathlib.Path.home(), 'BlenderAssets')
     )
 
     asset_extract_folder: bpy.props.StringProperty(
-        name='Asset Extract Folder',
-        description='Path to assets. Create it under the Asset Extract Root Folder.\n'
-        'The following variables are available: {id}, {type}, {name}, {aliases[en]}, {aliases[ja]}',
+        name=_('Asset Extract Folder'),
+        description=_('Path to assets. Create it under the Asset Extract Root Folder.\n'
+                      'The following variables are available: {id}, {type}, {name}, {aliases[en]}, {aliases[ja]}'),
         default='{type}/{id}.{name}'
     )
 
     asset_extract_json: bpy.props.StringProperty(
-        name='Asset Extract Json',
-        description='Name to assets marker JSON. Create it under the Asset Extract Folder.\n'
-        'The presence of this file is used to determine the existence of the asset.\n'
-        'The following variables are available: {id}, {type}, {name}, {aliases[en]}, {aliases[ja]}',
+        name=_('Asset Extract JSON'),
+        description=_('Name to assets marker JSON. Create it under the Asset Extract Folder.\n'
+                      'The presence of this file is used to determine the existence of the asset.\n'
+                      'The following variables are available: {id}, {type}, {name}, {aliases[en]}, {aliases[ja]}'),
         default='{id}.json'
     )
 
-    def draw(self, _):
+    def draw(self, _context):
         layout = self.layout  # pylint: disable=no-member
 
         col = layout.box().column()
@@ -96,11 +97,11 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
 
         row = col.split(factor=0.95, align=True)
         row.prop(self, 'asset_json_update_repo')
-        row.operator('wm.url_open', text='Browse Assets', icon='URL').url = f'https://github.com/{self.asset_json_update_repo}/issues'
+        row.operator('wm.url_open', text=_('Browse Assets'), icon='URL').url = f'https://github.com/{self.asset_json_update_repo}/issues'
 
         row = col.split(factor=0.95, align=True)
         row.prop(self, 'asset_json_update_query')
-        row.operator('wm.url_open', text='Query Examples', icon='URL').url = 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki/How-to-add-a-new-asset#query-examples'
+        row.operator('wm.url_open', text=_('Query Examples'), icon='URL').url = 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki/How-to-add-a-new-asset#query-examples'
 
         col.prop(self, 'asset_json_update_on_startup_enabled')
 
@@ -108,7 +109,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col.prop(self, 'asset_cache_folder')
 
         usage = col.split(align=True, factor=0.24)
-        usage.label(text='Asset Cache Usage:')
+        usage.label(text=_('Asset Cache Usage:'))
         usage_row = usage.column(align=True)
         usage_row.alignment = 'RIGHT'
 

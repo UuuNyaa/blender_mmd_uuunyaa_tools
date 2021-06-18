@@ -5,6 +5,7 @@
 from abc import abstractmethod
 
 from bpy.types import NodeFrame, ShaderNodeGroup
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners.utilities import MaterialUtilities
 
 
@@ -54,7 +55,13 @@ class WetAdjuster(MaterialAdjusterABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Wet Adjuster'
+        return _('Wet Adjuster')
+
+    translation_properties = [
+        _('Specular'),
+        _('Roughness'),
+        _('Wet'),
+    ]
 
     def attach(self):
         node_frame = self.get_adjusters_node_frame()
@@ -93,7 +100,15 @@ class SubsurfaceAdjuster(MaterialAdjusterABC):
 
     @classmethod
     def get_name(cls) -> str:
-        return 'Subsurface Adjuster'
+        return _('Subsurface Adjuster')
+
+    translation_properties = [
+        _('Min'),
+        _('Max'),
+        _('Blood Color'),
+        _('Subsurface'),
+        _('Subsurface Color'),
+    ]
 
     def attach(self) -> ShaderNodeGroup:
         node_frame = self.get_adjusters_node_frame()

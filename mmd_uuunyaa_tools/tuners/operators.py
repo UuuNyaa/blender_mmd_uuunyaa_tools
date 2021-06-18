@@ -3,14 +3,14 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
                                       material_tuners)
 
 
 class TuneLighting(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.tune_lighting'
-    bl_label = 'Tune Lighting'
-    bl_description = 'Tune selected lighting.'
+    bl_label = _('Tune Lighting')
     bl_options = {'REGISTER', 'UNDO'}
 
     lighting: bpy.props.EnumProperty(
@@ -28,8 +28,7 @@ class TuneLighting(bpy.types.Operator):
 
 class FreezeLighting(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.freeze_lighting'
-    bl_label = 'Freeze Lighting'
-    bl_description = 'Freeze active lighting.'
+    bl_label = _('Freeze Lighting')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -46,8 +45,7 @@ class FreezeLighting(bpy.types.Operator):
 
 class TuneMaterial(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.tune_material'
-    bl_label = 'Tune Material'
-    bl_description = 'Tune selected material.'
+    bl_label = _('Tune Material')
     bl_options = {'REGISTER', 'UNDO'}
 
     material: bpy.props.EnumProperty(
@@ -65,8 +63,7 @@ class TuneMaterial(bpy.types.Operator):
 
 class AttachMaterialAdjuster(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.attach_material_adjuster'
-    bl_label = 'Attach Material Adjuster'
-    bl_description = 'Attach Adjuster to selected material.'
+    bl_label = _('Attach Material Adjuster')
     bl_options = {'REGISTER', 'UNDO'}
 
     adjuster_name: bpy.props.StringProperty()
@@ -82,8 +79,7 @@ class AttachMaterialAdjuster(bpy.types.Operator):
 
 class DetachMaterialAdjuster(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.detach_material_adjuster'
-    bl_label = 'Detach Material Adjuster'
-    bl_description = 'Detach Adjuster from selected material.'
+    bl_label = _('Detach Material Adjuster')
     bl_options = {'REGISTER', 'UNDO'}
 
     adjuster_name: bpy.props.StringProperty()
