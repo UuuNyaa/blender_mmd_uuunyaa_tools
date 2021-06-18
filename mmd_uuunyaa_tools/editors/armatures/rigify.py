@@ -93,14 +93,20 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
         MMDBindInfo(MMDBoneInfo.下半身, 'spine_fk', 'ORG-spine', GroupType.TORSO, MMDBindType.COPY_SPINE),
 
+        MMDBindInfo(MMDBoneInfo.左足D, None, 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足, 'thigh_fk.L', 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左ひざD, None, 'ORG-shin.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左ひざ, 'shin_fk.L', 'ORG-shin.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左足首D, None, 'ORG-foot.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'ORG-foot.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'foot_ik.L', 'foot_ik.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'ORG-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
 
+        MMDBindInfo(MMDBoneInfo.右足D, None, 'ORG-thigh.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足, 'thigh_fk.R', 'ORG-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右ひざD, None, 'ORG-shin.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右ひざ, 'shin_fk.R', 'ORG-shin.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右足首D, None, 'ORG-foot.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'ORG-foot.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'foot_ik.R', 'foot_ik.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'ORG-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
@@ -123,6 +129,12 @@ class RigifyArmatureObject(RichArmatureObjectABC):
     @staticmethod
     def copy_pose(pose_bone, target_object, subtarget, influence_data_path):
         PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+
+
+    @staticmethod
+    def copy_leg_d(pose_bone, target_object, subtarget, influence_data_path):
+        PoseUtil.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseUtil.add_copy_scale_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
 
     @staticmethod
     def copy_parent(pose_bone, target_object, subtarget, influence_data_path):
@@ -1114,6 +1126,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
             MMDBindType.COPY_TOE: self.copy_toe,
             MMDBindType.COPY_EYE: self.copy_eye,
             MMDBindType.COPY_ROOT: self.copy_root,
+            MMDBindType.COPY_LEG_D: self.copy_leg_d,
         }
 
         rigify_pose_bones = self.pose_bones

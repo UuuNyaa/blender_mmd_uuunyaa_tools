@@ -116,13 +116,21 @@ class MMDBoneInfo(Enum):
     左ひざ = (MMDBoneType.STANDARD, '左ひざ')
     左足首 = (MMDBoneType.STANDARD, '左足首')
     左足ＩＫ = (MMDBoneType.STANDARD, '左足ＩＫ')
+
     左足先EX = (MMDBoneType.TOE_EX, '左足先EX')
+    左足D = (MMDBoneType.TOE_EX, '左足D')
+    左ひざD = (MMDBoneType.TOE_EX, '左ひざD')
+    左足首D = (MMDBoneType.TOE_EX, '左足首D')
 
     右足 = (MMDBoneType.STANDARD, '右足')
     右ひざ = (MMDBoneType.STANDARD, '右ひざ')
     右足首 = (MMDBoneType.STANDARD, '右足首')
     右足ＩＫ = (MMDBoneType.STANDARD, '右足ＩＫ')
+
     右足先EX = (MMDBoneType.TOE_EX, '右足先EX')
+    右足D = (MMDBoneType.TOE_EX, '右足D')
+    右ひざD = (MMDBoneType.TOE_EX, '右ひざD')
+    右足首D = (MMDBoneType.TOE_EX, '右足首D')
 
     左つま先ＩＫ = (MMDBoneType.STANDARD, '左つま先ＩＫ')
     右つま先ＩＫ = (MMDBoneType.STANDARD, '右つま先ＩＫ')
@@ -164,6 +172,7 @@ class MMDBindType(Enum):
     COPY_TOE = 5
     COPY_EYE = 6
     COPY_ROOT = 7
+    COPY_LEG_D = 8
 
 
 @dataclass
@@ -336,6 +345,21 @@ class PoseUtil(ABC):
         )
         cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
+
+    @classmethod
+    def add_copy_scale_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+        # pylint: disable=too-many-arguments
+        constraint = cls.add_constraint(
+            pose_bone, 'COPY_SCALE', 'mmd_uuunyaa_copy_scale',
+            target=target_object,
+            subtarget=subtarget,
+            target_space=space,
+            owner_space=space,
+            **kwargs
+        )
+        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        return constraint
+
 
     @classmethod
     def add_ik_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
