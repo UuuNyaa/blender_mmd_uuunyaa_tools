@@ -8,6 +8,9 @@ import bpy
 def _(msgid: str) -> str:
   return msgid
 
+def iface_(msgid: str) -> str:
+  return bpy.app.translations.pgettext_iface(msgid)
+
 def register():
   bpy.app.translations.register(__name__, translation_dict)
 
@@ -31,26 +34,32 @@ translation_dict = {
     ("*", "Failed to download assets from uploader.jp. The response format may have changed."): "Failed to download assets from uploader.jp. The response format may have changed.",
     #: mmd_uuunyaa_tools/asset_search/actions.py:405
     ("*", "The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences."): "The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences.",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:33
+    ("*", "All"): "All",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:34
+    ("*", "Model (.pmx)"): "Model (.pmx)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:35
+    ("*", "Model (.blend)"): "Model (.blend)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:36
+    ("*", "Motion (.vmd)"): "Motion (.vmd)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:37
+    ("*", "Pose (.vpd)"): "Pose (.vpd)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:38
+    ("*", "Lighting"): "Lighting",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:39
+    ("*", "Material"): "Material",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:40
+    ("*", "World (.blend)"): "World (.blend)",
     #: mmd_uuunyaa_tools/asset_search/operators.py:13
-    ("Operator", "Reload Asset JSONs"): "Reload Asset JSONs",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:14
-    ("*", "Reload asset JSONs."): "Reload asset JSONs.",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:24
-    ("Operator", "Update Assets JSON"): "Update Assets JSON",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:25
-    ("*", "Update assets JSON."): "Update assets JSON.",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:42
-    ("Operator", "Update Debug Asset JSON"): "Update Debug Asset JSON",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:43
-    ("*", "Update debug asset JSON."): "Update debug asset JSON.",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:60
-    ("Operator", "Delete Debug Asset JSON"): "Delete Debug Asset JSON",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:61
-    ("*", "Delete debug asset JSON."): "Delete debug asset JSON.",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:76
-    ("Operator", "Delete Asset Cached Files"): "Delete Asset Cached Files",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:77
-    ("*", "Delete cached files."): "Delete cached files.",
+    ("*", "Reload Asset JSONs"): "Reload Asset JSONs",
+    #: mmd_uuunyaa_tools/asset_search/operators.py:23
+    ("*", "Update Assets JSON"): "Update Assets JSON",
+    #: mmd_uuunyaa_tools/asset_search/operators.py:40
+    ("*", "Update Debug Asset JSON"): "Update Debug Asset JSON",
+    #: mmd_uuunyaa_tools/asset_search/operators.py:57
+    ("*", "Delete Debug Asset JSON"): "Delete Debug Asset JSON",
+    #: mmd_uuunyaa_tools/asset_search/operators.py:72
+    ("*", "Delete Asset Cached Files"): "Delete Asset Cached Files",
     #: mmd_uuunyaa_tools/asset_search/panels.py:267
     ("*", "Type:"): "Type:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:268
@@ -68,101 +77,95 @@ translation_dict = {
     #: mmd_uuunyaa_tools/asset_search/panels.py:276
     ("*", "Source:"): "Source:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:281
-    ("Operator", "Download"): "Download",
+    ("*", "Download"): "Download",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284
+    ("*", "Downloading"): "Downloading",
     #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288
     ("*", "Cache:"): "Cache:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:285
-    ("Operator", "Cancel"): "Cancel",
+    ("*", "Cancel"): "Cancel",
     #: mmd_uuunyaa_tools/asset_search/panels.py:289 mmd_uuunyaa_tools/asset_search/panels.py:301
     ("*", "Path:"): "Path:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:296 mmd_uuunyaa_tools/asset_search/panels.py:302
-    ("Operator", "Import"): "Import",
+    ("*", "Import"): "Import",
     #: mmd_uuunyaa_tools/asset_search/panels.py:305 mmd_uuunyaa_tools/asset_search/panels.py:308
-    ("Operator", "Retry"): "Retry",
+    ("*", "Retry"): "Retry",
     #: mmd_uuunyaa_tools/asset_search/panels.py:332
     ("*", "UuuNyaa Asset Search"): "UuuNyaa Asset Search",
     #: mmd_uuunyaa_tools/asset_search/panels.py:344
     ("*", "Asset type"): "Asset type",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:480
+    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:486
     ("*", "Query"): "Query",
     #: mmd_uuunyaa_tools/asset_search/panels.py:352
     ("*", "Cached"): "Cached",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:408
+    #: mmd_uuunyaa_tools/asset_search/panels.py:365
+    ("*", "{search_result_count} of {search_result_hit_count} results"): "{search_result_count} of {search_result_hit_count} results",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:411
     ("*", "Invalid search result, Please search again."): "Invalid search result, Please search again.",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:432
+    #: mmd_uuunyaa_tools/asset_search/panels.py:418
+    ("*", "Loading {loading_count} item{plural_form_suffix}..."): "Loading {loading_count} item{plural_form_suffix}...",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:438
     ("*", "UuuNyaa Assets Operator"): "UuuNyaa Assets Operator",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:443
-    ("*", "Reload local asset JSON files"): "Reload local asset JSON files",
     #: mmd_uuunyaa_tools/asset_search/panels.py:449
+    ("*", "Reload local asset JSON files"): "Reload local asset JSON files",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:455
     ("*", "Download and Update to the latest assets"): "Download and Update to the latest assets",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:463
-    ("*", "Debug"): "Debug",
     #: mmd_uuunyaa_tools/asset_search/panels.py:469
+    ("*", "Debug"): "Debug",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:475
     ("*", "Fetch an asset for debug"): "Fetch an asset for debug",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:470
+    #: mmd_uuunyaa_tools/asset_search/panels.py:476
     ("*", "issue #"): "issue #",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:477
-    ("*", "Download and Update to the latest filterd assets for debug"): "Download and Update to the latest filterd assets for debug",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:479
-    ("*", "Repository"): "Repository",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:481
-    ("*", "Write to"): "Write to",
     #: mmd_uuunyaa_tools/asset_search/panels.py:483
-    ("Operator", "Update Assets JSON by query"): "Update Assets JSON by query",
+    ("*", "Download and Update to the latest filterd assets for debug"): "Download and Update to the latest filterd assets for debug",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:485
+    ("*", "Repository"): "Repository",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:487
+    ("*", "Write to"): "Write to",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:489
+    ("*", "Update Assets JSON by query"): "Update Assets JSON by query",
     #: mmd_uuunyaa_tools/editors/operators.py:19
-    ("Operator", "Add Human (metarig) from MMD Armature"): "Add Human (metarig) from MMD Armature",
-    #: mmd_uuunyaa_tools/editors/operators.py:20
-    ("*", "Add Human (metarig) from MMD armature."): "Add Human (metarig) from MMD armature.",
+    ("*", "Add Human (metarig) from MMD Armature"): "Add Human (metarig) from MMD Armature",
+    #: mmd_uuunyaa_tools/editors/operators.py:22
+    ("*", "Clean Armature"): "Clean Armature",
     #: mmd_uuunyaa_tools/editors/operators.py:23
-    ("Operator", "Clean Armature"): "Clean Armature",
-    #: mmd_uuunyaa_tools/editors/operators.py:24
-    ("Operator", "Clean Koikatsu Armature"): "Clean Koikatsu Armature",
-    #: mmd_uuunyaa_tools/editors/operators.py:225
-    ("Operator", "Integrate Rigify and MMD Armatures"): "Integrate Rigify and MMD Armatures",
-    #: mmd_uuunyaa_tools/editors/operators.py:226
-    ("*", "Integrate Rigify and MMD armatures."): "Integrate Rigify and MMD armatures.",
-    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:282
-    ("Operator", "Join Armatures"): "Join Armatures",
-    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:282
+    ("*", "Clean Koikatsu Armature"): "Clean Koikatsu Armature",
+    #: mmd_uuunyaa_tools/editors/operators.py:224
+    ("*", "Integrate Rigify and MMD Armatures"): "Integrate Rigify and MMD Armatures",
+    #: mmd_uuunyaa_tools/editors/operators.py:227 mmd_uuunyaa_tools/editors/operators.py:279
+    ("*", "Join Armatures"): "Join Armatures",
+    #: mmd_uuunyaa_tools/editors/operators.py:227 mmd_uuunyaa_tools/editors/operators.py:279
     ("*", "Join MMD and Rigify armatures"): "Join MMD and Rigify armatures",
-    #: mmd_uuunyaa_tools/editors/operators.py:230 mmd_uuunyaa_tools/editors/operators.py:283
+    #: mmd_uuunyaa_tools/editors/operators.py:228 mmd_uuunyaa_tools/editors/operators.py:280
     ("*", "MMD main bone layer"): "MMD main bone layer",
-    #: mmd_uuunyaa_tools/editors/operators.py:231 mmd_uuunyaa_tools/editors/operators.py:284
+    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:281
     ("*", "MMD others bone layer"): "MMD others bone layer",
-    #: mmd_uuunyaa_tools/editors/operators.py:232 mmd_uuunyaa_tools/editors/operators.py:285
+    #: mmd_uuunyaa_tools/editors/operators.py:230 mmd_uuunyaa_tools/editors/operators.py:282
     ("*", "MMD shadow bone layer"): "MMD shadow bone layer",
-    #: mmd_uuunyaa_tools/editors/operators.py:233 mmd_uuunyaa_tools/editors/operators.py:286
+    #: mmd_uuunyaa_tools/editors/operators.py:231 mmd_uuunyaa_tools/editors/operators.py:283
     ("*", "MMD dummy bone layer"): "MMD dummy bone layer",
-    #: mmd_uuunyaa_tools/editors/operators.py:278
-    ("Operator", "Bind MMD to Rigify"): "Bind MMD to Rigify",
-    #: mmd_uuunyaa_tools/editors/operators.py:279
-    ("*", "Bind MMD to Rigify."): "Bind MMD to Rigify.",
-    #: mmd_uuunyaa_tools/editors/operators.py:331
-    ("Operator", "Convert Rigify Armature to MMD compatible"): "Convert Rigify Armature to MMD compatible",
+    #: mmd_uuunyaa_tools/editors/operators.py:276
+    ("*", "Bind MMD to Rigify"): "Bind MMD to Rigify",
+    #: mmd_uuunyaa_tools/editors/operators.py:328
+    ("*", "Convert Rigify Armature to MMD compatible"): "Convert Rigify Armature to MMD compatible",
     #: mmd_uuunyaa_tools/editors/operators.py:332
-    ("*", "Convert Rigify armature to MMD compatible."): "Convert Rigify armature to MMD compatible.",
-    #: mmd_uuunyaa_tools/editors/operators.py:336
     ("*", "Upper Body2 as"): "Upper Body2 as",
-    #: mmd_uuunyaa_tools/editors/operators.py:346
+    #: mmd_uuunyaa_tools/editors/operators.py:342
     ("*", "Lower Body as"): "Lower Body as",
-    #: mmd_uuunyaa_tools/editors/operators.py:382 mmd_uuunyaa_tools/editors/operators.py:453
-    ("Operator", "Apply MMD Rest Pose"): "Apply MMD Rest Pose",
-    #: mmd_uuunyaa_tools/editors/operators.py:383 mmd_uuunyaa_tools/editors/operators.py:454
-    ("*", "Apply MMD rest pose."): "Apply MMD rest pose.",
-    #: mmd_uuunyaa_tools/editors/operators.py:386 mmd_uuunyaa_tools/editors/operators.py:457
+    #: mmd_uuunyaa_tools/editors/operators.py:378 mmd_uuunyaa_tools/editors/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
+    ("*", "Apply MMD Rest Pose"): "Apply MMD Rest Pose",
+    #: mmd_uuunyaa_tools/editors/operators.py:381 mmd_uuunyaa_tools/editors/operators.py:450
     ("*", "Iterations"): "Iterations",
-    #: mmd_uuunyaa_tools/editors/operators.py:386 mmd_uuunyaa_tools/editors/operators.py:457
+    #: mmd_uuunyaa_tools/editors/operators.py:381 mmd_uuunyaa_tools/editors/operators.py:450
     ("*", "Number of solving iterations"): "Number of solving iterations",
-    #: mmd_uuunyaa_tools/editors/operators.py:387 mmd_uuunyaa_tools/editors/operators.py:458
+    #: mmd_uuunyaa_tools/editors/operators.py:382 mmd_uuunyaa_tools/editors/operators.py:451
     ("*", "Pose arms"): "Pose arms",
-    #: mmd_uuunyaa_tools/editors/operators.py:388 mmd_uuunyaa_tools/editors/operators.py:459
+    #: mmd_uuunyaa_tools/editors/operators.py:383 mmd_uuunyaa_tools/editors/operators.py:452
     ("*", "Pose legs"): "Pose legs",
-    #: mmd_uuunyaa_tools/editors/operators.py:389 mmd_uuunyaa_tools/editors/operators.py:460
+    #: mmd_uuunyaa_tools/editors/operators.py:384 mmd_uuunyaa_tools/editors/operators.py:453
     ("*", "Pose fingers"): "Pose fingers",
-    #: mmd_uuunyaa_tools/editors/operators.py:424
-    ("Operator", "Convert AutoRig Armature to MMD compatible"): "Convert AutoRig Armature to MMD compatible",
-    #: mmd_uuunyaa_tools/editors/operators.py:425
-    ("*", "Convert AutoRig armature to MMD compatible."): "Convert AutoRig armature to MMD compatible.",
+    #: mmd_uuunyaa_tools/editors/operators.py:419
+    ("*", "Convert AutoRig Armature to MMD compatible"): "Convert AutoRig Armature to MMD compatible",
     #: mmd_uuunyaa_tools/editors/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
     #: mmd_uuunyaa_tools/editors/panels.py:44
@@ -208,7 +211,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/panels.py:133
     ("*", "Limbs"): "Limbs",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:117
-    ("*", "SkinHair"): "SkinHair",
+    ("*", "Add Skin Hair Mesh"): "Add Skin Hair Mesh",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:118
     ("*", "Construct a skin hair mesh"): "Construct a skin hair mesh",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:134
@@ -232,17 +235,17 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/skin_hair.py:180
     ("*", "UuuNyaa"): "UuuNyaa",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:184
-    ("*", "Skin Hair"): "Skin Hair",
+    ("Operator", "Skin Hair"): "Skin Hair",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:188
-    ("*", "UuuNyaa Extras"): "UuuNyaa Extras",
+    ("Operator", "UuuNyaa Extras"): "UuuNyaa Extras",
     #: mmd_uuunyaa_tools/menus.py:18 mmd_uuunyaa_tools/menus.py:50 mmd_uuunyaa_tools/menus.py:70 mmd_uuunyaa_tools/menus.py:90
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: mmd_uuunyaa_tools/operators.py:19
-    ("Operator", "Convert Materials for Eevee"): "Convert Materials for Eevee",
+    ("*", "Convert Materials for Eevee"): "Convert Materials for Eevee",
     #: mmd_uuunyaa_tools/operators.py:20
     ("*", "Convert materials of selected objects for Eevee."): "Convert materials of selected objects for Eevee.",
     #: mmd_uuunyaa_tools/operators.py:43
-    ("Operator", "Setup Render Engine for Eevee"): "Setup Render Engine for Eevee",
+    ("*", "Setup Render Engine for Eevee"): "Setup Render Engine for Eevee",
     #: mmd_uuunyaa_tools/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "Setup render engine properties for Eevee.",
     #: mmd_uuunyaa_tools/operators.py:47
@@ -252,53 +255,43 @@ translation_dict = {
     #: mmd_uuunyaa_tools/operators.py:49
     ("*", "Use Film Transparent"): "Use Film Transparent",
     #: mmd_uuunyaa_tools/operators.py:109
-    ("Operator", "Show Message Box"): "Show Message Box",
-    #: mmd_uuunyaa_tools/operators.py:110
-    ("*", "Show message box."): "Show message box.",
-    #: mmd_uuunyaa_tools/operators.py:131
-    ("Operator", "Select Related Objects"): "Select Related Objects",
-    #: mmd_uuunyaa_tools/operators.py:132
-    ("*", "Select related objects."): "Select related objects.",
-    #: mmd_uuunyaa_tools/operators.py:187
-    ("Operator", "Select Related Bones"): "Select Related Bones",
-    #: mmd_uuunyaa_tools/operators.py:188
-    ("*", "Select related bones."): "Select related bones.",
-    #: mmd_uuunyaa_tools/operators.py:222
-    ("Operator", "Select Related Pose Bones"): "Select Related Pose Bones",
-    #: mmd_uuunyaa_tools/operators.py:223
-    ("*", "Select related pose bones."): "Select related pose bones.",
-    #: mmd_uuunyaa_tools/operators.py:257
-    ("Operator", "Remove Unused Vertex Groups"): "Remove Unused Vertex Groups",
-    #: mmd_uuunyaa_tools/operators.py:258
+    ("*", "Show Message Box"): "Show Message Box",
+    #: mmd_uuunyaa_tools/operators.py:130
+    ("*", "Select Related Objects"): "Select Related Objects",
+    #: mmd_uuunyaa_tools/operators.py:185
+    ("*", "Select Related Bones"): "Select Related Bones",
+    #: mmd_uuunyaa_tools/operators.py:219
+    ("*", "Select Related Pose Bones"): "Select Related Pose Bones",
+    #: mmd_uuunyaa_tools/operators.py:253
+    ("*", "Remove Unused Vertex Groups"): "Remove Unused Vertex Groups",
+    #: mmd_uuunyaa_tools/operators.py:254
     ("*", "Remove unused vertex groups from the active meshes"): "Remove unused vertex groups from the active meshes",
-    #: mmd_uuunyaa_tools/operators.py:261
+    #: mmd_uuunyaa_tools/operators.py:257
     ("*", "Weight Threshold"): "Weight Threshold",
-    #: mmd_uuunyaa_tools/operators.py:325
-    ("Operator", "Select Shape Key Target Vertices"): "Select Shape Key Target Vertices",
-    #: mmd_uuunyaa_tools/operators.py:326
+    #: mmd_uuunyaa_tools/operators.py:321
+    ("*", "Select Shape Key Target Vertices"): "Select Shape Key Target Vertices",
+    #: mmd_uuunyaa_tools/operators.py:322
     ("*", "Select shape key target vertices from the active meshes"): "Select shape key target vertices from the active meshes",
-    #: mmd_uuunyaa_tools/operators.py:329 mmd_uuunyaa_tools/operators.py:376
+    #: mmd_uuunyaa_tools/operators.py:325 mmd_uuunyaa_tools/operators.py:372
     ("*", "Distance Threshold"): "Distance Threshold",
-    #: mmd_uuunyaa_tools/operators.py:372
-    ("Operator", "Remove Unused Shape Keys"): "Remove Unused Shape Keys",
-    #: mmd_uuunyaa_tools/operators.py:373
+    #: mmd_uuunyaa_tools/operators.py:368
+    ("*", "Remove Unused Shape Keys"): "Remove Unused Shape Keys",
+    #: mmd_uuunyaa_tools/operators.py:369
     ("*", "Remove unused shape keys from the active meshes"): "Remove unused shape keys from the active meshes",
     #: mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "Render:",
     #: mmd_uuunyaa_tools/panels.py:35
     ("*", "MMD to Rigify:"): "MMD to Rigify:",
     #: mmd_uuunyaa_tools/panels.py:38
-    ("Operator", "Add Metarig"): "Add Metarig",
+    ("*", "Add Metarig"): "Add Metarig",
     #: mmd_uuunyaa_tools/panels.py:44
-    ("Operator", "Integrate Armatures"): "Integrate Armatures",
+    ("*", "Integrate Armatures"): "Integrate Armatures",
     #: mmd_uuunyaa_tools/panels.py:50
-    ("Operator", "Convert Armatures"): "Convert Armatures",
+    ("*", "Bind Armatures"): "Bind Armatures",
     #: mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "Rigify to MMD:",
     #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
-    ("Operator", "Convert to MMD compatible"): "Convert to MMD compatible",
-    #: mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
-    ("Operator", "Apply MMD rest pose"): "Apply MMD rest pose",
+    ("*", "Convert to MMD compatible"): "Convert to MMD compatible",
     #: mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(Experimental) Auto-Rig to MMD:",
     #: mmd_uuunyaa_tools/panels.py:65
@@ -316,7 +309,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/preferences.py:30
     ("*", "Path to asset list JSON files"): "Path to asset list JSON files",
     #: mmd_uuunyaa_tools/preferences.py:36
-    ("*", "Asset JSON Update Repo"): "Asset JSON Update Repo",
+    ("*", "Asset JSON Update Repository"): "Asset JSON Update Repository",
     #: mmd_uuunyaa_tools/preferences.py:37
     ("*", "Specify the github repository which to retrieve the assets"): "Specify the github repository which to retrieve the assets",
     #: mmd_uuunyaa_tools/preferences.py:42
@@ -336,7 +329,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/preferences.py:75
     ("*", "Asset Extract Folder"): "Asset Extract Folder",
     #: mmd_uuunyaa_tools/preferences.py:82
-    ("*", "Asset Extract Json"): "Asset Extract Json",
+    ("*", "Asset Extract JSON"): "Asset Extract JSON",
     #: mmd_uuunyaa_tools/preferences.py:100
     ("*", "Browse Assets"): "Browse Assets",
     #: mmd_uuunyaa_tools/preferences.py:104
@@ -361,7 +354,7 @@ translation_dict = {
     ("*", "Specular"): "Specular",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "Roughness",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:174
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:176
     ("*", "Wet"): "Wet",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:255
     ("*", "Subsurface Adjuster"): "Subsurface Adjuster",
@@ -371,7 +364,7 @@ translation_dict = {
     ("*", "Max"): "Max",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108
     ("*", "Blood Color"): "Blood Color",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/panels.py:173
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/panels.py:175
     ("*", "Subsurface"): "Subsurface",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110
     ("*", "Subsurface Color"): "Subsurface Color",
@@ -464,25 +457,15 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:833
     ("*", "Liquid Cloudy"): "Liquid Cloudy",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
-    ("Operator", "Tune Lighting"): "Tune Lighting",
-    #: mmd_uuunyaa_tools/tuners/operators.py:14
-    ("*", "Tune selected lighting."): "Tune selected lighting.",
-    #: mmd_uuunyaa_tools/tuners/operators.py:32
-    ("Operator", "Freeze Lighting"): "Freeze Lighting",
-    #: mmd_uuunyaa_tools/tuners/operators.py:33
-    ("*", "Freeze active lighting."): "Freeze active lighting.",
-    #: mmd_uuunyaa_tools/tuners/operators.py:50
-    ("Operator", "Tune Material"): "Tune Material",
-    #: mmd_uuunyaa_tools/tuners/operators.py:51
-    ("*", "Tune selected material."): "Tune selected material.",
-    #: mmd_uuunyaa_tools/tuners/operators.py:69
-    ("Operator", "Attach Material Adjuster"): "Attach Material Adjuster",
-    #: mmd_uuunyaa_tools/tuners/operators.py:70
-    ("*", "Attach Adjuster to selected material."): "Attach Adjuster to selected material.",
-    #: mmd_uuunyaa_tools/tuners/operators.py:86
-    ("Operator", "Detach Material Adjuster"): "Detach Material Adjuster",
-    #: mmd_uuunyaa_tools/tuners/operators.py:87
-    ("*", "Detach Adjuster from selected material."): "Detach Adjuster from selected material.",
+    ("*", "Tune Lighting"): "Tune Lighting",
+    #: mmd_uuunyaa_tools/tuners/operators.py:31
+    ("*", "Freeze Lighting"): "Freeze Lighting",
+    #: mmd_uuunyaa_tools/tuners/operators.py:48
+    ("*", "Tune Material"): "Tune Material",
+    #: mmd_uuunyaa_tools/tuners/operators.py:66
+    ("*", "Attach Material Adjuster"): "Attach Material Adjuster",
+    #: mmd_uuunyaa_tools/tuners/operators.py:82
+    ("*", "Detach Material Adjuster"): "Detach Material Adjuster",
     #: mmd_uuunyaa_tools/tuners/panels.py:14
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
     #: mmd_uuunyaa_tools/tuners/panels.py:24
@@ -503,6 +486,8 @@ translation_dict = {
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaa Material",
     #: mmd_uuunyaa_tools/tuners/panels.py:145
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaa Material Adjuster",
+    #: mmd_uuunyaa_tools/tuners/panels.py:162
+    ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name} is unsupported. Select other material to be output from Principled BSDF.",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "Choose the lighting you want to use",
     #: mmd_uuunyaa_tools/tuners/properties.py:38
@@ -539,26 +524,32 @@ translation_dict = {
     ("*", "Failed to download assets from uploader.jp. The response format may have changed."): "uploader.jpからのアセットダウンロードに失敗しました。レスポンスフォーマットが変わっている可能性があります。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:405
     ("*", "The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences."): "ファイルパスが長すぎます。アドオンプリファレンスのアセット展開ルートフォルダーを短くすることで軽減できます。",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:33
+    ("*", "All"): "全て",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:34
+    ("*", "Model (.pmx)"): "モデル (.pmx)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:35
+    ("*", "Model (.blend)"): "モデル (.blend)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:36
+    ("*", "Motion (.vmd)"): "モーション (.vmd)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:37
+    ("*", "Pose (.vpd)"): "ポーズ (.vpd)",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:38
+    ("*", "Lighting"): "照明",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:39
+    ("*", "Material"): "マテリアル",
+    #: mmd_uuunyaa_tools/asset_search/assets.py:40
+    ("*", "World (.blend)"): "ワールド (.blend)",
     #: mmd_uuunyaa_tools/asset_search/operators.py:13
     ("Operator", "Reload Asset JSONs"): "アセットJSONをリロード",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:14
-    ("*", "Reload asset JSONs."): "アセットJSONをリロード",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:24
+    #: mmd_uuunyaa_tools/asset_search/operators.py:23
     ("Operator", "Update Assets JSON"): "アセットJSONを更新",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:25
-    ("*", "Update assets JSON."): "アセットJSONを更新",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:42
+    #: mmd_uuunyaa_tools/asset_search/operators.py:40
     ("Operator", "Update Debug Asset JSON"): "デバッグアセットJSONを更新",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:43
-    ("*", "Update debug asset JSON."): "デバッグアセットJSONを更新",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:60
+    #: mmd_uuunyaa_tools/asset_search/operators.py:57
     ("Operator", "Delete Debug Asset JSON"): "デバッグアセットJSONを削除",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:61
-    ("*", "Delete debug asset JSON."): "デバッグアセットJSONを削除",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:76
+    #: mmd_uuunyaa_tools/asset_search/operators.py:72
     ("Operator", "Delete Asset Cached Files"): "アセットキャッシュファイルを削除",
-    #: mmd_uuunyaa_tools/asset_search/operators.py:77
-    ("*", "Delete cached files."): "キャッシュファイルを削除",
     #: mmd_uuunyaa_tools/asset_search/panels.py:267
     ("*", "Type:"): "タイプ:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:268
@@ -577,6 +568,8 @@ translation_dict = {
     ("*", "Source:"): "配信元:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:281
     ("Operator", "Download"): "ダウンロード",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284
+    ("*", "Downloading"): "ダウンロード中",
     #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288
     ("*", "Cache:"): "キャッシュ:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:285
@@ -591,86 +584,78 @@ translation_dict = {
     ("*", "UuuNyaa Asset Search"): "UuuNyaaアセットサーチ",
     #: mmd_uuunyaa_tools/asset_search/panels.py:344
     ("*", "Asset type"): "アセットタイプ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:480
+    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:486
     ("*", "Query"): "クエリ",
     #: mmd_uuunyaa_tools/asset_search/panels.py:352
     ("*", "Cached"): "キャッシュ済",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:408
+    #: mmd_uuunyaa_tools/asset_search/panels.py:365
+    ("*", "{search_result_count} of {search_result_hit_count} results"): "{search_result_count} 件 / {search_result_hit_count} 件中",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:411
     ("*", "Invalid search result, Please search again."): "無効な検索結果です。再検索してください。",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:432
+    #: mmd_uuunyaa_tools/asset_search/panels.py:418
+    ("*", "Loading {loading_count} item{plural_form_suffix}..."): "{loading_count} 件をロード中...",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:438
     ("*", "UuuNyaa Assets Operator"): "UuuNyaaアセットオペレーター",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:443
-    ("*", "Reload local asset JSON files"): "ローカルアセットJSONファイルをリロード",
     #: mmd_uuunyaa_tools/asset_search/panels.py:449
+    ("*", "Reload local asset JSON files"): "ローカルアセットJSONファイルをリロード",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:455
     ("*", "Download and Update to the latest assets"): "最新アセットをダウンロードして更新",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:463
-    ("*", "Debug"): "デバッグ",
     #: mmd_uuunyaa_tools/asset_search/panels.py:469
+    ("*", "Debug"): "デバッグ",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:475
     ("*", "Fetch an asset for debug"): "デバッグ用にアセットを取得",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:470
+    #: mmd_uuunyaa_tools/asset_search/panels.py:476
     ("*", "issue #"): "issue番号",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:477
-    ("*", "Download and Update to the latest filterd assets for debug"): "デバッグ用にフィルタ済み最新アセットをダウンロードして更新",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:479
-    ("*", "Repository"): "リポジトリ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:481
-    ("*", "Write to"): "書込み先",
     #: mmd_uuunyaa_tools/asset_search/panels.py:483
+    ("*", "Download and Update to the latest filterd assets for debug"): "デバッグ用にフィルタ済み最新アセットをダウンロードして更新",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:485
+    ("*", "Repository"): "リポジトリ",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:487
+    ("*", "Write to"): "書込み先",
+    #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("Operator", "Update Assets JSON by query"): "アセットJSONをクエリで更新",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "MMDアーマチュアからHuman (metarig)を追加",
-    #: mmd_uuunyaa_tools/editors/operators.py:20
-    ("*", "Add Human (metarig) from MMD armature."): "MMDアーマチュアからHuman (metarig)を追加",
-    #: mmd_uuunyaa_tools/editors/operators.py:23
+    #: mmd_uuunyaa_tools/editors/operators.py:22
     ("Operator", "Clean Armature"): "アーマチュアを掃除",
-    #: mmd_uuunyaa_tools/editors/operators.py:24
+    #: mmd_uuunyaa_tools/editors/operators.py:23
     ("Operator", "Clean Koikatsu Armature"): "コイカツアーマチュアを掃除",
-    #: mmd_uuunyaa_tools/editors/operators.py:225
+    #: mmd_uuunyaa_tools/editors/operators.py:224
     ("Operator", "Integrate Rigify and MMD Armatures"): "RigifyとMMDアーマチュアを統合",
-    #: mmd_uuunyaa_tools/editors/operators.py:226
-    ("*", "Integrate Rigify and MMD armatures."): "RigifyとMMDアーマチュアを統合",
-    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:282
+    #: mmd_uuunyaa_tools/editors/operators.py:227 mmd_uuunyaa_tools/editors/operators.py:279
     ("Operator", "Join Armatures"): "アーマチュアを結合",
-    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:282
+    #: mmd_uuunyaa_tools/editors/operators.py:227 mmd_uuunyaa_tools/editors/operators.py:279
     ("*", "Join MMD and Rigify armatures"): "RigifyとMMDアーマチュアを結合",
-    #: mmd_uuunyaa_tools/editors/operators.py:230 mmd_uuunyaa_tools/editors/operators.py:283
+    #: mmd_uuunyaa_tools/editors/operators.py:228 mmd_uuunyaa_tools/editors/operators.py:280
     ("*", "MMD main bone layer"): "MMDメインボーンレイヤー",
-    #: mmd_uuunyaa_tools/editors/operators.py:231 mmd_uuunyaa_tools/editors/operators.py:284
+    #: mmd_uuunyaa_tools/editors/operators.py:229 mmd_uuunyaa_tools/editors/operators.py:281
     ("*", "MMD others bone layer"): "MMDその他ボーンレイヤー",
-    #: mmd_uuunyaa_tools/editors/operators.py:232 mmd_uuunyaa_tools/editors/operators.py:285
+    #: mmd_uuunyaa_tools/editors/operators.py:230 mmd_uuunyaa_tools/editors/operators.py:282
     ("*", "MMD shadow bone layer"): "MMDシャドウボーンレイヤー",
-    #: mmd_uuunyaa_tools/editors/operators.py:233 mmd_uuunyaa_tools/editors/operators.py:286
+    #: mmd_uuunyaa_tools/editors/operators.py:231 mmd_uuunyaa_tools/editors/operators.py:283
     ("*", "MMD dummy bone layer"): "MMDダミーボーンレイヤー",
-    #: mmd_uuunyaa_tools/editors/operators.py:278
+    #: mmd_uuunyaa_tools/editors/operators.py:276
     ("Operator", "Bind MMD to Rigify"): "MMDをRigifyに束縛",
-    #: mmd_uuunyaa_tools/editors/operators.py:279
-    ("*", "Bind MMD to Rigify."): "MMDをRigifyに束縛",
-    #: mmd_uuunyaa_tools/editors/operators.py:331
+    #: mmd_uuunyaa_tools/editors/operators.py:328
     ("Operator", "Convert Rigify Armature to MMD compatible"): "RigifyアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/editors/operators.py:332
-    ("*", "Convert Rigify armature to MMD compatible."): "RigifyアーマチュアをMMD互換に変換",
-    #: mmd_uuunyaa_tools/editors/operators.py:336
     ("*", "Upper Body2 as"): "上半身２として",
-    #: mmd_uuunyaa_tools/editors/operators.py:346
+    #: mmd_uuunyaa_tools/editors/operators.py:342
     ("*", "Lower Body as"): "下半身として",
-    #: mmd_uuunyaa_tools/editors/operators.py:382 mmd_uuunyaa_tools/editors/operators.py:453
+    #: mmd_uuunyaa_tools/editors/operators.py:378 mmd_uuunyaa_tools/editors/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
     ("Operator", "Apply MMD Rest Pose"): "MMDレストポーズを適用",
-    #: mmd_uuunyaa_tools/editors/operators.py:383 mmd_uuunyaa_tools/editors/operators.py:454
-    ("*", "Apply MMD rest pose."): "MMDレストポーズを適用",
-    #: mmd_uuunyaa_tools/editors/operators.py:386 mmd_uuunyaa_tools/editors/operators.py:457
+    #: mmd_uuunyaa_tools/editors/operators.py:381 mmd_uuunyaa_tools/editors/operators.py:450
     ("*", "Iterations"): "反復",
-    #: mmd_uuunyaa_tools/editors/operators.py:386 mmd_uuunyaa_tools/editors/operators.py:457
+    #: mmd_uuunyaa_tools/editors/operators.py:381 mmd_uuunyaa_tools/editors/operators.py:450
     ("*", "Number of solving iterations"): "反復解決回数",
-    #: mmd_uuunyaa_tools/editors/operators.py:387 mmd_uuunyaa_tools/editors/operators.py:458
+    #: mmd_uuunyaa_tools/editors/operators.py:382 mmd_uuunyaa_tools/editors/operators.py:451
     ("*", "Pose arms"): "腕をポーズ",
-    #: mmd_uuunyaa_tools/editors/operators.py:388 mmd_uuunyaa_tools/editors/operators.py:459
+    #: mmd_uuunyaa_tools/editors/operators.py:383 mmd_uuunyaa_tools/editors/operators.py:452
     ("*", "Pose legs"): "脚をポーズ",
-    #: mmd_uuunyaa_tools/editors/operators.py:389 mmd_uuunyaa_tools/editors/operators.py:460
+    #: mmd_uuunyaa_tools/editors/operators.py:384 mmd_uuunyaa_tools/editors/operators.py:453
     ("*", "Pose fingers"): "指をポーズ",
-    #: mmd_uuunyaa_tools/editors/operators.py:424
+    #: mmd_uuunyaa_tools/editors/operators.py:419
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "AutoRigアーマチュアをMMD互換に変換",
-    #: mmd_uuunyaa_tools/editors/operators.py:425
-    ("*", "Convert AutoRig armature to MMD compatible."): "AutoRigアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/editors/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
     #: mmd_uuunyaa_tools/editors/panels.py:44
@@ -716,7 +701,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/panels.py:133
     ("*", "Limbs"): "肢体",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:117
-    ("*", "SkinHair"): "体毛",
+    ("*", "Add Skin Hair Mesh"): "体毛メッシュを追加",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:118
     ("*", "Construct a skin hair mesh"): "体毛メッシュを構築",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:134
@@ -740,9 +725,9 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/skin_hair.py:180
     ("*", "UuuNyaa"): "UuuNyaa",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:184
-    ("*", "Skin Hair"): "体毛",
+    ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:188
-    ("*", "UuuNyaa Extras"): "UuuNyaa Extras",
+    ("*", "UuuNyaa Extras"): "UuuNyaaその他",
     #: mmd_uuunyaa_tools/menus.py:18 mmd_uuunyaa_tools/menus.py:50 mmd_uuunyaa_tools/menus.py:70 mmd_uuunyaa_tools/menus.py:90
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: mmd_uuunyaa_tools/operators.py:19
@@ -761,35 +746,27 @@ translation_dict = {
     ("*", "Use Film Transparent"): "フィルム透過を使用",
     #: mmd_uuunyaa_tools/operators.py:109
     ("Operator", "Show Message Box"): "メッセージボックスを表示",
-    #: mmd_uuunyaa_tools/operators.py:110
-    ("*", "Show message box."): "メッセージボックスを表示",
-    #: mmd_uuunyaa_tools/operators.py:131
+    #: mmd_uuunyaa_tools/operators.py:130
     ("Operator", "Select Related Objects"): "関連オブジェクトを選択",
-    #: mmd_uuunyaa_tools/operators.py:132
-    ("*", "Select related objects."): "関連オブジェクトを選択",
-    #: mmd_uuunyaa_tools/operators.py:187
+    #: mmd_uuunyaa_tools/operators.py:185
     ("Operator", "Select Related Bones"): "関連ボーンを選択",
-    #: mmd_uuunyaa_tools/operators.py:188
-    ("*", "Select related bones."): "関連ボーンを選択",
-    #: mmd_uuunyaa_tools/operators.py:222
+    #: mmd_uuunyaa_tools/operators.py:219
     ("Operator", "Select Related Pose Bones"): "関連ポーズボーンを選択",
-    #: mmd_uuunyaa_tools/operators.py:223
-    ("*", "Select related pose bones."): "関連ポーズボーンを選択",
-    #: mmd_uuunyaa_tools/operators.py:257
+    #: mmd_uuunyaa_tools/operators.py:253
     ("Operator", "Remove Unused Vertex Groups"): "未使用頂点グループをすべて削除",
-    #: mmd_uuunyaa_tools/operators.py:258
+    #: mmd_uuunyaa_tools/operators.py:254
     ("*", "Remove unused vertex groups from the active meshes"): "アクティブメッシュから未使用頂点グループをすべて削除",
-    #: mmd_uuunyaa_tools/operators.py:261
+    #: mmd_uuunyaa_tools/operators.py:257
     ("*", "Weight Threshold"): "ウエイトしきい値",
-    #: mmd_uuunyaa_tools/operators.py:325
+    #: mmd_uuunyaa_tools/operators.py:321
     ("Operator", "Select Shape Key Target Vertices"): "シェイプキー対象の頂点を選択",
-    #: mmd_uuunyaa_tools/operators.py:326
+    #: mmd_uuunyaa_tools/operators.py:322
     ("*", "Select shape key target vertices from the active meshes"): "アクティブメッシュのシェイプキー対象の頂点を選択",
-    #: mmd_uuunyaa_tools/operators.py:329 mmd_uuunyaa_tools/operators.py:376
+    #: mmd_uuunyaa_tools/operators.py:325 mmd_uuunyaa_tools/operators.py:372
     ("*", "Distance Threshold"): "距離しきい値",
-    #: mmd_uuunyaa_tools/operators.py:372
+    #: mmd_uuunyaa_tools/operators.py:368
     ("Operator", "Remove Unused Shape Keys"): "未使用シェイプキーをすべて削除",
-    #: mmd_uuunyaa_tools/operators.py:373
+    #: mmd_uuunyaa_tools/operators.py:369
     ("*", "Remove unused shape keys from the active meshes"): "アクティブメッシュから未使用シェイプキーをすべて削除",
     #: mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "レンダー:",
@@ -800,13 +777,11 @@ translation_dict = {
     #: mmd_uuunyaa_tools/panels.py:44
     ("Operator", "Integrate Armatures"): "アーマチュアを統合",
     #: mmd_uuunyaa_tools/panels.py:50
-    ("Operator", "Convert Armatures"): "アーマチュアを変換",
+    ("*", "Bind Armatures"): "アーマチュアを束縛",
     #: mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
     #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "MMD互換へ変換",
-    #: mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
-    ("Operator", "Apply MMD rest pose"): "MMDレストポーズを適用",
     #: mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
     #: mmd_uuunyaa_tools/panels.py:65
@@ -824,7 +799,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/preferences.py:30
     ("*", "Path to asset list JSON files"): "アセットJSONファイルのパス",
     #: mmd_uuunyaa_tools/preferences.py:36
-    ("*", "Asset JSON Update Repo"): "アセットJSON更新リポジトリ",
+    ("*", "Asset JSON Update Repository"): "アセットJSON更新リポジトリ",
     #: mmd_uuunyaa_tools/preferences.py:37
     ("*", "Specify the github repository which to retrieve the assets"): "アセットを取得するgithubリポジトリを指定",
     #: mmd_uuunyaa_tools/preferences.py:42
@@ -844,7 +819,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/preferences.py:75
     ("*", "Asset Extract Folder"): "アセット展開先フォルダー",
     #: mmd_uuunyaa_tools/preferences.py:82
-    ("*", "Asset Extract Json"): "アセット展開JSON",
+    ("*", "Asset Extract JSON"): "アセット展開JSON",
     #: mmd_uuunyaa_tools/preferences.py:100
     ("*", "Browse Assets"): "アセットを閲覧",
     #: mmd_uuunyaa_tools/preferences.py:104
@@ -869,7 +844,7 @@ translation_dict = {
     ("*", "Specular"): "スペキュラー",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "粗さ",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:174
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:176
     ("*", "Wet"): "ウェット",
     ("Operator", "Wet"): "ウェット",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:255
@@ -880,7 +855,7 @@ translation_dict = {
     ("*", "Max"): "最大",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108
     ("*", "Blood Color"): "血液カラー",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/panels.py:173
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/panels.py:175
     ("*", "Subsurface"): "サブサーフェス",
     ("Operator", "Subsurface"): "サブサーフェス",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110
@@ -975,24 +950,14 @@ translation_dict = {
     ("*", "Liquid Cloudy"): "液体 白濁",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("Operator", "Tune Lighting"): "ライト調整",
-    #: mmd_uuunyaa_tools/tuners/operators.py:14
-    ("*", "Tune selected lighting."): "選択中ライトを調整",
-    #: mmd_uuunyaa_tools/tuners/operators.py:32
+    #: mmd_uuunyaa_tools/tuners/operators.py:31
     ("Operator", "Freeze Lighting"): "ライトを凍結",
-    #: mmd_uuunyaa_tools/tuners/operators.py:33
-    ("*", "Freeze active lighting."): "選択中ライトを凍結",
-    #: mmd_uuunyaa_tools/tuners/operators.py:50
+    #: mmd_uuunyaa_tools/tuners/operators.py:48
     ("Operator", "Tune Material"): "マテリアル調整",
-    #: mmd_uuunyaa_tools/tuners/operators.py:51
-    ("*", "Tune selected material."): "選択中マテリアルを調整",
-    #: mmd_uuunyaa_tools/tuners/operators.py:69
+    #: mmd_uuunyaa_tools/tuners/operators.py:66
     ("Operator", "Attach Material Adjuster"): "マテリアル調整器を付加",
-    #: mmd_uuunyaa_tools/tuners/operators.py:70
-    ("*", "Attach Adjuster to selected material."): "選択中マテリアルに調整器を付加",
-    #: mmd_uuunyaa_tools/tuners/operators.py:86
+    #: mmd_uuunyaa_tools/tuners/operators.py:82
     ("Operator", "Detach Material Adjuster"): "マテリアル調整器を除去",
-    #: mmd_uuunyaa_tools/tuners/operators.py:87
-    ("*", "Detach Adjuster from selected material."): "選択中マテリアルから調整器を除去",
     #: mmd_uuunyaa_tools/tuners/panels.py:14
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
     #: mmd_uuunyaa_tools/tuners/panels.py:24
@@ -1013,6 +978,8 @@ translation_dict = {
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaaマテリアル",
     #: mmd_uuunyaa_tools/tuners/panels.py:145
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaaマテリアル調整器",
+    #: mmd_uuunyaa_tools/tuners/panels.py:162
+    ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name} は未未対応です。プリンシプルBSDFから出力のある他のマテリアルを選択してください。",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "照明を選択",
     #: mmd_uuunyaa_tools/tuners/properties.py:38

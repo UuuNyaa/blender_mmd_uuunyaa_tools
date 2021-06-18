@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.m17n import _
+from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
                                       material_tuners, operators)
 from mmd_uuunyaa_tools.tuners.utilities import NodeUtilities
@@ -159,7 +159,9 @@ class MaterialAdjusterPanel(bpy.types.Panel):
 
         utilities = material_adjusters.MaterialAdjusterUtilities(material)
         if not utilities.check_attachable():
-            col.label(text=f'{material.name} is unsupported. Select other material to be output from Principled BSDF.', icon='ERROR')
+            col.label(text=iface_('{material_name} is unsupported. Select other material to be output from Principled BSDF.').format(
+                material_name=material.name
+            ), icon='ERROR')
             return
 
         grid = col.grid_flow(row_major=True, columns=2)

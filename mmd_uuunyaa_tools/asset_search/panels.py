@@ -13,7 +13,7 @@ from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor, Message
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
 from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, ReloadAssetJsons, UpdateAssetJson, UpdateDebugAssetJson
-from mmd_uuunyaa_tools.m17n import _
+from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.utilities import get_preferences, label_multiline, to_human_friendly_text, to_int32
 
 PREVIEWS: Union[bpy.utils.previews.ImagePreviewCollection, None]
@@ -281,7 +281,7 @@ class AssetDetailPopup(bpy.types.Operator):
             layout.operator(AssetDownload.bl_idname, text=_('Download'), icon='TRIA_DOWN_BAR').asset_id = asset.id
 
         elif asset_state is AssetState.DOWNLOADING:
-            draw_titled_label(layout, title=_('Cache:'), text=f'Downloading {to_human_friendly_text(task.fetched_size)}B / {to_human_friendly_text(task.content_length)}B')
+            draw_titled_label(layout, title=_('Cache:'), text=f'{iface_("Downloading")} {to_human_friendly_text(task.fetched_size)}B / {to_human_friendly_text(task.content_length)}B')
             layout.operator(AssetDownloadCancel.bl_idname, text=_('Cancel'), icon='CANCEL').asset_id = asset.id
 
         elif asset_state is AssetState.CACHED:
@@ -362,7 +362,10 @@ class AssetSearchPanel(bpy.types.Panel):
 
         row = layout.row()
         row.alignment = 'RIGHT'
-        row.label(text=f'{search.result.count} of {search.result.hit_count} results')
+        row.label(text=iface_('{search_result_count} of {search_result_hit_count} results').format(
+            search_result_count=search.result.count,
+            search_result_hit_count=search.result.hit_count,
+        ))
 
         asset_items = context.scene.mmd_uuunyaa_tools_asset_search.result.asset_items
 
@@ -412,7 +415,10 @@ class AssetSearchPanel(bpy.types.Panel):
         if loading_count > 0:
             row = layout.row()
             row.alignment = 'CENTER'
-            row.label(text=f"Loading {loading_count} item{'s' if loading_count > 1 else ''}...")
+            row.label(text=iface_('Loading {loading_count} item{plural_form_suffix}...').format(
+                loading_count=loading_count,
+                plural_form_suffix='s' if loading_count > 1 else ''
+            ))
             return
 
     @ staticmethod

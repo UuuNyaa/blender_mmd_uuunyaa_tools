@@ -17,7 +17,6 @@ from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 class MMDArmatureAddMetarig(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.mmd_armature_add_metarig'
     bl_label = _('Add Human (metarig) from MMD Armature')
-    bl_description = _('Add Human (metarig) from MMD armature.')
     bl_options = {'REGISTER', 'UNDO'}
 
     is_clean_armature: bpy.props.BoolProperty(name=_('Clean Armature'), default=True)
@@ -223,7 +222,6 @@ class MMDRigifyOperatorABC:
 class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_integrate'
     bl_label = _('Integrate Rigify and MMD Armatures')
-    bl_description = _('Integrate Rigify and MMD armatures.')
     bl_options = {'REGISTER', 'UNDO'}
 
     is_join_armatures: bpy.props.BoolProperty(name=_('Join Armatures'), description=_('Join MMD and Rigify armatures'), default=True)
@@ -276,7 +274,6 @@ class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
 class MMDRigifyBind(bpy.types.Operator, MMDRigifyOperatorABC):
     bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_bind'
     bl_label = _('Bind MMD to Rigify')
-    bl_description = _('Bind MMD to Rigify.')
     bl_options = {'REGISTER', 'UNDO'}
 
     is_join_armatures: bpy.props.BoolProperty(name=_('Join Armatures'), description=_('Join MMD and Rigify armatures'), default=True)
@@ -329,7 +326,6 @@ class MMDRigifyBind(bpy.types.Operator, MMDRigifyOperatorABC):
 class MMDRigifyConvert(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.rigify_to_mmd_compatible'
     bl_label = _('Convert Rigify Armature to MMD compatible')
-    bl_description = _('Convert Rigify armature to MMD compatible.')
     bl_options = {'REGISTER', 'UNDO'}
 
     upper_body2_bind_bone: bpy.props.EnumProperty(
@@ -380,7 +376,6 @@ class MMDRigifyConvert(bpy.types.Operator):
 class MMDRigifyApplyMMDRestPose(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.rigify_apply_mmd_rest_pose'
     bl_label = _('Apply MMD Rest Pose')
-    bl_description = _('Apply MMD rest pose.')
     bl_options = {'REGISTER', 'UNDO'}
 
     iterations: bpy.props.IntProperty(name=_('Iterations'), description=_('Number of solving iterations'), default=7, min=1, max=100)
@@ -422,7 +417,6 @@ class MMDRigifyApplyMMDRestPose(bpy.types.Operator):
 class MMDAutoRigConvert(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.autorig_to_mmd_compatible'
     bl_label = _('Convert AutoRig Armature to MMD compatible')
-    bl_description = _('Convert AutoRig armature to MMD compatible.')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -451,7 +445,6 @@ class MMDAutoRigConvert(bpy.types.Operator):
 class MMDAutoRigApplyMMDRestPose(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.autorig_apply_mmd_rest_pose'
     bl_label = _('Apply MMD Rest Pose')
-    bl_description = _('Apply MMD rest pose.')
     bl_options = {'REGISTER', 'UNDO'}
 
     iterations: bpy.props.IntProperty(name=_('Iterations'), description=_('Number of solving iterations'), default=7, min=1, max=100)

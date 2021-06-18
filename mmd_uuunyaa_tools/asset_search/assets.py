@@ -13,7 +13,8 @@ from enum import Enum
 from typing import Any, Dict, ItemsView, Tuple, ValuesView
 
 import requests
-from mmd_uuunyaa_tools import REGISTER_HOOKS, PACKAGE_PATH
+from mmd_uuunyaa_tools import PACKAGE_PATH, REGISTER_HOOKS
+from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import get_preferences
 
 
@@ -26,6 +27,18 @@ class AssetType(Enum):
     LIGHTING = 'Lighting'
     MATERIAL = 'Material'
     WORLD_BLENDER = 'World (.blend)'
+
+
+translation_properties = [
+    _('All'),
+    _('Model (.pmx)'),
+    _('Model (.blend)'),
+    _('Motion (.vmd)'),
+    _('Pose (.vpd)'),
+    _('Lighting'),
+    _('Material'),
+    _('World (.blend)'),
+]
 
 
 class AssetDescription:

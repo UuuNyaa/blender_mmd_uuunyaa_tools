@@ -107,7 +107,6 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
 class ShowMessageBox(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.show_message_box'
     bl_label = _('Show Message Box')
-    bl_description = _('Show message box.')
     bl_options = {'INTERNAL'}
 
     icon: bpy.props.StringProperty(default='INFO')
@@ -129,7 +128,6 @@ class ShowMessageBox(bpy.types.Operator):
 class SelectRelatedObjects(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_objects'
     bl_label = _('Select Related Objects')
-    bl_description = _('Select related objects.')
     bl_options = {'REGISTER', 'UNDO'}
 
     type_to_name_func = {
@@ -185,7 +183,6 @@ class SelectRelatedObjects(bpy.types.Operator):
 class SelectRelatedBones(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_bones'
     bl_label = _('Select Related Bones')
-    bl_description = _('Select related bones.')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod
@@ -220,7 +217,6 @@ class SelectRelatedBones(bpy.types.Operator):
 class SelectRelatedPoseBones(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_related_pose_bones'
     bl_label = _('Select Related Pose Bones')
-    bl_description = _('Select related pose bones.')
     bl_options = {'REGISTER', 'UNDO'}
 
     @classmethod

@@ -47,7 +47,7 @@ class OperatorPanel(bpy.types.Panel):
 
         row = col.split(factor=0.9, align=True)
         row.operator_context = 'EXEC_DEFAULT'
-        row.operator(MMDRigifyBind.bl_idname, text=_('Convert Armatures'), icon='GROUP_BONE').is_join_armatures = True
+        row.operator(MMDRigifyBind.bl_idname, text=_('Bind Armatures'), icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
         row.operator(MMDRigifyBind.bl_idname, text=_(''), icon='WINDOW')
 
@@ -55,12 +55,12 @@ class OperatorPanel(bpy.types.Panel):
         col.label(text=_('Rigify to MMD:'), icon='OUTLINER_OB_ARMATURE')
         col.operator(MMDRigifyConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
         col.separator()
-        col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text=_('Apply MMD rest pose'))
+        col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))
 
         col.label(text=_('(Experimental) Auto-Rig to MMD:'), icon='OUTLINER_OB_ARMATURE')
         col.operator(MMDAutoRigConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
         col.separator()
-        col.operator(MMDAutoRigApplyMMDRestPose.bl_idname, text=_('Apply MMD rest pose'))
+        col.operator(MMDAutoRigApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))
 
         layout.label(text=_('UI Panels'))
         col = layout.column(align=True)

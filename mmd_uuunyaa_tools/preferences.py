@@ -33,7 +33,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     )
 
     asset_json_update_repo: bpy.props.StringProperty(
-        name=_('Asset JSON Update Repo'),
+        name=_('Asset JSON Update Repository'),
         description=_('Specify the github repository which to retrieve the assets'),
         default=AssetUpdater.default_repo
     )
@@ -79,7 +79,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     )
 
     asset_extract_json: bpy.props.StringProperty(
-        name=_('Asset Extract Json'),
+        name=_('Asset Extract JSON'),
         description=_('Name to assets marker JSON. Create it under the Asset Extract Folder.\n'
                       'The presence of this file is used to determine the existence of the asset.\n'
                       'The following variables are available: {id}, {type}, {name}, {aliases[en]}, {aliases[ja]}'),

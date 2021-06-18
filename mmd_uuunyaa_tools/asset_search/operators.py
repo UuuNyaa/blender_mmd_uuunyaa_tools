@@ -11,7 +11,6 @@ from mmd_uuunyaa_tools.m17n import _
 class ReloadAssetJsons(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.reload_asset_jsons'
     bl_label = _('Reload Asset JSONs')
-    bl_description = _('Reload asset JSONs.')
     bl_options = {'INTERNAL'}
 
     def execute(self, context):
@@ -22,7 +21,6 @@ class ReloadAssetJsons(bpy.types.Operator):
 class UpdateAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.update_asset_json'
     bl_label = _('Update Assets JSON')
-    bl_description = _('Update assets JSON.')
     bl_options = {'INTERNAL'}
 
     repo: bpy.props.StringProperty(default=AssetUpdater.default_repo)
@@ -40,7 +38,6 @@ class UpdateAssetJson(bpy.types.Operator):
 class UpdateDebugAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.update_debug_asset_json'
     bl_label = _('Update Debug Asset JSON')
-    bl_description = _('Update debug asset JSON.')
     bl_options = {'INTERNAL'}
 
     repo: bpy.props.StringProperty(default=AssetUpdater.default_repo)
@@ -58,7 +55,6 @@ class UpdateDebugAssetJson(bpy.types.Operator):
 class DeleteDebugAssetJson(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.delete_debug_asset_json'
     bl_label = _('Delete Debug Asset JSON')
-    bl_description = _('Delete debug asset JSON.')
     bl_options = {'INTERNAL'}
 
     delete_json: bpy.props.StringProperty(default='ZDEBUG.json')
@@ -74,7 +70,6 @@ class DeleteDebugAssetJson(bpy.types.Operator):
 class DeleteCachedFiles(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.delete_cached_files'
     bl_label = _('Delete Asset Cached Files')
-    bl_description = _('Delete cached files.')
     bl_options = {'INTERNAL'}
 
     def execute(self, context):

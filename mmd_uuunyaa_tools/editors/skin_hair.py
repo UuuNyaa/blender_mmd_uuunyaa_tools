@@ -114,7 +114,7 @@ def create_skin_hair(  # pylint: disable=too-many-arguments
 
 class AddSkinHairMesh(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.add_skin_hair_mesh'
-    bl_label = _('SkinHair')
+    bl_label = _('Add Skin Hair Mesh')
     bl_description = _('Construct a skin hair mesh')
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -179,12 +179,12 @@ class UuuNyaaMeshExtrasMenu(bpy.types.Menu):
     bl_idname = 'VIEW3D_MT_uuunyaa_mesh_extras'
     bl_label = _('UuuNyaa')
 
-    def draw(self, context):
+    def draw(self, _context):
         self.layout.operator_context = 'INVOKE_REGION_WIN'
         self.layout.operator(AddSkinHairMesh.bl_idname, text=_('Skin Hair'))
 
     @staticmethod
-    def draw_menu(this, _):
+    def draw_menu(this, _context):
         this.layout.menu(UuuNyaaMeshExtrasMenu.bl_idname, text=_('UuuNyaa Extras'))
 
     @staticmethod
