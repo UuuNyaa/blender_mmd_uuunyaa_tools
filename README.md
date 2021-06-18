@@ -16,7 +16,7 @@ mmd_uuunyaa_toolsは[powroupi/blender_mmd_tools](https://github.com/powroupi/ble
 mmd_uuunyaa_tools needs your contribution!
 
 - Feature/Asset requests (material, lighting, etc)
-- Document writing
+- Document writing / translation
 - Asset creation (lighting, materials, accessories, etc)
 - Asset maintenance
 - Software development
