@@ -4,12 +4,32 @@
 #   UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import List, Union
+import time
+from abc import ABC
+from dataclasses import dataclass, field
+from enum import Enum
+from inspect import currentframe, getframeinfo
+from typing import Dict, Iterable, List, Set, Tuple, Union
 
 import bmesh
 import bpy
 from mmd_uuunyaa_tools.m17n import _
-from mmd_uuunyaa_tools.utilities import MessageException
+from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
+
+mmd_tools = import_mmd_tools()
+
+
+class PhysicsMode(Enum):
+    AUTO = 'Auto'
+    BONE_CONSTRAINT = 'Bone Constraint'
+    SURFACE_DEFORM = 'Surface Deform'
+
+
+translation_properties = [
+    _('Auto'),
+    _('Bone Constraint'),
+    _('Surface Deform'),
+]
 
 
 class ConvertRigidBodyToClothOperator(bpy.types.Operator):
@@ -17,405 +37,597 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
     bl_label = _('Convert Rigid Bodies to Cloth')
     bl_options = {'REGISTER', 'UNDO'}
 
-    subdivide: bpy.props.IntProperty(default=0, description=_('Subdivide level'), min=0, max=5)
-    cloth_convert_mod: bpy.props.IntProperty(default=1, description=_('Cloth convert mode'), min=1, max=3)
-    auto_select_mesh: bpy.props.BoolProperty(default=True, description=_('Auto select mesh'))
-    auto_select_rigid_body: bpy.props.BoolProperty(default=True, description=_('Auto select rigid bodies'))
+    subdivision_level: bpy.props.IntProperty(default=0, name=_('Subdivision Level'), min=0, max=5)
+    physics_mode: bpy.props.EnumProperty(
+        name=_('Physics Mode'),
+        items=[(m.name, m.value, '') for m in PhysicsMode],
+        default=PhysicsMode.AUTO.name
+    )
+
+    @classmethod
+    def poll(cls, context: bpy.types.Context):
+        if context.mode != 'OBJECT':
+            return False
+
+        selected_mesh_mmd_root = None
+        selected_rigid_body_mmd_root = None
+
+        mmd_find_root = mmd_tools.core.model.Model.findRoot
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                return False
+
+            if obj.mmd_type == 'RIGID_BODY':
+                selected_rigid_body_mmd_root = mmd_find_root(obj)
+            elif obj.mmd_type == 'NONE':
+                selected_mesh_mmd_root = mmd_find_root(obj)
+
+            if selected_rigid_body_mmd_root == selected_mesh_mmd_root:
+                return selected_rigid_body_mmd_root is not None
+
+        return False
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
 
     def execute(self, context: bpy.types.Context):
-        ClothEditor.convert_rigid_body_to_cloth(self.subdivide, self.cloth_convert_mod, self.auto_select_rigid_body, self.auto_select_mesh)
+
+        mmd_find_root = mmd_tools.core.model.Model.findRoot
+
+        target_root_object = None
+        rigid_body_objects: List[bpy.types.Object] = []
+        mesh_objects: List[bpy.types.Object] = []
+
+        obj: bpy.types.Object
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                continue
+
+            root_object = mmd_find_root(obj)
+            if root_object is None:
+                continue
+
+            if target_root_object is None:
+                target_root_object = root_object
+            elif target_root_object != root_object:
+                raise MessageException(_('Multiple MMD models selected. Please select single at a time.'))
+
+            if obj.mmd_type == 'RIGID_BODY':
+                rigid_body_objects.append(obj)
+            elif obj.mmd_type == 'NONE':
+                mesh_objects.append(obj)
+
+        ClothEditor.convert_physics_rigid_body_to_cloth(
+            target_root_object,
+            rigid_body_objects,
+            mesh_objects,
+            self.subdivision_level,
+            PhysicsMode[self.physics_mode]
+        )
         return {'FINISHED'}
 
 
-class ConvertRigidBodyToClothPanel(bpy.types.Panel):
-    bl_idname = 'UUUNYAA_PT_mmd_converter'
-    bl_label = _('UuuNyaa MMD Converter')
+@dataclass
+class Edges:
+    up_edges: Set[bmesh.types.BMEdge] = field(default_factory=set)
+    down_edges: Set[bmesh.types.BMEdge] = field(default_factory=set)
+    side_edges: Set[bmesh.types.BMEdge] = field(default_factory=set)
+
+
+@dataclass
+class Vertices:
+    up_verts: Set[bmesh.types.BMVert] = field(default_factory=set)
+    down_verts: Set[bmesh.types.BMVert] = field(default_factory=set)
+    # wire_verts: Set[bmesh.types.BMVert] = field(default_factory=set)
+    hair_verts: Set[bmesh.types.BMVert] = field(default_factory=set)
+    side_verts: Set[bmesh.types.BMVert] = field(default_factory=set)
+
+
+class UuuNyaaPhysicsPanel(bpy.types.Panel):
+    bl_idname = 'UUUNYAA_PT_physics'
+    bl_label = _('UuuNyaa Physics')
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = 'MMD'
 
+    @classmethod
+    def poll(cls, context):
+        return mmd_tools.core.model.Model.findRoot(context.active_object)
+
     def draw(self, context: bpy.types.Context):
-        self.layout.operator(ConvertRigidBodyToClothOperator.bl_idname)
+        root_object = mmd_tools.core.model.Model.findRoot(context.active_object)
+
+        layout = self.layout
+        col = layout.column()
+        col.prop(root_object.mmd_root, 'show_rigid_bodies', text='Show All Rigid Bodies')
+        col.operator_context = 'EXEC_DEFAULT'
+        operator = col.operator('mmd_tools.rigid_body_select', text=_('Select Related Rigid Bodies'), icon='RESTRICT_SELECT_OFF')
+        operator.properties = set(['collision_group_number', 'shape'])
+
+        row = col.split(factor=0.9, align=True)
+        row.operator_context = 'EXEC_DEFAULT'
+        row.operator(ConvertRigidBodyToClothOperator.bl_idname, icon='MATCLOTH')
+        row.operator_context = 'INVOKE_DEFAULT'
+        row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
 
 
-class ClothEditor:
+class MeshEditorABC(ABC):
     @staticmethod
-    def convert_rigid_body_to_cloth(subdivide: int, cloth_convert_mod: int, auto_select_rigid_body: bool, auto_select_mesh: bool):
-        select_obj: List[bpy.types.Object] = bpy.context.selected_objects
-        mmd_mesh: Union[bpy.types.Object, None] = None
-        mmd_arm = None
-        mmd_parent = None
-        select_rigid_body: List[bpy.types.Object] = []
-        select_mesh: List[bpy.types.Object] = []
+    def add_modifier(mesh_object: bpy.types.Object, modifier_type: str, name: str, **kwargs) -> bpy.types.Modifier:
+        modifier = mesh_object.modifiers.new(name, modifier_type)
+        for key, value in kwargs.items():
+            setattr(modifier, key, value)
+        return modifier
 
-        for obj in select_obj:
-            if obj.type == 'MESH':
-                for m in obj.modifiers:
-                    if m.type == 'ARMATURE':
-                        select_mesh.append(obj)
-                        break
-                if hasattr(obj, 'mmd_rigid'):
-                    if obj.mmd_rigid.name != '':
-                        select_rigid_body.append(obj)
+    @classmethod
+    def add_subsurface_modifier(cls, mesh_object: bpy.types.Object, name: str, levels: int, render_levels: int, **kwargs) -> bpy.types.Modifier:
+        return cls.add_modifier(
+            mesh_object, 'SUBSURF', name,
+            levels=levels,
+            render_levels=render_levels,
+            boundary_smooth='PRESERVE_CORNERS',
+            show_only_control_edges=False,
+            **kwargs
+        )
 
-        if len(select_rigid_body) == 0:
-            raise MessageException(_('所选物体中没有MMD刚体'))
+    @classmethod
+    def add_armature_modifier(cls, mesh_object: bpy.types.Object, name: str, armature_object: bpy.types.Object, **kwargs) -> bpy.types.Modifier:
+        return cls.add_modifier(
+            mesh_object, 'ARMATURE', name,
+            object=armature_object,
+            **kwargs
+        )
 
-        if auto_select_rigid_body:
-            bpy.ops.object.select_all(action='DESELECT')
-            bpy.context.view_layer.objects.active = select_rigid_body[0]
-            bpy.ops.mmd_tools.rigid_body_select(properties={'collision_group_number'})  # pylint: disable=no-member
-            rigid_bodies = bpy.context.selected_objects
-        else:
-            rigid_bodies = select_rigid_body
+    @classmethod
+    def add_cloth_modifier(cls, mesh_object: bpy.types.Object, name: str, **kwargs) -> bpy.types.Modifier:
+        return cls.add_modifier(
+            mesh_object, 'CLOTH', name,
+            **kwargs
+        )
 
-        mmd_parent = select_rigid_body[0].parent.parent
+    @classmethod
+    def add_corrective_smooth_modifier(cls, mesh_object: bpy.types.Object, name: str, **kwargs) -> bpy.types.Modifier:
+        return cls.add_modifier(
+            mesh_object, 'CORRECTIVE_SMOOTH', name,
+            **kwargs
+        )
 
-        if auto_select_mesh:
-            obj: bpy.types.Object
-            for obj in mmd_parent.children:
-                if obj.type == 'ARMATURE':
-                    mmd_arm = obj
-                    mmd_mesh = mmd_arm.children[0]
-            if mmd_mesh is None:
-                raise MessageException(_('所选刚体没有对应网格模型'))
-        elif len(select_mesh) == 0:
-            raise MessageException(_('所选物体中没有MMD网格模型'))
-        else:
-            mmd_mesh = select_mesh[0]
+    @classmethod
+    def add_surface_deform_modifier(cls, mesh_object: bpy.types.Object, name: str, **kwargs) -> bpy.types.Modifier:
+        return cls.add_modifier(
+            mesh_object, 'SURFACE_DEFORM', name,
+            **kwargs
+        )
 
-        mmd_arm = mmd_mesh.parent
 
-        rigid_bodys_count = len(rigid_bodies)
-        joints = []
-        side_joints = []
-        edge_index = []
-        verts = []
-        edges = []
-        bones_list: List[bpy.types.PoseBone] = []
+class ClothEditor(MeshEditorABC):
+    @classmethod
+    def convert_physics_rigid_body_to_cloth(
+        cls,
+        root_object: bpy.types.Object,
+        rigid_body_objects: List[bpy.types.Object],
+        mesh_objects: List[bpy.types.Object],
+        subdivision_level: int,
+        physics_mode: PhysicsMode
+    ):
 
-        mean_radius = 0
+        mmd_model = mmd_tools.core.model.Model(root_object)
+        mmd_mesh_object = mesh_objects[0]
+        mmd_armature_object = mmd_model.armature()
 
-        for rigid_body in rigid_bodies:
-            if rigid_body.mmd_rigid.shape == 'BOX':
-                radius = min(rigid_body.mmd_rigid.size[0], min(rigid_body.mmd_rigid.size[1], rigid_body.mmd_rigid.size[2]))
-            else:
-                radius = rigid_body.mmd_rigid.size[0]
-            mean_radius += radius
+        rigid_bodys_count = len(rigid_body_objects)
+        rigid_body_index_dict = {
+            rigid_body_objects[i]: i
+            for i in range(rigid_bodys_count)
+        }
 
-            bone = mmd_arm.pose.bones[rigid_body.mmd_rigid.bone]
-            verts.append(rigid_body.location)
-            bones_list.append(bone)
+        pose_bones: List[bpy.types.PoseBone] = [mmd_armature_object.pose.bones[r.mmd_rigid.bone] for r in rigid_body_objects]
 
-        mean_radius /= rigid_bodys_count
+        rigid_body_mean_radius: float = sum([
+            min(r.mmd_rigid.size) if r.mmd_rigid.shape == 'BOX'
+            else r.mmd_rigid.size[0]
+            for r in rigid_body_objects
+        ]) / rigid_bodys_count
 
-        for obj in bpy.context.view_layer.objects:
-            if not hasattr(obj, 'rigid_body_constraint'):
-                continue
+        def remove_objects(objects: Iterable[bpy.types.Object]):
+            for obj in objects:
+                bpy.data.objects.remove(obj)
 
-            if obj.rigid_body_constraint is not None:
-                if obj.rigid_body_constraint.object1 in rigid_bodies and obj.rigid_body_constraint.object2 in rigid_bodies:
-                    joints.append(obj)
-                    index1 = rigid_bodies.index(obj.rigid_body_constraint.object1)
-                    index2 = rigid_bodies.index(obj.rigid_body_constraint.object2)
-                    edge_index.append([index1, index2])
-                    edges.append([index1, index2])
-                elif obj.rigid_body_constraint.object1 in rigid_bodies or obj.rigid_body_constraint.object2 in rigid_bodies:
-                    side_joints.append(obj)
+        joint_objects, joint_edge_indices, side_joint_objects = cls.collect_joints(mmd_model, rigid_body_index_dict)
 
-        mesh = bpy.data.meshes.new('mmd_cloth')
-        mesh.from_pydata(verts, edges, [])
-        mesh.validate()
-        cloth_obj = bpy.data.objects.new('mmd_cloth', mesh)
-        bpy.context.collection.objects.link(cloth_obj)
-        cloth_obj.parent = mmd_parent
-        bpy.ops.object.select_all(action='DESELECT')
+        remove_objects(joint_objects)
 
-        bpy.context.view_layer.objects.active = cloth_obj
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_all(action='SELECT')
-        bpy.ops.mesh.edge_face_add()
-        bpy.ops.object.mode_set(mode='OBJECT')
+        cloth_mesh = bpy.data.meshes.new('mmd_uuunyaa_physics_cloth')
+        cloth_mesh.from_pydata([r.location for r in rigid_body_objects], joint_edge_indices, [])
+        cloth_mesh.validate()
 
-        # 删除大于四边的面
-        # remove ngon
-        bm = bmesh.new()  # pylint: disable=assignment-from-no-return,invalid-name
-        bm.from_mesh(mesh)
-        for face in bm.faces:
-            if len(face.verts) > 4:
-                bm.faces.remove(face)
+        cloth_mesh_object = cls.new_mesh_object('mmd_uuunyaa_physics_cloth', cloth_mesh)
+        cloth_mesh_object.parent = mmd_armature_object
+        cloth_mesh_object.display_type = 'WIRE'
 
-        # 删除多余边
-        # remove extra edge
-        for edge in bm.edges:
-            true_edge = False
-            for i in edge_index:
-                if edge.verts[0].index in i and edge.verts[1].index in i:
-                    true_edge = True
-                    break
+        cls.add_edge_faces(cloth_mesh_object)
+        cls.clean_mesh(cloth_mesh, joint_edge_indices)
 
-            if true_edge == False:
-                bm.edges.remove(edge)
-
-        # 尝试标记出头发,飘带
-        # try mark hair or ribbon vertex
-        bm.to_mesh(mesh)
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_all(action='DESELECT')
-        bpy.ops.mesh.select_mode(type='EDGE')
-        bpy.ops.mesh.select_non_manifold(extend=False, use_wire=True, use_boundary=False, use_multi_face=False, use_non_contiguous=False, use_verts=False)
-        bpy.ops.mesh.select_linked(delimit=set())
-        bpy.ops.object.mode_set(mode='OBJECT')
-        bm.clear()
-        bm.from_mesh(mesh)
+        cls.select_hair_ribbon_vertices(cloth_mesh_object)
 
         # 标记出特殊边和点
         # These are special edge and vertex
-        hair_verts = []
-        up_edges = []
-        down_edges = []
-        side_edges = []
-        up_verts: List[bmesh.types.BMVert] = []
-        down_verts: List[bmesh.types.BMVert] = []
-        wire_verts: List[bmesh.types.BMVert] = []
-        side_verts: List[bmesh.types.BMVert] = []
+        cloth_bm: bmesh.types.BMesh = bmesh.new()
+        cloth_bm.from_mesh(cloth_mesh)
 
         # 标出头部，尾部，飘带顶点
         # try mark head,tail,ribbon vertex
-        bm.verts.ensure_lookup_table()
-        for i in range(len(bm.verts)):
-            vertex = bm.verts[i]
-            bone = bones_list[i]
-            if bone.bone.use_connect == False:
-                up_verts.append(vertex)
-            elif len(bone.children) == 0:
-                down_verts.append(vertex)
-            elif bone.children[0] not in bones_list:
-                down_verts.append(vertex)
-            if vertex.is_wire:
-                wire_verts.append(vertex)
-            if vertex.select:
-                hair_verts.append(vertex)
-                if cloth_convert_mod == 1:
-                    vertex.co = bone.tail
-            if cloth_convert_mod == 2:
-                vertex.co = bone.tail
+        cloth_bm.verts.ensure_lookup_table()
+        cloth_bm.edges.ensure_lookup_table()
 
-        bm.edges.ensure_lookup_table()
-        for i in range(len(bm.edges)):
-            edge = bm.edges[i]
-            vert1 = edge.verts[0]
-            vert2 = edge.verts[1]
-            if edge.is_boundary:
-                if vert1 in up_verts and vert2 in up_verts:
-                    up_edges.append(edge)
-                elif vert1 in down_verts and vert2 in down_verts:
-                    down_edges.append(edge)
-                else:
-                    side_edges.append(edge)
-                    if edge.verts[0] not in side_verts:
-                        side_verts.append(edge.verts[0])
-                    if edge.verts[1] not in side_verts:
-                        side_verts.append(edge.verts[1])
+        vertices = cls.collect_vertices(cloth_bm, pose_bones, physics_mode)
+        edges = cls.collect_edges(cloth_bm, vertices)
 
-        # 延长头部顶点
-        # extend root vertex
-        new_up_verts = [None for i in range(len(bm.verts))]
-        new_down_verts = [None for i in range(len(bm.verts))]
-        for i in range(len(up_verts)):
-            vertex = up_verts[i]
-            new_location = bones_list[vertex.index].head
-            if cloth_convert_mod == 1 and vertex not in hair_verts or cloth_convert_mod == 3:
-                for edge in vertex.link_edges:
-                    if edge not in up_edges:
-                        if edge.verts[0] == vertex:
-                            new_location = vertex.co*2-edge.verts[1].co
-                        else:
-                            new_location = vertex.co*2-edge.verts[0].co
-                    break
-            new_vert = bm.verts.new(new_location)
-            new_edge = bm.edges.new([vertex, new_vert])
-            new_up_verts[vertex.index] = new_vert
-            if vertex in side_verts:
-                side_verts.append(new_vert)
-                side_edges.append(new_edge)
-            bm.edges.ensure_lookup_table()
+        new_up_verts = cls.extend_up_mesh(cloth_bm, pose_bones, vertices, edges, physics_mode)
+        new_down_verts = cls.extend_down_mesh(cloth_bm, vertices, edges)
 
-        # 延长尾部顶点
-        # extend tail vertex
-        for i in range(len(down_verts)):
-            vertex = down_verts[i]
-            if vertex not in up_verts:
-                new_location = [0, 0, 0]
-                for edge in vertex.link_edges:
-                    if edge not in down_edges:
-                        if edge.verts[0] == vertex:
-                            new_location = vertex.co*2-edge.verts[1].co
-                        else:
-                            new_location = vertex.co*2-edge.verts[0].co
-                    break
-                new_vert = bm.verts.new(new_location)
-                new_edge = bm.edges.new([vertex, new_vert])
-                new_down_verts[vertex.index] = new_vert
-                if vertex in side_verts:
-                    side_verts.append(new_vert)
-                    side_edges.append(new_edge)
-                bm.edges.ensure_lookup_table()
+        cloth_bm.verts.index_update()
 
-        for i in range(len(up_edges)):
-            edge = up_edges[i]
-            vert1 = edge.verts[0]
-            vert2 = edge.verts[1]
-            vert3 = new_up_verts[vert2.index]
-            vert4 = new_up_verts[vert1.index]
-            if vert3 is not None and vert4 is not None:
-                bm.faces.new([vert1, vert2, vert3, vert4])
-            bm.edges.ensure_lookup_table()
+        cls.fill_faces(cloth_bm, edges.up_edges, new_up_verts)
+        cls.fill_faces(cloth_bm, edges.down_edges, new_down_verts)
 
-        for i in range(len(down_edges)):
-            edge = down_edges[i]
-            vert1 = edge.verts[0]
-            vert2 = edge.verts[1]
-            vert3 = new_down_verts[vert2.index]
-            vert4 = new_down_verts[vert1.index]
-            if vert3 is not None and vert4 is not None:
-                bm.faces.new([vert1, vert2, vert3, vert4])
-            bm.edges.ensure_lookup_table()
+        cloth_bm.verts.index_update()
 
-        bm.verts.index_update()
-        bm.faces.ensure_lookup_table()
-        new_side_verts = [None for i in range(len(bm.verts))]
-        for i in range(len(side_verts)):
-            vertex = side_verts[i]
-            for edge in vertex.link_edges:
-                if edge not in side_edges:
-                    if edge.verts[0] == vertex:
-                        new_location = vertex.co*2-edge.verts[1].co
-                    else:
-                        new_location = vertex.co*2-edge.verts[0].co
-                    break
-            new_vert = bm.verts.new(new_location)
-            new_side_verts[vertex.index] = new_vert
-            bm.edges.ensure_lookup_table()
+        new_side_verts = cls.extend_mesh_side(cloth_bm, vertices, edges)
 
-        for i in range(len(side_edges)):
-            edge = side_edges[i]
-            vert1 = edge.verts[0]
-            vert2 = edge.verts[1]
-            vert3 = new_side_verts[vert2.index]
-            vert4 = new_side_verts[vert1.index]
-            if vert3 is not None and vert4 is not None:
-                bm.faces.new([vert1, vert2, vert3, vert4])
-            bm.edges.ensure_lookup_table()
+        cls.fill_faces(cloth_bm, edges.side_edges, new_side_verts)
 
-        bm.verts.ensure_lookup_table()
-        bm.to_mesh(mesh)
+        cloth_bm.edges.ensure_lookup_table()
+        cloth_bm.verts.ensure_lookup_table()
+        cloth_bm.to_mesh(cloth_mesh)
 
+        cls.normals_make_consistent(cloth_mesh_object)
+
+        pin_vertex_group = cls.new_pin_vertex_group(cloth_mesh_object, side_joint_objects, new_up_verts, new_side_verts, rigid_body_index_dict)
+
+        remove_objects(side_joint_objects)
+
+        deform_vertex_group: bpy.types.VertexGroup = mmd_mesh_object.vertex_groups.new(name='mmd_uuunyaa_physics_cloth_deform')
+
+        cls.add_subsurface_modifier(cloth_mesh_object, 'mmd_uuunyaa_physics_cloth_subsurface', subdivision_level, subdivision_level)
+        cls.add_armature_modifier(cloth_mesh_object, 'mmd_uuunyaa_physics_cloth_armature', mmd_armature_object, vertex_group=pin_vertex_group.name)
+        cloth_modifier = cls.add_cloth_modifier(cloth_mesh_object, 'mmd_uuunyaa_physics_cloth')
+        cloth_modifier.settings.vertex_group_mass = pin_vertex_group.name
+
+        corrective_smooth_modifier = cls.add_corrective_smooth_modifier(cloth_mesh_object, 'mmd_uuunyaa_physics_cloth_smooth', smooth_type='LENGTH_WEIGHTED', rest_source='BIND')
+        bpy.ops.object.correctivesmooth_bind(modifier=corrective_smooth_modifier.name)
+        if subdivision_level == 0:
+            corrective_smooth_modifier.show_viewport = False
+
+        deform_vertex_group_index = deform_vertex_group.index
+        vertices_hair_verts = vertices.hair_verts
+
+        cls.bind_mmd_mesh(mmd_mesh_object, cloth_mesh_object, cloth_bm, pose_bones, deform_vertex_group_index, vertices_hair_verts, physics_mode)
+
+        remove_objects(rigid_body_objects)
+
+        cls.fix_mesh(cloth_mesh_object, rigid_body_mean_radius)
+
+        if len(cloth_mesh.polygons) != 0 and physics_mode in {PhysicsMode.AUTO, PhysicsMode.SURFACE_DEFORM}:
+            bpy.context.view_layer.objects.active = mmd_mesh_object
+            bpy.ops.object.surfacedeform_bind(
+                modifier=cls.add_surface_deform_modifier(
+                    mmd_mesh_object, 'mmd_uuunyaa_physics_cloth_deform',
+                    target=cloth_mesh_object,
+                    vertex_group=deform_vertex_group.name
+                ).name
+            )
+
+        cloth_bm.free()
+
+    @staticmethod
+    def fix_mesh(cloth_mesh_object: bpy.types.Object, radius: float):
+        # 挤出孤立边
+        bpy.context.view_layer.objects.active = cloth_mesh_object
         bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_all(action='SELECT')
-        bpy.ops.mesh.normals_make_consistent(inside=False)
+        bpy.ops.mesh.select_non_manifold(extend=False, use_wire=True, use_boundary=False, use_multi_face=False, use_non_contiguous=False, use_verts=False)
+        bpy.ops.mesh.extrude_edges_move(TRANSFORM_OT_translate={'value': (0, 0.01, 0)})
+        bpy.ops.mesh.select_linked(delimit=set())
+        bpy.ops.mesh.select_all(action='INVERT')
+        bpy.ops.transform.shrink_fatten(value=radius, use_even_offset=False, mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
         bpy.ops.object.mode_set(mode='OBJECT')
 
-        pin_vertex_group = cloth_obj.vertex_groups.new(name='mmd_cloth_pin')
-        for obj in joints:
-            bpy.data.objects.remove(obj)
-        for obj in side_joints:
-            if obj.rigid_body_constraint.object1 in rigid_bodies:
+    @staticmethod
+    def bind_mmd_mesh(mmd_mesh_object, cloth_mesh_object, cloth_bm, pose_bones, deform_vertex_group_index, vertices_hair_verts, physics_mode):
+        unnecessary_vertex_groups: List[bpy.types.VertexGroup] = []
+
+        mmd_mesh: bpy.types.Mesh = mmd_mesh_object.data
+        mmd_bm: bmesh.types.BMesh = bmesh.new()
+        mmd_bm.from_mesh(mmd_mesh)
+
+        mmd_bm.verts.layers.deform.verify()
+        deform_layer = mmd_bm.verts.layers.deform.active
+
+        for i, bone in enumerate(pose_bones):
+            vert = cloth_bm.verts[i]
+            name = bone.name
+            if vert in vertices_hair_verts and physics_mode in {PhysicsMode.AUTO, PhysicsMode.BONE_CONSTRAINT}:
+                line_vertex_group = cloth_mesh_object.vertex_groups.new(name=name)
+                line_vertex_group.add([i], 1, 'REPLACE')
+                for c in bone.constraints:
+                    bone.constraints.remove(c)
+                con = bone.constraints.new(type='STRETCH_TO')
+                con.target = cloth_mesh_object
+                con.subtarget = name
+                con.rest_length = 0.0
+            else:
+                # merge deform vertex weights
+                from_vertex_group = mmd_mesh_object.vertex_groups[name]
+                from_index = from_vertex_group.index
+                unnecessary_vertex_groups.append(from_vertex_group)
+
+                vert: bmesh.types.BMVert
+                for vert in mmd_bm.verts:
+                    deform_vert: bmesh.types.BMDeformVert = vert[deform_layer]
+                    if from_index not in deform_vert:
+                        continue
+
+                    to_index = deform_vertex_group_index
+                    deform_vert[to_index] = deform_vert.get(to_index, 0.0) + deform_vert[from_index]
+
+        mmd_bm.to_mesh(mmd_mesh)
+        mmd_bm.free()
+
+        for vertex_group in unnecessary_vertex_groups:
+            mmd_mesh_object.vertex_groups.remove(vertex_group)
+
+    @staticmethod
+    def new_pin_vertex_group(cloth_mesh_object, side_joint_objects, new_up_verts, new_side_verts, rigid_body_index_dict):
+        pin_vertex_group = cloth_mesh_object.vertex_groups.new(name='mmd_uuunyaa_physics_cloth_pin')
+
+        for obj in side_joint_objects:
+            if obj.rigid_body_constraint.object1 in rigid_body_index_dict:
                 side_rigid_body = obj.rigid_body_constraint.object1
                 pin_rigid_body = obj.rigid_body_constraint.object2
             else:
                 side_rigid_body = obj.rigid_body_constraint.object2
                 pin_rigid_body = obj.rigid_body_constraint.object1
 
-            index1 = rigid_bodies.index(side_rigid_body)
+            index1 = rigid_body_index_dict[side_rigid_body]
             vert2 = new_up_verts[index1]
-            if vert2 is not None:
-                index3 = vert2.index
-                vert3 = new_side_verts[index3]
-                if vert3 is None:
-                    pin_index = [index3]
-                else:
-                    pin_index = [index3, vert3.index]
-            else:
+            if vert2 is None:
                 pin_index = [index1]
+            else:
+                vert3 = new_side_verts[vert2.index]
+                if vert3 is None:
+                    pin_index = [vert2.index]
+                else:
+                    pin_index = [vert2.index, vert3.index]
 
             pin_bone_name = pin_rigid_body.mmd_rigid.bone
 
-            skin_vertex_group = cloth_obj.vertex_groups.get(pin_bone_name)
+            skin_vertex_group = cloth_mesh_object.vertex_groups.get(pin_bone_name)
             if skin_vertex_group is None:
-                skin_vertex_group = cloth_obj.vertex_groups.new(name=pin_bone_name)
+                skin_vertex_group = cloth_mesh_object.vertex_groups.new(name=pin_bone_name)
+
             skin_vertex_group.add(pin_index, 1, 'REPLACE')
             pin_vertex_group.add(pin_index, 1, 'REPLACE')
-            bpy.data.objects.remove(obj)
 
-        deform_vertex_group = mmd_mesh.vertex_groups.new(name='mmd_cloth_deform')
+        return pin_vertex_group
 
-        cloth_obj.display_type = 'WIRE'
-
-        mod = cloth_obj.modifiers.new('mmd_cloth_subsurface', 'SUBSURF')
-        mod.levels = subdivide
-        mod.render_levels = subdivide
-        mod.boundary_smooth = 'PRESERVE_CORNERS'
-        mod.show_only_control_edges = False
-
-        mod = cloth_obj.modifiers.new('mmd_cloth_skin', 'ARMATURE')
-        mod.object = mmd_arm
-        mod.vertex_group = 'mmd_cloth_pin'
-
-        mod = cloth_obj.modifiers.new('mmd_cloth', 'CLOTH')
-        mod.settings.vertex_group_mass = 'mmd_cloth_pin'
-
-        mod = cloth_obj.modifiers.new('mmd_cloth_smooth', 'CORRECTIVE_SMOOTH')
-        mod.smooth_type = 'LENGTH_WEIGHTED'
-        mod.rest_source = 'BIND'
-        bpy.ops.object.correctivesmooth_bind(modifier='mmd_cloth_smooth')
-        if subdivide == 0:
-            mod.show_viewport = False
-
-        bpy.context.view_layer.objects.active = mmd_mesh
-
-        for i in range(rigid_bodys_count):
-            vertex = bm.verts[i]
-            obj = rigid_bodies[i]
-            bone = bones_list[i]
-            name = bone.name
-            if vertex in hair_verts and cloth_convert_mod == 1 or cloth_convert_mod == 2:
-                line_vertex_group = cloth_obj.vertex_groups.new(name=name)
-                line_vertex_group.add([i], 1, 'REPLACE')
-                for c in bone.constraints:
-                    bone.constraints.remove(c)
-                con = bone.constraints.new(type='STRETCH_TO')
-                con.target = cloth_obj
-                con.subtarget = name
-                con.rest_length = bone.length
-            else:
-                mod = mmd_mesh.modifiers.new('combin_weight', 'VERTEX_WEIGHT_MIX')
-                mod.vertex_group_a = deform_vertex_group.name
-                mod.vertex_group_b = name
-                mod.mix_set = 'OR'
-                mod.mix_mode = 'ADD'
-                mod.normalize = False
-                bpy.ops.object.modifier_move_to_index(modifier='combin_weight', index=0)  # pylint: disable=no-member
-                bpy.ops.object.modifier_apply(modifier='combin_weight')
-                mmd_mesh.vertex_groups.remove(mmd_mesh.vertex_groups[name])
-            bpy.data.objects.remove(obj)
-
-        # 挤出孤立边
-        bpy.context.view_layer.objects.active = cloth_obj
+    @staticmethod
+    def normals_make_consistent(cloth_mesh_object):
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.context.view_layer.objects.active = cloth_mesh_object
         bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_non_manifold(extend=False, use_wire=True, use_boundary=False, use_multi_face=False, use_non_contiguous=False, use_verts=False)
-        bpy.ops.mesh.extrude_edges_move(TRANSFORM_OT_translate={'value': (0, 0.01, 0)})
-        bpy.ops.mesh.select_linked(delimit=set())
-        bpy.ops.mesh.select_all(action='INVERT')
-        bpy.ops.transform.shrink_fatten(value=mean_radius, use_even_offset=False, mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
-
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.mesh.normals_make_consistent(inside=False)
         bpy.ops.object.mode_set(mode='OBJECT')
 
-        if len(mesh.polygons.items()) != 0 and cloth_convert_mod != 2:
-            bpy.context.view_layer.objects.active = mmd_mesh
-            mod = mmd_mesh.modifiers.new('mmd_cloth_deform', 'SURFACE_DEFORM')
-            mod.target = cloth_obj
-            mod.vertex_group = deform_vertex_group.name
-            bpy.ops.object.surfacedeform_bind(modifier=mod.name)
+    @staticmethod
+    def extend_mesh_side(cloth_bm, vertices, edges):
+        new_side_verts = [None for i in range(len(cloth_bm.verts))]
 
-        bm.free()
+        for vert in vertices.side_verts:
+            for edge in vert.link_edges:
+                if edge not in edges.side_edges:
+                    if edge.verts[0] == vert:
+                        new_location = vert.co*2-edge.verts[1].co
+                    else:
+                        new_location = vert.co*2-edge.verts[0].co
+                    break
+            new_vert = cloth_bm.verts.new(new_location)
+            new_side_verts[vert.index] = new_vert
+
+        return new_side_verts
+
+    @staticmethod
+    def fill_faces(cloth_bm, edges, new_verts):
+        for edge in edges:
+            vert1 = edge.verts[0]
+            vert2 = edge.verts[1]
+            vert3 = new_verts[vert2.index]
+            vert4 = new_verts[vert1.index]
+
+            if vert3 is not None and vert4 is not None:
+                cloth_bm.faces.new([vert1, vert2, vert3, vert4])
+
+    @staticmethod
+    def extend_up_mesh(cloth_bm, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges, physics_mode: PhysicsMode):
+        new_up_verts = [None for i in range(len(cloth_bm.verts))]
+
+        # 延长头部顶点
+        # extend root vertex
+        for vert in vertices.up_verts:
+            new_location = pose_bones[vert.index].head
+
+            if (
+                (physics_mode == PhysicsMode.AUTO and vert not in vertices.hair_verts)
+                or physics_mode == PhysicsMode.SURFACE_DEFORM
+            ):
+                for edge in vert.link_edges:
+                    if edge in edges.up_edges:
+                        break
+
+                    if edge.verts[0] == vert:
+                        new_location = vert.co*2-edge.verts[1].co
+                    else:
+                        new_location = vert.co*2-edge.verts[0].co
+
+            new_vert = cloth_bm.verts.new(new_location)
+            new_edge = cloth_bm.edges.new([vert, new_vert])
+            new_up_verts[vert.index] = new_vert
+
+            if vert in vertices.side_verts:
+                vertices.side_verts.add(new_vert)
+                edges.side_edges.add(new_edge)
+
+        return new_up_verts
+
+    @staticmethod
+    def extend_down_mesh(cloth_bm, vertices: Vertices, edges: Edges):
+        new_down_verts = [None for i in range(len(cloth_bm.verts))]
+        # 延长尾部顶点
+        # extend tail vertex
+        for vert in vertices.down_verts:
+            if vert in vertices.up_verts:
+                continue
+
+            new_location = [0, 0, 0]
+            for edge in vert.link_edges:
+                if edge in edges.down_edges:
+                    break
+
+                if edge.verts[0] == vert:
+                    new_location = vert.co*2-edge.verts[1].co
+                else:
+                    new_location = vert.co*2-edge.verts[0].co
+
+            new_vert = cloth_bm.verts.new(new_location)
+            new_edge = cloth_bm.edges.new([vert, new_vert])
+            new_down_verts[vert.index] = new_vert
+
+            if vert in vertices.side_verts:
+                vertices.side_verts.add(new_vert)
+                edges.side_edges.add(new_edge)
+
+        return new_down_verts
+
+    @staticmethod
+    def select_hair_ribbon_vertices(cloth_mesh_object: bpy.types.Object):
+        # 尝试标记出头发,飘带
+        # try mark hair or ribbon vertex
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.context.view_layer.objects.active = cloth_mesh_object
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_all(action='DESELECT')
+        bpy.ops.mesh.select_mode(type='EDGE')
+        bpy.ops.mesh.select_non_manifold(extend=False, use_wire=True, use_boundary=False, use_multi_face=False, use_non_contiguous=False, use_verts=False)
+        bpy.ops.mesh.select_linked(delimit=set())
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+    @staticmethod
+    def new_mesh_object(name: str, cloth_mesh: bpy.types.Mesh):
+        cloth_mesh_object = bpy.data.objects.new(name, cloth_mesh)
+        bpy.context.collection.objects.link(cloth_mesh_object)
+
+        return cloth_mesh_object
+
+    @staticmethod
+    def add_edge_faces(cloth_mesh_object: bpy.types.Object):
+        bpy.ops.object.select_all(action='DESELECT')
+        bpy.context.view_layer.objects.active = cloth_mesh_object
+        bpy.ops.object.mode_set(mode='EDIT')
+        bpy.ops.mesh.select_all(action='SELECT')
+        bpy.ops.mesh.edge_face_add()
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+    @staticmethod
+    def collect_joints(mmd_model, rigid_body_index_dict: Dict[bpy.types.Object, int]) -> Tuple[List[bpy.types.Object], List[Tuple[int, int]], List[bpy.types.Object]]:
+        joint_objects: List[bpy.types.Object] = []
+        joint_edge_indices: List[Tuple[int, int]] = []
+        side_joint_objects: List[bpy.types.Object] = []
+
+        for obj in mmd_model.joints():
+            obj1 = obj.rigid_body_constraint.object1
+            obj2 = obj.rigid_body_constraint.object2
+            if obj1 in rigid_body_index_dict and obj2 in rigid_body_index_dict:
+                joint_objects.append(obj)
+                joint_edge_indices.append((rigid_body_index_dict[obj1], rigid_body_index_dict[obj2]))
+            elif obj1 in rigid_body_index_dict or obj2 in rigid_body_index_dict:
+                side_joint_objects.append(obj)
+
+        return joint_objects, joint_edge_indices, side_joint_objects
+
+    @staticmethod
+    def collect_vertices(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], physics_mode: PhysicsMode) -> Vertices:
+        vertices = Vertices()
+
+        for i in range(len(cloth_bm.verts)):
+            vert = cloth_bm.verts[i]
+            bone = pose_bones[i]
+            if not bone.bone.use_connect:
+                vertices.up_verts.add(vert)
+            elif len(bone.children) == 0:
+                vertices.down_verts.add(vert)
+            elif bone.children[0] not in pose_bones:
+                vertices.down_verts.add(vert)
+
+            # if vert.is_wire:
+            #     vertices.wire_verts.add(vert)
+
+            if vert.select:
+                vertices.hair_verts.add(vert)
+                if physics_mode == PhysicsMode.AUTO:
+                    vert.co = bone.tail
+
+            if physics_mode == PhysicsMode.BONE_CONSTRAINT:
+                vert.co = bone.tail
+
+        return vertices
+
+    @staticmethod
+    def collect_edges(cloth_bm: bmesh.types.BMesh, vertices: Vertices) -> Edges:
+        edges = Edges()
+
+        for edge in cloth_bm.edges:
+            if not edge.is_boundary:
+                continue
+
+            vert1 = edge.verts[0]
+            vert2 = edge.verts[1]
+            if vert1 in vertices.up_verts and vert2 in vertices.up_verts:
+                edges.up_edges.add(edge)
+            elif vert1 in vertices.down_verts and vert2 in vertices.down_verts:
+                edges.down_edges.add(edge)
+            else:
+                edges.side_edges.add(edge)
+                if edge.verts[0] not in vertices.side_verts:
+                    vertices.side_verts.add(edge.verts[0])
+                if edge.verts[1] not in vertices.side_verts:
+                    vertices.side_verts.add(edge.verts[1])
+        return edges
+
+    @staticmethod
+    def clean_mesh(mesh: bpy.types.Mesh, save_edges: List[Tuple[int, int]]):
+        def remove_ngon(cloth_bm):
+            # 删除大于四边的面
+            # remove ngon
+            for face in cloth_bm.faces:
+                if len(face.verts) > 4:
+                    cloth_bm.faces.remove(face)
+
+        def remove_edges(cloth_bm: bmesh.types.BMesh, save_edges):
+            # 删除多余边
+            # remove extra edge
+            for edge in cloth_bm.edges:
+                is_save_edge = False
+                for i in save_edges:
+                    if edge.verts[0].index in i and edge.verts[1].index in i:
+                        is_save_edge = True
+                        break
+
+                if not is_save_edge:
+                    cloth_bm.edges.remove(edge)
+
+        cloth_bm = bmesh.new()  # pylint: disable=assignment-from-no-return,invalid-name
+        cloth_bm.from_mesh(mesh)
+        remove_ngon(cloth_bm)
+        remove_edges(cloth_bm, save_edges)
+        cloth_bm.to_mesh(mesh)
+        cloth_bm.free()

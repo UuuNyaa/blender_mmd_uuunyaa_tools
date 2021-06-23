@@ -14,7 +14,6 @@ import bpy
 import rna_prop_ui
 from mathutils import Matrix, Vector
 from mmd_uuunyaa_tools import PACKAGE_PATH
-from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
 PATH_BLENDS_RIGSHAPELIBRARY = os.path.join(PACKAGE_PATH, 'blends', 'RigShapeLibrary.blend')
 
