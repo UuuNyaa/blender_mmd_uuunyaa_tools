@@ -32,7 +32,7 @@ class UuuNyaaRigidBodyAdjusterPanel(bpy.types.Panel):
 
 class SelectMeshRigidBody(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_rigid_body_mesh'
-    bl_label = _('Select RigidBody Mesh')
+    bl_label = _('Select Rigid Body Mesh')
     bl_options = {'REGISTER', 'UNDO'}
 
     only_in_mmd_model: bpy.props.BoolProperty(name=_('Only in the MMD Model'))
