@@ -124,6 +124,40 @@ translation_dict = {
     ("*", "Write to"): "Write to",
     #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("*", "Update Assets JSON by query"): "Update Assets JSON by query",
+    #: mmd_uuunyaa_tools/editors/cloth.py:29
+    ("*", "Auto"): "Auto",
+    #: mmd_uuunyaa_tools/editors/cloth.py:30
+    ("*", "Bone Constraint"): "Bone Constraint",
+    #: mmd_uuunyaa_tools/editors/cloth.py:31
+    ("*", "Surface Deform"): "Surface Deform",
+    #: mmd_uuunyaa_tools/editors/cloth.py:37
+    ("*", "Configure Mesh Collision"): "Configure Mesh Collision",
+    #: mmd_uuunyaa_tools/editors/cloth.py:40 mmd_uuunyaa_tools/editors/cloth.py:78
+    ("*", "Damping"): "Damping",
+    #: mmd_uuunyaa_tools/editors/cloth.py:41 mmd_uuunyaa_tools/editors/cloth.py:79
+    ("*", "Thickness Outer"): "Thickness Outer",
+    #: mmd_uuunyaa_tools/editors/cloth.py:42 mmd_uuunyaa_tools/editors/cloth.py:80
+    ("*", "Thickness Inner"): "Thickness Inner",
+    #: mmd_uuunyaa_tools/editors/cloth.py:43 mmd_uuunyaa_tools/editors/cloth.py:81
+    ("*", "Cloth Friction"): "Cloth Friction",
+    #: mmd_uuunyaa_tools/editors/cloth.py:75
+    ("*", "Configure Mesh Cloth"): "Configure Mesh Cloth",
+    #: mmd_uuunyaa_tools/editors/cloth.py:113
+    ("*", "Remove Mesh Collision"): "Remove Mesh Collision",
+    #: mmd_uuunyaa_tools/editors/cloth.py:139
+    ("*", "Convert Rigid Body to Cloth"): "Convert Rigid Body to Cloth",
+    #: mmd_uuunyaa_tools/editors/cloth.py:142
+    ("*", "Subdivision Level"): "Subdivision Level",
+    #: mmd_uuunyaa_tools/editors/cloth.py:144
+    ("*", "Physics Mode"): "Physics Mode",
+    #: mmd_uuunyaa_tools/editors/cloth.py:195
+    ("*", "Multiple MMD models selected. Please select single model at a time."): "Multiple MMD models selected. Please select single model at a time.",
+    #: mmd_uuunyaa_tools/editors/cloth.py:235
+    ("*", "UuuNyaa Physics"): "UuuNyaa Physics",
+    #: mmd_uuunyaa_tools/editors/cloth.py:257
+    ("*", "Select Related Rigid Bodies"): "Select Related Rigid Bodies",
+    #: mmd_uuunyaa_tools/editors/cloth.py:431
+    ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body.",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("*", "Add Human (metarig) from MMD Armature"): "Add Human (metarig) from MMD Armature",
     #: mmd_uuunyaa_tools/editors/operators.py:22
@@ -614,6 +648,40 @@ translation_dict = {
     ("*", "Write to"): "書込み先",
     #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("Operator", "Update Assets JSON by query"): "アセットJSONをクエリで更新",
+    #: mmd_uuunyaa_tools/editors/cloth.py:29
+    ("*", "Auto"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:30
+    ("*", "Bone Constraint"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:31
+    ("*", "Surface Deform"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:37
+    ("*", "Configure Mesh Collision"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:40 mmd_uuunyaa_tools/editors/cloth.py:78
+    ("*", "Damping"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:41 mmd_uuunyaa_tools/editors/cloth.py:79
+    ("*", "Thickness Outer"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:42 mmd_uuunyaa_tools/editors/cloth.py:80
+    ("*", "Thickness Inner"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:43 mmd_uuunyaa_tools/editors/cloth.py:81
+    ("*", "Cloth Friction"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:75
+    ("*", "Configure Mesh Cloth"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:113
+    ("*", "Remove Mesh Collision"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:139
+    ("*", "Convert Rigid Body to Cloth"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:142
+    ("*", "Subdivision Level"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:144
+    ("*", "Physics Mode"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:195
+    ("*", "Multiple MMD models selected. Please select single model at a time."): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:235
+    ("*", "UuuNyaa Physics"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:257
+    ("*", "Select Related Rigid Bodies"): "",
+    #: mmd_uuunyaa_tools/editors/cloth.py:431
+    ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "MMDアーマチュアからHuman (metarig)を追加",
     #: mmd_uuunyaa_tools/editors/operators.py:22

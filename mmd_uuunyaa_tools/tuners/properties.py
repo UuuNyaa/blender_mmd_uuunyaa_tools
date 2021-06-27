@@ -7,15 +7,15 @@ from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
 
 
-def update_lighting_thumbnails(prop: 'LightingPropertyGroup', _):
-    bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=prop.thumbnails)  # pylint: disable=no-member
-
-
 class LightingPropertyGroup(bpy.types.PropertyGroup):
+    @staticmethod
+    def update_lighting_thumbnails(prop: 'LightingPropertyGroup', _):
+        bpy.ops.mmd_uuunyaa_tools.tune_lighting(lighting=prop.thumbnails)  # pylint: disable=no-member
+
     thumbnails: bpy.props.EnumProperty(
         items=lighting_tuners.TUNERS.to_enum_property_items(),
         description=_('Choose the lighting you want to use'),
-        update=update_lighting_thumbnails,
+        update=update_lighting_thumbnails.__func__,
     )
 
     @staticmethod
@@ -28,15 +28,15 @@ class LightingPropertyGroup(bpy.types.PropertyGroup):
         del bpy.types.Collection.mmd_uuunyaa_tools_lighting
 
 
-def update_material_thumbnails(prop: 'MaterialPropertyGroup', _):
-    bpy.ops.mmd_uuunyaa_tools.tune_material(material=prop.thumbnails)  # pylint: disable=no-member
-
-
 class MaterialPropertyGroup(bpy.types.PropertyGroup):
+    @staticmethod
+    def update_material_thumbnails(prop: 'MaterialPropertyGroup', _):
+        bpy.ops.mmd_uuunyaa_tools.tune_material(material=prop.thumbnails)  # pylint: disable=no-member
+
     thumbnails: bpy.props.EnumProperty(
         items=material_tuners.TUNERS.to_enum_property_items(),
         description=_('Choose the material you want to use'),
-        update=update_material_thumbnails,
+        update=update_material_thumbnails.__func__,
     )
 
     @staticmethod
