@@ -28,6 +28,37 @@ translation_properties = [
 ]
 
 mmd_tools = import_mmd_tools()
+if not hasattr(mmd_tools.core.model.Model, 'clothGroupObject'):
+    def mmd_model_cloth_group_object_method(self):
+        # pylint: disable=protected-access
+        if not hasattr(self, '_cloth_grp'):
+            self._cloth_grp = None
+            for i in self.rootObject().children:
+                if i.name == 'cloths':
+                    self._cloth_grp = i
+                    break
+
+            if self._cloth_grp is None:
+                cloths = bpy.data.objects.new(name='cloths', object_data=None)
+                mmd_tools.bpyutils.SceneOp(bpy.context).link_object(cloths)
+                cloths.parent = self.rootObject()
+                cloths.hide = cloths.hide_select = True
+                cloths.lock_rotation = cloths.lock_location = cloths.lock_scale = [True, True, True]
+                self._cloth_grp = cloths
+
+        return self._cloth_grp
+
+    mmd_tools.core.model.Model.clothGroupObject = mmd_model_cloth_group_object_method
+
+    def mmd_model_cloths_method(self):
+        for obj in self.allObjects(self.clothGroupObject()):
+            if obj.type != 'MESH':
+                continue
+            if MeshEditor(obj).find_cloth_modifier() is None:
+                continue
+            yield obj
+
+    mmd_tools.core.model.Model.cloths = mmd_model_cloths_method
 
 
 @dataclass
@@ -59,6 +90,7 @@ class RigidBodyToClothConverter:
         mmd_model = mmd_tools.core.model.Model(mmd_root_object)
         mmd_mesh_object = mesh_objects[0]
         mmd_armature_object = mmd_model.armature()
+        mmd_cloth_group_object = mmd_model.clothGroupObject()
 
         rigid_bodys_count = len(rigid_body_objects)
         rigid_body_index_dict = {
@@ -97,7 +129,8 @@ class RigidBodyToClothConverter:
         cloth_mesh.validate()
 
         cloth_mesh_object = cls.new_mesh_object('mmd_uuunyaa_physics_cloth', cloth_mesh)
-        cloth_mesh_object.parent = mmd_armature_object
+        cloth_mesh_object.parent = mmd_cloth_group_object
+        cloth_mesh_object.hide_render = True
         cloth_mesh_object.display_type = 'WIRE'
 
         cls.add_edge_faces(cloth_mesh_object)
@@ -212,7 +245,7 @@ class RigidBodyToClothConverter:
                 con.rest_length = bone.length
             else:
                 # merge deform vertex weights
-                from_vertex_group = mmd_mesh_object.vertex_groups[name]
+                from_vertex_group = mmd_mesh_object.vertex_groups.get(name)
                 from_index = from_vertex_group.index
                 unnecessary_vertex_groups.append(from_vertex_group)
 

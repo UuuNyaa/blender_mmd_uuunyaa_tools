@@ -158,7 +158,7 @@ class CopyClothAdjusterSettings(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class SelectMeshCloth(bpy.types.Operator):
+class SelectClothMesh(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_cloth_mesh'
     bl_label = _('Select Cloth Mesh')
     bl_options = {'REGISTER', 'UNDO'}
@@ -185,9 +185,14 @@ class SelectMeshCloth(bpy.types.Operator):
         mmd_tools = import_mmd_tools()
         mmd_root = mmd_tools.core.model.Model.findRoot(key_object)
         if mmd_root is None:
-            return []
+            return
 
-        return mmd_tools.core.model.Model(mmd_root).meshes()
+        mmd_model = mmd_tools.core.model.Model(mmd_root)
+
+        for o in mmd_model.meshes():
+            yield o
+
+        yield from mmd_model.cloths()
 
     def execute(self, context: bpy.types.Context):
         key_object = context.active_object
@@ -218,7 +223,15 @@ class RemoveMeshCloth(bpy.types.Operator):
     def poll(cls, context: bpy.types.Context):
         if context.mode != 'OBJECT':
             return False
-        return MeshEditor.mesh_object_is_contained_in(context.selected_objects)
+
+        active_object = context.active_object
+        if active_object is None:
+            return False
+
+        if active_object.type != 'MESH':
+            return False
+
+        return MeshEditor(active_object).find_cloth_modifier() is not None
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)

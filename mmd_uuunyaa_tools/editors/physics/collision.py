@@ -103,6 +103,7 @@ class CopyCollisionAdjusterSettings(bpy.types.Operator):
             MeshEditor(to_object).get_collision_modifier(from_modifier.name)
 
             to_settings = to_object.mmd_uuunyaa_tools_collision_settings
+            to_settings.presets = from_settings.presets
             to_settings.damping = from_settings.damping
             to_settings.thickness_outer = from_settings.thickness_outer
             to_settings.thickness_inner = from_settings.thickness_inner
@@ -111,7 +112,7 @@ class CopyCollisionAdjusterSettings(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class SelectMeshCollision(bpy.types.Operator):
+class SelectCollisionMesh(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.select_collision_mesh'
     bl_label = _('Select Collision Mesh')
     bl_options = {'REGISTER', 'UNDO'}
@@ -171,7 +172,15 @@ class RemoveMeshCollision(bpy.types.Operator):
     def poll(cls, context: bpy.types.Context):
         if context.mode != 'OBJECT':
             return False
-        return MeshEditor.mesh_object_is_contained_in(context.selected_objects)
+
+        active_object = context.active_object
+        if active_object is None:
+            return False
+
+        if active_object.type != 'MESH':
+            return False
+
+        return MeshEditor(active_object).find_collision_modifier() is not None
 
     def invoke(self, context, event):
         return context.window_manager.invoke_confirm(self, event)
