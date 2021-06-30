@@ -35,7 +35,7 @@ class MeshEditor:
             **kwargs
         )
 
-    def add_subsurface_modifier(self, name: str, levels: int, render_levels: int, **kwargs) -> bpy.types.Modifier:
+    def add_subsurface_modifier(self, name: str, levels: int, render_levels: int, **kwargs) -> bpy.types.SubsurfModifier:
         return self.add_modifier(
             'SUBSURF', name,
             levels=levels,
@@ -44,6 +44,18 @@ class MeshEditor:
             show_only_control_edges=False,
             **kwargs
         )
+
+    def find_subsurface_modifier(self, name: str) -> Union[bpy.types.SubsurfModifier, None]:
+        for modifier in self.mesh_object.modifiers:
+            if modifier.type == 'SUBSURF' and modifier.name == name:
+                return modifier
+        return None
+
+    def get_subsurface_modifier(self, name: str) -> bpy.types.Modifier:
+        modifier = self.find_subsurface_modifier(name)
+        if modifier is None:
+            modifier = self.add_subsurface_modifier(name=name, levels=0, render_levels=0)
+        return modifier
 
     def add_armature_modifier(self, name: str, armature_object: bpy.types.Object, **kwargs) -> bpy.types.Modifier:
         return self.add_modifier(
