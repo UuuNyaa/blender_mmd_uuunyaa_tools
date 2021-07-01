@@ -272,6 +272,10 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
         items=[(m.name, m.value, '') for m in PhysicsMode],
         default=PhysicsMode.AUTO.name
     )
+    extend_ribbon_area: bpy.props.BoolProperty(
+        name=_('Extend Ribbon Area'),
+        default=True
+    )
 
     @classmethod
     def poll(cls, context: bpy.types.Context):
@@ -331,7 +335,8 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
                 rigid_body_objects,
                 mesh_objects,
                 self.subdivision_level,
-                PhysicsMode[self.physics_mode]
+                PhysicsMode[self.physics_mode],
+                self.extend_ribbon_area
             )
 
         except MessageException as ex:
