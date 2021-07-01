@@ -21,20 +21,6 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
     bl_region_type = 'UI'
     bl_category = 'MMD'
 
-    def check_prop(self, obj: bpy.types.Object):
-        if 'mmd_uuunyaa_tools_show_cloths' in obj:
-            return
-
-        rna_prop_ui.rna_idprop_ui_create(
-            obj, 'mmd_uuunyaa_tools_show_cloths',
-            default=True,
-            min=False, max=True,
-            soft_min=None, soft_max=None,
-            description='descriptions',
-            overridable=True,
-            subtype='Boolean'
-        )
-
     def draw(self, context: bpy.types.Context):
         layout = self.layout
 
@@ -73,7 +59,7 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
             row.prop(mmd_root_object, 'mmd_uuunyaa_tools_show_cloths', text=_('Cloth'), toggle=True)
 
             col = layout.column(align=True)
-            col.label(text='Converter:', icon='SHADERFX')
+            col.label(text=_('Converter:'), icon='SHADERFX')
 
             row = col.split(factor=0.9, align=True)
             row.operator_context = 'EXEC_DEFAULT'

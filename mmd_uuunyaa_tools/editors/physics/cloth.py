@@ -266,7 +266,7 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
     bl_label = _('Convert Rigid Body to Cloth')
     bl_options = {'REGISTER', 'UNDO'}
 
-    subdivision_level: bpy.props.IntProperty(name=_('Subdivision Level'), min=0, max=5, default=0)
+    subdivision_level: bpy.props.IntProperty(name=_('Subdivision Levels'), min=0, max=5, default=0)
     physics_mode: bpy.props.EnumProperty(
         name=_('Physics Mode'),
         items=[(m.name, m.value, '') for m in PhysicsMode],

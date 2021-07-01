@@ -6,7 +6,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, Iterable, List, Set, Tuple
+from typing import Dict, Iterable, List, Set, Tuple, Union
 
 import bmesh
 import bpy
@@ -87,8 +87,8 @@ class RigidBodyToClothConverter:
         subdivision_level: int,
         physics_mode: PhysicsMode,
         extend_ribbon_area: bool
-    ):
-
+    ):  # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-locals, too-many-statements
         mmd_model = mmd_tools.core.model.Model(mmd_root_object)
         mmd_mesh_object = mesh_objects[0]
         mmd_armature_object = mmd_model.armature()
@@ -155,13 +155,10 @@ class RigidBodyToClothConverter:
         new_side_verts = cls.extend_side_vertices(cloth_bm, vertices, edges)
         cls.fill_faces(cloth_bm, edges.side_edges, new_side_verts)
 
-        cloth_bm.verts.ensure_lookup_table()
-
-        cls.normals_make_consistent(cloth_bm)
-
         new_ribbon_verts = cls.extend_ribbon_vertices(cloth_bm)
         cls.fill_faces(cloth_bm, [e for e in cloth_bm.edges if e.is_wire], new_ribbon_verts)
 
+        cls.normals_make_consistent(cloth_bm)
         cloth_bm.verts.ensure_lookup_table()
         cloth_bm.edges.ensure_lookup_table()
         cloth_bm.to_mesh(cloth_mesh)
@@ -203,6 +200,8 @@ class RigidBodyToClothConverter:
 
     @staticmethod
     def bind_mmd_mesh(mmd_mesh_object, cloth_mesh_object, cloth_bm, pose_bones, deform_vertex_group_index, vertices_ribbon_verts, physics_mode):
+        # pylint: disable=too-many-arguments, too-many-locals
+
         unnecessary_vertex_groups: List[bpy.types.VertexGroup] = []
 
         mmd_mesh: bpy.types.Mesh = mmd_mesh_object.data
@@ -288,8 +287,8 @@ class RigidBodyToClothConverter:
         cloth_bm.normal_update()
 
     @staticmethod
-    def extend_side_vertices(cloth_bm: bmesh.types.BMesh, vertices: Vertices, edges: Edges):
-        new_side_verts = [None for i in range(len(cloth_bm.verts))]
+    def extend_side_vertices(cloth_bm: bmesh.types.BMesh, vertices: Vertices, edges: Edges) -> List[Union[bmesh.types.BMVert, None]]:
+        new_side_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
 
         for vert in vertices.side_verts:
             for edge in vert.link_edges:
@@ -305,10 +304,10 @@ class RigidBodyToClothConverter:
         return new_side_verts
 
     @staticmethod
-    def extend_ribbon_vertices(cloth_bm: bmesh.types.BMesh):
+    def extend_ribbon_vertices(cloth_bm: bmesh.types.BMesh) -> List[Union[bmesh.types.BMVert, None]]:
         # 挤出飘带顶点
         # extrude ribbon edge
-        new_ribbon_verts = [None for i in range(len(cloth_bm.verts))]
+        new_ribbon_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
 
         for vert in cloth_bm.verts[:]:
             if not vert.is_wire:
@@ -332,8 +331,8 @@ class RigidBodyToClothConverter:
                 cloth_bm.faces.new([vert1, vert2, vert3, vert4])
 
     @staticmethod
-    def extend_up_edges(cloth_bm, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges, physics_mode: PhysicsMode):
-        new_up_verts = [None for i in range(len(cloth_bm.verts))]
+    def extend_up_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges, physics_mode: PhysicsMode) -> List[Union[bmesh.types.BMVert, None]]:
+        new_up_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
 
         # 延长头部顶点
         # extend root vertex
@@ -364,8 +363,8 @@ class RigidBodyToClothConverter:
         return new_up_verts
 
     @staticmethod
-    def extend_down_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges):
-        new_down_verts = [None for i in range(len(cloth_bm.verts))]
+    def extend_down_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges) -> List[Union[bmesh.types.BMVert, None]]:
+        new_down_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
         # 延长尾部顶点
         # extend tail vertex
         for vert in vertices.down_verts:
@@ -400,15 +399,6 @@ class RigidBodyToClothConverter:
         return cloth_mesh_object
 
     @staticmethod
-    def add_edge_faces(cloth_mesh_object: bpy.types.Object):
-        bpy.ops.object.select_all(action='DESELECT')
-        bpy.context.view_layer.objects.active = cloth_mesh_object
-        bpy.ops.object.mode_set(mode='EDIT')
-        bpy.ops.mesh.select_all(action='SELECT')
-        bpy.ops.mesh.edge_face_add()
-        bpy.ops.object.mode_set(mode='OBJECT')
-
-    @staticmethod
     def collect_joints(mmd_model, rigid_body_index_dict: Dict[bpy.types.Object, int]) -> Tuple[List[bpy.types.Object], List[Tuple[int, int]], List[bpy.types.Object]]:
         joint_objects: List[bpy.types.Object] = []
         joint_edge_indices: List[Tuple[int, int]] = []
@@ -436,25 +426,31 @@ class RigidBodyToClothConverter:
 
         if extend_ribbon_area:
             boundary_verts = vertices.ribbon_verts
-            boundary_verts2 = []
+            boundary_verts_next = []
             while len(boundary_verts) != 0:
-                for v in boundary_verts:
-                    for e in v.link_edges:
-                        for v2 in e.verts:
-                            if v2 not in vertices.ribbon_verts:
-                                vertices.ribbon_verts.add(v2)
-                                boundary_verts2.append(v2)
-                boundary_verts = boundary_verts2.copy()
-                boundary_verts2.clear()
+                for vert in [
+                    v2
+                    for v in boundary_verts
+                    for e in v.link_edges
+                    for v2 in e.verts
+                    if v2 not in vertices.ribbon_verts
+                ]:
+                    vertices.ribbon_verts.add(vert)
+                    boundary_verts_next.append(vert)
+                boundary_verts = boundary_verts_next.copy()
+                boundary_verts_next.clear()
 
         vertices.all_ribbon = True
-        for f in cloth_bm.faces:
+        for face in cloth_bm.faces:
             ribbon_face: bool = False
-            for v in f.verts:
-                if v in vertices.ribbon_verts:
+            for vert in face.verts:
+                if vert in vertices.ribbon_verts:
                     ribbon_face = True
+                    break
+
             if not ribbon_face:
                 vertices.all_ribbon = False
+                break
 
         vert: bmesh.types.BMVert
         for vert in cloth_bm.verts:
@@ -468,7 +464,10 @@ class RigidBodyToClothConverter:
             elif bone.children[0] not in pose_bones:
                 vertices.down_verts.add(vert)
 
-            if vert in vertices.ribbon_verts and physics_mode in {PhysicsMode.AUTO, PhysicsMode.BONE_CONSTRAINT}:
+            if (
+                vert in vertices.ribbon_verts and physics_mode == PhysicsMode.AUTO
+                or physics_mode == PhysicsMode.BONE_CONSTRAINT
+            ):
                 vert.co = bone.tail
 
         return vertices
