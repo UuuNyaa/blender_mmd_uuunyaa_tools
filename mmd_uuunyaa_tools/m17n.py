@@ -80,7 +80,7 @@ translation_dict = {
     ("*", "Download"): "Download",
     #: mmd_uuunyaa_tools/asset_search/panels.py:284
     ("*", "Downloading"): "Downloading",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/editors/physics/cloth.py:119
     ("*", "Cache:"): "Cache:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:285
     ("*", "Cancel"): "Cancel",
@@ -210,6 +210,116 @@ translation_dict = {
     ("*", "Spine"): "Spine",
     #: mmd_uuunyaa_tools/editors/panels.py:133
     ("*", "Limbs"): "Limbs",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:26 mmd_uuunyaa_tools/editors/physics/collision.py:25
+    ("*", "Nothing"): "Nothing",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:39
+    ("*", "Cotton"): "Cotton",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:62
+    ("*", "Silk"): "Silk",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:87
+    ("*", "UuuNyaa Cloth Adjuster"): "UuuNyaa Cloth Adjuster",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:109
+    ("*", "Collision:"): "Collision:",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:115 mmd_uuunyaa_tools/editors/physics/collision.py:78 mmd_uuunyaa_tools/editors/physics/rigid_body.py:29
+    ("*", "Batch Operation:"): "Batch Operation:",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:116 mmd_uuunyaa_tools/editors/physics/collision.py:79 mmd_uuunyaa_tools/editors/physics/rigid_body.py:30
+    ("Operator", "Copy to Selected"): "Copy to Selected",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:121 mmd_uuunyaa_tools/editors/physics/cloth.py:412
+    ("*", "Simulation Start"): "Simulation Start",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:122 mmd_uuunyaa_tools/editors/physics/cloth.py:418
+    ("*", "Simulation End"): "Simulation End",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:128
+    ("*", "Subdivision:"): "Subdivision:",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:129 mmd_uuunyaa_tools/editors/physics/cloth.py:269 mmd_uuunyaa_tools/editors/physics/cloth.py:448
+    ("*", "Subdivision Levels"): "Subdivision Levels",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:134
+    ("*", "Copy Cloth Adjuster Settings"): "Copy Cloth Adjuster Settings",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:169 mmd_uuunyaa_tools/editors/physics/panels.py:43
+    ("Operator", "Select Cloth Mesh"): "Select Cloth Mesh",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:172 mmd_uuunyaa_tools/editors/physics/collision.py:120
+    ("*", "Same MMD Model"): "Same MMD Model",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:173 mmd_uuunyaa_tools/editors/physics/collision.py:121
+    ("*", "Same Physics Settings"): "Same Physics Settings",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:174
+    ("*", "Same Cache Settings"): "Same Cache Settings",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:229
+    ("Operator", "Remove Mesh Cloth"): "Remove Mesh Cloth",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:266
+    ("Operator", "Convert Rigid Body to Cloth"): "Convert Rigid Body to Cloth",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:271
+    ("*", "Physics Mode"): "Physics Mode",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:276
+    ("*", "Extend Ribbon Area"): "Extend Ribbon Area",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:326
+    ("*", "Multiple MMD models selected. Please select single model at a time."): "Multiple MMD models selected. Please select single model at a time.",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:355 mmd_uuunyaa_tools/editors/physics/collision.py:209
+    ("*", "Presets"): "Presets",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:362
+    ("*", "Vertex Mass"): "Vertex Mass",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:375
+    ("*", "Stiffness"): "Stiffness",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:388 mmd_uuunyaa_tools/editors/physics/collision.py:216
+    ("*", "Damping"): "Damping",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:394
+    ("*", "Collision Quality"): "Collision Quality",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:400
+    ("*", "Minimum Distance"): "Minimum Distance",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:406
+    ("*", "Impulse Clamping"): "Impulse Clamping",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:38
+    ("*", "Thin Smooth"): "Thin Smooth",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:56
+    ("*", "UuuNyaa Collision Adjuster"): "UuuNyaa Collision Adjuster",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:84
+    ("Operator", "Copy Collision Adjuster Settings"): "Copy Collision Adjuster Settings",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:117 mmd_uuunyaa_tools/editors/physics/panels.py:39
+    ("Operator", "Select Collision Mesh"): "Select Collision Mesh",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:168
+    ("Operator", "Remove Mesh Collision"): "Remove Mesh Collision",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:222
+    ("*", "Thickness Outer"): "Thickness Outer",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:228
+    ("*", "Thickness Inner"): "Thickness Inner",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:234
+    ("*", "Cloth Friction"): "Cloth Friction",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:25
+    ("*", "Auto"): "Auto",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:26
+    ("*", "Bone Constraint"): "Bone Constraint",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:27
+    ("*", "Surface Deform"): "Surface Deform",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:108
+    ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body.",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:19
+    ("*", "UuuNyaa Physics"): "UuuNyaa Physics",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:28
+    ("*", "Relevant Selection:"): "Relevant Selection:",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:33
+    ("Operator", "Select Rigid Body"): "Select Rigid Body",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:49
+    ("*", "MMD Model is not selected."): "MMD Model is not selected.",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:54
+    ("*", "Visibility:"): "Visibility:",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:56
+    ("*", "Mesh"): "Mesh",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:57
+    ("*", "Armature"): "Armature",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:58
+    ("*", "Rigid Body"): "Rigid Body",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:59
+    ("*", "Cloth"): "Cloth",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:62
+    ("*", "Converter:"): "Converter:",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:66
+    ("Operator", "Rigid Body to Cloth"): "Rigid Body to Cloth",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:15
+    ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaa Rigid Body Adjuster",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:35
+    ("Operator", "Select Rigid Body Mesh"): "Select Rigid Body Mesh",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:38
+    ("*", "Only in the MMD Model"): "Only in the MMD Model",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:39
+    ("*", "Only the same Settings"): "Only the same Settings",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "Add Skin Hair Mesh",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:118
@@ -570,7 +680,7 @@ translation_dict = {
     ("Operator", "Download"): "ダウンロード",
     #: mmd_uuunyaa_tools/asset_search/panels.py:284
     ("*", "Downloading"): "ダウンロード中",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/editors/physics/cloth.py:119
     ("*", "Cache:"): "キャッシュ:",
     #: mmd_uuunyaa_tools/asset_search/panels.py:285
     ("Operator", "Cancel"): "キャンセル",
@@ -700,6 +810,116 @@ translation_dict = {
     ("*", "Spine"): "脊柱",
     #: mmd_uuunyaa_tools/editors/panels.py:133
     ("*", "Limbs"): "肢体",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:26 mmd_uuunyaa_tools/editors/physics/collision.py:25
+    ("*", "Nothing"): "なし",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:39
+    ("*", "Cotton"): "綿",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:62
+    ("*", "Silk"): "絹",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:87
+    ("*", "UuuNyaa Cloth Adjuster"): "UuuNyaaクロス調整器",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:109
+    ("*", "Collision:"): "コリジョン:",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:115 mmd_uuunyaa_tools/editors/physics/collision.py:78 mmd_uuunyaa_tools/editors/physics/rigid_body.py:29
+    ("*", "Batch Operation:"): "一括操作:",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:116 mmd_uuunyaa_tools/editors/physics/collision.py:79 mmd_uuunyaa_tools/editors/physics/rigid_body.py:30
+    ("Operator", "Copy to Selected"): "選択にコピー",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:121 mmd_uuunyaa_tools/editors/physics/cloth.py:412
+    ("*", "Simulation Start"): "シミュレーション開始",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:122 mmd_uuunyaa_tools/editors/physics/cloth.py:418
+    ("*", "Simulation End"): "シミュレーション終了",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:128
+    ("*", "Subdivision:"): "細分化",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:129 mmd_uuunyaa_tools/editors/physics/cloth.py:269 mmd_uuunyaa_tools/editors/physics/cloth.py:448
+    ("*", "Subdivision Levels"): "細分化レベル",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:134
+    ("*", "Copy Cloth Adjuster Settings"): "クロス調整器をコピー",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:169 mmd_uuunyaa_tools/editors/physics/panels.py:43
+    ("Operator", "Select Cloth Mesh"): "クロスメッシュを選択",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:172 mmd_uuunyaa_tools/editors/physics/collision.py:120
+    ("*", "Same MMD Model"): "同じMMDモデル",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:173 mmd_uuunyaa_tools/editors/physics/collision.py:121
+    ("*", "Same Physics Settings"): "同じ物理設定",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:174
+    ("*", "Same Cache Settings"): "同じキャッシュ設定",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:229
+    ("Operator", "Remove Mesh Cloth"): "クロスを除去",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:266
+    ("Operator", "Convert Rigid Body to Cloth"): "リジッドボディをクロスに変換",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:271
+    ("*", "Physics Mode"): "物理モード",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:276
+    ("*", "Extend Ribbon Area"): "リボンエリア拡張",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:326
+    ("*", "Multiple MMD models selected. Please select single model at a time."): "複数のMMDモデルが選択されています。ひとつずつモデルを選択してください。",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:355 mmd_uuunyaa_tools/editors/physics/collision.py:209
+    ("*", "Presets"): "プリセット",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:362
+    ("*", "Vertex Mass"): "頂点の質量",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:375
+    ("*", "Stiffness"): "剛性",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:388 mmd_uuunyaa_tools/editors/physics/collision.py:216
+    ("*", "Damping"): "減衰",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:394
+    ("*", "Collision Quality"): "コリジョンの品質",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:400
+    ("*", "Minimum Distance"): "最小距離",
+    #: mmd_uuunyaa_tools/editors/physics/cloth.py:406
+    ("*", "Impulse Clamping"): "撃力を制限",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:38
+    ("*", "Thin Smooth"): "薄くスムーズ",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:56
+    ("*", "UuuNyaa Collision Adjuster"): "UuuNyaaコリジョン調整器",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:84
+    ("Operator", "Copy Collision Adjuster Settings"): "コリジョン調整器をコピー",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:117 mmd_uuunyaa_tools/editors/physics/panels.py:39
+    ("Operator", "Select Collision Mesh"): "コリジョンメッシュを選択",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:168
+    ("Operator", "Remove Mesh Collision"): "コリジョンを除去",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:222
+    ("*", "Thickness Outer"): "外側の厚さ",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:228
+    ("*", "Thickness Inner"): "内側の厚さ",
+    #: mmd_uuunyaa_tools/editors/physics/collision.py:234
+    ("*", "Cloth Friction"): "摩擦",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:25
+    ("*", "Auto"): "自動",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:26
+    ("*", "Bone Constraint"): "ボーンコンストレイント",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:27
+    ("*", "Surface Deform"): "サーフェス変形",
+    #: mmd_uuunyaa_tools/editors/physics/convert_rigid_body_to_cloth.py:108
+    ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "{rigid_body_name}に関連するボーンがありません。リジッドボディにボーンを関連付けてください。",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:19
+    ("*", "UuuNyaa Physics"): "UuuNyaa物理演算",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:28
+    ("*", "Relevant Selection:"): "関連選択",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:33
+    ("Operator", "Select Rigid Body"): "リジッドボディを選択",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:49
+    ("*", "MMD Model is not selected."): "MMDモデルが未選択",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:54
+    ("*", "Visibility:"): "可視性:",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:56
+    ("*", "Mesh"): "メッシュ",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:57
+    ("*", "Armature"): "アーマチュア",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:58
+    ("*", "Rigid Body"): "リジッドボディ",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:59
+    ("*", "Cloth"): "クロス",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:62
+    ("*", "Converter:"): "",
+    #: mmd_uuunyaa_tools/editors/physics/panels.py:66
+    ("Operator", "Rigid Body to Cloth"): "リジッドボディをクロスに",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:15
+    ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaaリジッドボディ調整器",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:35
+    ("Operator", "Select Rigid Body Mesh"): "リジッドボディメッシュを選択",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:38
+    ("*", "Only in the MMD Model"): "MMDモデルのみ",
+    #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:39
+    ("*", "Only the same Settings"): "同じ設定のみ",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "体毛メッシュを追加",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:118
@@ -781,7 +1001,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
     #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
-    ("Operator", "Convert to MMD compatible"): "MMD互換へ変換",
+    ("Operator", "Convert to MMD compatible"): "MMD互換に変換",
     #: mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
     #: mmd_uuunyaa_tools/panels.py:65
