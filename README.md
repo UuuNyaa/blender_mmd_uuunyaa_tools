@@ -24,4 +24,5 @@ mmd_uuunyaa_tools needs your contribution!
 If you are interested in any of the above, please contact me via the [issues](../../issues).
 
 ## Credits
-Lighting thumbnail images depict the character "Hatsune Miku" of Crypton Future Media, Inc. under the [Piapro Character License](http://piapro.jp/license/pcl/summary).
+- Rigid body Physics to Cloth Physics feature is the work of [小威廉伯爵](https://github.com/958261649/Miku_Miku_Rig). It was ported with his permission.
+- Lighting thumbnail images depict the character "Hatsune Miku" of Crypton Future Media, Inc. under the [Piapro Character License](http://piapro.jp/license/pcl/summary).
