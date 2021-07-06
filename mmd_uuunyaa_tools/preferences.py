@@ -50,15 +50,15 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     )
 
     asset_cache_folder: bpy.props.StringProperty(
-        name="Asset Cache Folder",
-        description=('Directory path to download cache'),
+        name=_('Asset Cache Folder'),
+        description=_('Path to asset cache folder'),
         subtype='DIR_PATH',
         default=os.path.join(tempfile.gettempdir(), 'mmd_uuunyaa_tools_cache'),
     )
 
     asset_max_cache_size: bpy.props.IntProperty(
         name=_('Asset Max. Cache Size (MB)'),
-        description=_('Maximum size (Mega bytes) of the cache folder'),
+        description=_('Maximum size (Mega bytes) of the asset cache folder'),
         min=100,
         soft_max=1_000_000,
         default=10_000,
@@ -66,7 +66,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
 
     asset_extract_root_folder: bpy.props.StringProperty(
         name=_('Asset Extract Root Folder'),
-        description=_('Path to extract the downloaded assets'),
+        description=_('Path to extract the cached assets'),
         subtype='DIR_PATH',
         default=os.path.join(pathlib.Path.home(), 'BlenderAssets')
     )
@@ -87,7 +87,7 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     )
 
     def draw(self, _context):
-        layout = self.layout  # pylint: disable=no-member
+        layout: bpy.types.UILayout = self.layout  # pylint: disable=no-member
 
         col = layout.box().column()
         col.prop(self, 'asset_search_results_max_display_count')
@@ -124,3 +124,13 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col.prop(self, 'asset_extract_root_folder')
         col.prop(self, 'asset_extract_folder')
         col.prop(self, 'asset_extract_json')
+
+        layout.separator()
+        col = layout.column()
+        col.label(text=_('Credits:'))
+
+        credit = col.column(align=True)
+        row = credit.split(factor=0.95)
+        row.label(text=_('Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵.'))
+        row.operator('wm.url_open', text=_(''), icon='URL').url = 'https://github.com/958261649/Miku_Miku_Rig'
+        credit.label(text=_('It was ported with his permission.'))

@@ -24,6 +24,12 @@ def unregister():
 
 translation_dict = {
   "en_US": {
+    #: mmd_uuunyaa_tools/__init__.py:26
+    ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.",
+    #: mmd_uuunyaa_tools/__init__.py:27 mmd_uuunyaa_tools/editors/skin_hair.py:180
+    ("*", "UuuNyaa"): "UuuNyaa",
+    #: mmd_uuunyaa_tools/__init__.py:31
+    ("*", "View3D > Tool Shelf > MMD Tools Panel"): "View3D > Tool Shelf > MMD Tools Panel",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "Failed to download assets from SmutBase. The response format may have changed.",
     #: mmd_uuunyaa_tools/asset_search/actions.py:100
@@ -342,8 +348,6 @@ translation_dict = {
     ("*", "Location"): "Location",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:149
     ("*", "Rotation"): "Rotation",
-    #: mmd_uuunyaa_tools/editors/skin_hair.py:180
-    ("*", "UuuNyaa"): "UuuNyaa",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:184
     ("*", "Skin Hair"): "Skin Hair",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:188
@@ -428,14 +432,18 @@ translation_dict = {
     ("*", "Specify the filter conditions for retrieving assets"): "Specify the filter conditions for retrieving assets",
     #: mmd_uuunyaa_tools/preferences.py:48
     ("*", "Asset JSON Auto Update on Startup"): "Asset JSON Auto Update on Startup",
+    #: mmd_uuunyaa_tools/preferences.py:53
+    ("*", "Asset Cache Folder"): "Asset Cache Folder",
+    #: mmd_uuunyaa_tools/preferences.py:54
+    ("*", "Path to asset cache folder"): "Path to asset cache folder",
     #: mmd_uuunyaa_tools/preferences.py:60
     ("*", "Asset Max. Cache Size (MB)"): "Asset Max. Cache Size (MB)",
     #: mmd_uuunyaa_tools/preferences.py:61
-    ("*", "Maximum size (Mega bytes) of the cache folder"): "Maximum size (Mega bytes) of the cache folder",
+    ("*", "Maximum size (Mega bytes) of the asset cache folder"): "Maximum size (Mega bytes) of the asset cache folder",
     #: mmd_uuunyaa_tools/preferences.py:68
     ("*", "Asset Extract Root Folder"): "Asset Extract Root Folder",
     #: mmd_uuunyaa_tools/preferences.py:69
-    ("*", "Path to extract the downloaded assets"): "Path to extract the downloaded assets",
+    ("*", "Path to extract the cached assets"): "Path to extract the cached assets",
     #: mmd_uuunyaa_tools/preferences.py:75
     ("*", "Asset Extract Folder"): "Asset Extract Folder",
     #: mmd_uuunyaa_tools/preferences.py:82
@@ -446,6 +454,12 @@ translation_dict = {
     ("*", "Query Examples"): "Query Examples",
     #: mmd_uuunyaa_tools/preferences.py:112
     ("*", "Asset Cache Usage:"): "Asset Cache Usage:",
+    #: mmd_uuunyaa_tools/preferences.py:130
+    ("*", "Credits:"): "Credits:",
+    #: mmd_uuunyaa_tools/preferences.py:134
+    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵.",
+    #: mmd_uuunyaa_tools/preferences.py:136
+    ("*", "It was ported with his permission."): "It was ported with his permission.",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "Reset",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
@@ -508,7 +522,7 @@ translation_dict = {
     ("*", "Fabric Wave"): "Fabric Wave",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:453
     ("*", "Fabric Cotton"): "Fabric Cotton",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:872
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:873
     ("*", "Color"): "Color",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:457 mmd_uuunyaa_tools/tuners/material_tuners.py:528 mmd_uuunyaa_tools/tuners/material_tuners.py:599
     ("*", "Alpha"): "Alpha",
@@ -516,7 +530,7 @@ translation_dict = {
     ("*", "Vector"): "Vector",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:459 mmd_uuunyaa_tools/tuners/material_tuners.py:530
     ("*", "Impurity"): "Impurity",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:873
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:874
     ("*", "Scale"): "Scale",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:461 mmd_uuunyaa_tools/tuners/material_tuners.py:532
     ("*", "Angle"): "Angle",
@@ -568,11 +582,11 @@ translation_dict = {
     ("*", "Liquid Water"): "Liquid Water",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:833
     ("*", "Liquid Cloudy"): "Liquid Cloudy",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:869
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:870
     ("*", "Artistic Watercolor"): "Artistic Watercolor",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:874
-    ("*", "Background Scale"): "Background Scale",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:875
+    ("*", "Background Scale"): "Background Scale",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:876
     ("*", "Bleed Strength"): "Bleed Strength",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("*", "Tune Lighting"): "Tune Lighting",
@@ -634,6 +648,12 @@ translation_dict = {
     ("*", "MMDTexUV"): "MMDTexUV",
   },
   "ja_JP": {
+    #: mmd_uuunyaa_tools/__init__.py:26
+    ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "MMDモデル＆シーン編集のためのユーティリティーツールです。by Uuu(/>ω<)/Nyaa!",
+    #: mmd_uuunyaa_tools/__init__.py:27 mmd_uuunyaa_tools/editors/skin_hair.py:180
+    ("*", "UuuNyaa"): "UuuNyaa",
+    #: mmd_uuunyaa_tools/__init__.py:31
+    ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3Dビュー > サイドバー > MMD Toolsパネル",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "SmutBaseからのアセットダウンロードに失敗しました。レスポンスフォーマットが変わっている可能性があります。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:100
@@ -952,8 +972,6 @@ translation_dict = {
     ("*", "Location"): "位置",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:149
     ("*", "Rotation"): "回転",
-    #: mmd_uuunyaa_tools/editors/skin_hair.py:180
-    ("*", "UuuNyaa"): "UuuNyaa",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:184
     ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:188
@@ -1038,16 +1056,20 @@ translation_dict = {
     ("*", "Specify the filter conditions for retrieving assets"): "アセットを取得するフィルタ条件を指定",
     #: mmd_uuunyaa_tools/preferences.py:48
     ("*", "Asset JSON Auto Update on Startup"): "起動時にアセットJSONを更新する",
+    #: mmd_uuunyaa_tools/preferences.py:53
+    ("*", "Asset Cache Folder"): "アセットキャッシュフォルダー",
+    #: mmd_uuunyaa_tools/preferences.py:54
+    ("*", "Path to asset cache folder"): "アセットキャッシュフォルダーのパス",
     #: mmd_uuunyaa_tools/preferences.py:60
     ("*", "Asset Max. Cache Size (MB)"): "アセット最大キャッシュサイズ(MB)",
     #: mmd_uuunyaa_tools/preferences.py:61
-    ("*", "Maximum size (Mega bytes) of the cache folder"): "キャッシュフォルダーの最大サイズ(メガバイト)",
+    ("*", "Maximum size (Mega bytes) of the asset cache folder"): "アセットキャッシュフォルダーの最大サイズ(メガバイト)",
     #: mmd_uuunyaa_tools/preferences.py:68
     ("*", "Asset Extract Root Folder"): "アセット展開ルートフォルダー",
     #: mmd_uuunyaa_tools/preferences.py:69
-    ("*", "Path to extract the downloaded assets"): "ダウンロードしたアセットの展開先パス",
+    ("*", "Path to extract the cached assets"): "キャッシュしたアセットの展開パス",
     #: mmd_uuunyaa_tools/preferences.py:75
-    ("*", "Asset Extract Folder"): "アセット展開先フォルダー",
+    ("*", "Asset Extract Folder"): "アセット展開フォルダー",
     #: mmd_uuunyaa_tools/preferences.py:82
     ("*", "Asset Extract JSON"): "アセット展開JSON",
     #: mmd_uuunyaa_tools/preferences.py:100
@@ -1056,6 +1078,12 @@ translation_dict = {
     ("*", "Query Examples"): "クエリ例",
     #: mmd_uuunyaa_tools/preferences.py:112
     ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
+    #: mmd_uuunyaa_tools/preferences.py:130
+    ("*", "Credits:"): "クレジット:",
+    #: mmd_uuunyaa_tools/preferences.py:134
+    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "リジッドボディ物理からクロス物理機能は小威廉伯爵の作品です。",
+    #: mmd_uuunyaa_tools/preferences.py:136
+    ("*", "It was ported with his permission."): "この機能は本人の許可を得て移植したものです。",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "リセット",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
@@ -1120,7 +1148,7 @@ translation_dict = {
     ("*", "Fabric Wave"): "布地 波形",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:453
     ("*", "Fabric Cotton"): "布地 綿",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:872
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:873
     ("*", "Color"): "カラー",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:457 mmd_uuunyaa_tools/tuners/material_tuners.py:528 mmd_uuunyaa_tools/tuners/material_tuners.py:599
     ("*", "Alpha"): "アルファ",
@@ -1128,7 +1156,7 @@ translation_dict = {
     ("*", "Vector"): "ベクトル",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:459 mmd_uuunyaa_tools/tuners/material_tuners.py:530
     ("*", "Impurity"): "不純物",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:873
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:874
     ("*", "Scale"): "スケール",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:461 mmd_uuunyaa_tools/tuners/material_tuners.py:532
     ("*", "Angle"): "角度",
@@ -1180,11 +1208,11 @@ translation_dict = {
     ("*", "Liquid Water"): "水",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:833
     ("*", "Liquid Cloudy"): "液体 白濁",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:869
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:870
     ("*", "Artistic Watercolor"): "表現手法 水彩画",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:874
-    ("*", "Background Scale"): "背景スケール",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:875
+    ("*", "Background Scale"): "背景スケール",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:876
     ("*", "Bleed Strength"): "滲み強度",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("Operator", "Tune Lighting"): "ライト調整",
