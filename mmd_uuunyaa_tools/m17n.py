@@ -223,7 +223,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:115 mmd_uuunyaa_tools/editors/physics/collision.py:78 mmd_uuunyaa_tools/editors/physics/rigid_body.py:29
     ("*", "Batch Operation:"): "Batch Operation:",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:116 mmd_uuunyaa_tools/editors/physics/collision.py:79 mmd_uuunyaa_tools/editors/physics/rigid_body.py:30
-    ("Operator", "Copy to Selected"): "Copy to Selected",
+    ("*", "Copy to Selected"): "Copy to Selected",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:121 mmd_uuunyaa_tools/editors/physics/cloth.py:412
     ("*", "Simulation Start"): "Simulation Start",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:122 mmd_uuunyaa_tools/editors/physics/cloth.py:418
@@ -235,7 +235,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:134
     ("*", "Copy Cloth Adjuster Settings"): "Copy Cloth Adjuster Settings",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:169 mmd_uuunyaa_tools/editors/physics/panels.py:43
-    ("Operator", "Select Cloth Mesh"): "Select Cloth Mesh",
+    ("*", "Select Cloth Mesh"): "Select Cloth Mesh",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:172 mmd_uuunyaa_tools/editors/physics/collision.py:120
     ("*", "Same MMD Model"): "Same MMD Model",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:173 mmd_uuunyaa_tools/editors/physics/collision.py:121
@@ -243,9 +243,9 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:174
     ("*", "Same Cache Settings"): "Same Cache Settings",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:229
-    ("Operator", "Remove Mesh Cloth"): "Remove Mesh Cloth",
+    ("*", "Remove Mesh Cloth"): "Remove Mesh Cloth",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:266
-    ("Operator", "Convert Rigid Body to Cloth"): "Convert Rigid Body to Cloth",
+    ("*", "Convert Rigid Body to Cloth"): "Convert Rigid Body to Cloth",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:271
     ("*", "Physics Mode"): "Physics Mode",
     #: mmd_uuunyaa_tools/editors/physics/cloth.py:276
@@ -271,11 +271,11 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/collision.py:56
     ("*", "UuuNyaa Collision Adjuster"): "UuuNyaa Collision Adjuster",
     #: mmd_uuunyaa_tools/editors/physics/collision.py:84
-    ("Operator", "Copy Collision Adjuster Settings"): "Copy Collision Adjuster Settings",
+    ("*", "Copy Collision Adjuster Settings"): "Copy Collision Adjuster Settings",
     #: mmd_uuunyaa_tools/editors/physics/collision.py:117 mmd_uuunyaa_tools/editors/physics/panels.py:39
-    ("Operator", "Select Collision Mesh"): "Select Collision Mesh",
+    ("*", "Select Collision Mesh"): "Select Collision Mesh",
     #: mmd_uuunyaa_tools/editors/physics/collision.py:168
-    ("Operator", "Remove Mesh Collision"): "Remove Mesh Collision",
+    ("*", "Remove Mesh Collision"): "Remove Mesh Collision",
     #: mmd_uuunyaa_tools/editors/physics/collision.py:222
     ("*", "Thickness Outer"): "Thickness Outer",
     #: mmd_uuunyaa_tools/editors/physics/collision.py:228
@@ -295,7 +295,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/panels.py:28
     ("*", "Relevant Selection:"): "Relevant Selection:",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:33
-    ("Operator", "Select Rigid Body"): "Select Rigid Body",
+    ("*", "Select Rigid Body"): "Select Rigid Body",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:49
     ("*", "MMD Model is not selected."): "MMD Model is not selected.",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:54
@@ -311,11 +311,11 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/panels.py:62
     ("*", "Converter:"): "Converter:",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:66
-    ("Operator", "Rigid Body to Cloth"): "Rigid Body to Cloth",
+    ("*", "Rigid Body to Cloth"): "Rigid Body to Cloth",
     #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:15
     ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaa Rigid Body Adjuster",
     #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:35
-    ("Operator", "Select Rigid Body Mesh"): "Select Rigid Body Mesh",
+    ("*", "Select Rigid Body Mesh"): "Select Rigid Body Mesh",
     #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:38
     ("*", "Only in the MMD Model"): "Only in the MMD Model",
     #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:39
@@ -345,9 +345,9 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/skin_hair.py:180
     ("*", "UuuNyaa"): "UuuNyaa",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:184
-    ("Operator", "Skin Hair"): "Skin Hair",
+    ("*", "Skin Hair"): "Skin Hair",
     #: mmd_uuunyaa_tools/editors/skin_hair.py:188
-    ("Operator", "UuuNyaa Extras"): "UuuNyaa Extras",
+    ("*", "UuuNyaa Extras"): "UuuNyaa Extras",
     #: mmd_uuunyaa_tools/menus.py:18 mmd_uuunyaa_tools/menus.py:50 mmd_uuunyaa_tools/menus.py:70 mmd_uuunyaa_tools/menus.py:90
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: mmd_uuunyaa_tools/operators.py:19
@@ -458,7 +458,9 @@ translation_dict = {
     ("*", "Backlight"): "Backlight",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:122
     ("*", "Light Probe Grid"): "Light Probe Grid",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:58 mmd_uuunyaa_tools/tuners/utilities.py:258
+    #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:136
+    ("*", "Shadowless"): "Shadowless",
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:58 mmd_uuunyaa_tools/tuners/utilities.py:261
     ("*", "Wet Adjuster"): "Wet Adjuster",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61
     ("*", "Specular"): "Specular",
@@ -466,7 +468,7 @@ translation_dict = {
     ("*", "Roughness"): "Roughness",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:176
     ("*", "Wet"): "Wet",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:255
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:258
     ("*", "Subsurface Adjuster"): "Subsurface Adjuster",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106
     ("*", "Min"): "Min",
@@ -506,7 +508,7 @@ translation_dict = {
     ("*", "Fabric Wave"): "Fabric Wave",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:453
     ("*", "Fabric Cotton"): "Fabric Cotton",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:872
     ("*", "Color"): "Color",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:457 mmd_uuunyaa_tools/tuners/material_tuners.py:528 mmd_uuunyaa_tools/tuners/material_tuners.py:599
     ("*", "Alpha"): "Alpha",
@@ -514,7 +516,7 @@ translation_dict = {
     ("*", "Vector"): "Vector",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:459 mmd_uuunyaa_tools/tuners/material_tuners.py:530
     ("*", "Impurity"): "Impurity",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:873
     ("*", "Scale"): "Scale",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:461 mmd_uuunyaa_tools/tuners/material_tuners.py:532
     ("*", "Angle"): "Angle",
@@ -566,6 +568,12 @@ translation_dict = {
     ("*", "Liquid Water"): "Liquid Water",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:833
     ("*", "Liquid Cloudy"): "Liquid Cloudy",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:869
+    ("*", "Artistic Watercolor"): "Artistic Watercolor",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:874
+    ("*", "Background Scale"): "Background Scale",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:875
+    ("*", "Bleed Strength"): "Bleed Strength",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("*", "Tune Lighting"): "Tune Lighting",
     #: mmd_uuunyaa_tools/tuners/operators.py:31
@@ -621,6 +629,8 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/utilities.py:249
     ("*", "Leather Texture"): "Leather Texture",
     #: mmd_uuunyaa_tools/tuners/utilities.py:252
+    ("*", "Watercolor Texture"): "Watercolor Texture",
+    #: mmd_uuunyaa_tools/tuners/utilities.py:255
     ("*", "MMDTexUV"): "MMDTexUV",
   },
   "ja_JP": {
@@ -909,7 +919,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/physics/panels.py:59
     ("*", "Cloth"): "クロス",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:62
-    ("*", "Converter:"): "",
+    ("*", "Converter:"): "コンバーター:",
     #: mmd_uuunyaa_tools/editors/physics/panels.py:66
     ("Operator", "Rigid Body to Cloth"): "リジッドボディをクロスに",
     #: mmd_uuunyaa_tools/editors/physics/rigid_body.py:15
@@ -1058,7 +1068,9 @@ translation_dict = {
     ("*", "Backlight"): "バックライト",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:122
     ("*", "Light Probe Grid"): "イラディアンスボリューム",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:58 mmd_uuunyaa_tools/tuners/utilities.py:258
+    #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:136
+    ("*", "Shadowless"): "シャドウレス",
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:58 mmd_uuunyaa_tools/tuners/utilities.py:261
     ("*", "Wet Adjuster"): "ウエット調節器",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61
     ("*", "Specular"): "スペキュラー",
@@ -1067,7 +1079,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:176
     ("*", "Wet"): "ウェット",
     ("Operator", "Wet"): "ウェット",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:255
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:103 mmd_uuunyaa_tools/tuners/utilities.py:258
     ("*", "Subsurface Adjuster"): "サブサーフェス調節器",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106
     ("*", "Min"): "最小",
@@ -1108,7 +1120,7 @@ translation_dict = {
     ("*", "Fabric Wave"): "布地 波形",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:453
     ("*", "Fabric Cotton"): "布地 綿",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:456 mmd_uuunyaa_tools/tuners/material_tuners.py:527 mmd_uuunyaa_tools/tuners/material_tuners.py:598 mmd_uuunyaa_tools/tuners/material_tuners.py:872
     ("*", "Color"): "カラー",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:457 mmd_uuunyaa_tools/tuners/material_tuners.py:528 mmd_uuunyaa_tools/tuners/material_tuners.py:599
     ("*", "Alpha"): "アルファ",
@@ -1116,7 +1128,7 @@ translation_dict = {
     ("*", "Vector"): "ベクトル",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:459 mmd_uuunyaa_tools/tuners/material_tuners.py:530
     ("*", "Impurity"): "不純物",
-    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:460 mmd_uuunyaa_tools/tuners/material_tuners.py:531 mmd_uuunyaa_tools/tuners/material_tuners.py:603 mmd_uuunyaa_tools/tuners/material_tuners.py:647 mmd_uuunyaa_tools/tuners/material_tuners.py:873
     ("*", "Scale"): "スケール",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:461 mmd_uuunyaa_tools/tuners/material_tuners.py:532
     ("*", "Angle"): "角度",
@@ -1168,6 +1180,12 @@ translation_dict = {
     ("*", "Liquid Water"): "水",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:833
     ("*", "Liquid Cloudy"): "液体 白濁",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:869
+    ("*", "Artistic Watercolor"): "表現手法 水彩画",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:874
+    ("*", "Background Scale"): "背景スケール",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:875
+    ("*", "Bleed Strength"): "滲み強度",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("Operator", "Tune Lighting"): "ライト調整",
     #: mmd_uuunyaa_tools/tuners/operators.py:31
@@ -1223,6 +1241,8 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/utilities.py:249
     ("*", "Leather Texture"): "革テクスチャ",
     #: mmd_uuunyaa_tools/tuners/utilities.py:252
+    ("*", "Watercolor Texture"): "水彩画テクスチャ",
+    #: mmd_uuunyaa_tools/tuners/utilities.py:255
     ("*", "MMDTexUV"): "MMDTexUV",
   },
 }

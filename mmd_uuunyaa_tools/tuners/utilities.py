@@ -248,6 +248,9 @@ class MaterialUtilities(NodeUtilities):
     def get_leather_texture_node(self) -> ShaderNodeGroup:
         return self.get_node_group(_('Leather Texture'), label='Leather Texture')
 
+    def get_watercolor_texture_node(self) -> ShaderNodeGroup:
+        return self.get_node_group(_('Watercolor Texture'), label='Watercolor Texture')
+
     def get_tex_uv(self) -> ShaderNodeGroup:
         return self.get_node_group(_('MMDTexUV'), name='mmd_tex_uv')
 

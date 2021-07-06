@@ -126,11 +126,26 @@ class LightProbeGridLightingTuner(LightingTunerABC):
         self.add_lights(self.get_id())
 
 
+class ShadowlessLightingTuner(LightingTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'LIGHTING_SHADOWLESS'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Shadowless')
+
+    def execute(self):
+        self.reset()
+        self.add_lights(self.get_id())
+
+
 TUNERS = TunerRegistry(
     (0, ResetLightingTuner),
     (1, LeftAccentLightingTuner),
     (5, DoubleSideAccentLightingTuner),
     (2, GodRayLightingTuner),
     (3, BacklightLightingTuner),
+    (6, ShadowlessLightingTuner),
     (4, LightProbeGridLightingTuner),
 )

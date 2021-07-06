@@ -860,6 +860,45 @@ class LiquidCloudyMaterialTuner(MaterialTunerABC):
         })
 
 
+class ArtisticWatercolorMaterialTuner(MaterialTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_ARTISTIC_WATERCOLOR'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Artistic Watercolor')
+
+    translation_properties = [
+        _('Color'),
+        _('Scale'),
+        _('Background Scale'),
+        _('Bleed Strength'),
+    ]
+
+    def execute(self):
+        self.reset()
+        node_frame = self.get_node_frame(self.get_name())
+        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_watercolor_texture = self.edit(self.get_watercolor_texture_node(), {
+            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFCCCC),
+            'Scale': 2.000,
+            'Background Scale': 3.000,
+            'Bleed Strength': 1.000,
+        }, {'location': self.grid_to_position(-2, +0), 'parent': node_frame})
+
+        self.edit(self.get_output_node(), {
+            'Surface': self.edit(self.get_shader_node(), {
+                'Base Color': self.hex_to_rgba(0x000000),
+                'Specular': 0.000,
+                'Emission': node_watercolor_texture.outputs['Color'],
+                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
+        }, {'location': self.grid_to_position(+3, +0)}, force=True)
+
+        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
+
+
 TUNERS = TunerRegistry(
     (0, ResetMaterialTuner),
     (1, TransparentMaterialTuner),
@@ -885,4 +924,5 @@ TUNERS = TunerRegistry(
     (20, StoneGemMaterialTuner),
     (15, LiquidWaterMaterialTuner),
     (16, LiquidCloudyMaterialTuner),
+    (24, ArtisticWatercolorMaterialTuner),
 )
