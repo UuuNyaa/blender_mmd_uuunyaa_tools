@@ -18,12 +18,18 @@ class MeshEditor:
     @staticmethod
     def edit_modifier(modifier: bpy.types.Modifier, settings: SettingsOrNone = None, **kwargs) -> bpy.types.Modifier:
         for key, value in kwargs.items():
+            if not hasattr(modifier, key):
+                continue
+
             setattr(modifier, key, value)
 
         if settings is None:
             return modifier
 
         for key, value in settings.items():
+            if not hasattr(modifier.settings, key):
+                continue
+
             setattr(modifier.settings, key, value)
 
         return modifier
