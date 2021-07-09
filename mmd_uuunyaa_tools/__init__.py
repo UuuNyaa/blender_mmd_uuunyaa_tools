@@ -23,17 +23,22 @@ from mmd_uuunyaa_tools.m17n import _
 
 bl_info = {
     'name': 'mmd_uuunyaa_tools',
-    'description': _('Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.'),
-    'author': _('UuuNyaa'),
-    'version': (0, 9, 4),
+    'description': 'Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.',
+    'author': 'UuuNyaa',
+    'version': (0, 9, 5),
     'blender': (2, 80, 0),
-    'warning': _(''),
-    'location': _('View3D > Tool Shelf > MMD Tools Panel'),
+    'warning': '',
+    'location': 'View3D > Tool Shelf > MMD Tools Panel',
     'wiki_url': 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki',
     'tracker_url': 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/issues',
     'support': 'COMMUNITY',
     'category': 'Object'
 }
+
+_translation_texts = [
+    _('Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.'),
+    _('View3D > Tool Shelf > MMD Tools Panel'),
+]
 
 PACKAGE_PATH = os.path.dirname(__file__)
 PACKAGE_NAME = __package__

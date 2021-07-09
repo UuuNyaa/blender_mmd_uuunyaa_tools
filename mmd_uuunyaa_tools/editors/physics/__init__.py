@@ -19,6 +19,7 @@ class MeshEditor:
     def edit_modifier(modifier: bpy.types.Modifier, settings: SettingsOrNone = None, **kwargs) -> bpy.types.Modifier:
         for key, value in kwargs.items():
             if not hasattr(modifier, key):
+                print(f'WARN: {modifier} modifier has no attribute "{key}"')
                 continue
 
             setattr(modifier, key, value)
@@ -28,6 +29,7 @@ class MeshEditor:
 
         for key, value in settings.items():
             if not hasattr(modifier.settings, key):
+                print(f'WARN: {modifier.settings} object has no attribute "{key}"')
                 continue
 
             setattr(modifier.settings, key, value)
