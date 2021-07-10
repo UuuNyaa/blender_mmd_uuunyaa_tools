@@ -123,7 +123,6 @@ class MMDArmatureObject(ArmatureObjectABC):
         if_far_then_set(mmd_edit_bones['左手首'], tail=extend_toward_tail(mmd_edit_bones['左ひじ'], 1.3))
 
         # spine chain
-
         upper_lower_distance = (mmd_edit_bones['上半身'].head - mmd_edit_bones['下半身'].head).length
         threshold_distance = mmd_edit_bones['下半身'].length / 4
         if upper_lower_distance > threshold_distance:
@@ -143,6 +142,10 @@ class MMDArmatureObject(ArmatureObjectABC):
         else:
             mmd_edit_bones['上半身'].tail = mmd_edit_bones['首'].head
             mmd_edit_bones['首'].tail = mmd_edit_bones['頭'].head
+
+        # toe
+        self.move_bone(mmd_edit_bones['右つま先ＩＫ'], head=mmd_edit_bones['右足首'].tail)
+        self.move_bone(mmd_edit_bones['左つま先ＩＫ'], head=mmd_edit_bones['左足首'].tail)
 
     def clean_koikatsu_armature_prepare(self):
         mmd_pose_bones = self.pose_bones

@@ -359,7 +359,6 @@ class PoseUtil(ABC):
         cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
-
     @classmethod
     def add_ik_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
@@ -450,6 +449,38 @@ class ArmatureObjectABC(ABC):
 
         raise ValueError(f"unknown plane, expected: XY, XZ, YZ, not '{plane}'")
 
+    @staticmethod
+    def move_bone(edit_bone: bpy.types.EditBone, head: Vector = None, tail: Vector = None):
+        vector: Vector = edit_bone.vector
+
+        if head is not None and tail is not None:
+            edit_bone.head = head
+            edit_bone.tail = tail
+
+        elif head is not None:
+            edit_bone.head = head
+            edit_bone.tail = head + vector
+
+        elif tail is not None:
+            edit_bone.head = tail - vector
+            edit_bone.tail = tail
+
+    @staticmethod
+    def fit_edit_bone_rotation(target_bone: bpy.types.EditBone, reference_bone: bpy.types.EditBone):
+        def set_rotation(bone, rotation_matrix: Matrix):
+            bone.matrix = Matrix.Translation(bone.matrix.to_translation()) @ rotation_matrix
+
+        def to_rotation_matrix(bone) -> Matrix:
+            return bone.matrix.to_quaternion().to_matrix().to_4x4()
+
+        set_rotation(target_bone, to_rotation_matrix(reference_bone))
+
+    @staticmethod
+    def insert_edit_bone(edit_bone: bpy.types.EditBone, parent_bone: bpy.types.EditBone):
+        for bone in parent_bone.children:
+            bone.parent = edit_bone
+        edit_bone.parent = parent_bone
+
 
 class RichArmatureObjectABC(ArmatureObjectABC):
     # pylint: disable=too-many-public-methods
@@ -467,22 +498,6 @@ class RichArmatureObjectABC(ArmatureObjectABC):
                 continue
 
             PoseUtil.add_prop(prop_storage_bone, data_path.prop_name)
-
-    @staticmethod
-    def fit_edit_bone_rotation(target_bone: bpy.types.EditBone, reference_bone: bpy.types.EditBone):
-        def set_rotation(bone, rotation_matrix: Matrix):
-            bone.matrix = Matrix.Translation(bone.matrix.to_translation()) @ rotation_matrix
-
-        def to_rotation_matrix(bone) -> Matrix:
-            return bone.matrix.to_quaternion().to_matrix().to_4x4()
-
-        set_rotation(target_bone, to_rotation_matrix(reference_bone))
-
-    @staticmethod
-    def insert_edit_bone(edit_bone: bpy.types.EditBone, parent_bone: bpy.types.EditBone):
-        for bone in parent_bone.children:
-            bone.parent = edit_bone
-        edit_bone.parent = parent_bone
 
     def assign_mmd_bone_names(self, mmd2pose_bone_name_overrides: Union[Dict[str, str], None] = None):
         pose_bones = self.pose_bones

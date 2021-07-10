@@ -596,21 +596,12 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         rig_edit_bones['MCH-spine'].parent = rig_edit_bones['torso']
         rig_edit_bones['MCH-spine.002'].parent = rig_edit_bones['spine_fk.001']
 
-        def move_bone(edit_bone: bpy.types.EditBone, head: Vector = None, tail: Vector = None):
-            vector: Vector = edit_bone.vector
-            if head is not None:
-                edit_bone.head = head
-                edit_bone.tail = head + vector
-            elif tail is not None:
-                edit_bone.head = tail - vector
-                edit_bone.tail = tail
+        self.move_bone(rig_edit_bones['tweak_spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
+        self.move_bone(rig_edit_bones['spine_fk.001'], head=rig_edit_bones['ORG-spine.001'].head)
+        self.move_bone(rig_edit_bones['MCH-spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
+        self.move_bone(rig_edit_bones['chest'], head=rig_edit_bones['ORG-spine.001'].head)
 
-        move_bone(rig_edit_bones['tweak_spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        move_bone(rig_edit_bones['spine_fk.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        move_bone(rig_edit_bones['MCH-spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        move_bone(rig_edit_bones['chest'], head=rig_edit_bones['ORG-spine.001'].head)
-
-        move_bone(rig_edit_bones['hips'], head=rig_edit_bones['ORG-spine'].tail)
+        self.move_bone(rig_edit_bones['hips'], head=rig_edit_bones['ORG-spine'].tail)
 
         # adjust torso bone
         self._adjust_torso_bone(rig_edit_bones)
@@ -976,16 +967,6 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         rig_edit_bone.tail = mmd_edit_bone.tail
         cls.fit_edit_bone_rotation(mmd_edit_bone, rig_edit_bone)
 
-    @staticmethod
-    def _move_bone(edit_bone: bpy.types.EditBone, head: Vector = None, tail: Vector = None):
-        vector: Vector = edit_bone.vector
-        if head is not None:
-            edit_bone.head = head
-            edit_bone.tail = head + vector
-        elif tail is not None:
-            edit_bone.head = tail - vector
-            edit_bone.tail = tail
-
     def imitate_mmd_bone_structure(self, mmd_armature_object: MMDArmatureObject):
         # pylint: disable=too-many-locals,too-many-statements
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones
@@ -1060,16 +1041,16 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         rig_edit_bones['MCH-spine'].parent = rig_edit_bones['torso']
         rig_edit_bones['MCH-spine.002'].parent = rig_edit_bones['spine_fk.001']
 
-        self._move_bone(rig_edit_bones['tweak_spine.001'], head=mmd_edit_bones['上半身'].head)
-        self._move_bone(rig_edit_bones['spine_fk.001'], head=mmd_edit_bones['上半身'].head)
-        self._move_bone(rig_edit_bones['MCH-spine.001'], head=mmd_edit_bones['上半身'].head)
-        self._move_bone(rig_edit_bones['chest'], head=mmd_edit_bones['上半身'].head)
+        self.move_bone(rig_edit_bones['tweak_spine.001'], head=mmd_edit_bones['上半身'].head)
+        self.move_bone(rig_edit_bones['spine_fk.001'], head=mmd_edit_bones['上半身'].head)
+        self.move_bone(rig_edit_bones['MCH-spine.001'], head=mmd_edit_bones['上半身'].head)
+        self.move_bone(rig_edit_bones['chest'], head=mmd_edit_bones['上半身'].head)
 
         rig_edit_bones['ORG-spine'].tail = mmd_edit_bones['下半身'].head
         rig_edit_bones['DEF-spine'].tail = mmd_edit_bones['下半身'].head
-        self._move_bone(rig_edit_bones['spine_fk'], head=mmd_edit_bones['下半身'].head)
-        self._move_bone(rig_edit_bones['MCH-spine'], head=mmd_edit_bones['下半身'].head)
-        self._move_bone(rig_edit_bones['hips'], head=mmd_edit_bones['下半身'].head)
+        self.move_bone(rig_edit_bones['spine_fk'], head=mmd_edit_bones['下半身'].head)
+        self.move_bone(rig_edit_bones['MCH-spine'], head=mmd_edit_bones['下半身'].head)
+        self.move_bone(rig_edit_bones['hips'], head=mmd_edit_bones['下半身'].head)
 
         # adjust torso
         torso_bone = self._adjust_torso_bone(rig_edit_bones)
@@ -1095,6 +1076,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         rig_edit_bones['ORG-eye.L'].parent = rig_edit_bones['ORG-face']
         rig_edit_bones['ORG-eye.L'].length = mmd_edit_bones['左目'].length
+<<<<<<< HEAD
         self._move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
         self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones, '左目')
 
@@ -1102,6 +1084,15 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         rig_edit_bones['ORG-eye.R'].length = mmd_edit_bones['右目'].length
         self._move_bone(rig_edit_bones['ORG-eye.R'], head=mmd_edit_bones['右目'].head)
         self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones, '右目')
+=======
+        self.move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
+        self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones['左目'])
+
+        rig_edit_bones['ORG-eye.R'].parent = rig_edit_bones['ORG-face']
+        rig_edit_bones['ORG-eye.R'].length = mmd_edit_bones['右目'].length
+        self.move_bone(rig_edit_bones['ORG-eye.R'], head=mmd_edit_bones['右目'].head)
+        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones['右目'])
+>>>>>>> Start implementing breast physics feature
 
         rig_edit_bones['eyes'].translate(eye_height_translation_vector)
         rig_edit_bones['eye.L'].translate(eye_height_translation_vector)

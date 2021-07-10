@@ -10,6 +10,7 @@ from mmd_uuunyaa_tools.editors.physics.collision import (RemoveMeshCollision,
                                                          SelectCollisionMesh)
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
+from mmd_uuunyaa_tools.editors.physics.softbody import ConvertBreastBoneToClothOperator
 
 mmd_tools = import_mmd_tools()
 
@@ -66,6 +67,10 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
             row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_('Rigid Body to Cloth'), icon='MATCLOTH')
             row.operator_context = 'INVOKE_DEFAULT'
             row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
+
+        col = layout.column(align=True)
+        col.label(text='experimental')
+        col.operator(ConvertBreastBoneToClothOperator.bl_idname)
 
     @staticmethod
     def _toggle_visibility_of_cloths(obj, context):
