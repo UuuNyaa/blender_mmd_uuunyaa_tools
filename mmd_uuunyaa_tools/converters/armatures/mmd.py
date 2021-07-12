@@ -2,15 +2,151 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+from dataclasses import dataclass
+from enum import Enum
 from typing import Dict, Set
 
 import bpy
 from mathutils import Vector
-from mmd_uuunyaa_tools.editors.armatures import ArmatureObjectABC, MMDBoneInfo, MMDBoneType
+from mmd_uuunyaa_tools.editors import ArmatureEditor
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
 
-class MMDArmatureObject(ArmatureObjectABC):
+class MMDBoneType(Enum):
+    STANDARD = '標準'
+    PARENT = '全ての親'
+    UPPER_ARM_TWIST = '腕捩'
+    WRIST_TWIST = '手捩'
+    UPPER_BODY_1 = '上半身1'
+    UPPER_BODY_2 = '上半身２'
+    GROOVE = 'グルーブ'
+    TOLSO = '腰'
+    LEG_IK_PARENT = '足IK親'
+    CONTROL = '操作中心'
+    TOE_EX = '足先EX'
+    HAND_ACCESSORIES = '手持ちアクセサリ用ダミー'
+    SHOULDER_CANCEL = '肩キャンセル'
+    THUMB_0 = '親指０'
+    OTHERS = 'その他・独自'
+
+
+@dataclass
+class MMDBoneInfo(Enum):
+    # pylint: disable=non-ascii-name,invalid-name,too-many-instance-attributes
+
+    bone_type: MMDBoneType
+    mmd_bone_name: str
+
+    全ての親 = (MMDBoneType.PARENT, '全ての親')
+    センター = (MMDBoneType.STANDARD, 'センター')
+    グルーブ = (MMDBoneType.GROOVE, 'グルーブ')
+    腰 = (MMDBoneType.TOLSO, '腰')
+    上半身 = (MMDBoneType.STANDARD, '上半身')
+    上半身1 = (MMDBoneType.UPPER_BODY_1, '上半身1')
+    上半身2 = (MMDBoneType.UPPER_BODY_2, '上半身2')
+    首 = (MMDBoneType.STANDARD, '首')
+    頭 = (MMDBoneType.STANDARD, '頭')
+
+    両目 = (MMDBoneType.STANDARD, '両目')
+    左目 = (MMDBoneType.STANDARD, '左目')
+    右目 = (MMDBoneType.STANDARD, '右目')
+
+    左肩 = (MMDBoneType.STANDARD, '左肩')
+    左腕 = (MMDBoneType.STANDARD, '左腕')
+    左腕捩 = (MMDBoneType.UPPER_ARM_TWIST, '左腕捩')
+    左ひじ = (MMDBoneType.STANDARD, '左ひじ')
+    左手捩 = (MMDBoneType.WRIST_TWIST, '左手捩')
+    左手首 = (MMDBoneType.STANDARD, '左手首')
+    左親指０ = (MMDBoneType.THUMB_0, '左親指０')
+    左親指１ = (MMDBoneType.STANDARD, '左親指１')
+    左親指２ = (MMDBoneType.STANDARD, '左親指２')
+    左人指０ = (MMDBoneType.OTHERS, '左人指０')
+    左人指１ = (MMDBoneType.STANDARD, '左人指１')
+    左人指２ = (MMDBoneType.STANDARD, '左人指２')
+    左人指３ = (MMDBoneType.STANDARD, '左人指３')
+    左中指０ = (MMDBoneType.OTHERS, '左中指０')
+    左中指１ = (MMDBoneType.STANDARD, '左中指１')
+    左中指２ = (MMDBoneType.STANDARD, '左中指２')
+    左中指３ = (MMDBoneType.STANDARD, '左中指３')
+    左薬指０ = (MMDBoneType.OTHERS, '左薬指０')
+    左薬指１ = (MMDBoneType.STANDARD, '左薬指１')
+    左薬指２ = (MMDBoneType.STANDARD, '左薬指２')
+    左薬指３ = (MMDBoneType.STANDARD, '左薬指３')
+    左小指０ = (MMDBoneType.OTHERS, '左小指０')
+    左小指１ = (MMDBoneType.STANDARD, '左小指１')
+    左小指２ = (MMDBoneType.STANDARD, '左小指２')
+    左小指３ = (MMDBoneType.STANDARD, '左小指３')
+
+    右肩 = (MMDBoneType.STANDARD, '右肩')
+    右腕 = (MMDBoneType.STANDARD, '右腕')
+    右腕捩 = (MMDBoneType.UPPER_ARM_TWIST, '右腕捩')
+    右ひじ = (MMDBoneType.STANDARD, '右ひじ')
+    右手捩 = (MMDBoneType.WRIST_TWIST, '右手捩')
+    右手首 = (MMDBoneType.STANDARD, '右手首')
+    右親指０ = (MMDBoneType.THUMB_0, '右親指０')
+    右親指１ = (MMDBoneType.STANDARD, '右親指１')
+    右親指２ = (MMDBoneType.STANDARD, '右親指２')
+    右人指０ = (MMDBoneType.OTHERS, '右人指０')
+    右人指１ = (MMDBoneType.STANDARD, '右人指１')
+    右人指２ = (MMDBoneType.STANDARD, '右人指２')
+    右人指３ = (MMDBoneType.STANDARD, '右人指３')
+    右中指０ = (MMDBoneType.OTHERS, '右中指０')
+    右中指１ = (MMDBoneType.STANDARD, '右中指１')
+    右中指２ = (MMDBoneType.STANDARD, '右中指２')
+    右中指３ = (MMDBoneType.STANDARD, '右中指３')
+    右薬指０ = (MMDBoneType.OTHERS, '右薬指０')
+    右薬指１ = (MMDBoneType.STANDARD, '右薬指１')
+    右薬指２ = (MMDBoneType.STANDARD, '右薬指２')
+    右薬指３ = (MMDBoneType.STANDARD, '右薬指３')
+    右小指０ = (MMDBoneType.OTHERS, '右小指０')
+    右小指１ = (MMDBoneType.STANDARD, '右小指１')
+    右小指２ = (MMDBoneType.STANDARD, '右小指２')
+    右小指３ = (MMDBoneType.STANDARD, '右小指３')
+
+    下半身 = (MMDBoneType.STANDARD, '下半身')
+
+    左足 = (MMDBoneType.STANDARD, '左足')
+    左ひざ = (MMDBoneType.STANDARD, '左ひざ')
+    左足首 = (MMDBoneType.STANDARD, '左足首')
+    左足ＩＫ = (MMDBoneType.STANDARD, '左足ＩＫ')
+
+    左足先EX = (MMDBoneType.TOE_EX, '左足先EX')
+    左足D = (MMDBoneType.TOE_EX, '左足D')
+    左ひざD = (MMDBoneType.TOE_EX, '左ひざD')
+    左足首D = (MMDBoneType.TOE_EX, '左足首D')
+
+    右足 = (MMDBoneType.STANDARD, '右足')
+    右ひざ = (MMDBoneType.STANDARD, '右ひざ')
+    右足首 = (MMDBoneType.STANDARD, '右足首')
+    右足ＩＫ = (MMDBoneType.STANDARD, '右足ＩＫ')
+
+    右足先EX = (MMDBoneType.TOE_EX, '右足先EX')
+    右足D = (MMDBoneType.TOE_EX, '右足D')
+    右ひざD = (MMDBoneType.TOE_EX, '右ひざD')
+    右足首D = (MMDBoneType.TOE_EX, '右足首D')
+
+    左つま先ＩＫ = (MMDBoneType.STANDARD, '左つま先ＩＫ')
+    右つま先ＩＫ = (MMDBoneType.STANDARD, '右つま先ＩＫ')
+    左つま先 = (MMDBoneType.STANDARD, '左つま先')
+    右つま先 = (MMDBoneType.STANDARD, '右つま先')
+
+    左肩C = (MMDBoneType.SHOULDER_CANCEL, '左肩C')
+    左肩P = (MMDBoneType.SHOULDER_CANCEL, '左肩P')
+    右肩C = (MMDBoneType.SHOULDER_CANCEL, '右肩C')
+    右肩P = (MMDBoneType.SHOULDER_CANCEL, '右肩P')
+    左ダミー = (MMDBoneType.HAND_ACCESSORIES, '左ダミー')
+    右ダミー = (MMDBoneType.HAND_ACCESSORIES, '右ダミー')
+    左足IK親 = (MMDBoneType.LEG_IK_PARENT, '左足IK親')
+    右足IK親 = (MMDBoneType.LEG_IK_PARENT, '右足IK親')
+
+    def __new__(cls, bone_type: MMDBoneType, mmd_bone_name: str):
+        obj = object.__new__(cls)
+        obj.bone_type = bone_type
+        obj.mmd_bone_name = mmd_bone_name
+        return obj
+
+
+class MMDArmatureObject(ArmatureEditor):
     exist_bone_types: Set[MMDBoneType]
 
     @staticmethod

@@ -2,24 +2,21 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-# pylint: disable=too-many-lines
-
 import math
 from typing import Dict, Set, Tuple
 
 import bpy
 from mathutils import Color, Euler, Matrix, Vector
-from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
-                                                 ControlType, DataPath,
-                                                 DriverVariable, GroupType,
-                                                 MMDBindInfo, MMDBindType,
-                                                 MMDBoneInfo, MMDBoneType,
-                                                 PoseUtil,
-                                                 RichArmatureObjectABC)
-from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
+from mmd_uuunyaa_tools.converters.armatures.mmd import (MMDArmatureObject,
+                                                        MMDBoneInfo,
+                                                        MMDBoneType)
+from mmd_uuunyaa_tools.converters.armatures.mmd_bind import (
+    ControlType, DataPath, GroupType, MMDBindArmatureObjectABC, MMDBindInfo,
+    MMDBindType, PoseBoneEditor)
+from mmd_uuunyaa_tools.editors import DriverVariable
 
 
-class RigifyArmatureObject(RichArmatureObjectABC):
+class RigifyArmatureObject(MMDBindArmatureObjectABC):
     # pylint: disable=too-many-instance-attributes
     prop_storage_bone_name = 'torso'
     prop_name_mmd_uuunyaa_bind_mmd_rigify = 'mmd_uuunyaa_bind_mmd_rigify'
@@ -128,25 +125,25 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
     @staticmethod
     def copy_pose(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
 
     @staticmethod
     def copy_leg_d(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
-        PoseUtil.add_copy_scale_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_scale_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
 
     @staticmethod
     def copy_parent(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL_WITH_PARENT', influence_data_path)
+        PoseBoneEditor.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL_WITH_PARENT', influence_data_path)
 
     @staticmethod
     def copy_local(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
+        PoseBoneEditor.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
 
     @staticmethod
     def copy_spine(pose_bone, target_object, _, influence_data_path):
-        PoseUtil.add_copy_location_constraint(pose_bone, target_object, 'spine_fk', 'POSE', influence_data_path)
-        PoseUtil.add_copy_rotation_constraint(
+        PoseBoneEditor.add_copy_location_constraint(pose_bone, target_object, 'spine_fk', 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_rotation_constraint(
             pose_bone, target_object, 'spine_fk', 'LOCAL_WITH_PARENT', influence_data_path,
             invert_x=False,
             invert_y=True,
@@ -157,7 +154,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
     def copy_toe(pose_bone, target_object, subtarget, influence_data_path):
 
         def add_driver(constraint, target_object, influence_data_path, toe_bind_data_path):
-            PoseUtil.add_driver(
+            PoseBoneEditor.add_driver(
                 constraint, 'influence',
                 'mmd_uuunyaa_influence * mmd_uuunyaa_toe_bind',
                 DriverVariable('mmd_uuunyaa_influence', target_object, influence_data_path),
@@ -195,12 +192,12 @@ class RigifyArmatureObject(RichArmatureObjectABC):
 
     @staticmethod
     def copy_eye(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
+        PoseBoneEditor.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
 
     @staticmethod
     def copy_root(pose_bone, target_object, subtarget, influence_data_path):
-        PoseUtil.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
-        PoseUtil.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
+        PoseBoneEditor.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_rotation_constraint(pose_bone, target_object, subtarget, 'LOCAL', influence_data_path)
 
     @staticmethod
     def is_rigify_armature_object(obj: bpy.types.Object):
@@ -620,7 +617,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
 
         self.create_props(pose_bones[self.prop_storage_bone_name])
-        PoseUtil.remove_constraints(pose_bones)
+        PoseBoneEditor.remove_constraints(pose_bones)
 
         self.raw_object.show_in_front = True
 
@@ -635,32 +632,32 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         self._imitate_mmd_eye_behavior(pose_bones)
 
         # set spine
-        PoseUtil.edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', influence=0.000)
-        PoseUtil.edit_constraints(pose_bones['ORG-spine.001'], 'COPY_TRANSFORMS', subtarget='spine_fk.001')
+        PoseBoneEditor.edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', influence=0.000)
+        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.001'], 'COPY_TRANSFORMS', subtarget='spine_fk.001')
 
         # reset rest_length
         # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
-        PoseUtil.edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
-        PoseUtil.edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
-        PoseUtil.edit_constraints(pose_bones['ORG-spine.002'], 'STRETCH_TO', rest_length=0.000)
-        PoseUtil.edit_constraints(pose_bones['ORG-spine.003'], 'STRETCH_TO', rest_length=0.000)
+        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
+        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
+        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.002'], 'STRETCH_TO', rest_length=0.000)
+        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.003'], 'STRETCH_TO', rest_length=0.000)
 
         # shoulders
-        PoseUtil.add_constraint(
+        PoseBoneEditor.add_constraint(
             pose_bones['mmd_uuunyaa_shoulder_cancel_shadow.L'],
             'COPY_TRANSFORMS', 'mmd_uuunyaa_transform_shoulder_cancel',
             target=self.raw_object, subtarget='mmd_uuunyaa_shoulder_cancel_dummy.L',
             target_space='POSE', owner_space='POSE'
         )
 
-        PoseUtil.add_constraint(
+        PoseBoneEditor.add_constraint(
             pose_bones['mmd_uuunyaa_shoulder_cancel_shadow.R'],
             'COPY_TRANSFORMS', 'mmd_uuunyaa_transform_shoulder_cancel',
             target=self.raw_object, subtarget='mmd_uuunyaa_shoulder_cancel_dummy.R',
             target_space='POSE', owner_space='POSE'
         )
 
-        PoseUtil.add_constraint(
+        PoseBoneEditor.add_constraint(
             pose_bones['mmd_uuunyaa_shoulder_cancel.L'],
             'TRANSFORM', 'mmd_uuunyaa_transform_shoulder_cancel',
             target=self.raw_object, subtarget='mmd_uuunyaa_shoulder_cancel_shadow.L',
@@ -674,7 +671,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
             target_space='LOCAL', owner_space='LOCAL'
         )
 
-        PoseUtil.add_constraint(
+        PoseBoneEditor.add_constraint(
             pose_bones['mmd_uuunyaa_shoulder_cancel.R'],
             'TRANSFORM', 'mmd_uuunyaa_transform_shoulder_cancel',
             target=self.raw_object, subtarget='mmd_uuunyaa_shoulder_cancel_shadow.R',
@@ -718,17 +715,17 @@ class RigifyArmatureObject(RichArmatureObjectABC):
             'f_ring.02.R', 'f_ring.03.R', 'f_ring.02.L', 'f_ring.03.L',
             'f_pinky.02.R', 'f_pinky.03.R', 'f_pinky.02.L', 'f_pinky.03.L',
         ]:
-            PoseUtil.edit_constraints(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
+            PoseBoneEditor.edit_constraints(pose_bones[pose_bone_name], 'COPY_ROTATION', mute=True)
 
         # legs
         def bind_fk2ik(from_bone_name: str, ik_bone_name: str, control_data_path: str):
-            PoseUtil.add_copy_transforms_constraint(pose_bones[ik_bone_name], self.raw_object, from_bone_name, 'LOCAL', control_data_path, invert_influence=True)
+            PoseBoneEditor.add_copy_transforms_constraint(pose_bones[ik_bone_name], self.raw_object, from_bone_name, 'LOCAL', control_data_path, invert_influence=True)
 
         leg_l_mmd_uuunyaa_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_MMD_UUUNYAA].data_path}'
         bind_fk2ik('thigh_fk.L', 'thigh_ik.L', leg_l_mmd_uuunyaa_data_path)
 
         shin_ik_l_bone = pose_bones['MCH-shin_ik.L'] if 'MCH-shin_ik.L' in pose_bones else pose_bones['MCH-thigh_ik.L']
-        PoseUtil.edit_constraints(shin_ik_l_bone, 'IK', iterations=200)
+        PoseBoneEditor.edit_constraints(shin_ik_l_bone, 'IK', iterations=200)
         shin_ik_l_bone.use_ik_limit_x = True
         shin_ik_l_bone.ik_min_x = math.radians(0)
         shin_ik_l_bone.ik_max_x = math.radians(180)
@@ -737,7 +734,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         bind_fk2ik('thigh_fk.R', 'thigh_ik.R', leg_r_mmd_uuunyaa_data_path)
 
         shin_ik_r_bone = pose_bones['MCH-shin_ik.R'] if 'MCH-shin_ik.R' in pose_bones else pose_bones['MCH-thigh_ik.R']
-        PoseUtil.edit_constraints(shin_ik_r_bone, 'IK', iterations=200)
+        PoseBoneEditor.edit_constraints(shin_ik_r_bone, 'IK', iterations=200)
         shin_ik_r_bone.use_ik_limit_x = True
         shin_ik_r_bone.ik_min_x = math.radians(0)
         shin_ik_r_bone.ik_max_x = math.radians(180)
@@ -745,8 +742,8 @@ class RigifyArmatureObject(RichArmatureObjectABC):
         # toe IK
         leg_l_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_IK_FK].data_path}'
         leg_r_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_IK_FK].data_path}'
-        PoseUtil.add_ik_constraint(pose_bones['ORG-foot.L'], self.raw_object, 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3, invert_influence=True)
-        PoseUtil.add_ik_constraint(pose_bones['ORG-foot.R'], self.raw_object, 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3, invert_influence=True)
+        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.L'], self.raw_object, 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3, invert_influence=True)
+        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.R'], self.raw_object, 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3, invert_influence=True)
 
         self._set_bone_custom_shapes(pose_bones)
 
@@ -840,9 +837,7 @@ class RigifyArmatureObject(RichArmatureObjectABC):
             bone_group.colors.active = Color((0.5490196347236633, 1.0, 1.0))
 
         insufficient_custom_shapes = list({custom_shape_name for _, custom_shape_name, _, _ in bone_widgets} - set(bpy.data.objects.keys()))
-        if len(insufficient_custom_shapes) > 0:
-            with bpy.data.libraries.load(PATH_BLENDS_RIGSHAPELIBRARY, link=False) as (_, data_to):
-                data_to.objects = insufficient_custom_shapes
+        self.load_custom_shapes(insufficient_custom_shapes)
 
         for bone_name, custom_shape_name, custom_shape_scale, bone_group_name in bone_widgets:
             pose_bones[bone_name].custom_shape = bpy.data.objects[custom_shape_name]
@@ -1144,11 +1139,11 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
             for constraint in mmd_pose_bone.constraints:
                 if constraint.name == 'IK' and constraint.type == 'IK':
-                    PoseUtil.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
+                    PoseBoneEditor.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
 
                 elif mmd_bind_info.bind_type == MMDBindType.COPY_EYE:
                     # mmd internal eye influence
-                    PoseUtil.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
+                    PoseBoneEditor.add_influence_driver(constraint, self.raw_object, bind_mmd_rigify_data_path, invert_influence=True)
 
             binders[mmd_bind_info.bind_type](
                 mmd_pose_bone,
@@ -1231,7 +1226,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         })
 
         pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
-        PoseUtil.edit_constraints(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', mute=True)
+        PoseBoneEditor.edit_constraints(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', mute=True)
 
         # set bind mode
         self.bind_mmd_rigify = 1.000  # Bind

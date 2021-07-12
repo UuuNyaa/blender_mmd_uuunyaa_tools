@@ -2,8 +2,6 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from dataclasses import dataclass
-from enum import Enum
 from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import bpy

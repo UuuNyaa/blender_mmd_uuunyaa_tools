@@ -3,13 +3,13 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import ControlType
-from mmd_uuunyaa_tools.editors.armatures.autorig import AutoRigArmatureObject
-from mmd_uuunyaa_tools.editors.armatures.rigify import MMDRigifyArmatureObject
+from mmd_uuunyaa_tools.converters.armatures import (AutoRigArmatureObject,
+                                                    ControlType,
+                                                    MMDRigifyArmatureObject)
 from mmd_uuunyaa_tools.m17n import _
 
 
-class MMDRigifyOperatorPanel(bpy.types.Panel):
+class MMDRigifyPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_mmd_rigify'
     bl_label = _('UuuNyaa MMD Rigify')
     bl_space_type = 'VIEW_3D'
@@ -76,7 +76,7 @@ class MMDRigifyOperatorPanel(bpy.types.Panel):
         row.prop(context.active_object.data, 'layers', index=27, toggle=True, text=_('Dummy'))
 
 
-class AutoRigOperatorPanel(bpy.types.Panel):
+class AutoRigPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_mmd_autorig'
     bl_label = _('UuuNyaa MMD AutoRig')
     bl_space_type = 'VIEW_3D'

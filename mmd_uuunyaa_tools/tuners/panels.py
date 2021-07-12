@@ -3,10 +3,14 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
+from mmd_uuunyaa_tools.editors import MaterialEditor, NodeEditor
 from mmd_uuunyaa_tools.m17n import _, iface_
-from mmd_uuunyaa_tools.tuners import (lighting_tuners, material_adjusters,
-                                      material_tuners, operators)
-from mmd_uuunyaa_tools.tuners.utilities import NodeUtilities
+from mmd_uuunyaa_tools.tuners.lighting_tuners import LightingUtilities
+from mmd_uuunyaa_tools.tuners.material_adjusters import (
+    MaterialAdjusterUtilities, SubsurfaceAdjuster, WetAdjuster)
+from mmd_uuunyaa_tools.tuners.operators import (AttachMaterialAdjuster,
+                                                DetachMaterialAdjuster,
+                                                FreezeLighting)
 
 
 class SkyPanel(bpy.types.Panel):
@@ -28,7 +32,7 @@ class SkyPanel(bpy.types.Panel):
     def draw(self, context: bpy.types.Context):
         world: bpy.types.World = context.scene.world
 
-        utilities = NodeUtilities(world.node_tree)
+        utilities = NodeEditor(world.node_tree)
 
         layout = self.layout
 
@@ -91,7 +95,7 @@ class LightingPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_lighting, 'thumbnails', mmd_uuunyaa_tools_lighting.thumbnails))
 
-        utilities = lighting_tuners.LightingUtilities(context.collection)
+        utilities = LightingUtilities(context.collection)
         lighting = utilities.find_active_lighting()
         if lighting is None:
             return
@@ -101,7 +105,7 @@ class LightingPanel(bpy.types.Panel):
         layout.prop(lighting, 'scale')
 
         row = layout.row(align=False)
-        row.operator(operators.FreezeLighting.bl_idname)
+        row.operator(FreezeLighting.bl_idname)
 
 
 class MaterialPanel(bpy.types.Panel):
@@ -132,7 +136,7 @@ class MaterialPanel(bpy.types.Panel):
         row.alignment = 'CENTER'
         row.label(text=row.enum_item_name(mmd_uuunyaa_tools_material, 'thumbnails', mmd_uuunyaa_tools_material.thumbnails))
 
-        utilities = material_tuners.MaterialUtilities(material)
+        utilities = MaterialEditor(material)
         node_frame = utilities.find_node_frame()
         if node_frame is None:
             return
@@ -157,7 +161,7 @@ class MaterialAdjusterPanel(bpy.types.Panel):
         layout = self.layout
         col = layout.column(align=True)
 
-        utilities = material_adjusters.MaterialAdjusterUtilities(material)
+        utilities = MaterialAdjusterUtilities(material)
         if not utilities.check_attachable():
             col.label(text=iface_('{material_name} is unsupported. Select other material to be output from Principled BSDF.').format(
                 material_name=material.name
@@ -168,12 +172,12 @@ class MaterialAdjusterPanel(bpy.types.Panel):
 
         def draw_operator(layout, class_, text, icon):
             if utilities.check_attached(class_.get_name()):
-                layout.operator(operators.DetachMaterialAdjuster.bl_idname, text=text, icon='X').adjuster_name = class_.get_name()
+                layout.operator(DetachMaterialAdjuster.bl_idname, text=text, icon='X').adjuster_name = class_.get_name()
             else:
-                layout.operator(operators.AttachMaterialAdjuster.bl_idname, text=text, icon=icon).adjuster_name = class_.get_name()
+                layout.operator(AttachMaterialAdjuster.bl_idname, text=text, icon=icon).adjuster_name = class_.get_name()
 
-        draw_operator(grid, material_adjusters.SubsurfaceAdjuster,  text=_('Subsurface'), icon='SHADING_RENDERED')
-        draw_operator(grid, material_adjusters.WetAdjuster,  text=_('Wet'), icon='MOD_FLUIDSIM')
+        draw_operator(grid, SubsurfaceAdjuster,  text=_('Subsurface'), icon='SHADING_RENDERED')
+        draw_operator(grid, WetAdjuster,  text=_('Wet'), icon='MOD_FLUIDSIM')
 
         node_frame = utilities.find_adjusters_node_frame()
         if node_frame is None:

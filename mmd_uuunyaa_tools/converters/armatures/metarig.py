@@ -6,11 +6,12 @@ import math
 
 import bpy
 from mathutils import Vector
-from mmd_uuunyaa_tools.editors.armatures import ArmatureObjectABC, MMDBoneType
-from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
+from mmd_uuunyaa_tools.converters.armatures.mmd import (MMDArmatureObject,
+                                                        MMDBoneType)
+from mmd_uuunyaa_tools.editors.armatures import ArmatureEditor
 
 
-class MetarigArmatureObject(ArmatureObjectABC):
+class MetarigArmatureObject(ArmatureEditor):
     def fit_scale(self, mmd_armature_object: MMDArmatureObject):
         rigify_height = self.bones['spine.004'].head_local[2]
         mmd_height = mmd_armature_object.strict_bones['首'].head_local[2]

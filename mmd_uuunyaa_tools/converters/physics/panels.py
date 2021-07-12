@@ -3,14 +3,13 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-import rna_prop_ui
-from mmd_uuunyaa_tools.editors.physics.cloth import (
+from mmd_uuunyaa_tools.converters.physics.cloth import (
     ConvertRigidBodyToClothOperator, RemoveMeshCloth, SelectClothMesh)
-from mmd_uuunyaa_tools.editors.physics.collision import (RemoveMeshCollision,
-                                                         SelectCollisionMesh)
+from mmd_uuunyaa_tools.converters.physics.collision import (
+    RemoveMeshCollision, SelectCollisionMesh)
+from mmd_uuunyaa_tools.converters.physics.softbody import ConvertBreastBoneToClothOperator
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
-from mmd_uuunyaa_tools.editors.physics.softbody import ConvertBreastBoneToClothOperator
 
 mmd_tools = import_mmd_tools()
 

@@ -4,14 +4,12 @@
 
 import bpy
 
-from mmd_uuunyaa_tools import operators
-from mmd_uuunyaa_tools.editors.operators import (MMDArmatureAddMetarig,
-                                                 MMDAutoRigApplyMMDRestPose,
-                                                 MMDAutoRigConvert,
-                                                 MMDRigifyApplyMMDRestPose,
-                                                 MMDRigifyBind,
-                                                 MMDRigifyConvert,
-                                                 MMDRigifyIntegrate)
+from mmd_uuunyaa_tools.converters.armatures.operators import (
+    MMDArmatureAddMetarig, MMDAutoRigApplyMMDRestPose, MMDAutoRigConvert,
+    MMDRigifyApplyMMDRestPose, MMDRigifyBind, MMDRigifyConvert,
+    MMDRigifyIntegrate)
+from mmd_uuunyaa_tools.editors.operators import (ConvertMaterialsForEevee,
+                                                 SetupRenderEngineForEevee)
 from mmd_uuunyaa_tools.m17n import _
 
 
@@ -28,8 +26,8 @@ class OperatorPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text=_('Render:'), icon='SCENE_DATA')
-        col.operator(operators.SetupRenderEngineForEevee.bl_idname, icon='SCENE')
-        col.operator(operators.ConvertMaterialsForEevee.bl_idname, icon='NODE_MATERIAL')
+        col.operator(SetupRenderEngineForEevee.bl_idname, icon='SCENE')
+        col.operator(ConvertMaterialsForEevee.bl_idname, icon='NODE_MATERIAL')
 
         col = layout.column(align=True)
         col.label(text=_('MMD to Rigify:'), icon='OUTLINER_OB_ARMATURE')

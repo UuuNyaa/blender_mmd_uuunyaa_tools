@@ -5,8 +5,8 @@
 from typing import Iterable, List
 
 import bpy
-from mmd_uuunyaa_tools.editors.physics import MeshEditor
-from mmd_uuunyaa_tools.editors.physics.convert_rigid_body_to_cloth import RigidBodyToClothConverter, PhysicsMode
+from mmd_uuunyaa_tools.editors import MeshEditor
+from mmd_uuunyaa_tools.converters.physics.rigid_body_to_cloth import RigidBodyToClothConverter, PhysicsMode
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools

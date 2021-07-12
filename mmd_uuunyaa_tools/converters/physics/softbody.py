@@ -10,9 +10,9 @@ import bmesh
 import bpy
 import mathutils
 from mathutils import Matrix, Vector
-from mmd_uuunyaa_tools.editors.physics import MeshEditor
+from mmd_uuunyaa_tools.editors import MeshEditor
 from mmd_uuunyaa_tools.m17n import _
-from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
+from mmd_uuunyaa_tools.utilities import MessageException
 
 
 class BreastBoneDirection(Enum):
@@ -132,7 +132,7 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
             time_scale=0.5,
             bending_model='LINEAR'
         )
-        
+
 
 def to_pyramid_vertices(target: Target, base_area_factor: float) -> Tuple[Vector, List[Vector]]:
     deform_mesh: bpy.types.Mesh = target.deform_mesh_object.data
