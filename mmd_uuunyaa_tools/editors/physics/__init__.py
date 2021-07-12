@@ -2,7 +2,9 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Any, Dict, Iterable, Union
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Dict, Iterable, List, Tuple, Union
 
 import bpy
 
@@ -155,6 +157,7 @@ class MeshEditor:
             cloth_friction: float = 5,
             **kwargs
     ) -> bpy.types.Modifier:
+        # pylint: disable=too-many-arguments
         return self.edit_singleton_modifier(
             self.get_collision_modifier(name),
             damping=damping,
@@ -177,6 +180,28 @@ class MeshEditor:
                 return True
 
         return False
+
+    def find_vertex_group(self, name: str) -> Union[bpy.types.VertexGroup, None]:
+        return self.mesh_object.vertex_groups.get(name, None)
+
+    def add_vertex_group(self, name: str) -> bpy.types.VertexGroup:
+        return self.mesh_object.vertex_groups.new(name=name)
+
+    def get_vertex_group(self, name: str) -> bpy.types.VertexGroup:
+        vertex_group = self.find_vertex_group(name)
+        if vertex_group is None:
+            vertex_group = self.add_vertex_group(name)
+        return vertex_group
+
+    def edit_vertex_group(self, name: str, vertex_weight_operations: List[Tuple[List[int], float, str]]):
+        vertex_group = self.get_vertex_group(name)
+        for vertex_weight_operation in vertex_weight_operations:
+            vertex_group.add(
+                vertex_weight_operation[0],
+                vertex_weight_operation[1],
+                vertex_weight_operation[2] if len(vertex_weight_operation) >= 3 else 'REPLACE'
+            )
+        return vertex_group
 
 
 class RigidBodyEditor(MeshEditor):

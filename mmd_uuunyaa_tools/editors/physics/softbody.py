@@ -30,60 +30,124 @@ class Target:
     direction: Vector
 
 
-def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float, spring_length_ratio: float, vertex_shift: float):
+POINT = 0
+APEX = 1
+BASE_A = 2
+BASE_B = 3
+BASE_C = 4
+BASE_D = 5
+
+
+def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float, spring_length_ratio: float, base_area_factor: float):
 
     targets = build_targets(breast_bones, mesh_objects, head_tail)
 
-    for target in targets:
-        apex_vertex, base_vertices = to_pyramid_vertices(target, vertex_shift)
+    if len(targets) == 0:
+        raise MessageException(_('Target bones not found.')) from None
 
-        pyramid_mesh = bpy.data.meshes.new(f'mmd_uuunyaa_physics_{target.bone_name}')
-        pyramid_mesh.from_pydata([
+    for target in targets:
+        apex_vertex, base_vertices = to_pyramid_vertices(target, base_area_factor)
+        vertices: List[Vector] = [
             apex_vertex * spring_length_ratio,
             apex_vertex,
             *base_vertices
+        ]
+
+        pyramid_armature = bpy.data.armatures.new(f'mmd_uuunyaa_physics_{target.bone_name}')
+        pyramid_armature_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_{target.bone_name}', pyramid_armature)
+        bpy.context.scene.collection.objects.link(pyramid_armature_object)
+        pyramid_armature_object.location = target.origin
+
+        bpy.context.selected_objects.append(pyramid_armature_object)
+        bpy.context.view_layer.objects.active = pyramid_armature_object
+        bpy.ops.object.mode_set(mode='EDIT')
+
+        bone_length = vertices[APEX].length * 0.1
+        bone_vector = target.direction * bone_length
+
+        base_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_{target.bone_name}')
+        base_bone.head = Vector((0, 0, 0))
+        base_bone.tail = Vector((0, 0, 0)) + bone_vector
+
+        apex_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_point_{target.bone_name}')
+        apex_bone.parent = base_bone
+        apex_bone.head = vertices[APEX] - bone_vector
+        apex_bone.tail = vertices[APEX]
+
+        base_a_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_a_{target.bone_name}')
+        base_a_bone.parent = base_bone
+        base_a_bone.head = vertices[BASE_A]
+        base_a_bone.tail = vertices[BASE_A] + bone_vector
+
+        base_b_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_b_{target.bone_name}')
+        base_b_bone.parent = base_bone
+        base_b_bone.head = vertices[BASE_B]
+        base_b_bone.tail = vertices[BASE_B] + bone_vector
+
+        base_c_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_c_{target.bone_name}')
+        base_c_bone.parent = base_bone
+        base_c_bone.head = vertices[BASE_C]
+        base_c_bone.tail = vertices[BASE_C] + bone_vector
+
+        base_d_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_d_{target.bone_name}')
+        base_d_bone.parent = base_bone
+        base_d_bone.head = vertices[BASE_D]
+        base_d_bone.tail = vertices[BASE_D] + bone_vector
+        pyramid_armature_object.update_from_editmode()
+
+        pyramid_mesh = bpy.data.meshes.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}')
+        pyramid_mesh.from_pydata(vertices, [
+            [POINT, APEX]
         ], [
-            [0, 1]
-        ], [
-            [1, 2, 3],
-            [1, 3, 4],
-            [1, 4, 5],
-            [1, 5, 2],
-        ]) 
+            [APEX, BASE_A, BASE_B],
+            [APEX, BASE_B, BASE_C],
+            [APEX, BASE_C, BASE_D],
+            [APEX, BASE_D, BASE_A],
+        ])
         pyramid_mesh.update()
-        pyramid_mesh_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_{target.bone_name}', pyramid_mesh)
+
+        pyramid_mesh_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}', pyramid_mesh)
         bpy.context.scene.collection.objects.link(pyramid_mesh_object)
-        pyramid_mesh_object.location = target.origin
+        pyramid_mesh_object.parent = pyramid_armature_object
+        pyramid_mesh_object.parent_type = 'BONE'
+        pyramid_mesh_object.parent_bone = base_bone.name
+        pyramid_mesh_object.matrix_basis = base_bone.matrix.inverted() @ Matrix.Translation(-bone_vector)
         pyramid_mesh_object.hide_render = True
         pyramid_mesh_object.display_type = 'WIRE'
 
-        pin_vertex_group: bpy.types.VertexGroup = pyramid_mesh_object.vertex_groups.new(name='mmd_uuunyaa_physics_cloth_pin')
-        pin_vertex_group.add([0], 0.4, 'REPLACE')
-        pin_vertex_group.add([2, 3, 4, 5], 0.8, 'REPLACE')
-
         mesh_editor = MeshEditor(pyramid_mesh_object)
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_point', [([POINT], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_apex', [([APEX], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_base_a', [([BASE_A], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_base_b', [([BASE_B], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_base_c', [([BASE_C], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_base_d', [([BASE_D], 1.0)])
         mesh_editor.edit_cloth_modifier(
             'mmd_uuunyaa_physics_cloth',
-            vertex_group_mass=pin_vertex_group.name,
+            vertex_group_mass=mesh_editor.edit_vertex_group('mmd_uuunyaa_physics_cloth_pin', [
+                ([POINT], 0.6),  # 0.4 - 0.6
+                ([APEX], 0.4),  # 0.4 - 0.6
+                ([BASE_A, BASE_B, BASE_C, BASE_D], 0.8),  # 0.8 - 0.9
+            ]).name,
             time_scale=0.5,
             bending_model='LINEAR'
         )
+        
 
-
-def to_pyramid_vertices(target, vertex_shift):
+def to_pyramid_vertices(target: Target, base_area_factor: float) -> Tuple[Vector, List[Vector]]:
     deform_mesh: bpy.types.Mesh = target.deform_mesh_object.data
     deform_bm: bmesh.types.BMesh = bmesh.new()
     deform_bm.from_mesh(deform_mesh)
 
     apex_vertex, deform_vertex_index_weights = find_apex_vertex(deform_bm, target)
-    base_vertices = find_base_vertices(deform_bm, target, deform_vertex_index_weights, vertex_shift)
+    base_vertices = find_base_vertices(deform_bm, target, deform_vertex_index_weights, base_area_factor)
 
     deform_bm.free()
 
     return apex_vertex, base_vertices
 
 
-def find_base_vertices(deform_bm, target, deform_vertex_index_weights, vertex_shift):
+def find_base_vertices(deform_bm: bmesh.types.BMesh, target: Target, deform_vertex_index_weights: Dict[int, float], base_area_factor: float) -> List[Vector]:
     ortho_projection_matrix = Matrix.OrthoProjection(target.direction, 4)
 
     f_l = 1
@@ -94,31 +158,30 @@ def find_base_vertices(deform_bm, target, deform_vertex_index_weights, vertex_sh
         [0.0, 0.0, 0.0, 1.0]
     ])
 
-    wide_projection_matrix = intrinsic_matrix @ ortho_projection_matrix @ Matrix.Translation(-target.origin)
+    wide_projection_matrix: Matrix = intrinsic_matrix @ ortho_projection_matrix @ Matrix.Translation(-target.origin)
 
-    wide_project_vertices: List[Vector] = []
     wide_project_2d_vertices: Set[Tuple[float, float]] = set()
+    wide_project_3d_vertices: List[Vector] = []
 
     deform_bm.verts.ensure_lookup_table()
     for deform_vertex_index, deform_vertex_weight in deform_vertex_index_weights.items():
-        deform_vertex: Vector = deform_bm.verts[deform_vertex_index].co
+        deform_vertex = deform_bm.verts[deform_vertex_index].co
         wide_project_3d_vertex = wide_projection_matrix @ deform_vertex
         wide_project_2d_vertex = wide_project_3d_vertex / wide_project_3d_vertex[2]
 
         wide_project_2d_vertices.add(wide_project_2d_vertex[0:2])
-        wide_project_vertices.append(wide_project_3d_vertex * (deform_vertex_weight**vertex_shift))
+        wide_project_3d_vertices.append(wide_project_3d_vertex * (deform_vertex_weight**base_area_factor))
 
     box_fit_angle: float = mathutils.geometry.box_fit_2d(list(wide_project_2d_vertices))
+    rotate_matrix: Matrix = Matrix.Rotation(+box_fit_angle, 4, target.direction) @ ortho_projection_matrix
 
     x_min = float('+inf')
     x_max = float('-inf')
     z_min = float('+inf')
     z_max = float('-inf')
 
-    rotate_matrix = Matrix.Rotation(+box_fit_angle, 4, target.direction) @ ortho_projection_matrix
-
-    for vertex in wide_project_vertices:
-        rotate_vertex = rotate_matrix @ vertex
+    for vertex in wide_project_3d_vertices:
+        rotate_vertex: Vector = rotate_matrix @ vertex
 
         if x_min > rotate_vertex.x:
             x_min = rotate_vertex.x
@@ -133,9 +196,9 @@ def find_base_vertices(deform_bm, target, deform_vertex_index_weights, vertex_sh
             z_max = rotate_vertex.z
 
     front_vector = Vector([0, -1, 0])
-    rotate_matrix_invert = Matrix.Rotation(-box_fit_angle, 4, front_vector) @ Matrix.OrthoProjection(front_vector, 4)
+    rotate_matrix_invert: Matrix = Matrix.Rotation(-box_fit_angle, 4, front_vector) @ Matrix.OrthoProjection(front_vector, 4)
 
-    base_vertices = [
+    base_vertices: List[Vector] = [
         rotate_matrix_invert @ Vector([x_min, 0, 0]),
         rotate_matrix_invert @ Vector([0, 0, z_min]),
         rotate_matrix_invert @ Vector([x_max, 0, 0]),
@@ -145,7 +208,7 @@ def find_base_vertices(deform_bm, target, deform_vertex_index_weights, vertex_sh
     return base_vertices
 
 
-def find_apex_vertex(deform_bm, target):
+def find_apex_vertex(deform_bm: bmesh.types.BMesh, target: Target) -> Tuple[Vector, Dict[int, float]]:
     deform_layer = deform_bm.verts.layers.deform.verify()
 
     vertex_group_index = target.vertex_group.index
@@ -190,7 +253,7 @@ def find_apex_vertex(deform_bm, target):
     )
 
 
-def build_targets(breast_bones, mesh_objects, head_tail):
+def build_targets(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float) -> List[Target]:
     targets: List[Target] = []
 
     for breast_bone in breast_bones:
@@ -229,17 +292,15 @@ def build_targets(breast_bones, mesh_objects, head_tail):
 
     return targets
 
-    # mathutils.geometry.intersect_ray_tri(v1, v2, v3, ray, orig, clip=True)
-
 
 class ConvertBreastBoneToClothOperator(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_breast_bone_to_cloth'
     bl_label = _('Convert Breast Bone to Cloth')
     bl_options = {'REGISTER', 'UNDO'}
 
-    head_tail: bpy.props.FloatProperty(name=_('Head/Tail'), default=0.5, min=0.0, max=1.0)
-    spring_length_ratio: bpy.props.FloatProperty(name=_('Spring Length Ratio'), default=5.0, min=1.0, max=100.0)
-    vertex_shift: bpy.props.FloatProperty(name=_('Vertex Shift'), default=0.1, min=0.0, max=100.0)
+    head_tail: bpy.props.FloatProperty(name=_('Head/Tail'), default=0.5, min=0.0, max=1.0, step=10)
+    spring_length_ratio: bpy.props.FloatProperty(name=_('Spring Length Ratio'), default=5.0, min=1.0, max=100.0, step=10)
+    base_area_factor: bpy.props.FloatProperty(name=_('Vertex Shift'), default=0.1, min=0.0, max=100.0, step=10)
 
     @ classmethod
     def poll(cls, context: bpy.types.Context):
@@ -267,7 +328,7 @@ class ConvertBreastBoneToClothOperator(bpy.types.Operator):
                 target_mesh_objects,
                 self.head_tail,
                 self.spring_length_ratio,
-                self.vertex_shift
+                self.base_area_factor
             )
 
         except MessageException as ex:
