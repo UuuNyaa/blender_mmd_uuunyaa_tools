@@ -10,8 +10,8 @@ from mathutils import Euler, Matrix, Vector
 from mmd_uuunyaa_tools.converters.armatures.mmd import (MMDArmatureObject,
                                                         MMDBoneInfo)
 from mmd_uuunyaa_tools.converters.armatures.mmd_bind import (
-    ControlType, DataPath, GroupType, MMDBindInfo, MMDBindType,
-    MMDBindArmatureObjectABC)
+    ControlType, DataPath, GroupType, MMDBindArmatureObjectABC, MMDBindInfo,
+    MMDBindType)
 
 
 class AutoRigArmatureObject(MMDBindArmatureObjectABC):
@@ -554,7 +554,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         shin_ik_l_bone = pose_bones['leg_ik_nostr.l']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.l'], 'IK'):
             self.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
-        self.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', leg_l_mmd_uuunyaa_data_path, 2, 200, invert_influence=True)
+        self.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', 2, 200, leg_l_mmd_uuunyaa_data_path, invert_influence=True)
         shin_ik_l_bone.use_ik_limit_z = True
         shin_ik_l_bone.ik_min_z = math.radians(0)
         shin_ik_l_bone.ik_max_z = math.radians(180)
@@ -563,7 +563,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         shin_ik_r_bone = pose_bones['leg_ik_nostr.r']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.r'], 'IK'):
             self.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
-        self.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', leg_r_mmd_uuunyaa_data_path, 2, 200, invert_influence=True)
+        self.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', 2, 200, leg_r_mmd_uuunyaa_data_path, invert_influence=True)
         shin_ik_r_bone.use_ik_limit_z = True
         shin_ik_r_bone.ik_min_z = math.radians(-180)
         shin_ik_r_bone.ik_max_z = math.radians(0)
@@ -597,8 +597,8 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         # toe IK
         leg_l_mmd_uuunyaa = self.datapaths[ControlType.LEG_L_MMD_UUUNYAA]
         leg_r_mmd_uuunyaa = self.datapaths[ControlType.LEG_R_MMD_UUUNYAA]
-        self.add_ik_constraint(pose_bones['foot.l'], self.raw_object, 'mmd_uuunyaa_toe_ik.l', f'pose.bones{leg_l_mmd_uuunyaa.data_path}', 1, 3, invert_influence=True)
-        self.add_ik_constraint(pose_bones['foot.r'], self.raw_object, 'mmd_uuunyaa_toe_ik.r', f'pose.bones{leg_r_mmd_uuunyaa.data_path}', 1, 3, invert_influence=True)
+        self.add_ik_constraint(pose_bones['foot.l'], self.raw_object, 'mmd_uuunyaa_toe_ik.l', 1, 3, f'pose.bones{leg_l_mmd_uuunyaa.data_path}', invert_influence=True)
+        self.add_ik_constraint(pose_bones['foot.r'], self.raw_object, 'mmd_uuunyaa_toe_ik.r', 1, 3, f'pose.bones{leg_r_mmd_uuunyaa.data_path}', invert_influence=True)
 
         # toe MMD
         edit_constraints(pose_bones['toes_01.l'], 'COPY_ROTATION', mix_mode='ADD', target_space='LOCAL', owner_space='LOCAL')

@@ -2,6 +2,7 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+import math
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Set, Tuple, Union
@@ -9,8 +10,9 @@ from typing import Dict, List, Set, Tuple, Union
 import bmesh
 import bpy
 import mathutils
+import numpy as np
 from mathutils import Matrix, Vector
-from mmd_uuunyaa_tools.editors import MeshEditor
+from mmd_uuunyaa_tools.editors import ArmatureEditor, MeshEditor
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import MessageException
 
@@ -30,7 +32,7 @@ class Target:
     direction: Vector
 
 
-POINT = 0
+STRING = 0
 APEX = 1
 BASE_A = 2
 BASE_B = 3
@@ -46,7 +48,10 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
         raise MessageException(_('Target bones not found.')) from None
 
     for target in targets:
-        apex_vertex, base_vertices = to_pyramid_vertices(target, base_area_factor)
+        deform_bm: bmesh.types.BMesh = bmesh.new()
+        deform_bm.from_object(target.deform_mesh_object, bpy.context.evaluated_depsgraph_get())
+
+        apex_vertex, base_vertices, deform_vertex_index_weights = to_pyramid_vertices(deform_bm, target, base_area_factor)
         vertices: List[Vector] = [
             apex_vertex * spring_length_ratio,
             apex_vertex,
@@ -62,34 +67,43 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
         bpy.context.view_layer.objects.active = pyramid_armature_object
         bpy.ops.object.mode_set(mode='EDIT')
 
-        bone_length = vertices[APEX].length * 0.1
+        bone_length = vertices[APEX].length / 4.5
         bone_vector = target.direction * bone_length
 
-        base_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_{target.bone_name}')
+        # Move the apex vertex into the mesh
+        vertices[APEX] -= bone_vector
+
+        base_bone_name = f'mmd_uuunyaa_physics_base_{target.bone_name}'
+        base_bone = pyramid_armature.edit_bones.new(base_bone_name)
         base_bone.head = Vector((0, 0, 0))
         base_bone.tail = Vector((0, 0, 0)) + bone_vector
 
-        apex_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_point_{target.bone_name}')
+        apex_bone_name = f'mmd_uuunyaa_physics_apex_{target.bone_name}'
+        apex_bone = pyramid_armature.edit_bones.new(apex_bone_name)
         apex_bone.parent = base_bone
-        apex_bone.head = vertices[APEX] - bone_vector
-        apex_bone.tail = vertices[APEX]
+        apex_bone.head = vertices[APEX]
+        apex_bone.tail = vertices[APEX] + bone_vector
 
-        base_a_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_a_{target.bone_name}')
+        base_a_bone_name = f'mmd_uuunyaa_physics_base_a_{target.bone_name}'
+        base_a_bone = pyramid_armature.edit_bones.new(base_a_bone_name)
         base_a_bone.parent = base_bone
         base_a_bone.head = vertices[BASE_A]
         base_a_bone.tail = vertices[BASE_A] + bone_vector
 
-        base_b_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_b_{target.bone_name}')
+        base_b_bone_name = f'mmd_uuunyaa_physics_base_b_{target.bone_name}'
+        base_b_bone = pyramid_armature.edit_bones.new(base_b_bone_name)
         base_b_bone.parent = base_bone
         base_b_bone.head = vertices[BASE_B]
         base_b_bone.tail = vertices[BASE_B] + bone_vector
 
-        base_c_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_c_{target.bone_name}')
+        base_c_bone_name = f'mmd_uuunyaa_physics_base_c_{target.bone_name}'
+        base_c_bone = pyramid_armature.edit_bones.new(base_c_bone_name)
         base_c_bone.parent = base_bone
         base_c_bone.head = vertices[BASE_C]
         base_c_bone.tail = vertices[BASE_C] + bone_vector
 
-        base_d_bone = pyramid_armature.edit_bones.new(f'mmd_uuunyaa_physics_base_d_{target.bone_name}')
+        base_d_bone_name = f'mmd_uuunyaa_physics_base_d_{target.bone_name}'
+        base_d_bone = pyramid_armature.edit_bones.new(base_d_bone_name)
         base_d_bone.parent = base_bone
         base_d_bone.head = vertices[BASE_D]
         base_d_bone.tail = vertices[BASE_D] + bone_vector
@@ -97,7 +111,7 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
 
         pyramid_mesh = bpy.data.meshes.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}')
         pyramid_mesh.from_pydata(vertices, [
-            [POINT, APEX]
+            [STRING, APEX]
         ], [
             [APEX, BASE_A, BASE_B],
             [APEX, BASE_B, BASE_C],
@@ -116,7 +130,7 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
         pyramid_mesh_object.display_type = 'WIRE'
 
         mesh_editor = MeshEditor(pyramid_mesh_object)
-        mesh_editor.edit_vertex_group('mmd_uuunyaa_point', [([POINT], 1.0)])
+        mesh_editor.edit_vertex_group('mmd_uuunyaa_string', [([STRING], 1.0)])
         mesh_editor.edit_vertex_group('mmd_uuunyaa_apex', [([APEX], 1.0)])
         mesh_editor.edit_vertex_group('mmd_uuunyaa_base_a', [([BASE_A], 1.0)])
         mesh_editor.edit_vertex_group('mmd_uuunyaa_base_b', [([BASE_B], 1.0)])
@@ -125,7 +139,7 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
         mesh_editor.edit_cloth_modifier(
             'mmd_uuunyaa_physics_cloth',
             vertex_group_mass=mesh_editor.edit_vertex_group('mmd_uuunyaa_physics_cloth_pin', [
-                ([POINT], 0.6),  # 0.4 - 0.6
+                ([STRING], 0.6),  # 0.4 - 0.6
                 ([APEX], 0.4),  # 0.4 - 0.6
                 ([BASE_A, BASE_B, BASE_C, BASE_D], 0.8),  # 0.8 - 0.9
             ]).name,
@@ -133,18 +147,208 @@ def convert(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types
             bending_model='LINEAR'
         )
 
+        bpy.ops.object.mode_set(mode='POSE')
 
-def to_pyramid_vertices(target: Target, base_area_factor: float) -> Tuple[Vector, List[Vector]]:
-    deform_mesh: bpy.types.Mesh = target.deform_mesh_object.data
-    deform_bm: bmesh.types.BMesh = bmesh.new()
-    deform_bm.from_mesh(deform_mesh)
+        armature_editor = ArmatureEditor(pyramid_armature_object)
+        pose_bones = armature_editor.pose_bones
+        armature_editor.add_copy_location_constraint(pose_bones[apex_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_apex', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_a_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_a', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_b_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_b', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_c_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_c', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_d_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_d', 'WORLD')
 
+        bpy.ops.object.mode_set(mode='EDIT')
+
+        deform_bm.verts.ensure_lookup_table()
+        deform_vertex_count = len(deform_vertex_index_weights)
+
+        vertex_kdtree = mathutils.kdtree.KDTree(deform_vertex_count)
+        for index in deform_vertex_index_weights:
+            vertex_kdtree.insert(deform_bm.verts[index].co, index)
+        vertex_kdtree.balance()
+
+        adjacencies, vid2uid = build_adjacencies(deform_bm.verts, deform_vertex_index_weights, vertex_kdtree)
+
+        # unified vertex id to numpy id
+        uid2nid: Dict[int, int] = {uid: nid for nid, uid in enumerate(set(vid2uid.values()))}
+        uid2vids: Dict[int, List[int]] = {uid: [vid for vid in vid2uid if vid2uid[vid] == uid] for uid in vid2uid.values()}
+        nid2uid: Dict[int, int] = {v: k for k, v in uid2nid.items()}
+
+        sink_nids: Set[int] = set()
+
+        for index, weight in deform_vertex_index_weights.items():
+            if weight > 0:
+                continue
+            uid = vid2uid[index]
+            sink_nids.add(uid2nid[uid])
+
+        nid_count = len(uid2nid)
+
+        adjacency_matrix = np.zeros((nid_count, nid_count))
+
+        for (from_uid, to_uid), distance in adjacencies.items():
+            adjacency_matrix[uid2nid[from_uid], uid2nid[to_uid]] = 1/distance
+            adjacency_matrix[uid2nid[to_uid], uid2nid[from_uid]] = 1/distance
+
+        # np.set_printoptions(precision=3, suppress=True)
+
+        def collect_nid_weights(position: Vector):
+            nid_weights: Dict[int, float] = {}
+            min_distance = None
+            for _, near_vid, distance in vertex_kdtree.find_n(position, 16):
+                if min_distance is None:
+                    min_distance = distance
+
+                weight = math.exp(1-distance/min_distance)
+                if weight < 0.5:
+                    break
+
+                nid_weights[uid2nid[vid2uid[near_vid]]] = weight
+            return nid_weights
+
+        degree_matrix = np.diag(np.sum(adjacency_matrix, axis=1))
+        laplacian_matrix = degree_matrix - adjacency_matrix
+        eigen_values, eigen_vector = np.linalg.eigh(laplacian_matrix)
+
+        weights = np.zeros(nid_count)
+        diffusion = np.exp(-eigen_values/np.average(eigen_values))
+
+        bone_name_nid_weights: Dict[str:Dict[int, float]] = {
+            apex_bone_name: collect_nid_weights(pose_bones[apex_bone_name].tail + target.origin),
+            base_a_bone_name: collect_nid_weights(pose_bones[base_a_bone_name].head + target.origin),
+            base_b_bone_name: collect_nid_weights(pose_bones[base_b_bone_name].head + target.origin),
+            base_c_bone_name: collect_nid_weights(pose_bones[base_c_bone_name].head + target.origin),
+            base_d_bone_name: collect_nid_weights(pose_bones[base_d_bone_name].head + target.origin),
+        }
+
+        mesh_editor = MeshEditor(target.deform_mesh_object)
+        for bone_name in bone_name_nid_weights:
+            in_nid_weights = {
+                nid: (weight * 10 if b == bone_name else -weight)
+                for b, n2w in bone_name_nid_weights.items()
+                for nid, weight in n2w.items()
+            }
+            # for _ in range(100):
+            #     for nid, weight in in_nid_weights.items():
+            #         weights[nid] = weight
+
+            #     for nid in sink_nids:
+            #         weights[nid] = 0
+
+            #     weights = eigen_vector.T @ weights
+            #     weights = weights * diffusion
+            #     weights = eigen_vector @ weights
+
+            # for _ in range(10):
+            #     for nid, weight in in_nid_weights.items():
+            #         if weight < 0:
+            #             weights[nid] = weight
+
+            #     weights = eigen_vector.T @ weights
+            #     weights = weights * diffusion
+            #     weights = eigen_vector @ weights
+
+            #     for nid in sink_nids:
+            #         weights[nid] = 0
+
+            for nid, weight in in_nid_weights.items():
+                weights[nid] = weight
+
+            for nid in sink_nids:
+                weights[nid] = 0.5
+
+            # normalize
+            weights = weights/np.max(weights)
+
+            mesh_editor.edit_vertex_group(bone_name, [
+                (uid2vids[nid2uid[nid]], weights[nid].item()) for nid in range(nid_count)
+            ])
+
+        # print(f'deform_vertex_count={deform_vertex_count}')
+        print(f'adjacency_matrix={adjacency_matrix.shape}')
+        # print(f'deform_vertex_count={deform_vertex_count}')
+        # print(eigen_values)
+        # print(eigen_vector)
+
+        np.savetxt('/home/hobby/Workspace/Develop/jupyter/L.txt', laplacian_matrix)
+        np.savetxt('/home/hobby/Workspace/Develop/jupyter/A.txt', adjacency_matrix)
+        np.savetxt('/home/hobby/Workspace/Develop/jupyter/D.txt', eigen_values)
+        np.savetxt('/home/hobby/Workspace/Develop/jupyter/V.txt', eigen_vector)
+        np.savetxt('/home/hobby/Workspace/Develop/jupyter/Sink.txt', np.array(list(sink_nids)))
+
+        deform_bm.free()
+
+
+def build_adjacencies(
+    vertices: List[bmesh.types.BMVert],
+    deform_vertex_index_weights: Dict[int, float],
+    vertex_kdtree: mathutils.kdtree.KDTree
+):
+    # vertex id to unified vertex id
+    vid2uid: Dict[int, int] = {}
+
+    # build adjacency dictionary
+    adjacencies: Dict[Tuple[int, int], float] = {}
+    for from_vid in deform_vertex_index_weights:
+        from_vert: bmesh.types.BMVert = vertices[from_vid]
+
+        link_vids: List[int] = [e.other_vert(from_vert).index for e in from_vert.link_edges]
+
+        if len(link_vids) == 0:
+            continue
+
+        link_vert_distances: List[float] = [(vertices[vid].co - from_vert.co).length for vid in link_vids]
+        link_vert_min_distance: float = min(link_vert_distances)
+        link_vert_max_distance: float = max(link_vert_distances)
+
+        # collect unified vertices
+        for _, near_vid, distance in sorted(
+            vertex_kdtree.find_range(from_vert.co, link_vert_max_distance),
+            lambda v: -deform_vertex_index_weights[v[1]]
+        ):
+            if from_vid == near_vid:
+                continue
+
+            if distance < link_vert_min_distance:
+                if from_vid in vid2uid:
+                    vid2uid.setdefault(near_vid, vid2uid[from_vid])
+                elif near_vid in vid2uid:
+                    vid2uid[from_vid] = vid2uid[near_vid]
+                else:
+                    vid2uid[from_vid] = from_vid
+                    vid2uid[near_vid] = from_vid
+
+                continue
+
+            if near_vid not in link_vids:
+                continue
+
+            from_uid = vid2uid.setdefault(from_vid, from_vid)
+            near_uid = vid2uid.setdefault(near_vid, near_vid)
+
+            if from_uid == near_uid:
+                continue
+
+            adjacencies[(from_uid, near_uid)] = distance
+
+    return adjacencies, vid2uid
+
+
+def collect_near_vert_indices(link_vert_indices: List[int], near_vert_indices: List[int], index: int) -> bool:
+    if len(link_vert_indices) == 0:
+        return False
+
+    if index in link_vert_indices:
+        link_vert_indices.remove(index)
+
+    near_vert_indices.append(index)
+    return True
+
+
+def to_pyramid_vertices(deform_bm: bmesh.types.BMesh, target: Target, base_area_factor: float) -> Tuple[Vector, List[Vector], Dict[int, float]]:
     apex_vertex, deform_vertex_index_weights = find_apex_vertex(deform_bm, target)
     base_vertices = find_base_vertices(deform_bm, target, deform_vertex_index_weights, base_area_factor)
-
-    deform_bm.free()
-
-    return apex_vertex, base_vertices
+    return apex_vertex, base_vertices, deform_vertex_index_weights
 
 
 def find_base_vertices(deform_bm: bmesh.types.BMesh, target: Target, deform_vertex_index_weights: Dict[int, float], base_area_factor: float) -> List[Vector]:
@@ -235,8 +439,8 @@ def find_apex_vertex(deform_bm: bmesh.types.BMesh, target: Target) -> Tuple[Vect
         )
 
         for index in range(3):
-            if vertex_weights[index] == 0:
-                continue
+            # if vertex_weights[index] == 0:
+            #     continue
             deform_vertex_index_weights[tri_loops[index].vert.index] = vertex_weights[index]
 
         if intersection is None:

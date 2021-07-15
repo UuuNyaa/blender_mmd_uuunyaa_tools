@@ -742,8 +742,8 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         # toe IK
         leg_l_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_IK_FK].data_path}'
         leg_r_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_IK_FK].data_path}'
-        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.L'], self.raw_object, 'mmd_uuunyaa_toe_ik.L', leg_l_ik_fk_data_path, 1, 3, invert_influence=True)
-        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.R'], self.raw_object, 'mmd_uuunyaa_toe_ik.R', leg_r_ik_fk_data_path, 1, 3, invert_influence=True)
+        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.L'], self.raw_object, 'mmd_uuunyaa_toe_ik.L', 1, 3, leg_l_ik_fk_data_path, invert_influence=True)
+        PoseBoneEditor.add_ik_constraint(pose_bones['ORG-foot.R'], self.raw_object, 'mmd_uuunyaa_toe_ik.R', 1, 3, leg_r_ik_fk_data_path, invert_influence=True)
 
         self._set_bone_custom_shapes(pose_bones)
 

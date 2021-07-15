@@ -89,7 +89,16 @@ class PoseBoneEditor(ABC):
                 setattr(constraint, key, value)
 
     @classmethod
-    def add_copy_transforms_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+    def add_copy_transforms_constraint(
+        cls,
+        pose_bone: bpy.types.PoseBone,
+        target_object: bpy.types.Object,
+        subtarget: str,
+        space: str,
+        influence_data_path: Union[str, None] = None,
+        invert_influence: bool = False,
+        **kwargs
+    ) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
         constraint = cls.add_constraint(
             pose_bone, 'COPY_TRANSFORMS', 'mmd_uuunyaa_copy_transforms',
@@ -99,11 +108,21 @@ class PoseBoneEditor(ABC):
             owner_space=space,
             **kwargs
         )
-        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        if influence_data_path:
+            cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
     @classmethod
-    def add_copy_rotation_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+    def add_copy_rotation_constraint(
+        cls,
+        pose_bone: bpy.types.PoseBone,
+        target_object: bpy.types.Object,
+        subtarget: str,
+        space: str,
+        influence_data_path: Union[str, None] = None,
+        invert_influence: bool = False,
+        **kwargs
+    ) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
         constraint = cls.add_constraint(
             pose_bone, 'COPY_ROTATION', 'mmd_uuunyaa_copy_rotation',
@@ -113,11 +132,21 @@ class PoseBoneEditor(ABC):
             owner_space=space,
             **kwargs
         )
-        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        if influence_data_path:
+            cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
     @classmethod
-    def add_copy_location_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+    def add_copy_location_constraint(
+        cls,
+        pose_bone: bpy.types.PoseBone,
+        target_object: bpy.types.Object,
+        subtarget: str,
+        space: str,
+        influence_data_path: Union[str, None] = None,
+        invert_influence: bool = False,
+        **kwargs
+    ) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
         constraint = cls.add_constraint(
             pose_bone, 'COPY_LOCATION', 'mmd_uuunyaa_copy_location',
@@ -127,11 +156,21 @@ class PoseBoneEditor(ABC):
             owner_space=space,
             **kwargs
         )
-        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        if influence_data_path:
+            cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
     @classmethod
-    def add_copy_scale_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, space: str, influence_data_path: str, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+    def add_copy_scale_constraint(
+        cls,
+        pose_bone: bpy.types.PoseBone,
+        target_object: bpy.types.Object,
+        subtarget: str,
+        space: str,
+        influence_data_path: Union[str, None] = None,
+        invert_influence: bool = False,
+        **kwargs
+    ) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
         constraint = cls.add_constraint(
             pose_bone, 'COPY_SCALE', 'mmd_uuunyaa_copy_scale',
@@ -141,11 +180,22 @@ class PoseBoneEditor(ABC):
             owner_space=space,
             **kwargs
         )
-        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        if influence_data_path:
+            cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
     @classmethod
-    def add_ik_constraint(cls, pose_bone: bpy.types.PoseBone, target_object: bpy.types.Object, subtarget: str, influence_data_path: str, chain_count: int, iterations: int, invert_influence: bool = False, **kwargs) -> bpy.types.Constraint:
+    def add_ik_constraint(
+        cls,
+        pose_bone: bpy.types.PoseBone,
+        target_object: bpy.types.Object,
+        subtarget: str,
+        chain_count: int,
+        iterations: int,
+        influence_data_path: Union[str, None] = None,
+        invert_influence: bool = False,
+        **kwargs
+    ) -> bpy.types.Constraint:
         # pylint: disable=too-many-arguments
         constraint = cls.add_constraint(
             pose_bone, 'IK', 'mmd_uuunyaa_ik_mmd',
@@ -155,7 +205,8 @@ class PoseBoneEditor(ABC):
             iterations=iterations,
             **kwargs
         )
-        cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
+        if influence_data_path:
+            cls.add_influence_driver(constraint, target_object, influence_data_path, invert_influence=invert_influence)
         return constraint
 
     @staticmethod
@@ -246,13 +297,13 @@ class EditBoneEditor(ABC):
             data_to.objects = custom_shape_names
 
 
-class ArmatureEditor(EditBoneEditor):
+class ArmatureEditor(EditBoneEditor, PoseBoneEditor):
     raw_object: bpy.types.Object
     raw_armature: bpy.types.Armature
 
     def __init__(self, armature_object: bpy.types.Object):
         self.raw_object = armature_object
-        self.raw_armature: bpy.types.Armature = self.raw_object.data
+        self.raw_armature: bpy.types.Armature = armature_object.data
 
     @property
     def bones(self) -> bpy.types.ArmatureBones:
