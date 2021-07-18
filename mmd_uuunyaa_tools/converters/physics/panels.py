@@ -7,7 +7,7 @@ from mmd_uuunyaa_tools.converters.physics.cloth import (
     ConvertRigidBodyToClothOperator, RemoveMeshCloth, SelectClothMesh)
 from mmd_uuunyaa_tools.converters.physics.collision import (
     RemoveMeshCollision, SelectCollisionMesh)
-from mmd_uuunyaa_tools.converters.physics.softbody import ConvertBreastBoneToClothOperator
+from mmd_uuunyaa_tools.converters.physics.softbody import AddPyramidMeshByBreastBoneOperator, ConvertPyramidMeshToClothOperator, AssignPyramidWeightsOperator
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
@@ -69,7 +69,9 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text='experimental')
-        col.operator(ConvertBreastBoneToClothOperator.bl_idname)
+        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname)
+        col.operator(ConvertPyramidMeshToClothOperator.bl_idname)
+        col.operator(AssignPyramidWeightsOperator.bl_idname)
 
     @staticmethod
     def _toggle_visibility_of_cloths(obj, context):

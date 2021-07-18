@@ -33,6 +33,14 @@ class Target:
     direction: Vector
 
 
+@dataclass
+class TargetA:
+    bone_name: str
+    parent_bone_name: str
+    deform_mesh_object: bpy.types.Object
+    pyramid_mesh_object: bpy.types.Object
+
+
 STRING = 0
 APEX = 1
 BASE_A = 2
@@ -40,29 +48,35 @@ BASE_B = 3
 BASE_C = 4
 BASE_D = 5
 
+PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME = 'physics_pyramid_cloth_target_bone'
+PYRAMID_CLOTH_PARENT_BONE_PROPERTY_NAME = 'physics_pyramid_cloth_parent_bone'
 
-def add_deform_pyramid(armature_object: bpy.types.Object, breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float, spring_length_ratio: float, base_area_factor: float):
+
+def add_pyramid_mesh(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float, spring_length_ratio: float, base_area_factor: float):
     targets = build_targets(breast_bones, mesh_objects, head_tail)
 
     if len(targets) == 0:
         raise MessageException(_('Target bones not found.')) from None
 
     for target in targets:
-        build_pyramid_mesh(target, spring_length_ratio, base_area_factor)
+        pyramid_mesh = build_pyramid_mesh(target, spring_length_ratio, base_area_factor)
+        pyramid_mesh[PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME] = target.bone_name
+        pyramid_mesh[PYRAMID_CLOTH_PARENT_BONE_PROPERTY_NAME] = target.parent_bone_name
+        bpy.context.scene.collection.objects.link(pyramid_mesh)
 
 
 def build_pyramid_mesh(target: Target, spring_length_ratio: float, base_area_factor: float):
     deform_bm: bmesh.types.BMesh = bmesh.new()
     deform_bm.from_object(target.deform_mesh_object, bpy.context.evaluated_depsgraph_get())
 
-    apex_vertex, base_vertices, deform_vertex_index_weights = to_pyramid_vertices(deform_bm, target, base_area_factor)
+    apex_vertex, base_vertices, _deform_vertex_index_weights = to_pyramid_vertices(deform_bm, target, base_area_factor)
     vertices: List[Vector] = [
         apex_vertex * spring_length_ratio,
         apex_vertex,
         *base_vertices
     ]
 
-    pyramid_mesh = bpy.data.meshes.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}')
+    pyramid_mesh = bpy.data.meshes.new(f'physics_pyramid_cloth_{target.bone_name}')
     pyramid_mesh.from_pydata(vertices, [
         [STRING, APEX]
     ], [
@@ -75,22 +89,21 @@ def build_pyramid_mesh(target: Target, spring_length_ratio: float, base_area_fac
 
     deform_bm.clear()
 
-    pyramid_mesh_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}', pyramid_mesh)
-    bpy.context.scene.collection.objects.link(pyramid_mesh_object)
+    pyramid_mesh_object = bpy.data.objects.new(f'physics_pyramid_cloth_{target.bone_name}', pyramid_mesh)
     pyramid_mesh_object.matrix_basis = Matrix.Translation(target.origin)
     pyramid_mesh_object.hide_render = True
     pyramid_mesh_object.display_type = 'WIRE'
 
     mesh_editor = MeshEditor(pyramid_mesh_object)
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_string', [([STRING], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_apex', [([APEX], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_a', [([BASE_A], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_b', [([BASE_B], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_c', [([BASE_C], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_d', [([BASE_D], 1.0)])
+    mesh_editor.edit_vertex_group('string', [([STRING], 1.0)])
+    mesh_editor.edit_vertex_group('apex', [([APEX], 1.0)])
+    mesh_editor.edit_vertex_group('base_a', [([BASE_A], 1.0)])
+    mesh_editor.edit_vertex_group('base_b', [([BASE_B], 1.0)])
+    mesh_editor.edit_vertex_group('base_c', [([BASE_C], 1.0)])
+    mesh_editor.edit_vertex_group('base_d', [([BASE_D], 1.0)])
     mesh_editor.edit_cloth_modifier(
-        'mmd_uuunyaa_physics_cloth',
-        vertex_group_mass=mesh_editor.edit_vertex_group('mmd_uuunyaa_physics_cloth_pin', [
+        'physics_pyramid_cloth',
+        vertex_group_mass=mesh_editor.edit_vertex_group('physics_pyramid_cloth_pin', [
             ([STRING], 0.6),  # 0.4 - 0.6
             ([APEX], 0.4),  # 0.4 - 0.6
             ([BASE_A, BASE_B, BASE_C, BASE_D], 0.8),  # 0.8 - 0.9
@@ -102,163 +115,167 @@ def build_pyramid_mesh(target: Target, spring_length_ratio: float, base_area_fac
     return pyramid_mesh_object
 
 
-def convert(armature_object: bpy.types.Object, breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy.types.Object], head_tail: float, spring_length_ratio: float, base_area_factor: float):
+def assign_pyramid_weights(
+    pyramid_mesh_objects: List[bpy.types.Object],
+    deform_mesh_objects: List[bpy.types.Object]
+):
+    for pyramid_mesh_object in pyramid_mesh_objects:
+        target_bone_name = pyramid_mesh_object[PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME]
+        parent_bone_name = pyramid_mesh_object[PYRAMID_CLOTH_PARENT_BONE_PROPERTY_NAME]
 
-    targets = build_targets(breast_bones, mesh_objects, head_tail)
+        pyramid_armature_object = pyramid_mesh_object.parent
 
-    if len(targets) == 0:
-        raise MessageException(_('Target bones not found.')) from None
+        for deform_mesh_object in deform_mesh_objects:
+            vertex_group = deform_mesh_object.vertex_groups.get(target_bone_name)
+            if vertex_group is None:
+                continue
 
-    pyramid_armature_objects = [armature_object] + [
-        build_pyramid_armature_object(target, spring_length_ratio, base_area_factor)
-        for target in targets
-    ]
+            assign_weights(
+                pyramid_armature_object,
+                TargetA(
+                    target_bone_name,
+                    parent_bone_name,
+                    deform_mesh_object,
+                    pyramid_mesh_object,
+                )
+            )
 
-    bpy.ops.object.mode_set(mode='OBJECT')
-    local_context: bpy.types.Context = bpy.context.copy()
-    local_context.update(
-        active_object=armature_object,
-        selected_objects=pyramid_armature_objects,
-        selected_editable_objects=pyramid_armature_objects,
-    )
-    bpy.ops.object.join(local_context)
-    bpy.context.view_layer.objects.active = armature_object
-    bpy.ops.object.mode_set(mode='EDIT')
 
-    armature_editor = ArmatureEditor(armature_object)
+def convert_pyramid_mesh_to_cloth(
+    pyramid_mesh_objects: List[bpy.types.Object],
+    deform_mesh_objects: List[bpy.types.Object]
+):
+    targets: List[TargetA] = []
+
+    for pyramid_mesh_object in pyramid_mesh_objects:
+        target_bone_name = pyramid_mesh_object[PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME]
+        parent_bone_name = pyramid_mesh_object[PYRAMID_CLOTH_PARENT_BONE_PROPERTY_NAME]
+
+        for deform_mesh_object in deform_mesh_objects:
+            vertex_group = deform_mesh_object.vertex_groups.get(target_bone_name)
+            if vertex_group is None:
+                continue
+
+            targets.append(TargetA(
+                target_bone_name,
+                parent_bone_name,
+                deform_mesh_object,
+                pyramid_mesh_object,
+            ))
+
     for target in targets:
-        base_bone_name = f'mmd_uuunyaa_physics_base_{target.bone_name}'
-        armature_editor.edit_bones[base_bone_name].parent = armature_editor.edit_bones[target.parent_bone_name]
+        bpy.ops.object.mode_set(mode='OBJECT')
+        pyramid_mesh_object = target.pyramid_mesh_object
+        pyramid_mesh: bpy.types.Mesh = pyramid_mesh_object.data
+        target_bone_name = target.bone_name
+        vertices: List[Vector] = [v.co for v in pyramid_mesh.vertices]
 
-    bpy.ops.object.mode_set(mode='OBJECT')
+        origin: Vector = pyramid_mesh_object.location.copy()
+        direction: Vector = vertices[APEX].normalized()
+
+        pyramid_armature = bpy.data.armatures.new(f'physics_pyramid_{target_bone_name}')
+        pyramid_armature_object = bpy.data.objects.new(f'physics_pyramid_{target_bone_name}', pyramid_armature)
+        bpy.context.scene.collection.objects.link(pyramid_armature_object)
+        pyramid_armature_object.location = origin
+
+        bpy.context.selected_objects.append(pyramid_armature_object)
+        bpy.context.view_layer.objects.active = pyramid_armature_object
+
+        bpy.ops.object.mode_set(mode='EDIT')
+
+        bone_length = vertices[APEX].length / 4.5
+        bone_vector = direction * bone_length
+
+        # Move the apex vertex into the mesh
+        pyramid_mesh.vertices[APEX].co -= bone_vector
+        pyramid_mesh.update()
+
+        base_bone_name = f'physics_pyramid_base_{target_bone_name}'
+        apex_bone_name = f'physics_pyramid_apex_{target_bone_name}'
+        base_a_bone_name = f'physics_pyramid_base_a_{target_bone_name}'
+        base_b_bone_name = f'physics_pyramid_base_b_{target_bone_name}'
+        base_c_bone_name = f'physics_pyramid_base_c_{target_bone_name}'
+        base_d_bone_name = f'physics_pyramid_base_d_{target_bone_name}'
+
+        def create_bones():
+            base_bone = pyramid_armature.edit_bones.new(base_bone_name)
+            base_bone.head = Vector((0, 0, 0))
+            base_bone.tail = Vector((0, 0, 0)) + bone_vector
+
+            apex_bone = pyramid_armature.edit_bones.new(apex_bone_name)
+            apex_bone.parent = base_bone
+            apex_bone.head = vertices[APEX]
+            apex_bone.tail = vertices[APEX] + bone_vector
+
+            base_a_bone = pyramid_armature.edit_bones.new(base_a_bone_name)
+            base_a_bone.parent = base_bone
+            base_a_bone.head = vertices[BASE_A]
+            base_a_bone.tail = vertices[BASE_A] + bone_vector
+
+            base_b_bone = pyramid_armature.edit_bones.new(base_b_bone_name)
+            base_b_bone.parent = base_bone
+            base_b_bone.head = vertices[BASE_B]
+            base_b_bone.tail = vertices[BASE_B] + bone_vector
+
+            base_c_bone = pyramid_armature.edit_bones.new(base_c_bone_name)
+            base_c_bone.parent = base_bone
+            base_c_bone.head = vertices[BASE_C]
+            base_c_bone.tail = vertices[BASE_C] + bone_vector
+
+            base_d_bone = pyramid_armature.edit_bones.new(base_d_bone_name)
+            base_d_bone.parent = base_bone
+            base_d_bone.head = vertices[BASE_D]
+            base_d_bone.tail = vertices[BASE_D] + bone_vector
+
+        create_bones()
+
+        bpy.ops.object.mode_set(mode='OBJECT')
+
+        pyramid_mesh_object.parent = pyramid_armature_object
+        pyramid_mesh_object.parent_type = 'BONE'
+        pyramid_mesh_object.parent_bone = base_bone_name
+        pyramid_mesh_object.matrix_basis = pyramid_armature.bones[base_bone_name].matrix_local.inverted() @ Matrix.Translation(-bone_vector)
+        pyramid_mesh_object.hide_render = True
+        pyramid_mesh_object.display_type = 'WIRE'
+
+        bpy.ops.object.mode_set(mode='POSE')
+
+        armature_editor = ArmatureEditor(pyramid_armature_object)
+        pose_bones = armature_editor.pose_bones
+        armature_editor.add_copy_location_constraint(pose_bones[apex_bone_name], pyramid_mesh_object, 'apex', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_a_bone_name], pyramid_mesh_object, 'base_a', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_b_bone_name], pyramid_mesh_object, 'base_b', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_c_bone_name], pyramid_mesh_object, 'base_c', 'WORLD')
+        armature_editor.add_copy_location_constraint(pose_bones[base_d_bone_name], pyramid_mesh_object, 'base_d', 'WORLD')
+
+        bpy.ops.object.mode_set(mode='EDIT')
+        assign_weights(pyramid_armature_object, target)
+
+        bpy.ops.object.mode_set(mode='OBJECT')
 
 
-def build_pyramid_armature_object(target, spring_length_ratio, base_area_factor):
-    deform_bm: bmesh.types.BMesh = bmesh.new()
-    deform_bm.from_object(target.deform_mesh_object, bpy.context.evaluated_depsgraph_get())
+def assign_weights(pyramid_armature_object: bpy.types.Object, target: TargetA):
+    mesh_editor = MeshEditor(target.deform_mesh_object)
 
-    apex_vertex, base_vertices, deform_vertex_index_weights = to_pyramid_vertices(deform_bm, target, base_area_factor)
-    vertices: List[Vector] = [
-        apex_vertex * spring_length_ratio,
-        apex_vertex,
-        *base_vertices
-    ]
+    deform_bmesh: bmesh.types.BMesh = bmesh.new()
+    deform_bmesh.from_object(target.deform_mesh_object, bpy.context.evaluated_depsgraph_get())
 
-    pyramid_armature = bpy.data.armatures.new(f'mmd_uuunyaa_physics_{target.bone_name}')
-    pyramid_armature_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_{target.bone_name}', pyramid_armature)
-    bpy.context.scene.collection.objects.link(pyramid_armature_object)
-    pyramid_armature_object.location = target.origin
+    origin = pyramid_armature_object.location
 
-    bpy.context.selected_objects.append(pyramid_armature_object)
-    bpy.context.view_layer.objects.active = pyramid_armature_object
-    bpy.ops.object.mode_set(mode='EDIT')
+    target_bone_name = target.bone_name
+    apex_bone_name = f'physics_pyramid_apex_{target_bone_name}'
+    base_a_bone_name = f'physics_pyramid_base_a_{target_bone_name}'
+    base_b_bone_name = f'physics_pyramid_base_b_{target_bone_name}'
+    base_c_bone_name = f'physics_pyramid_base_c_{target_bone_name}'
+    base_d_bone_name = f'physics_pyramid_base_d_{target_bone_name}'
 
-    bone_length = vertices[APEX].length / 4.5
-    bone_vector = target.direction * bone_length
+    pyramid_armature: bpy.types.Armature = pyramid_armature_object.data
 
-    # Move the apex vertex into the mesh
-    vertices[APEX] -= bone_vector
+    bone_length = pyramid_armature.bones[0].length
 
-    base_bone_name = f'mmd_uuunyaa_physics_base_{target.bone_name}'
-    apex_bone_name = f'mmd_uuunyaa_physics_apex_{target.bone_name}'
-    base_a_bone_name = f'mmd_uuunyaa_physics_base_a_{target.bone_name}'
-    base_b_bone_name = f'mmd_uuunyaa_physics_base_b_{target.bone_name}'
-    base_c_bone_name = f'mmd_uuunyaa_physics_base_c_{target.bone_name}'
-    base_d_bone_name = f'mmd_uuunyaa_physics_base_d_{target.bone_name}'
+    vid2weight = to_vid2weight(deform_bmesh, mesh_editor.get_vertex_group(target_bone_name).index)
 
-    def create_bones():
-        base_bone = pyramid_armature.edit_bones.new(base_bone_name)
-        base_bone.head = Vector((0, 0, 0))
-        base_bone.tail = Vector((0, 0, 0)) + bone_vector
-
-        apex_bone = pyramid_armature.edit_bones.new(apex_bone_name)
-        apex_bone.parent = base_bone
-        apex_bone.head = vertices[APEX]
-        apex_bone.tail = vertices[APEX] + bone_vector
-
-        base_a_bone = pyramid_armature.edit_bones.new(base_a_bone_name)
-        base_a_bone.parent = base_bone
-        base_a_bone.head = vertices[BASE_A]
-        base_a_bone.tail = vertices[BASE_A] + bone_vector
-
-        base_b_bone = pyramid_armature.edit_bones.new(base_b_bone_name)
-        base_b_bone.parent = base_bone
-        base_b_bone.head = vertices[BASE_B]
-        base_b_bone.tail = vertices[BASE_B] + bone_vector
-
-        base_c_bone = pyramid_armature.edit_bones.new(base_c_bone_name)
-        base_c_bone.parent = base_bone
-        base_c_bone.head = vertices[BASE_C]
-        base_c_bone.tail = vertices[BASE_C] + bone_vector
-
-        base_d_bone = pyramid_armature.edit_bones.new(base_d_bone_name)
-        base_d_bone.parent = base_bone
-        base_d_bone.head = vertices[BASE_D]
-        base_d_bone.tail = vertices[BASE_D] + bone_vector
-
-    create_bones()
-
-    # refresh edit context
-    bpy.ops.object.mode_set(mode='OBJECT')
-    bpy.ops.object.mode_set(mode='EDIT')
-
-    pyramid_mesh = bpy.data.meshes.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}')
-    pyramid_mesh.from_pydata(vertices, [
-        [STRING, APEX]
-    ], [
-        [APEX, BASE_A, BASE_B],
-        [APEX, BASE_B, BASE_C],
-        [APEX, BASE_C, BASE_D],
-        [APEX, BASE_D, BASE_A],
-    ])
-    pyramid_mesh.update()
-
-    pyramid_mesh_object = bpy.data.objects.new(f'mmd_uuunyaa_physics_cloth_{target.bone_name}', pyramid_mesh)
-    bpy.context.scene.collection.objects.link(pyramid_mesh_object)
-    pyramid_mesh_object.parent = pyramid_armature_object
-    pyramid_mesh_object.parent_type = 'BONE'
-    pyramid_mesh_object.parent_bone = base_bone_name
-    pyramid_mesh_object.matrix_basis = pyramid_armature.edit_bones[base_bone_name].matrix.inverted() @ Matrix.Translation(-bone_vector)
-    pyramid_mesh_object.hide_render = True
-    pyramid_mesh_object.display_type = 'WIRE'
-
-    mesh_editor = MeshEditor(pyramid_mesh_object)
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_string', [([STRING], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_apex', [([APEX], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_a', [([BASE_A], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_b', [([BASE_B], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_c', [([BASE_C], 1.0)])
-    mesh_editor.edit_vertex_group('mmd_uuunyaa_base_d', [([BASE_D], 1.0)])
-    mesh_editor.edit_cloth_modifier(
-        'mmd_uuunyaa_physics_cloth',
-        vertex_group_mass=mesh_editor.edit_vertex_group('mmd_uuunyaa_physics_cloth_pin', [
-            ([STRING], 0.6),  # 0.4 - 0.6
-            ([APEX], 0.4),  # 0.4 - 0.6
-            ([BASE_A, BASE_B, BASE_C, BASE_D], 0.8),  # 0.8 - 0.9
-        ]).name,
-        time_scale=0.5,
-        bending_model='LINEAR'
-    )
-
-    bpy.ops.object.mode_set(mode='POSE')
-
-    armature_editor = ArmatureEditor(pyramid_armature_object)
-    pose_bones = armature_editor.pose_bones
-    armature_editor.add_copy_location_constraint(pose_bones[apex_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_apex', 'WORLD')
-    armature_editor.add_copy_location_constraint(pose_bones[base_a_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_a', 'WORLD')
-    armature_editor.add_copy_location_constraint(pose_bones[base_b_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_b', 'WORLD')
-    armature_editor.add_copy_location_constraint(pose_bones[base_c_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_c', 'WORLD')
-    armature_editor.add_copy_location_constraint(pose_bones[base_d_bone_name], pyramid_mesh_object, 'mmd_uuunyaa_base_d', 'WORLD')
-
-    bpy.ops.object.mode_set(mode='EDIT')
-
-    deform_bm.verts.ensure_lookup_table()
-    vertex_kdtree = mathutils.kdtree.KDTree(len(deform_vertex_index_weights))
-    for index in deform_vertex_index_weights:
-        vertex_kdtree.insert(deform_bm.verts[index].co, index)
-    vertex_kdtree.balance()
-
-    adjacencies, vid2uid = build_adjacencies(deform_bm.verts, deform_vertex_index_weights, vertex_kdtree)
+    adjacencies, vid2uid = build_adjacencies(deform_bmesh.verts, vid2weight)
 
     # unified vertex id to numpy id
     uid2nid: Dict[int, int] = {uid: nid for nid, uid in enumerate(set(vid2uid.values()))}
@@ -267,7 +284,7 @@ def build_pyramid_armature_object(target, spring_length_ratio, base_area_factor)
 
     sink_nids: Set[int] = set()
 
-    for index, weight in deform_vertex_index_weights.items():
+    for index, weight in vid2weight.items():
         if weight > 0:
             continue
         sink_nids.add(uid2nid[vid2uid[index]])
@@ -276,39 +293,40 @@ def build_pyramid_armature_object(target, spring_length_ratio, base_area_factor)
 
     adjacency_matrix = np.zeros((nid_count, nid_count))
     for (from_uid, to_uid), span in adjacencies.items():
-        adjacency_matrix[uid2nid[from_uid], uid2nid[to_uid]] = 1/span
-        adjacency_matrix[uid2nid[to_uid], uid2nid[from_uid]] = 1/span
+        magnitude = math.exp(-span)
+        adjacency_matrix[uid2nid[from_uid], uid2nid[to_uid]] = magnitude
+        adjacency_matrix[uid2nid[to_uid], uid2nid[from_uid]] = magnitude
 
-    # np.set_printoptions(precision=3, suppress=True)
+        # np.set_printoptions(precision=3, suppress=True)
 
-    def collect_nid_weights(position: Vector):
+    deform_bmesh.verts.ensure_lookup_table()
+    vertex_kdtree = mathutils.kdtree.KDTree(nid_count)
+    for uid in uid2nid:
+        if vid2weight[uid] == 0:
+            continue
+        vertex_kdtree.insert(deform_bmesh.verts[uid].co, uid)
+    vertex_kdtree.balance()
+
+    def collect_nid_weights(position: Vector, _xxx):
         nid_weights: Dict[int, float] = {}
-        min_span = None
-        for _co, near_vid, near_span in vertex_kdtree.find_n(position, 16):
-            if min_span is None:
-                min_span = near_span
-
-            weight = math.exp(1-near_span/min_span)
-            if weight < 0.5:
-                break
-
-            nid_weights[uid2nid[vid2uid[near_vid]]] = weight
+        for _co, near_uid, near_span in vertex_kdtree.find_n(position, 4):
+            weight = math.exp(-near_span)
+            nid_weights[uid2nid[near_uid]] = weight
         return nid_weights
 
     bone_name_nid_weights: Dict[str:Dict[int, float]] = {
-        apex_bone_name: collect_nid_weights(pose_bones[apex_bone_name].tail + target.origin),
-        base_a_bone_name: collect_nid_weights(pose_bones[base_a_bone_name].head + target.origin),
-        base_b_bone_name: collect_nid_weights(pose_bones[base_b_bone_name].head + target.origin),
-        base_c_bone_name: collect_nid_weights(pose_bones[base_c_bone_name].head + target.origin),
-        base_d_bone_name: collect_nid_weights(pose_bones[base_d_bone_name].head + target.origin),
+        apex_bone_name: collect_nid_weights(pyramid_armature.bones[apex_bone_name].tail_local + origin, bone_length),
+        base_a_bone_name: collect_nid_weights(pyramid_armature.bones[base_a_bone_name].head_local + origin, bone_length),
+        base_b_bone_name: collect_nid_weights(pyramid_armature.bones[base_b_bone_name].head_local + origin, bone_length),
+        base_c_bone_name: collect_nid_weights(pyramid_armature.bones[base_c_bone_name].head_local + origin, bone_length),
+        base_d_bone_name: collect_nid_weights(pyramid_armature.bones[base_d_bone_name].head_local + origin, bone_length),
     }
 
     degree_matrix = np.diag(np.sum(adjacency_matrix, axis=1))
     laplacian_matrix = degree_matrix - adjacency_matrix
     eigen_values, eigen_vector = np.linalg.eigh(laplacian_matrix)
-    diffusion = np.exp(-eigen_values/np.average(eigen_values)*2)
+    diffusion = np.exp(-eigen_values*5)
 
-    mesh_editor = MeshEditor(target.deform_mesh_object)
     for bone_name in bone_name_nid_weights:
         in_nid_weights = {
             nid: (weight*5 if b == bone_name else -weight)
@@ -317,7 +335,7 @@ def build_pyramid_armature_object(target, spring_length_ratio, base_area_factor)
         }
 
         weights = np.zeros(nid_count)
-        for _iteration in range(90):
+        for _iteration in range(100):
             for nid, weight in in_nid_weights.items():
                 weights[nid] = weight
 
@@ -330,29 +348,50 @@ def build_pyramid_armature_object(target, spring_length_ratio, base_area_factor)
 
         # normalize
         weights[weights < 0] = 0
-        weights = weights / np.linalg.norm(weights)
+        # weights = weights / np.linalg.norm(weights)
         weights = weights / np.max(weights)
 
         mesh_editor.edit_vertex_group(bone_name, [
             (uid2vids[nid2uid[nid]], weights[nid].item()) for nid in range(nid_count)
         ])
 
-    deform_bm.free()
-    return pyramid_armature_object
+    deform_bmesh.free()
+
+
+def to_vid2weight(deform_bm: bmesh.types.BMesh, vertex_group_index) -> Dict[int, float]:
+    vid2weight: Dict[int, float] = {}
+
+    deform_layer = deform_bm.verts.layers.deform.verify()
+
+    tri_loops: Tuple[bmesh.types.BMLoop, bmesh.types.BMLoop, bmesh.types.BMLoop]
+    for tri_loops in deform_bm.calc_loop_triangles():
+        loop_vid2weight = {l.vert.index: l.vert[deform_layer].get(vertex_group_index, 0.0) for l in tri_loops}
+        if max(loop_vid2weight.values()) == 0:
+            continue
+
+        vid2weight.update(loop_vid2weight)
+
+    return vid2weight
 
 
 def build_adjacencies(
-    vertices: List[bmesh.types.BMVert],
-    deform_vertex_index_weights: Dict[int, float],
-    vertex_kdtree: mathutils.kdtree.KDTree
-) -> Dict[int, int]:
+    vertices: bmesh.types.BMVertSeq,
+    vid2weight: Dict[int, float]
+) -> Tuple[Dict[Tuple[int, int], float], Dict[int, int]]:
+
+    vertices.ensure_lookup_table()
+    vertex_kdtree = mathutils.kdtree.KDTree(len(vid2weight))
+    for vid in vid2weight:
+        vertex_kdtree.insert(vertices[vid].co, vid)
+    vertex_kdtree.balance()
+
     # vertex id to unified vertex id
     vid2uid_span: Dict[int, Tuple[int, float]] = {}
 
     # build adjacency dictionary
     adjacencies: Dict[Tuple[int, int], float] = {}
 
-    for from_vid in deform_vertex_index_weights:
+    for from_vid in vid2weight:
         from_vert: bmesh.types.BMVert = vertices[from_vid]
 
         link_vids: List[int] = [e.other_vert(from_vert).index for e in from_vert.link_edges]
@@ -563,16 +602,16 @@ def build_targets(breast_bones: List[bpy.types.EditBone], mesh_objects: List[bpy
     return targets
 
 
-class ConvertBreastBoneToClothOperator(bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.convert_breast_bone_to_cloth'
-    bl_label = _('Convert Breast Bone to Cloth')
+class AddPyramidMeshByBreastBoneOperator(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.add_pyramid_mesh_by_breast_bone'
+    bl_label = _('Add Pyramid Mesh by Breast Bone')
     bl_options = {'REGISTER', 'UNDO'}
 
     head_tail: bpy.props.FloatProperty(name=_('Head/Tail'), default=0.5, min=0.0, max=1.0, step=10)
     spring_length_ratio: bpy.props.FloatProperty(name=_('Spring Length Ratio'), default=5.0, min=1.0, max=100.0, step=10)
     base_area_factor: bpy.props.FloatProperty(name=_('Vertex Shift'), default=0.1, min=0.0, max=100.0, step=10)
 
-    @ classmethod
+    @classmethod
     def poll(cls, context: bpy.types.Context):
         if context.mode != 'EDIT_ARMATURE':
             return False
@@ -590,17 +629,123 @@ class ConvertBreastBoneToClothOperator(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context):
         try:
-            target_armature_object: bpy.types.Object = context.active_object
             target_edit_bones: List[bpy.types.EditBone] = [b for b in context.selected_editable_bones if b.use_deform]
             target_mesh_objects: List[bpy.types.Object] = [o for o in context.selected_objects if o.type == 'MESH' and not o.hide]
 
-            convert(
-                target_armature_object,
+            add_pyramid_mesh(
                 target_edit_bones,
                 target_mesh_objects,
                 self.head_tail,
                 self.spring_length_ratio,
                 self.base_area_factor
+            )
+
+        except MessageException as ex:
+            self.report(type={'ERROR'}, message=str(ex))
+            return {'CANCELLED'}
+
+        return {'FINISHED'}
+
+
+class ConvertPyramidMeshToClothOperator(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.convert_pyramid_mesh_to_cloth'
+    bl_label = _('Convert Pyramid Mesh to Cloth')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context: bpy.types.Context):
+        if context.mode != 'OBJECT':
+            return False
+
+        pyramid_mesh_count = 0
+        target_mesh_count = 0
+        target_armature_count = 0
+        for obj in context.selected_objects:
+            if obj.type == 'MESH':
+                if PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME in obj:
+                    pyramid_mesh_count += 1
+                else:
+                    target_mesh_count += 1
+
+            if obj.type == 'ARMATURE':
+                target_armature_count += 1
+
+            if pyramid_mesh_count > 0 and target_mesh_count > 0 and target_armature_count > 0:
+                return True
+
+        return False
+
+    def execute(self, context: bpy.types.Context):
+        try:
+            armature_object: bpy.types.Armature
+            pyramid_mesh_objects: List[bpy.types.Object] = []
+            deform_mesh_objects: List[bpy.types.Object] = []
+
+            for obj in context.selected_objects:
+                if obj.type == 'MESH':
+                    if PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME in obj:
+                        pyramid_mesh_objects.append(obj)
+                    else:
+                        deform_mesh_objects.append(obj)
+
+                if obj.type == 'ARMATURE':
+                    armature_object = obj
+
+            convert_pyramid_mesh_to_cloth(
+                pyramid_mesh_objects,
+                deform_mesh_objects
+            )
+
+        except MessageException as ex:
+            self.report(type={'ERROR'}, message=str(ex))
+            return {'CANCELLED'}
+
+        return {'FINISHED'}
+
+
+class AssignPyramidWeightsOperator(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.assign_pyramid_weights'
+    bl_label = _('Assign Pyramid Weights')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context: bpy.types.Context):
+        if context.mode != 'OBJECT':
+            return False
+
+        pyramid_mesh_count = 0
+        target_mesh_count = 0
+        for obj in context.selected_objects:
+            if obj.type != 'MESH':
+                continue
+
+            if PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME in obj:
+                pyramid_mesh_count += 1
+            else:
+                target_mesh_count += 1
+
+            if pyramid_mesh_count > 0 and target_mesh_count > 0:
+                return True
+
+        return False
+
+    def execute(self, context: bpy.types.Context):
+        try:
+            pyramid_mesh_objects: List[bpy.types.Object] = []
+            deform_mesh_objects: List[bpy.types.Object] = []
+
+            for obj in context.selected_objects:
+                if obj.type != 'MESH':
+                    continue
+
+                if PYRAMID_CLOTH_TARGET_BONE_PROPERTY_NAME in obj:
+                    pyramid_mesh_objects.append(obj)
+                else:
+                    deform_mesh_objects.append(obj)
+
+            assign_pyramid_weights(
+                pyramid_mesh_objects,
+                deform_mesh_objects
             )
 
         except MessageException as ex:
