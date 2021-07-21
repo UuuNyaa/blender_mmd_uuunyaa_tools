@@ -130,7 +130,6 @@ class RigifyArmatureObject(RichArmatureObjectABC):
     def copy_pose(pose_bone, target_object, subtarget, influence_data_path):
         PoseUtil.add_copy_transforms_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
 
-
     @staticmethod
     def copy_leg_d(pose_bone, target_object, subtarget, influence_data_path):
         PoseUtil.add_copy_location_constraint(pose_bone, target_object, subtarget, 'POSE', influence_data_path)
@@ -967,7 +966,12 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         return True
 
     @classmethod
-    def _fit_bone(cls, rig_edit_bone: bpy.types.EditBone, mmd_edit_bone: bpy.types.EditBone):
+    def _fit_bone(cls, rig_edit_bone: bpy.types.EditBone, mmd_edit_bones: bpy.types.ArmatureEditBones, mmd_bone_name: str):
+        if mmd_bone_name not in mmd_edit_bones:
+            print(f'WARN: The MMD armature has no {mmd_bone_name} bone')
+            return
+
+        mmd_edit_bone: bpy.types.EditBone = mmd_edit_bones[mmd_bone_name]
         rig_edit_bone.head = mmd_edit_bone.head
         rig_edit_bone.tail = mmd_edit_bone.tail
         cls.fit_edit_bone_rotation(mmd_edit_bone, rig_edit_bone)
@@ -989,10 +993,10 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         # add center (センター) groove (グルーブ) bone
         center_bone, groove_bone = self._add_root_bones(rig_edit_bones)
-        self._fit_bone(center_bone, mmd_edit_bones['センター'])
+        self._fit_bone(center_bone, mmd_edit_bones, 'センター')
 
         if MMDBoneType.GROOVE in mmd_armature_object.exist_bone_types:
-            self._fit_bone(groove_bone, mmd_edit_bones['グルーブ'])
+            self._fit_bone(groove_bone, mmd_edit_bones, 'グルーブ')
         else:
             groove_bone.head = mmd_edit_bones['センター'].head
             groove_bone.tail = groove_bone.head + Vector([0.0, 0.0, mmd_edit_bones['センター'].length/6])
@@ -1010,40 +1014,40 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         shoulder_cancel_shadow_l_bone, shoulder_cancel_shadow_r_bone = self._add_shoulder_cancel_shadow_bones(rig_edit_bones)
 
         if MMDBoneType.SHOULDER_CANCEL in mmd_armature_object.exist_bone_types:
-            self._fit_bone(shoulder_parent_l_bone, mmd_edit_bones['左肩P'])
-            self._fit_bone(shoulder_parent_r_bone, mmd_edit_bones['右肩P'])
+            self._fit_bone(shoulder_parent_l_bone, mmd_edit_bones, '左肩P')
+            self._fit_bone(shoulder_parent_r_bone, mmd_edit_bones, '右肩P')
 
-            self._fit_bone(shoulder_cancel_l_bone, mmd_edit_bones['左肩C'])
-            self._fit_bone(shoulder_cancel_r_bone, mmd_edit_bones['右肩C'])
+            self._fit_bone(shoulder_cancel_l_bone, mmd_edit_bones, '左肩C')
+            self._fit_bone(shoulder_cancel_r_bone, mmd_edit_bones, '右肩C')
 
-            self._fit_bone(shoulder_cancel_dummy_l_bone, mmd_edit_bones['左肩P'])
-            self._fit_bone(shoulder_cancel_dummy_r_bone, mmd_edit_bones['右肩P'])
+            self._fit_bone(shoulder_cancel_dummy_l_bone, mmd_edit_bones, '左肩P')
+            self._fit_bone(shoulder_cancel_dummy_r_bone, mmd_edit_bones, '右肩P')
 
-            self._fit_bone(shoulder_cancel_shadow_l_bone, mmd_edit_bones['左肩P'])
-            self._fit_bone(shoulder_cancel_shadow_r_bone, mmd_edit_bones['右肩P'])
+            self._fit_bone(shoulder_cancel_shadow_l_bone, mmd_edit_bones, '左肩P')
+            self._fit_bone(shoulder_cancel_shadow_r_bone, mmd_edit_bones, '右肩P')
 
         # add arm twist (腕捩)
         upper_arm_twist_fk_l_bone, upper_arm_twist_fk_r_bone = self._add_upper_arm_twist_bones(rig_edit_bones)
         if MMDBoneType.UPPER_ARM_TWIST in mmd_armature_object.exist_bone_types:
-            self._fit_bone(upper_arm_twist_fk_l_bone, mmd_edit_bones['左腕捩'])
-            self._fit_bone(upper_arm_twist_fk_r_bone, mmd_edit_bones['右腕捩'])
+            self._fit_bone(upper_arm_twist_fk_l_bone, mmd_edit_bones, '左腕捩')
+            self._fit_bone(upper_arm_twist_fk_r_bone, mmd_edit_bones, '右腕捩')
 
         # add wrist twist (手捩)
         wrist_twist_fk_l_bone, wrist_twist_fk_r_bone = self._add_wrist_twist_bones(rig_edit_bones)
         if MMDBoneType.WRIST_TWIST in mmd_armature_object.exist_bone_types:
-            self._fit_bone(wrist_twist_fk_l_bone, mmd_edit_bones['左手捩'])
-            self._fit_bone(wrist_twist_fk_r_bone, mmd_edit_bones['右手捩'])
+            self._fit_bone(wrist_twist_fk_l_bone, mmd_edit_bones, '左手捩')
+            self._fit_bone(wrist_twist_fk_r_bone, mmd_edit_bones, '右手捩')
 
         # add Leg IKP (足IK親)
         leg_ik_parent_l_bone, leg_ik_parent_r_bone = self._add_leg_ik_parent_bones(rig_edit_bones)
         if MMDBoneType.LEG_IK_PARENT in mmd_armature_object.exist_bone_types:
-            self._fit_bone(leg_ik_parent_l_bone, mmd_edit_bones['左足IK親'])
-            self._fit_bone(leg_ik_parent_r_bone, mmd_edit_bones['右足IK親'])
+            self._fit_bone(leg_ik_parent_l_bone, mmd_edit_bones, '左足IK親')
+            self._fit_bone(leg_ik_parent_r_bone, mmd_edit_bones, '右足IK親')
 
         # add toe IK (つま先ＩＫ)
         toe_ik_l_bone, toe_ik_r_bone = self._add_toe_ik_bones(rig_edit_bones)
-        self._fit_bone(toe_ik_l_bone, mmd_edit_bones['左つま先ＩＫ'])
-        self._fit_bone(toe_ik_r_bone, mmd_edit_bones['右つま先ＩＫ'])
+        self._fit_bone(toe_ik_l_bone, mmd_edit_bones, '左つま先ＩＫ')
+        self._fit_bone(toe_ik_r_bone, mmd_edit_bones, '右つま先ＩＫ')
 
         # split spine.001 (上半身) and spine (下半身)
         rig_edit_bones['ORG-spine.001'].use_connect = False
@@ -1092,12 +1096,12 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         rig_edit_bones['ORG-eye.L'].parent = rig_edit_bones['ORG-face']
         rig_edit_bones['ORG-eye.L'].length = mmd_edit_bones['左目'].length
         self._move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
-        self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones['左目'])
+        self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones, '左目')
 
         rig_edit_bones['ORG-eye.R'].parent = rig_edit_bones['ORG-face']
         rig_edit_bones['ORG-eye.R'].length = mmd_edit_bones['右目'].length
         self._move_bone(rig_edit_bones['ORG-eye.R'], head=mmd_edit_bones['右目'].head)
-        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones['右目'])
+        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones, '右目')
 
         rig_edit_bones['eyes'].translate(eye_height_translation_vector)
         rig_edit_bones['eye.L'].translate(eye_height_translation_vector)
