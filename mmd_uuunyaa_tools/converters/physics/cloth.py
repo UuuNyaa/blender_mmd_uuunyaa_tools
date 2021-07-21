@@ -17,11 +17,11 @@ class ClothTunerABC(TunerABC, MeshEditor):
 
 
 class NothingClothTuner(ClothTunerABC):
-    @ classmethod
+    @classmethod
     def get_id(cls) -> str:
         return 'PHYSICS_CLOTH_NOTHING'
 
-    @ classmethod
+    @classmethod
     def get_name(cls) -> str:
         return _('Nothing')
 

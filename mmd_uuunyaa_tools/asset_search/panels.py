@@ -421,12 +421,12 @@ class AssetSearchPanel(bpy.types.Panel):
             ))
             return
 
-    @ staticmethod
+    @staticmethod
     def register():
         global PREVIEWS  # pylint: disable=global-statement
         PREVIEWS = bpy.utils.previews.new()  # pylint: disable=assignment-from-no-return
 
-    @ staticmethod
+    @staticmethod
     def unregister():
         global PREVIEWS  # pylint: disable=global-statement
         if PREVIEWS is not None:

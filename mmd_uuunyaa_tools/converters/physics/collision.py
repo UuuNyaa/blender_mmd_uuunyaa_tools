@@ -16,11 +16,11 @@ class CollisionTunerABC(TunerABC, MeshEditor):
 
 
 class NothingCollisionTuner(CollisionTunerABC):
-    @ classmethod
+    @classmethod
     def get_id(cls) -> str:
         return 'PHYSICS_COLLISION_NOTHING'
 
-    @ classmethod
+    @classmethod
     def get_name(cls) -> str:
         return _('Nothing')
 
@@ -29,11 +29,11 @@ class NothingCollisionTuner(CollisionTunerABC):
 
 
 class ThinSmoothCollisionTuner(CollisionTunerABC):
-    @ classmethod
+    @classmethod
     def get_id(cls) -> str:
         return 'PHYSICS_COLLISION_THIN_SMOOTH'
 
-    @ classmethod
+    @classmethod
     def get_name(cls) -> str:
         return _('Thin Smooth')
 
@@ -58,7 +58,7 @@ class UuuNyaaCollisionAdjusterPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = 'physics'
 
-    @ classmethod
+    @classmethod
     def poll(cls, context: bpy.types.Context):
         return MeshEditor(context.active_object).find_collision_modifier() is not None
 
@@ -84,7 +84,7 @@ class CopyCollisionAdjusterSettings(bpy.types.Operator):
     bl_label = _('Copy Collision Adjuster Settings')
     bl_options = {'REGISTER', 'UNDO'}
 
-    @ classmethod
+    @classmethod
     def poll(cls, context: bpy.types.Context):
         return len([o for o in context.selected_objects if o.type == 'MESH']) >= 2
 
@@ -120,7 +120,7 @@ class SelectCollisionMesh(bpy.types.Operator):
     same_mmd_model: bpy.props.BoolProperty(name=_('Same MMD Model'))
     same_physics_settings: bpy.props.BoolProperty(name=_('Same Physics Settings'))
 
-    @ classmethod
+    @classmethod
     def poll(cls, context: bpy.types.Context):
         if context.mode != 'OBJECT':
             return False
@@ -134,7 +134,7 @@ class SelectCollisionMesh(bpy.types.Operator):
 
         return MeshEditor(active_object).find_collision_modifier() is not None
 
-    @ staticmethod
+    @staticmethod
     def filter_only_in_mmd_model(key_object: bpy.types.Object) -> Iterable[bpy.types.Object]:
         mmd_tools = import_mmd_tools()
         mmd_root = mmd_tools.core.model.Model.findRoot(key_object)
@@ -168,7 +168,7 @@ class RemoveMeshCollision(bpy.types.Operator):
     bl_label = _('Remove Mesh Collision')
     bl_options = {'REGISTER', 'UNDO'}
 
-    @ classmethod
+    @classmethod
     def poll(cls, context: bpy.types.Context):
         if context.mode != 'OBJECT':
             return False
@@ -201,7 +201,7 @@ class RemoveMeshCollision(bpy.types.Operator):
 
 
 class CollisionAdjusterSettingsPropertyGroup(bpy.types.PropertyGroup):
-    @ staticmethod
+    @staticmethod
     def _update_presets(prop, _):
         TUNERS[prop.presets](prop.id_data).execute()
 

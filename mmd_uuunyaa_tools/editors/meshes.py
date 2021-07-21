@@ -110,13 +110,13 @@ class MeshEditor:
 
         self.mesh_object.modifiers.remove(modifier)
 
-    def find_cloth_modifier(self) -> Union[bpy.types.Modifier, None]:
+    def find_cloth_modifier(self) -> Union[bpy.types.ClothModifier, None]:
         return self.find_singleton_modifier('CLOTH')
 
-    def get_cloth_modifier(self, name: str = 'Cloth') -> bpy.types.Modifier:
+    def get_cloth_modifier(self, name: str = 'Cloth') -> bpy.types.ClothModifier:
         return self.get_singleton_modifier('CLOTH', name)
 
-    def edit_cloth_modifier(self, name: str, **kwargs) -> bpy.types.Modifier:
+    def edit_cloth_modifier(self, name: str, **kwargs) -> bpy.types.ClothModifier:
         return self.edit_singleton_modifier(self.get_cloth_modifier(name), **kwargs)
 
     def find_cloth_settings(self) -> Union[bpy.types.ClothSettings, None]:
@@ -134,7 +134,7 @@ class MeshEditor:
     def remove_cloth_modifier(self):
         self.remove_singleton_modifier('CLOTH')
 
-    def find_collision_modifier(self) -> Union[bpy.types.Modifier, None]:
+    def find_collision_modifier(self) -> Union[bpy.types.CollisionModifier, None]:
         return self.find_singleton_modifier('COLLISION')
 
     def find_collision_settings(self) -> Union[bpy.types.CollisionSettings, None]:
@@ -143,7 +143,7 @@ class MeshEditor:
             return None
         return modifier.settings
 
-    def get_collision_modifier(self, name: str = 'Collision') -> bpy.types.Modifier:
+    def get_collision_modifier(self, name: str = 'Collision') -> bpy.types.CollisionModifier:
         return self.get_singleton_modifier('COLLISION', name)
 
     def edit_collision_modifier(
@@ -154,7 +154,7 @@ class MeshEditor:
             thickness_inner: float = 0.200,
             cloth_friction: float = 5,
             **kwargs
-    ) -> bpy.types.Modifier:
+    ) -> bpy.types.CollisionModifier:
         # pylint: disable=too-many-arguments
         return self.edit_singleton_modifier(
             self.get_collision_modifier(name),
