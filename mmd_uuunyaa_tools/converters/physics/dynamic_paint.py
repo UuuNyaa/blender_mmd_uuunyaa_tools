@@ -37,11 +37,15 @@ class UuuNyaaDynamicPaintAdjuster(bpy.types.Panel):
         if modifier.canvas_settings is None:
             return
 
-        active_surface_index = int(dynamic_paint_settings.active_surface)
-        active_surface = modifier.canvas_settings.canvas_surfaces[active_surface_index]
-
         col = layout.column()
         col.prop(dynamic_paint_settings, 'active_surface', text=_('Cache'))
+
+        active_surface_index = modifier.canvas_settings.canvas_surfaces.find(dynamic_paint_settings.active_surface)
+        if active_surface_index == -1:
+            return
+
+        active_surface = modifier.canvas_settings.canvas_surfaces[active_surface_index]
+
         row = col.row(align=True)
         row.prop(active_surface, 'frame_start', text=_('Simulation Start'))
         row.prop(active_surface, 'frame_end', text=_('Simulation End'))
@@ -73,6 +77,8 @@ class CanvasSkinPressDynamicPaintTuner(DynamicPaintTunerABC):
     def get_name(cls) -> str:
         return _('Canvas Skin Press')
 
+    SKIN_PRESS_SURFACE_NAME = 'Skin Press Surface'
+
     def execute(self):
         modifier = self.find_dynamic_paint_modifier()
 
@@ -82,15 +88,15 @@ class CanvasSkinPressDynamicPaintTuner(DynamicPaintTunerABC):
             canvas_surface = modifier.canvas_settings.canvas_surfaces.active
 
         else:
-            canvas_surface: Union[bpy.types.DynamicPaintSurface, None] = next(
-                iter([c for c in modifier.canvas_settings.canvas_surfaces if c.surface_type == 'DISPLACE']),
-                None
-            )
-            if canvas_surface is None:
+            canvas_surface_index = modifier.canvas_settings.canvas_surfaces.find(self.SKIN_PRESS_SURFACE_NAME)
+            if canvas_surface_index >= 0:
+                canvas_surface = modifier.canvas_settings.canvas_surfaces[canvas_surface_index]
+            else:
                 bpy.ops.dpaint.surface_slot_add()
                 canvas_surface = modifier.canvas_settings.canvas_surfaces.active
 
         modifier.ui_type = 'CANVAS'
+        canvas_surface.name = self.SKIN_PRESS_SURFACE_NAME
         canvas_surface.surface_type = 'DISPLACE'
         canvas_surface.brush_radius_scale = 3.0
         canvas_surface.use_dissolve = True
@@ -144,12 +150,12 @@ class DynamicPaintAdjusterSettingsPropertyGroup(bpy.types.PropertyGroup):
         }
 
         return [
-            (str(i), str(s.name), '', surface_type2icon.get(s.surface_type, 'QUESTION'), i)
+            (s.name, s.name, '', surface_type2icon.get(s.surface_type, 'QUESTION'), i)
             for i, s in enumerate(modifier.canvas_settings.canvas_surfaces)
         ]
 
     @staticmethod
-    def _get_surface(prop):
+    def _get_active_surface(prop):
         modifier = MeshEditor(prop.id_data).find_dynamic_paint_modifier()
         if modifier is None:
             return 0
@@ -160,7 +166,7 @@ class DynamicPaintAdjusterSettingsPropertyGroup(bpy.types.PropertyGroup):
         return modifier.canvas_settings.canvas_surfaces.active_index
 
     @staticmethod
-    def _set_surface(prop, index):
+    def _set_active_surface(prop, index):
         modifier = MeshEditor(prop.id_data).find_dynamic_paint_modifier()
         if modifier is None:
             return
@@ -180,8 +186,8 @@ class DynamicPaintAdjusterSettingsPropertyGroup(bpy.types.PropertyGroup):
     active_surface: bpy.props.EnumProperty(
         name=_('Active Surface'),
         items=_surface_items.__func__,
-        get=_get_surface.__func__,
-        set=_set_surface.__func__,
+        get=_get_active_surface.__func__,
+        set=_set_active_surface.__func__,
     )
 
     @staticmethod

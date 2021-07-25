@@ -151,7 +151,7 @@ class PyramidMeshEditor(MeshEditor):
 def add_pyramid_mesh_objects(
     breast_bones: List[bpy.types.EditBone],
     mesh_objects: List[bpy.types.Object],
-    head_tail: float, spring_length_ratio: float, base_area_factor: float, project_vertically: bool
+    head_tail: float, string_length_ratio: float, base_area_factor: float, project_vertically: bool
 ) -> List[bpy.types.Object]:
     targets = to_targets(breast_bones, mesh_objects, head_tail)
 
@@ -161,12 +161,12 @@ def add_pyramid_mesh_objects(
     pyramid_mesh_objects: List[bpy.types.Object] = []
 
     for target in targets:
-        pyramid_mesh_objects.append(build_pyramid_mesh_object(target, spring_length_ratio, base_area_factor, project_vertically))
+        pyramid_mesh_objects.append(build_pyramid_mesh_object(target, string_length_ratio, base_area_factor, project_vertically))
 
     return pyramid_mesh_objects
 
 
-def build_pyramid_mesh_object(target: Target, spring_length_ratio: float, base_area_factor: float, project_vertically: bool) -> bpy.types.Object:
+def build_pyramid_mesh_object(target: Target, string_length_ratio: float, base_area_factor: float, project_vertically: bool) -> bpy.types.Object:
     deform_bmesh: bmesh.types.BMesh = bmesh.new()
 
     # pylint: disable=no-member
@@ -175,7 +175,7 @@ def build_pyramid_mesh_object(target: Target, spring_length_ratio: float, base_a
 
     apex_vertex, base_vertices = to_pyramid_vertices(deform_bmesh, target, base_area_factor, project_vertically)
     vertices: List[Vector] = [
-        apex_vertex * spring_length_ratio,
+        apex_vertex * string_length_ratio,
         apex_vertex,
         *base_vertices
     ]
@@ -775,7 +775,7 @@ class AddPyramidMeshByBreastBoneOperator(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     head_tail: bpy.props.FloatProperty(name=_('Head/Tail'), default=0.5, min=0.0, max=1.0, step=10)
-    spring_length_ratio: bpy.props.FloatProperty(name=_('Spring Length Ratio'), default=2.0, min=1.0, max=100.0, step=10)
+    string_length_ratio: bpy.props.FloatProperty(name=_('String Length Ratio'), default=2.0, min=1.0, max=100.0, step=10)
     base_area_factor: bpy.props.FloatProperty(name=_('Base Area Factor'), default=0.1, min=0.0, max=100.0, step=10)
     project_vertically: bpy.props.BoolProperty(name=_('Project Base Vertices Vertically'), default=False)
 
@@ -804,7 +804,7 @@ class AddPyramidMeshByBreastBoneOperator(bpy.types.Operator):
                 target_edit_bones,
                 target_mesh_objects,
                 self.head_tail,
-                self.spring_length_ratio,
+                self.string_length_ratio,
                 self.base_area_factor,
                 self.project_vertically
             )
@@ -821,7 +821,7 @@ class ConvertPyramidMeshToClothOperator(bpy.types.Operator):
     bl_label = _('Convert Pyramid Mesh to Cloth')
     bl_options = {'REGISTER', 'UNDO'}
 
-    boundary_expansion_hop_count: bpy.props.IntProperty(name=_('Boundary Expansion Count'), default=0, min=0, max=5)
+    boundary_expansion_hop_count: bpy.props.IntProperty(name=_('Boundary Expansion Hop Count'), default=0, min=0, max=5)
 
     @classmethod
     def poll(cls, context: bpy.types.Context):
@@ -886,7 +886,7 @@ class AssignPyramidWeightsOperator(bpy.types.Operator):
     bl_label = _('Assign Pyramid Weights')
     bl_options = {'REGISTER', 'UNDO'}
 
-    boundary_expansion_hop_count: bpy.props.IntProperty(name=_('Boundary Expansion Count'), default=0, min=0, max=5)
+    boundary_expansion_hop_count: bpy.props.IntProperty(name=_('Boundary Expansion Hop Count'), default=0, min=0, max=5)
 
     @classmethod
     def poll(cls, context: bpy.types.Context):
