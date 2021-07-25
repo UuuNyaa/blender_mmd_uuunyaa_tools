@@ -23,7 +23,7 @@ class MMDRigifyPanel(bpy.types.Panel):
         if not MMDRigifyArmatureObject.is_rigify_armature_object(active_object):
             return False
 
-        return hasattr(active_object.pose.bones, 'bind_mmd_rigify')
+        return True
 
     def draw(self, context: bpy.types.Context):
         # pylint: disable=too-many-locals

@@ -1071,23 +1071,13 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         rig_edit_bones['ORG-eye.L'].parent = rig_edit_bones['ORG-face']
         rig_edit_bones['ORG-eye.L'].length = mmd_edit_bones['左目'].length
-<<<<<<< HEAD
-        self._move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
+        self.move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
         self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones, '左目')
 
         rig_edit_bones['ORG-eye.R'].parent = rig_edit_bones['ORG-face']
         rig_edit_bones['ORG-eye.R'].length = mmd_edit_bones['右目'].length
-        self._move_bone(rig_edit_bones['ORG-eye.R'], head=mmd_edit_bones['右目'].head)
-        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones, '右目')
-=======
-        self.move_bone(rig_edit_bones['ORG-eye.L'], head=mmd_edit_bones['左目'].head)
-        self._fit_bone(rig_edit_bones['ORG-eye.L'], mmd_edit_bones['左目'])
-
-        rig_edit_bones['ORG-eye.R'].parent = rig_edit_bones['ORG-face']
-        rig_edit_bones['ORG-eye.R'].length = mmd_edit_bones['右目'].length
         self.move_bone(rig_edit_bones['ORG-eye.R'], head=mmd_edit_bones['右目'].head)
-        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones['右目'])
->>>>>>> Start implementing breast physics feature
+        self._fit_bone(rig_edit_bones['ORG-eye.R'], mmd_edit_bones, '右目')
 
         rig_edit_bones['eyes'].translate(eye_height_translation_vector)
         rig_edit_bones['eye.L'].translate(eye_height_translation_vector)

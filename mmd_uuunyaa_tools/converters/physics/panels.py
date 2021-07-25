@@ -5,9 +5,11 @@
 import bpy
 from mmd_uuunyaa_tools.converters.physics.cloth import (
     ConvertRigidBodyToClothOperator, RemoveMeshCloth, SelectClothMesh)
+from mmd_uuunyaa_tools.converters.physics.cloth_pyramid import (
+    AddPyramidMeshByBreastBoneOperator, AssignPyramidWeightsOperator,
+    ConvertPyramidMeshToClothOperator)
 from mmd_uuunyaa_tools.converters.physics.collision import (
     RemoveMeshCollision, SelectCollisionMesh)
-from mmd_uuunyaa_tools.converters.physics.softbody import AddPyramidMeshByBreastBoneOperator, ConvertPyramidMeshToClothOperator, AssignPyramidWeightsOperator
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
@@ -68,10 +70,10 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
             row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
 
         col = layout.column(align=True)
-        col.label(text='experimental')
-        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname)
-        col.operator(ConvertPyramidMeshToClothOperator.bl_idname)
-        col.operator(AssignPyramidWeightsOperator.bl_idname)
+        col.label(text=_('Pyramid Cloth:'), icon='MOD_SOFT')
+        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname, text=_('Add Pyramid'), icon='MESH_CONE')
+        col.operator(ConvertPyramidMeshToClothOperator.bl_idname, text=_('Pyramid to Cloth'), icon='MOD_CLOTH')
+        col.operator(AssignPyramidWeightsOperator.bl_idname, text=_('Weight Repaint'), icon='WPAINT_HLT')
 
     @staticmethod
     def _toggle_visibility_of_cloths(obj, context):
