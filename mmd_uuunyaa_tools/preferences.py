@@ -86,6 +86,12 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         default='{id}.json'
     )
 
+    mmd_tools_translation_enabled: bpy.props.BoolProperty(
+        name=_('Enable MMD Tools Translation (Reboot required)'),
+        default=True
+    )
+
+
     def draw(self, _context):
         layout: bpy.types.UILayout = self.layout  # pylint: disable=no-member
 
@@ -124,6 +130,9 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col.prop(self, 'asset_extract_root_folder')
         col.prop(self, 'asset_extract_folder')
         col.prop(self, 'asset_extract_json')
+
+        col = layout.box().column()
+        col.prop(self, 'mmd_tools_translation_enabled')
 
         layout.separator()
         col = layout.column()

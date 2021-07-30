@@ -5,11 +5,45 @@
 from typing import Iterable, List
 
 import bpy
-from mmd_uuunyaa_tools.editors.physics import MeshEditor
-from mmd_uuunyaa_tools.editors.physics.convert_rigid_body_to_cloth import RigidBodyToClothConverter, PhysicsMode
+from mmd_uuunyaa_tools.editors import MeshEditor
+from mmd_uuunyaa_tools.converters.physics.rigid_body_to_cloth import RigidBodyToClothConverter, PhysicsMode
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
+
+
+mmd_tools = import_mmd_tools()
+if not hasattr(mmd_tools.core.model.Model, 'clothGroupObject'):
+    def mmd_model_cloth_group_object_method(self):
+        # pylint: disable=protected-access
+        if not hasattr(self, '_cloth_grp'):
+            self._cloth_grp = None
+            for i in self.rootObject().children:
+                if i.name == 'cloths':
+                    self._cloth_grp = i
+                    break
+
+            if self._cloth_grp is None:
+                cloths = bpy.data.objects.new(name='cloths', object_data=None)
+                mmd_tools.bpyutils.SceneOp(bpy.context).link_object(cloths)
+                cloths.parent = self.rootObject()
+                cloths.hide = cloths.hide_select = True
+                cloths.lock_rotation = cloths.lock_location = cloths.lock_scale = [True, True, True]
+                self._cloth_grp = cloths
+
+        return self._cloth_grp
+
+    mmd_tools.core.model.Model.clothGroupObject = mmd_model_cloth_group_object_method
+
+    def mmd_model_cloths_method(self):
+        for obj in self.allObjects(self.clothGroupObject()):
+            if obj.type != 'MESH':
+                continue
+            if MeshEditor(obj).find_cloth_modifier() is None:
+                continue
+            yield obj
+
+    mmd_tools.core.model.Model.cloths = mmd_model_cloths_method
 
 
 class ClothTunerABC(TunerABC, MeshEditor):
@@ -17,11 +51,11 @@ class ClothTunerABC(TunerABC, MeshEditor):
 
 
 class NothingClothTuner(ClothTunerABC):
-    @ classmethod
+    @classmethod
     def get_id(cls) -> str:
         return 'PHYSICS_CLOTH_NOTHING'
 
-    @ classmethod
+    @classmethod
     def get_name(cls) -> str:
         return _('Nothing')
 
@@ -75,10 +109,34 @@ class SilkClothTuner(ClothTunerABC):
         cloth_settings.bending_damping = 0.5
 
 
+class BreastPyramidClothTuner(ClothTunerABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'PHYSICS_CLOTH_BREAST_PYRAMID'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Breast Pyramid')
+
+    def execute(self):
+        cloth_settings: bpy.types.ClothSettings = self.find_cloth_settings()
+        cloth_settings.mass = 1.000
+        cloth_settings.air_damping = 1.000
+        cloth_settings.tension_stiffness = 5
+        cloth_settings.compression_stiffness = 5
+        cloth_settings.shear_stiffness = 5
+        cloth_settings.bending_stiffness = 0.05
+        cloth_settings.tension_damping = 0
+        cloth_settings.compression_damping = 0
+        cloth_settings.shear_damping = 0
+        cloth_settings.bending_damping = 0.5
+
+
 TUNERS = TunerRegistry(
     (0, NothingClothTuner),
     (1, CottonClothTuner),
     (2, SilkClothTuner),
+    (3, BreastPyramidClothTuner),
 )
 
 
@@ -189,7 +247,6 @@ class SelectClothMesh(bpy.types.Operator):
 
     @staticmethod
     def filter_only_in_mmd_model(key_object: bpy.types.Object) -> Iterable[bpy.types.Object]:
-        mmd_tools = import_mmd_tools()
         mmd_root = mmd_tools.core.model.Model.findRoot(key_object)
         if mmd_root is None:
             return

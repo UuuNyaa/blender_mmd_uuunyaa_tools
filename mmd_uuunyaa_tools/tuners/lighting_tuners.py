@@ -5,11 +5,11 @@
 import os
 from typing import Union
 
-from bpy.types import Object
+import bpy
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.tuners import TunerABC, TunerRegistry
-from mmd_uuunyaa_tools.utilities import ObjectAppender, ObjectMarker
+from mmd_uuunyaa_tools.tuners.utilities import ObjectAppender, ObjectMarker
 
 PATH_BLENDS_UUUNYAA_LIGHTINGS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Lightings.blend')
 
@@ -26,7 +26,7 @@ class LightingUtilities:
     def object_marker(self) -> ObjectMarker:
         return self.object_appender
 
-    def find_active_lighting(self) -> Union[Object, None]:
+    def find_active_lighting(self) -> Union[bpy.types.Object, None]:
         for obj in self.collection.objects.values():
             if obj.type != 'EMPTY' or obj.parent is not None or not self.object_marker.is_marked(obj):
                 continue

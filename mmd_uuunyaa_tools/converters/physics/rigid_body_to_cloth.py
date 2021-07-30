@@ -10,7 +10,7 @@ from typing import Dict, Iterable, List, Set, Tuple, Union
 
 import bmesh
 import bpy
-from mmd_uuunyaa_tools.editors.physics import MeshEditor
+from mmd_uuunyaa_tools.editors.meshes import MeshEditor
 from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.utilities import MessageException, import_mmd_tools
 
@@ -26,39 +26,6 @@ translation_properties = [
     _('Bone Constraint'),
     _('Surface Deform'),
 ]
-
-mmd_tools = import_mmd_tools()
-if not hasattr(mmd_tools.core.model.Model, 'clothGroupObject'):
-    def mmd_model_cloth_group_object_method(self):
-        # pylint: disable=protected-access
-        if not hasattr(self, '_cloth_grp'):
-            self._cloth_grp = None
-            for i in self.rootObject().children:
-                if i.name == 'cloths':
-                    self._cloth_grp = i
-                    break
-
-            if self._cloth_grp is None:
-                cloths = bpy.data.objects.new(name='cloths', object_data=None)
-                mmd_tools.bpyutils.SceneOp(bpy.context).link_object(cloths)
-                cloths.parent = self.rootObject()
-                cloths.hide = cloths.hide_select = True
-                cloths.lock_rotation = cloths.lock_location = cloths.lock_scale = [True, True, True]
-                self._cloth_grp = cloths
-
-        return self._cloth_grp
-
-    mmd_tools.core.model.Model.clothGroupObject = mmd_model_cloth_group_object_method
-
-    def mmd_model_cloths_method(self):
-        for obj in self.allObjects(self.clothGroupObject()):
-            if obj.type != 'MESH':
-                continue
-            if MeshEditor(obj).find_cloth_modifier() is None:
-                continue
-            yield obj
-
-    mmd_tools.core.model.Model.cloths = mmd_model_cloths_method
 
 
 @dataclass
@@ -89,7 +56,7 @@ class RigidBodyToClothConverter:
         extend_ribbon_area: bool
     ):  # pylint: disable=too-many-arguments
         # pylint: disable=too-many-locals, too-many-statements
-        mmd_model = mmd_tools.core.model.Model(mmd_root_object)
+        mmd_model = import_mmd_tools().core.model.Model(mmd_root_object)
         mmd_mesh_object = mesh_objects[0]
         mmd_armature_object = mmd_model.armature()
 
@@ -123,7 +90,7 @@ class RigidBodyToClothConverter:
         cloth_mesh.from_pydata([r.location for r in rigid_body_objects], joint_edge_indices, [])
         cloth_mesh.validate()
 
-        cloth_mesh_object = cls.new_mesh_object('mmd_uuunyaa_physics_cloth', cloth_mesh)
+        cloth_mesh_object = bpy.data.objects.new('mmd_uuunyaa_physics_cloth', cloth_mesh)
         cloth_mesh_object.parent = mmd_model.clothGroupObject()
         cloth_mesh_object.hide_render = True
         cloth_mesh_object.display_type = 'WIRE'
@@ -170,6 +137,7 @@ class RigidBodyToClothConverter:
         deform_vertex_group: bpy.types.VertexGroup = mmd_mesh_object.vertex_groups.new(name='mmd_uuunyaa_physics_cloth_deform')
 
         mesh_editor = MeshEditor(cloth_mesh_object)
+        mesh_editor.link_to_active_collection()
         mesh_editor.add_subsurface_modifier('mmd_uuunyaa_physics_cloth_subsurface', subdivision_level, subdivision_level)
         mesh_editor.add_armature_modifier('mmd_uuunyaa_physics_cloth_armature', mmd_armature_object, vertex_group=pin_vertex_group.name)
         mesh_editor.edit_cloth_modifier('mmd_uuunyaa_physics_cloth', vertex_group_mass=pin_vertex_group.name)
@@ -390,13 +358,6 @@ class RigidBodyToClothConverter:
                 edges.side_edges.add(new_edge)
 
         return new_down_verts
-
-    @staticmethod
-    def new_mesh_object(name: str, cloth_mesh: bpy.types.Mesh):
-        cloth_mesh_object = bpy.data.objects.new(name, cloth_mesh)
-        bpy.context.collection.objects.link(cloth_mesh_object)
-
-        return cloth_mesh_object
 
     @staticmethod
     def collect_joints(mmd_model, rigid_body_index_dict: Dict[bpy.types.Object, int]) -> Tuple[List[bpy.types.Object], List[Tuple[int, int]], List[bpy.types.Object]]:

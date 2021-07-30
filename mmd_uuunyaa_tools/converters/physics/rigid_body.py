@@ -5,7 +5,7 @@
 from typing import Iterable
 
 import bpy
-from mmd_uuunyaa_tools.editors.physics import MeshEditor
+from mmd_uuunyaa_tools.editors.meshes import MeshEditor
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 

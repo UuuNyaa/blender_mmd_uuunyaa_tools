@@ -3,13 +3,13 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors.armatures import ControlType
-from mmd_uuunyaa_tools.editors.armatures.autorig import AutoRigArmatureObject
-from mmd_uuunyaa_tools.editors.armatures.rigify import MMDRigifyArmatureObject
+from mmd_uuunyaa_tools.converters.armatures import (AutoRigArmatureObject,
+                                                    ControlType,
+                                                    MMDRigifyArmatureObject)
 from mmd_uuunyaa_tools.m17n import _
 
 
-class MMDRigifyOperatorPanel(bpy.types.Panel):
+class MMDRigifyPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_mmd_rigify'
     bl_label = _('UuuNyaa MMD Rigify')
     bl_space_type = 'VIEW_3D'
@@ -19,12 +19,16 @@ class MMDRigifyOperatorPanel(bpy.types.Panel):
 
     @classmethod
     def poll(cls, context):
-        return MMDRigifyArmatureObject.is_rigify_armature_object(context.active_object)
+        active_object = context.active_object
+        if not MMDRigifyArmatureObject.is_rigify_armature_object(active_object):
+            return False
+
+        return True
 
     def draw(self, context: bpy.types.Context):
         # pylint: disable=too-many-locals
         active_object = context.active_object
-        pose_bones = context.active_object.pose.bones
+        pose_bones = active_object.pose.bones
 
         rigify_armature_object = MMDRigifyArmatureObject(active_object)
         bind_mmd_rigify = rigify_armature_object.datapaths[ControlType.BIND_MMD_UUUNYAA]
@@ -64,19 +68,19 @@ class MMDRigifyOperatorPanel(bpy.types.Panel):
 
         col.label(text=_('MMD Layers:'))
         row = col.row()
-        row.prop(context.active_object.data, 'layers', index=24, toggle=True, text=_('Main'))
+        row.prop(active_object.data, 'layers', index=24, toggle=True, text=_('Main'))
 
         row = col.row()
-        row.prop(context.active_object.data, 'layers', index=25, toggle=True, text=_('Others'))
+        row.prop(active_object.data, 'layers', index=25, toggle=True, text=_('Others'))
 
         row = col.row()
-        row.prop(context.active_object.data, 'layers', index=26, toggle=True, text=_('Shadow'))
+        row.prop(active_object.data, 'layers', index=26, toggle=True, text=_('Shadow'))
 
         row = col.row()
-        row.prop(context.active_object.data, 'layers', index=27, toggle=True, text=_('Dummy'))
+        row.prop(active_object.data, 'layers', index=27, toggle=True, text=_('Dummy'))
 
 
-class AutoRigOperatorPanel(bpy.types.Panel):
+class AutoRigPanel(bpy.types.Panel):
     bl_idname = 'UUUNYAA_PT_mmd_autorig'
     bl_label = _('UuuNyaa MMD AutoRig')
     bl_space_type = 'VIEW_3D'

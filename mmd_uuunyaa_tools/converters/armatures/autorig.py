@@ -7,16 +7,14 @@ from typing import Dict, Iterable, Tuple
 
 import bpy
 from mathutils import Euler, Matrix, Vector
-from mmd_uuunyaa_tools.editors.armatures import (PATH_BLENDS_RIGSHAPELIBRARY,
-                                                 ControlType, DataPath,
-                                                 GroupType, MMDBindInfo,
-                                                 MMDBindType, MMDBoneInfo,
-                                                 PoseUtil,
-                                                 RichArmatureObjectABC)
-from mmd_uuunyaa_tools.editors.armatures.mmd import MMDArmatureObject
+from mmd_uuunyaa_tools.converters.armatures.mmd import (MMDArmatureObject,
+                                                        MMDBoneInfo)
+from mmd_uuunyaa_tools.converters.armatures.mmd_bind import (
+    ControlType, DataPath, GroupType, MMDBindArmatureObjectABC, MMDBindInfo,
+    MMDBindType)
 
 
-class AutoRigArmatureObject(RichArmatureObjectABC):
+class AutoRigArmatureObject(MMDBindArmatureObjectABC):
     # pylint: disable=too-many-instance-attributes
     prop_storage_bone_name = 'c_root_master.x'
     prop_name_mmd_uuunyaa_bind_mmd_autorig = 'mmd_uuunyaa_bind_mmd_autorig'
@@ -462,7 +460,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
 
         self.create_props(pose_bones[self.prop_storage_bone_name])
-        PoseUtil.remove_constraints(pose_bones)
+        self.remove_constraints(pose_bones)
 
         self._imitate_mmd_eye_behavior(pose_bones)
 
@@ -555,8 +553,8 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         add_constraint(pose_bones['thigh_ik_nostr.l'], 'COPY_ROTATION', 'mmd_uuunyaa_copy_rotation', target=self.raw_object, subtarget='c_thigh_ik.l')
         shin_ik_l_bone = pose_bones['leg_ik_nostr.l']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.l'], 'IK'):
-            PoseUtil.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
-        PoseUtil.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', leg_l_mmd_uuunyaa_data_path, 2, 200, invert_influence=True)
+            self.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
+        self.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', 2, 200, leg_l_mmd_uuunyaa_data_path, invert_influence=True)
         shin_ik_l_bone.use_ik_limit_z = True
         shin_ik_l_bone.ik_min_z = math.radians(0)
         shin_ik_l_bone.ik_max_z = math.radians(180)
@@ -564,8 +562,8 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         add_constraint(pose_bones['thigh_ik_nostr.r'], 'COPY_ROTATION', 'mmd_uuunyaa_copy_rotation', target=self.raw_object, subtarget='c_thigh_ik.r')
         shin_ik_r_bone = pose_bones['leg_ik_nostr.r']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.r'], 'IK'):
-            PoseUtil.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
-        PoseUtil.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', leg_r_mmd_uuunyaa_data_path, 2, 200, invert_influence=True)
+            self.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
+        self.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', 2, 200, leg_r_mmd_uuunyaa_data_path, invert_influence=True)
         shin_ik_r_bone.use_ik_limit_z = True
         shin_ik_r_bone.ik_min_z = math.radians(-180)
         shin_ik_r_bone.ik_max_z = math.radians(0)
@@ -591,16 +589,16 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         add_custom_shape_scale_driver(pose_bones['c_leg_pole.r'], leg_r_ik_fk_data_path, leg_r_mmd_uuunyaa_data_path)
 
         for constraint in list_constraints(pose_bones['c_foot_ik.l'], 'CHILD_OF'):
-            PoseUtil.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
+            self.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
 
         for constraint in list_constraints(pose_bones['c_foot_ik.r'], 'CHILD_OF'):
-            PoseUtil.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
+            self.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
 
         # toe IK
         leg_l_mmd_uuunyaa = self.datapaths[ControlType.LEG_L_MMD_UUUNYAA]
         leg_r_mmd_uuunyaa = self.datapaths[ControlType.LEG_R_MMD_UUUNYAA]
-        PoseUtil.add_ik_constraint(pose_bones['foot.l'], self.raw_object, 'mmd_uuunyaa_toe_ik.l', f'pose.bones{leg_l_mmd_uuunyaa.data_path}', 1, 3, invert_influence=True)
-        PoseUtil.add_ik_constraint(pose_bones['foot.r'], self.raw_object, 'mmd_uuunyaa_toe_ik.r', f'pose.bones{leg_r_mmd_uuunyaa.data_path}', 1, 3, invert_influence=True)
+        self.add_ik_constraint(pose_bones['foot.l'], self.raw_object, 'mmd_uuunyaa_toe_ik.l', 1, 3, f'pose.bones{leg_l_mmd_uuunyaa.data_path}', invert_influence=True)
+        self.add_ik_constraint(pose_bones['foot.r'], self.raw_object, 'mmd_uuunyaa_toe_ik.r', 1, 3, f'pose.bones{leg_r_mmd_uuunyaa.data_path}', invert_influence=True)
 
         # toe MMD
         edit_constraints(pose_bones['toes_01.l'], 'COPY_ROTATION', mix_mode='ADD', target_space='LOCAL', owner_space='LOCAL')
@@ -653,9 +651,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
         rig_bone_groups = self.pose_bone_groups
 
         insufficient_custom_shapes = list({custom_shape_name for _, custom_shape_name, _, _ in bone_widgets} - set(bpy.data.objects.keys()))
-        if len(insufficient_custom_shapes) > 0:
-            with bpy.data.libraries.load(PATH_BLENDS_RIGSHAPELIBRARY, link=False) as (_, data_to):
-                data_to.objects = insufficient_custom_shapes
+        self.load_custom_shapes(insufficient_custom_shapes)
 
         for bone_name, custom_shape_name, custom_shape_scale, bone_group_name in bone_widgets:
             pose_bones[bone_name].custom_shape = bpy.data.objects[custom_shape_name]
@@ -683,7 +679,7 @@ class AutoRigArmatureObject(RichArmatureObjectABC):
 
         def update_influence_drivers(pose_bone: bpy.types.PoseBone, influence_data_path: str, invert_influence=False):
             for constraint in pose_bone.constraints:
-                PoseUtil.update_influence_driver(constraint, self.raw_object, influence_data_path, invert_influence=invert_influence)
+                self.update_influence_driver(constraint, self.raw_object, influence_data_path, invert_influence=invert_influence)
 
         update_influence_drivers(pose_bones['c_eye.l'], eye_mmd_uuunyaa_data_path)
         update_influence_drivers(pose_bones['c_eye.r'], eye_mmd_uuunyaa_data_path)

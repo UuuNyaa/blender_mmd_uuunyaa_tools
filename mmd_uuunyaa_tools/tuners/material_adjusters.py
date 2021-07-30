@@ -5,11 +5,11 @@
 from abc import abstractmethod
 
 from bpy.types import NodeFrame, ShaderNodeGroup
+from mmd_uuunyaa_tools.editors import MaterialEditor
 from mmd_uuunyaa_tools.m17n import _
-from mmd_uuunyaa_tools.tuners.utilities import MaterialUtilities
 
 
-class MaterialAdjusterUtilities(MaterialUtilities):
+class MaterialAdjusterUtilities(MaterialEditor):
 
     def check_attached(self, label: str) -> bool:
         return self.find_node(ShaderNodeGroup, label=label) is not None
