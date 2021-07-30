@@ -99,17 +99,17 @@ translation_dict = {
         ("*", "Rigid Type"): "リジッドタイプ",
         ("*", "Hide Others"): "他を隠す",
 
-        ("*", "Material Sorter"): "マテリアルソーター",
+        ("*", "Material Sorter"): "マテリアル順序",
         ("*", "Select a mesh object"): "メッシュを選択してください",
         ("*", "Use the arrows to sort"): "矢印を使って並べ替えてください",
 
-        ("*", "Meshes Sorter"): "メッシュソーター",
+        ("*", "Meshes Sorter"): "メッシュ順序",
         ("*", "Select a MMD Model"): "MMDモデルを選択してください",
 
         ("*", "Bone Order"): "ボーン順序",
         ("*", "Select a MMD Model"): "MMDモデルを選択してください",
-        ("*", "After Dynamics"): "物理演算後",
-        ("*", "Transform Order"): "変形順序",
+        ("*", "After Dynamics"): "物理後",
+        ("*", "Transform Order"): "変形階層",
 
         ("*", "MMD Display"): "MMD表示",
         ("*", "Temporary Object"): "テンポラリオブジェクト",
@@ -158,10 +158,10 @@ translation_dict = {
 
         ("*", "MMD Bone Tools"): "MMDボーンツール",
         ("*", "Information:"): "情報:",
-        ("*", "Controllable"): "操作可能",
+        ("*", "Controllable"): "操作",
         ("*", "Tip Bone"): "ティップボーン",
-        ("*", "Fixed Axis"): "回転軸固定",
-        ("*", "Local Axes"): "ローカル回転軸",
+        ("*", "Fixed Axis"): "軸制限",
+        ("*", "Local Axes"): "ローカル軸",
         ("*", "Local X-Axis"): "ローカルX軸",
         ("*", "Local Z-Axis"): "ローカルZ軸",
         ("*", "Rotate +"): "回転 +",

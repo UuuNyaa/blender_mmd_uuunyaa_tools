@@ -86,9 +86,8 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         default='{id}.json'
     )
 
-
     mmd_tools_translation_enabled: bpy.props.BoolProperty(
-        name=_('Enable MMD Tools Translation'),
+        name=_('Enable MMD Tools Translation (Reboot required)'),
         default=True
     )
 

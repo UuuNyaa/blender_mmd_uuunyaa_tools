@@ -522,19 +522,19 @@ translation_dict = {
     ("*", "Asset Extract Folder"): "アセット展開フォルダー",
     #: mmd_uuunyaa_tools/preferences.py:82
     ("*", "Asset Extract JSON"): "アセット展開JSON",
-    #: mmd_uuunyaa_tools/preferences.py:91
-    ("*", "Enable MMD Tools Translation"): "MMD Tools翻訳の有効化",
-    #: mmd_uuunyaa_tools/preferences.py:107
+    #: mmd_uuunyaa_tools/preferences.py:90
+    ("*", "Enable MMD Tools Translation (Reboot required)"): "MMD Tools翻訳の有効化 (再起動が必要です)",
+    #: mmd_uuunyaa_tools/preferences.py:106
     ("*", "Browse Assets"): "アセットを閲覧",
-    #: mmd_uuunyaa_tools/preferences.py:111
+    #: mmd_uuunyaa_tools/preferences.py:110
     ("*", "Query Examples"): "クエリ例",
-    #: mmd_uuunyaa_tools/preferences.py:119
+    #: mmd_uuunyaa_tools/preferences.py:118
     ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
-    #: mmd_uuunyaa_tools/preferences.py:140
+    #: mmd_uuunyaa_tools/preferences.py:139
     ("*", "Credits:"): "クレジット:",
-    #: mmd_uuunyaa_tools/preferences.py:144
+    #: mmd_uuunyaa_tools/preferences.py:143
     ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "リジッドボディ物理からクロス物理機能は小威廉伯爵の作品です。",
-    #: mmd_uuunyaa_tools/preferences.py:146
+    #: mmd_uuunyaa_tools/preferences.py:145
     ("*", "It was ported with his permission."): "この機能は本人の許可を得て移植したものです。",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "リセット",

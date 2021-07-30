@@ -70,8 +70,8 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
             row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
 
         col = layout.column(align=True)
-        col.label(text=_('Pyramid Cloth:'), icon='MOD_SOFT')
-        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname, text=_('Add Pyramid'), icon='MESH_CONE')
+        col.label(text=_('Pyramid Cloth:'), icon='MESH_CONE')
+        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname, text=_('Add Pyramid'), icon='CONE')
         col.operator(ConvertPyramidMeshToClothOperator.bl_idname, text=_('Pyramid to Cloth'), icon='MOD_CLOTH')
         col.operator(AssignPyramidWeightsOperator.bl_idname, text=_('Weight Repaint'), icon='WPAINT_HLT')
 
