@@ -196,7 +196,13 @@ class MaterialEditor(NodeEditor):
 
     def find_active_principled_shader_node(self) -> Union[ShaderNodeBsdfPrincipled, None]:
         node_output = self.get_output_node()
-        node_from = node_output.inputs['Surface'].links[0].from_node
+        node_socket = node_output.inputs['Surface']
+        node_socket_links = node_socket.links
+
+        if len(node_socket_links) == 0:
+            return None
+
+        node_from = node_socket_links[0].from_node
 
         if isinstance(node_from, ShaderNodeBsdfPrincipled):
             return node_from
@@ -259,6 +265,9 @@ class MaterialEditor(NodeEditor):
 
     def get_wet_adjuster_node(self) -> ShaderNodeGroup:
         return self.get_node_group(_('Wet Adjuster'), label='Wet Adjuster')
+
+    def get_emission_adjuster_node(self) -> ShaderNodeGroup:
+        return self.get_node_group(_('Emission Adjuster'), label='Emission Adjuster')
 
     _adjusters_node_frame_label = 'UuuNyaa Adjusters'
     _adjusters_node_frame_name = 'uuunyaa_adjusters_node_frame'

@@ -5,7 +5,7 @@
 from abc import abstractmethod
 
 from bpy.types import NodeFrame, ShaderNodeGroup
-from mmd_uuunyaa_tools.editors import MaterialEditor
+from mmd_uuunyaa_tools.editors.nodes import MaterialEditor
 from mmd_uuunyaa_tools.m17n import _
 
 
@@ -137,6 +137,52 @@ class SubsurfaceAdjuster(MaterialAdjusterABC):
         }, force=True)
 
         self.nodes.remove(node_subsurface_adjuster)
+
+
+class EmissionAdjuster(MaterialAdjusterABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_ADJUSTER_EMISSION'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Emission Adjuster')
+
+    translation_properties = [
+        _('Min'),
+        _('Max'),
+        _('Blood Color'),
+        _('Subsurface'),
+        _('Subsurface Color'),
+    ]
+
+    def attach(self) -> ShaderNodeGroup:
+        node_frame = self.get_adjusters_node_frame()
+        node_emission_adjuster = self.find_node(ShaderNodeGroup, label=self.get_name(), node_frame=node_frame)
+
+        node_shader = self.find_active_principled_shader_node()
+        node_emission_adjuster = self.edit(self.get_emission_adjuster_node(), {
+            'Min': self.to_link_or_value(node_shader.inputs['Subsurface']),
+            'Max': 0.300,
+            'Blood Color': self.to_link_or_value(node_shader.inputs['Subsurface Color']),
+        }, {'location': self.grid_to_position(-2, -8), 'parent': node_frame})
+
+        self.edit(node_shader, {
+            'Subsurface':  node_emission_adjuster.outputs['Subsurface'],
+            'Subsurface Color': node_emission_adjuster.outputs['Subsurface Color'],
+        }, force=True)
+
+        return node_emission_adjuster
+
+    def detach(self):
+        node_emission_adjuster = self.get_emission_adjuster_node()
+
+        self.edit(self.find_active_principled_shader_node(), {
+            'Subsurface': self.to_link_or_value(node_emission_adjuster.inputs['Min']),
+            'Subsurface Color': self.to_link_or_value(node_emission_adjuster.inputs['Blood Color']),
+        }, force=True)
+
+        self.nodes.remove(node_emission_adjuster)
 
 
 ADJUSTERS = {

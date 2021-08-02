@@ -13,7 +13,8 @@ import bpy
 import mathutils
 import numpy as np
 from mathutils import Matrix, Vector
-from mmd_uuunyaa_tools.editors import ArmatureEditor, MeshEditor
+from mmd_uuunyaa_tools.editors.armatures import ArmatureEditor
+from mmd_uuunyaa_tools.editors.meshes import MeshEditor
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import MessageException
 
@@ -431,7 +432,7 @@ def assign_deform_weights(pyramid_armature_object: bpy.types.Object, deform_mesh
     pyramid_origin = pyramid_armature_object.location
     bone_length = pyramid_armature.bones[bone_names.apex].length
 
-    bone_name2nid2weight: Dict[str:Dict[int, float]] = {
+    bone_name2nid2weight: Dict[str, Dict[int, float]] = {
         bone_names.apex: collect_nid2weight(pyramid_armature.bones[bone_names.apex].tail_local + pyramid_origin, bone_length),
         bone_names.base_a: collect_nid2weight(pyramid_armature.bones[bone_names.base_a].head_local + pyramid_origin, bone_length),
         bone_names.base_b: collect_nid2weight(pyramid_armature.bones[bone_names.base_b].head_local + pyramid_origin, bone_length),

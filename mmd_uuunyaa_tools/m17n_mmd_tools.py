@@ -4,7 +4,7 @@
 
 import bpy
 
-from mmd_uuunyaa_tools import REGISTER_HOOKS
+from mmd_uuunyaa_tools import REGISTER_HOOKS, UNREGISTER_HOOKS
 from mmd_uuunyaa_tools.utilities import get_preferences
 
 
@@ -15,7 +15,14 @@ def initialize_mmd_tools_translation():
         bpy.app.translations.register(__name__, translation_dict)
 
 
+def finalize_mmd_tools_translation():
+    preferences = get_preferences()
+
+    if preferences.mmd_tools_translation_enabled:
+        bpy.app.translations.unregister(__name__)
+
 REGISTER_HOOKS.append(initialize_mmd_tools_translation)
+UNREGISTER_HOOKS.append(finalize_mmd_tools_translation)
 
 translation_dict = {
     "ja_JP": {

@@ -13,7 +13,7 @@ from mmd_uuunyaa_tools.converters.armatures.mmd import (MMDArmatureObject,
 from mmd_uuunyaa_tools.converters.armatures.mmd_bind import (
     ControlType, DataPath, GroupType, MMDBindArmatureObjectABC, MMDBindInfo,
     MMDBindType, PoseBoneEditor)
-from mmd_uuunyaa_tools.editors import DriverVariable
+from mmd_uuunyaa_tools.editors.armatures import DriverVariable
 
 
 class RigifyArmatureObject(MMDBindArmatureObjectABC):

@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import bpy
-from mmd_uuunyaa_tools.editors import MaterialEditor, NodeEditor
+from mmd_uuunyaa_tools.editors.nodes import MaterialEditor, NodeEditor
 from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.tuners.lighting_tuners import LightingUtilities
 from mmd_uuunyaa_tools.tuners.material_adjusters import (

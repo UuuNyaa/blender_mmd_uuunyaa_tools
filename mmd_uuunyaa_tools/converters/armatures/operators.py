@@ -206,14 +206,14 @@ class MMDRigifyOperatorABC:
         bpy.ops.object.join()
         mmd_armature.layers = layers
         mmd_armature['rig_id'] = rig_id
-        mmd_armature_object.raw_object.draw_type = 'WIRE'
+        mmd_armature_object.raw_object.display_type = 'WIRE'
 
         mmd_armature.layers[mmd_main_bone_layer] = False
         mmd_armature.layers[mmd_others_bone_layer] = True
         mmd_armature.layers[mmd_shadow_bone_layer] = False
         mmd_armature.layers[mmd_dummy_bone_layer] = False
 
-        mmd_armature_object.raw_object.show_x_ray = True
+        mmd_armature_object.raw_object.show_in_front = True
 
     def invoke(self, context, _):
         return context.window_manager.invoke_props_dialog(self)

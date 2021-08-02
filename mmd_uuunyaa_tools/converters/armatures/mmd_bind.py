@@ -9,7 +9,7 @@ from typing import Dict, List, Union
 
 import bpy
 from mmd_uuunyaa_tools.converters.armatures.mmd import MMDBoneInfo
-from mmd_uuunyaa_tools.editors import ArmatureEditor, PoseBoneEditor
+from mmd_uuunyaa_tools.editors.armatures import ArmatureEditor, PoseBoneEditor
 
 
 class GroupType(Enum):
