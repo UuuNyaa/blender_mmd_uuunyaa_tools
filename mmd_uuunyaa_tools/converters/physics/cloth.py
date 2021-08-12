@@ -324,6 +324,7 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     subdivision_level: bpy.props.IntProperty(name=_('Subdivision Levels'), min=0, max=5, default=0)
+    ribbon_stiffness: bpy.props.FloatProperty(name=_('Ribbon Stiffness'), min=0, max=1, default=0.2)
     physics_mode: bpy.props.EnumProperty(
         name=_('Physics Mode'),
         items=[(m.name, m.value, '') for m in PhysicsMode],
@@ -392,6 +393,7 @@ class ConvertRigidBodyToClothOperator(bpy.types.Operator):
                 rigid_body_objects,
                 mesh_objects,
                 self.subdivision_level,
+                self.ribbon_stiffness,
                 PhysicsMode[self.physics_mode],
                 self.extend_ribbon_area
             )

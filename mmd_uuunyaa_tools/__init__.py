@@ -59,10 +59,9 @@ def register():
 
 
 def unregister():
-    auto_load.unregister()
-
     for hook in UNREGISTER_HOOKS:
         try:
             hook()
         except:  # pylint: disable=bare-except
             traceback.print_exc()
+    auto_load.unregister()
