@@ -480,7 +480,7 @@ class AssetsOperatorPanel(bpy.types.Panel):
         row.operator(UpdateDebugAssetJson.bl_idname, icon='TRIA_DOWN_BAR').issue_number = props.debug_issue_number
 
         box = col.box().column()
-        box.label(text=_('Download and Update to the latest filterd assets for debug'), icon='FILTER')
+        box.label(text=_('Download and Update to the latest filtered assets for debug'), icon='FILTER')
 
         box.prop(props, 'repo', text=_('Repository'))
         box.prop(props, 'query', text=_('Query'))
