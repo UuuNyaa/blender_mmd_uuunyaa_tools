@@ -485,7 +485,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/panels.py:42
     ("Operator", "Integrate Armatures"): "アーマチュアを統合",
     #: mmd_uuunyaa_tools/panels.py:48
-    ("*", "Bind Armatures"): "アーマチュアを束縛",
+    ("Operator", "Bind Armatures"): "アーマチュアを束縛",
     #: mmd_uuunyaa_tools/panels.py:53
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
     #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59
@@ -1161,7 +1161,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/panels.py:42
     ("Operator", "Integrate Armatures"): "整合骨架",
     #: mmd_uuunyaa_tools/panels.py:48
-    ("*", "Bind Armatures"): "绑定骨架",
+    ("Operator", "Bind Armatures"): "绑定骨架",
     #: mmd_uuunyaa_tools/panels.py:53
     ("*", "Rigify to MMD:"): "Rigify到MMD:",
     #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59
@@ -1369,7 +1369,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/panels.py:149
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaa材质调整器",
     #: mmd_uuunyaa_tools/tuners/panels.py:166
-    ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name}是不支持的。选择要从原理化BSDF输出的其他材料。",
+    ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name}是不支持的。选择要从原理化BSDF输出的其他材质。",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "选择你的照明",
     #: mmd_uuunyaa_tools/tuners/properties.py:38

@@ -26,6 +26,13 @@ UNREGISTER_HOOKS.append(finalize_mmd_tools_translation)
 
 translation_dict = {
     "ja_JP": {
+        # Preferences
+        ("*", "Shared Toon Texture Folder"): "共有トゥーンテクスチャフォルダ",
+        ("*", "Base Texture Folder"): "ベーステクスチャフォルダ",
+        ("*", "Dictionary Folder"): "辞書フォルダ",
+        ("*", "Non-Collision Threshold"): "非コリジョンしきい値",
+
+        # 3D Viewport > Sidebar > MMD > Operator Panel
         ("Operator", "Create Model"): "モデルを作成",
         ("Operator", "Create a MMD Model Root Object"): "MMDモデルルートオブジェクトを作成",
 
@@ -87,6 +94,7 @@ translation_dict = {
         ("*", "Active Pose"): "アクティブなポーズ",
         ("*", "All Poses"): "全てのポーズ",
 
+        # 3D Viewport > Sidebar > MMD > Display Panel
         ("*", "Display Panel"): "表示パネル",
         ("Operator", "Bone"): "ボーン",
         ("Operator", "Morph"): "モーフ",
@@ -97,6 +105,7 @@ translation_dict = {
         ("Operator", "Move To Bottom"): "最後へ移動",
         ("Operator", "Delete All"): "全て削除",
 
+        # 3D Viewport > Sidebar > MMD > Morph Tools Panel
         ("*", "Morph Tools"): "モーフツール",
         ("*", "Eye"): "目",
         ("*", "Eye Brow"): "眉毛",
@@ -111,18 +120,22 @@ translation_dict = {
         ("*", "Rigid Type"): "リジッドタイプ",
         ("*", "Hide Others"): "他を隠す",
 
+        # 3D Viewport > Sidebar > MMD > Material Sorter Panel
         ("*", "Material Sorter"): "マテリアル順序",
         ("*", "Select a mesh object"): "メッシュを選択してください",
         ("*", "Use the arrows to sort"): "矢印を使って並べ替えてください",
 
+        # 3D Viewport > Sidebar > MMD > Meshes Sorter Panel
         ("*", "Meshes Sorter"): "メッシュ順序",
         ("*", "Select a MMD Model"): "MMDモデルを選択してください",
 
+        # 3D Viewport > Sidebar > MMD > Bone Order Panel
         ("*", "Bone Order"): "ボーン順序",
         ("*", "Select a MMD Model"): "MMDモデルを選択してください",
         ("*", "After Dynamics"): "物理後",
         ("*", "Transform Order"): "変形階層",
 
+        # 3D Viewport > Sidebar > Misc > MMD Display Panel
         ("*", "MMD Display"): "MMD表示",
         ("*", "Temporary Object"): "テンポラリオブジェクト",
         ("*", "Rigid Body Name"): "リジッドボティ名",
@@ -132,9 +145,11 @@ translation_dict = {
         ("*", "Sphere Texture"): "スフィアテクスチャ",
         ("*", "Property Drivers"): "プロパティドライバー",
 
+        # 3D Viewport > Sidebar > Misc > MMD Shading Panel
         ("*", "MMD Shading"): "MMDシェーディング",
         ("Operator", "Shadeless"): "影なし",
 
+        # 3D Viewport > Sidebar > Misc > MMD SDEF Driver Panel
         ("*", "MMD SDEF Driver"): "MMD SDEFドライバー",
         ("Operator", "Bind"): "バインド",
         ("Operator", "Unbind"): "アンバインド",
@@ -143,6 +158,7 @@ translation_dict = {
         ("*", "Bulk"): "バルク",
         ("*", "Skip"): "スキップ",
 
+        # Properties > Object Properties > MMD Model Information Panel
         ("*", "MMD Model Information"): "MMDモデル情報",
         ("Operator", "Change MMD IK Loop Factor"): "MMD IK反復係数を変更",
         ("*", "MMD IK Loop Factor"): "MMD IK反復係数",
@@ -150,6 +166,7 @@ translation_dict = {
         ("*", "This operation will break existing f-curve/action."): "この操作は既存のFカーブ/アクションを破壊します。",
         ("*", "Click [OK] to run the operation."): "[OK]をクリックして操作を実行してください。",
 
+        # Properties > Material Properties > MMD Material Panel
         ("*", "MMD Material"): "MMDマテリアル",
         ("*", "Color:"): "カラー:",
         ("*", "Shadow:"): "シャドウ:",
@@ -161,6 +178,7 @@ translation_dict = {
         ("*", "Edge Color"): "輪郭カラー",
         ("*", "Edge Weight"): "輪郭ウェイト",
 
+        # Properties > Material Properties > MMD Texture Panel
         ("*", "MMD Texture"): "MMDテクスチャ",
         ("*", "Texture:"): "テクスチャ:",
         ("*", "Sphere Texture:"): "スフィアテクスチャ:",
@@ -168,6 +186,7 @@ translation_dict = {
         ("*", "Use Shared Toon Texture"): "共有トゥーンテクスチャを使用",
         ("*", "Shared Toon Texture"): "共有トゥーンテクスチャ",
 
+        # Properties > Bone Properties > MMD Bone Tools Panel
         ("*", "MMD Bone Tools"): "MMDボーンツール",
         ("*", "Information:"): "情報:",
         ("*", "Controllable"): "操作",
@@ -179,7 +198,7 @@ translation_dict = {
         ("*", "Rotate +"): "回転 +",
         ("*", "Move +"): "移動 +",
 
-        # Shader Nodes
+        # Shader Editor > Shader Nodes
         ("*", "Base Tex Fac"): "ベーステクスチャ係数",
         ("*", "Base Tex"): "ベーステクスチャ",
         ("*", "Base Alpha"): "ベースアルファ",
@@ -196,6 +215,13 @@ translation_dict = {
         ("*", "SubTex UV"): "サブテクスチャUV",
     },
     "zh_CN": {
+        # Preferences
+        ("*", "Shared Toon Texture Folder"): "共用的卡通纹理文件夹",
+        ("*", "Base Texture Folder"): "基线纹理文件夹",
+        ("*", "Dictionary Folder"): "辞書文件夹",
+        ("*", "Non-Collision Threshold"): "非碰撞阈值",
+
+        # 3D Viewport > Sidebar > MMD > Operator Panel
         ("Operator", "Create Model"): "创建新的模型",
         ("Operator", "Create a MMD Model Root Object"): "创建一个MMD模型的根物体",
 
@@ -257,6 +283,7 @@ translation_dict = {
         ("*", "Active Pose"): "活动的姿态",
         ("*", "All Poses"): "全部姿态",
 
+        # 3D Viewport > Sidebar > MMD > Display Panel
         ("*", "Display Panel"): "显示面板",
         ("Operator", "Bone"): "骨骼",
         ("Operator", "Morph"): "变体",
@@ -267,6 +294,7 @@ translation_dict = {
         ("Operator", "Move To Bottom"): "移至底部",
         ("Operator", "Delete All"): "删除全部",
 
+        # 3D Viewport > Sidebar > MMD > Morph Tools Panel
         ("*", "Morph Tools"): "变体工具",
         ("*", "Eye"): "眼",
         ("*", "Eye Brow"): "眼眉",
@@ -281,18 +309,22 @@ translation_dict = {
         ("*", "Rigid Type"): "刚类型",
         ("*", "Hide Others"): "隐藏其他",
 
+        # 3D Viewport > Sidebar > MMD > Material Sorter Panel
         ("*", "Material Sorter"): "材质顺序",
         ("*", "Select a mesh object"): "选择一个网格物体",
         ("*", "Use the arrows to sort"): "使用箭头来排序",
 
+        # 3D Viewport > Sidebar > MMD > Meshes Sorter Panel
         ("*", "Meshes Sorter"): "网格顺序",
         ("*", "Select a MMD Model"): "选择一个MMD模型",
 
+        # 3D Viewport > Sidebar > MMD > Bone Order Panel
         ("*", "Bone Order"): "骨骼顺序",
         ("*", "Select a MMD Model"): "选择一个MMD模型",
         ("*", "After Dynamics"): "物理後",
         ("*", "Transform Order"): "変形階層",
 
+        # 3D Viewport > Sidebar > Misc > MMD Display Panel
         ("*", "MMD Display"): "MMD显示",
         ("*", "Temporary Object"): "临时物体",
         ("*", "Rigid Body Name"): "刚体名称",
@@ -302,9 +334,11 @@ translation_dict = {
         ("*", "Sphere Texture"): "球体纹理",
         ("*", "Property Drivers"): "属性驱动器",
 
+        # 3D Viewport > Sidebar > Misc > MMD Shading Panel
         ("*", "MMD Shading"): "MMD着色",
         ("Operator", "Shadeless"): "无明暗",
 
+        # 3D Viewport > Sidebar > Misc > MMD SDEF Driver Panel
         ("*", "MMD SDEF Driver"): "MMD SDEF驱动器",
         ("Operator", "Bind"): "绑定",
         ("Operator", "Unbind"): "解绑",
@@ -313,6 +347,7 @@ translation_dict = {
         ("*", "Bulk"): "散装",
         ("*", "Skip"): "略过",
 
+        # Properties > Object Properties > MMD Model Information Panel
         ("*", "MMD Model Information"): "MMD模型信息",
         ("Operator", "Change MMD IK Loop Factor"): "改变MMD IK循环系数",
         ("*", "MMD IK Loop Factor"): "MMD IK循环系数",
@@ -320,6 +355,7 @@ translation_dict = {
         ("*", "This operation will break existing f-curve/action."): "这一操作将破坏现有的函数曲线/动作。",
         ("*", "Click [OK] to run the operation."): "点击[确定]来运行操作。",
 
+        # Properties > Material Properties > MMD Material Panel
         ("*", "MMD Material"): "MMD材质",
         ("*", "Color:"): "颜色:",
         ("*", "Shadow:"): "阴影:",
@@ -331,6 +367,7 @@ translation_dict = {
         ("*", "Edge Color"): "边缘颜色",
         ("*", "Edge Weight"): "边缘权重",
 
+        # Properties > Material Properties > MMD Texture Panel
         ("*", "MMD Texture"): "MMD纹理",
         ("*", "Texture:"): "纹理:",
         ("*", "Sphere Texture:"): "球体纹理:",
@@ -338,6 +375,7 @@ translation_dict = {
         ("*", "Use Shared Toon Texture"): "使用共用的卡通纹理",
         ("*", "Shared Toon Texture"): "共用的卡通纹理",
 
+        # Properties > Bone Properties > MMD Bone Tools Panel
         ("*", "MMD Bone Tools"): "MMD骨骼工具",
         ("*", "Information:"): "信息:",
         ("*", "Controllable"): "可控制的",
@@ -349,7 +387,7 @@ translation_dict = {
         ("*", "Rotate +"): "旋转 +",
         ("*", "Move +"): "移动 +",
 
-        # Shader Nodes
+        # Shader Editor > Shader Nodes
         ("*", "Base Tex Fac"): "基线纹理系数",
         ("*", "Base Tex"): "基线纹理",
         ("*", "Base Alpha"): "基线Alpha",
