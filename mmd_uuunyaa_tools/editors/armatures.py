@@ -83,6 +83,18 @@ class PoseBoneEditor(ABC):
                 yield constraint
 
     @classmethod
+    def edit_constraint(cls, pose_bone: bpy.types.PoseBone, constraint_type: str, **kwargs):
+        constraints = list(cls.list_constraints(pose_bone, constraint_type))
+        if len(constraints) == 0:
+            cls.add_constraint(pose_bone, constraint_type, constraint_type, **kwargs)
+        elif len(constraints) == 1:
+            constraint = constraints[0]
+            for key, value in kwargs.items():
+                setattr(constraint, key, value)
+        else:
+            raise AttributeError('too many constraints')
+
+    @classmethod
     def edit_constraints(cls, pose_bone: bpy.types.PoseBone, constraint_type: str, **kwargs):
         for constraint in cls.list_constraints(pose_bone, constraint_type):
             for key, value in kwargs.items():

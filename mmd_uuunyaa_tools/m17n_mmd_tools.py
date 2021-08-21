@@ -27,6 +27,8 @@ UNREGISTER_HOOKS.append(finalize_mmd_tools_translation)
 translation_dict = {
     "ja_JP": {
         # Preferences
+        ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3Dビュー > サイドバー > MMD Toolsパネル",
+        ("*", "Utility tools for MMD model editing. (powroupi's forked version)"): "MMDモデル編集用のユーティリティーツールです。(powroupiのフォーク版)",
         ("*", "Shared Toon Texture Folder"): "共有トゥーンテクスチャフォルダ",
         ("*", "Base Texture Folder"): "ベーステクスチャフォルダ",
         ("*", "Dictionary Folder"): "辞書フォルダ",
@@ -35,6 +37,7 @@ translation_dict = {
         # 3D Viewport > Sidebar > MMD > Operator Panel
         ("Operator", "Create Model"): "モデルを作成",
         ("Operator", "Create a MMD Model Root Object"): "MMDモデルルートオブジェクトを作成",
+        ("*", "Name(Eng)"): "名前(英語)",
 
         ("Operator", "Convert Model"): "モデルを変換",
         ("Operator", "Convert to a MMD Model"): "MMDモデルへ変換",
@@ -43,16 +46,23 @@ translation_dict = {
         ("*", "Minimum Edge Alpha"): "最小輪郭アルファ",
 
         ("Operator", "Convert Materials For Cycles"): "マテリアルをCycles用に変換",
-        ("Operator", "Convert Shaders For Cycles"): "シェーダーをCycles用に変換",
         ("*", "Convert to Principled BSDF"): "プリンシプルBSDFへ変換",
-        ("*", "Clean Nodes"): "ノードを掃除",
+        ("*", "Clean Nodes"): "ノードをクリーン",
         ("Operator", "Separate By Materials"): "マテリアルで分解",
-        ("*", "Clean Shape Keys"): "シェイプキーを掃除",
+        ("*", "Clean Shape Keys"): "シェイプキーをクリーン",
         ("Operator", "Join Meshes"): "メッシュを統合",
         ("*", "Sort Shape Keys"): "シェイプキーをソート",
         ("Operator", "Attach Meshes to Model"): "メッシュをモデルに取付",
         ("Operator", "Translation"): "翻訳",
+        ("Operator", "Translate a MMD Model"): "MMDモデルを翻訳",
+        ("*", "Dictionary"): "辞書",
+        ("*", "Modes"): "モード",
+        ("*", "MMD Names"): "MMD名",
+        ("*", "Blender Names"): "Blender名",
+        ("*", "Use Morph Prefix"): "モーフ接頭辞を使用",
+        ("*", "Allow Fails"): "失敗を許可",
 
+        ("Operator", "Import"): "インポート",
         ("*", "Bone Constraints:"): "ボーンコンストレイント:",
         ("*", "Physics:"): "物理演算:",
         ("Operator", "Build"): "構築",
@@ -160,6 +170,8 @@ translation_dict = {
 
         # Properties > Object Properties > MMD Model Information Panel
         ("*", "MMD Model Information"): "MMDモデル情報",
+        ("*", "Name (English)"): "名前(英語)",
+        ("*", "Comment (English)"): "コメント(英語)",
         ("Operator", "Change MMD IK Loop Factor"): "MMD IK反復係数を変更",
         ("*", "MMD IK Loop Factor"): "MMD IK反復係数",
         ("Operator", "Recalculate bone roll"): "ボーンロールを再計算",
@@ -216,6 +228,8 @@ translation_dict = {
     },
     "zh_CN": {
         # Preferences
+        ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3D视图 > 侧栏 > MMD Tools面板",
+        ("*", "Utility tools for MMD model editing. (powroupi's forked version)"): "用于MMD模型编辑的实用工具。(powroupi的分叉版本)",
         ("*", "Shared Toon Texture Folder"): "共用的卡通纹理文件夹",
         ("*", "Base Texture Folder"): "基线纹理文件夹",
         ("*", "Dictionary Folder"): "辞書文件夹",
@@ -224,6 +238,7 @@ translation_dict = {
         # 3D Viewport > Sidebar > MMD > Operator Panel
         ("Operator", "Create Model"): "创建新的模型",
         ("Operator", "Create a MMD Model Root Object"): "创建一个MMD模型的根物体",
+        ("*", "Name(Eng)"): "名称(英文)",
 
         ("Operator", "Convert Model"): "转换模型",
         ("Operator", "Convert to a MMD Model"): "转换为MMD模型",
@@ -241,7 +256,15 @@ translation_dict = {
         ("*", "Sort Shape Keys"): "排列形态键",
         ("Operator", "Attach Meshes to Model"): "将网格附上到模型",
         ("Operator", "Translation"): "翻译",
+        ("Operator", "Translate a MMD Model"): "翻译一个MMD模型",
+        ("*", "Dictionary"): "词典",
+        ("*", "Modes"): "模式",
+        ("*", "MMD Names"): "MMD名称",
+        ("*", "Blender Names"): "Blender名称",
+        ("*", "Use Morph Prefix"): "使用变形前缀",
+        ("*", "Allow Fails"): "允许失败",
 
+        ("Operator", "Import"): "导入",
         ("*", "Bone Constraints:"): "骨骼约束:",
         ("*", "Physics:"): "物理:",
         ("Operator", "Build"): "建立",
@@ -251,7 +274,7 @@ translation_dict = {
         ("*", "Model:"): "模型:",
 
         ("*", "Types"): "类型",
-        ("*", "Morphs"): "变体",
+        ("*", "Morphs"): "变形",
         ("*", "Clean Model"): "清空模型",
         ("*", "Fix IK Links"): "修复IK关联",
         ("*", "Apply Bone Fixed Axis"): "应用骨骼固定轴",
@@ -286,7 +309,7 @@ translation_dict = {
         # 3D Viewport > Sidebar > MMD > Display Panel
         ("*", "Display Panel"): "显示面板",
         ("Operator", "Bone"): "骨骼",
-        ("Operator", "Morph"): "变体",
+        ("Operator", "Morph"): "变形",
         ("*", "Load Facial Items"): "载入面部项目",
         ("*", "Load Bone Groups"): "载入骨骼组",
         ("*", "Apply Bone Groups"): "应用骨骼组",
@@ -295,11 +318,11 @@ translation_dict = {
         ("Operator", "Delete All"): "删除全部",
 
         # 3D Viewport > Sidebar > MMD > Morph Tools Panel
-        ("*", "Morph Tools"): "变体工具",
+        ("*", "Morph Tools"): "变形工具",
         ("*", "Eye"): "眼",
         ("*", "Eye Brow"): "眼眉",
         ("*", "Mouth"): "嘴巴",
-        ("Operator", "Copy Morph"): "复制变体",
+        ("Operator", "Copy Morph"): "复制变形",
         ("*", "Rigid Bodies"): "刚体",
         ("*", "Active Model"): "活动的模型",
         ("*", "All Models"): "全部模型",
@@ -349,6 +372,8 @@ translation_dict = {
 
         # Properties > Object Properties > MMD Model Information Panel
         ("*", "MMD Model Information"): "MMD模型信息",
+        ("*", "Name (English)"): "名称(英文)",
+        ("*", "Comment (English)"): "注释(英文)",
         ("Operator", "Change MMD IK Loop Factor"): "改变MMD IK循环系数",
         ("*", "MMD IK Loop Factor"): "MMD IK循环系数",
         ("Operator", "Recalculate bone roll"): "重算骨骼扭转",

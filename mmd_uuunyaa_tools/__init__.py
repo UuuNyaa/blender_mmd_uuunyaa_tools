@@ -26,7 +26,7 @@ bl_info = {
     'description': 'Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.',
     'author': 'UuuNyaa',
     'version': (1, 0, 2),
-    'blender': (2, 80, 0),
+    'blender': (2, 83, 0),
     'warning': '',
     'location': 'View3D > Tool Shelf > MMD Tools Panel',
     'wiki_url': 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki',

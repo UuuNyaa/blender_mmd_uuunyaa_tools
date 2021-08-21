@@ -46,19 +46,19 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左親指１, 'thumb.02.L', 'ORG-thumb.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左親指２, 'thumb.03.L', 'ORG-thumb.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左人指０, None, 'ORG-palm.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左人指１, 'f_index.01.L', 'ORG-f_index.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左人指１, 'f_index.01.L', 'ORG-f_index.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左人指２, 'f_index.02.L', 'ORG-f_index.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左人指３, 'f_index.03.L', 'ORG-f_index.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左中指０, None, 'ORG-palm.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左中指１, 'f_middle.01.L', 'ORG-f_middle.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左中指１, 'f_middle.01.L', 'ORG-f_middle.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左中指２, 'f_middle.02.L', 'ORG-f_middle.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左中指３, 'f_middle.03.L', 'ORG-f_middle.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左薬指０, None, 'ORG-palm.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左薬指１, 'f_ring.01.L', 'ORG-f_ring.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左薬指１, 'f_ring.01.L', 'ORG-f_ring.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左薬指２, 'f_ring.02.L', 'ORG-f_ring.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左薬指３, 'f_ring.03.L', 'ORG-f_ring.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左小指０, None, 'ORG-palm.04.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左小指１, 'f_pinky.01.L', 'ORG-f_pinky.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.左小指１, 'f_pinky.01.L', 'ORG-f_pinky.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左小指２, 'f_pinky.02.L', 'ORG-f_pinky.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左小指３, 'f_pinky.03.L', 'ORG-f_pinky.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
 
@@ -72,19 +72,19 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.右親指１, 'thumb.02.R', 'ORG-thumb.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右親指２, 'thumb.03.R', 'ORG-thumb.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右人指０, None, 'ORG-palm.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右人指１, 'f_index.01.R', 'ORG-f_index.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右人指１, 'f_index.01.R', 'ORG-f_index.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右人指２, 'f_index.02.R', 'ORG-f_index.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右人指３, 'f_index.03.R', 'ORG-f_index.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右中指０, None, 'ORG-palm.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右中指１, 'f_middle.01.R', 'ORG-f_middle.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右中指１, 'f_middle.01.R', 'ORG-f_middle.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右中指２, 'f_middle.02.R', 'ORG-f_middle.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右中指３, 'f_middle.03.R', 'ORG-f_middle.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右薬指０, None, 'ORG-palm.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右薬指１, 'f_ring.01.R', 'ORG-f_ring.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右薬指１, 'f_ring.01.R', 'ORG-f_ring.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右薬指２, 'f_ring.02.R', 'ORG-f_ring.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右薬指３, 'f_ring.03.R', 'ORG-f_ring.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右小指０, None, 'ORG-palm.04.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右小指１, 'f_pinky.01.R', 'ORG-f_pinky.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.右小指１, 'f_pinky.01.R', 'ORG-f_pinky.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右小指２, 'f_pinky.02.R', 'ORG-f_pinky.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右小指３, 'f_pinky.03.R', 'ORG-f_pinky.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
 
@@ -634,11 +634,12 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         # set spine
         PoseBoneEditor.edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', influence=0.000)
         PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.001'], 'COPY_TRANSFORMS', subtarget='spine_fk.001')
+        PoseBoneEditor.edit_constraints(pose_bones['MCH-spine.001'], 'COPY_TRANSFORMS', mute=True)
 
         # reset rest_length
         # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
         PoseBoneEditor.edit_constraints(pose_bones['ORG-spine'], 'STRETCH_TO', rest_length=0.000)
-        PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000)
+        PoseBoneEditor.edit_constraint(pose_bones['ORG-spine.001'], 'STRETCH_TO', rest_length=0.000, target=self.raw_object, subtarget='tweak_spine.002')
         PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.002'], 'STRETCH_TO', rest_length=0.000)
         PoseBoneEditor.edit_constraints(pose_bones['ORG-spine.003'], 'STRETCH_TO', rest_length=0.000)
 
