@@ -45,15 +45,20 @@ class MMDRigifyPanel(bpy.types.Panel):
         layout = self.layout
         col = layout.column()
 
+        is_mmd_integrated_object: bool = MMDRigifyArmatureObject.is_mmd_integrated_object(active_object)
+
         col.label(text=_('MMD-Rigify:'))
-        col.prop(pose_bones[bind_mmd_rigify.bone_name], bind_mmd_rigify.prop_data_path, text=_('Bind'), slider=True)
-        col.prop(pose_bones[eye_mmd_rigify.bone_name], eye_mmd_rigify.prop_data_path, text=_('Eyes'), slider=True)
-        row = col.row()
-        row.prop(pose_bones[leg_l_mmd_rigify.bone_name], leg_l_mmd_rigify.prop_data_path, text=_('Leg.L'), slider=True)
-        row.prop(pose_bones[leg_r_mmd_rigify.bone_name], leg_r_mmd_rigify.prop_data_path, text=_('Leg.R'), slider=True)
-        row = col.row()
-        row.prop(pose_bones[toe_l_mmd_rigify.bone_name], toe_l_mmd_rigify.prop_data_path, text=_('Toe.L'), slider=True)
-        row.prop(pose_bones[toe_r_mmd_rigify.bone_name], toe_r_mmd_rigify.prop_data_path, text=_('Toe.R'), slider=True)
+        if not is_mmd_integrated_object:
+            col.label(text=_('Integrated armature is not selected.'))
+        else:
+            col.prop(pose_bones[bind_mmd_rigify.bone_name], bind_mmd_rigify.prop_data_path, text=_('Bind'), slider=True)
+            col.prop(pose_bones[eye_mmd_rigify.bone_name], eye_mmd_rigify.prop_data_path, text=_('Eyes'), slider=True)
+            row = col.row()
+            row.prop(pose_bones[leg_l_mmd_rigify.bone_name], leg_l_mmd_rigify.prop_data_path, text=_('Leg.L'), slider=True)
+            row.prop(pose_bones[leg_r_mmd_rigify.bone_name], leg_r_mmd_rigify.prop_data_path, text=_('Leg.R'), slider=True)
+            row = col.row()
+            row.prop(pose_bones[toe_l_mmd_rigify.bone_name], toe_l_mmd_rigify.prop_data_path, text=_('Toe.L'), slider=True)
+            row.prop(pose_bones[toe_r_mmd_rigify.bone_name], toe_r_mmd_rigify.prop_data_path, text=_('Toe.R'), slider=True)
 
         col.label(text=_('IK-FK:'))
         row = col.row()
@@ -63,7 +68,7 @@ class MMDRigifyPanel(bpy.types.Panel):
         row.prop(pose_bones[leg_l_ik_fk.bone_name], leg_l_ik_fk.prop_data_path, text=_('Leg.L'), slider=True)
         row.prop(pose_bones[leg_r_ik_fk.bone_name], leg_r_ik_fk.prop_data_path, text=_('Leg.R'), slider=True)
 
-        if not MMDRigifyArmatureObject.is_mmd_integrated_object(active_object):
+        if not is_mmd_integrated_object:
             return
 
         col.label(text=_('MMD Layers:'))
@@ -110,10 +115,15 @@ class AutoRigPanel(bpy.types.Panel):
         col = layout.column()
 
         col.label(text=_('MMD-AutoRig:'))
-        col.prop(pose_bones[eye_mmd_autorig.bone_name], eye_mmd_autorig.prop_data_path, text=_('Eyes'), slider=True)
-        row = col.row()
-        row.prop(pose_bones[leg_l_mmd_autorig.bone_name], leg_l_mmd_autorig.prop_data_path, text=_('Leg.L'), slider=True)
-        row.prop(pose_bones[leg_r_mmd_autorig.bone_name], leg_r_mmd_autorig.prop_data_path, text=_('Leg.R'), slider=True)
+
+        prop_storage_bone = pose_bones[AutoRigArmatureObject.prop_storage_bone_name]
+        if AutoRigArmatureObject.prop_name_mmd_uuunyaa_bind_mmd_autorig not in prop_storage_bone:
+            col.label(text=_('Integrated armature is not selected.'))
+        else:
+            col.prop(pose_bones[eye_mmd_autorig.bone_name], eye_mmd_autorig.prop_data_path, text=_('Eyes'), slider=True)
+            row = col.row()
+            row.prop(pose_bones[leg_l_mmd_autorig.bone_name], leg_l_mmd_autorig.prop_data_path, text=_('Leg.L'), slider=True)
+            row.prop(pose_bones[leg_r_mmd_autorig.bone_name], leg_r_mmd_autorig.prop_data_path, text=_('Leg.R'), slider=True)
 
         col.label(text=_('IK-FK:'))
         row = col.row()
