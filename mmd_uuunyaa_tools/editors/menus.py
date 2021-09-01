@@ -5,6 +5,7 @@
 import bpy
 from mmd_uuunyaa_tools.editors.operators import (RemoveUnusedShapeKeys,
                                                  RemoveUnusedVertexGroups,
+                                                 SelectMovedPoseBones,
                                                  SelectShapeKeyTargetVertices)
 from mmd_uuunyaa_tools.m17n import _
 
@@ -67,3 +68,43 @@ class RemoveUnusedShapeKeysMenu(bpy.types.Menu):
     @staticmethod
     def unregister():
         bpy.types.MESH_MT_shape_key_context_menu.remove(RemoveUnusedShapeKeysMenu.draw_menu)
+
+
+class SelectMovedPoseBonesMenu(bpy.types.Menu):
+    bl_idname = 'POSE_MT_mmd_uuunyaa_tools_select_moved_pose_bones'
+    bl_label = _('Select Moved')
+
+    def draw(self, _context):
+        layout = self.layout
+
+        operator = layout.operator(SelectMovedPoseBones.bl_idname, text=_('Moved'))
+        operator.select_rotated = True
+        operator.select_translated = True
+        operator.select_scaled = True
+
+        operator = layout.operator(SelectMovedPoseBones.bl_idname, text=_('Rotated'))
+        operator.select_rotated = True
+        operator.select_translated = False
+        operator.select_scaled = False
+
+        operator = layout.operator(SelectMovedPoseBones.bl_idname, text=_('Translated'))
+        operator.select_rotated = False
+        operator.select_translated = True
+        operator.select_scaled = False
+
+        operator = layout.operator(SelectMovedPoseBones.bl_idname, text=_('Scaled'))
+        operator.select_rotated = False
+        operator.select_translated = False
+        operator.select_scaled = True
+
+    @staticmethod
+    def draw_menu(this, _):
+        this.layout.menu(SelectMovedPoseBonesMenu.bl_idname)
+
+    @staticmethod
+    def register():
+        bpy.types.VIEW3D_MT_select_pose.append(SelectMovedPoseBonesMenu.draw_menu)
+
+    @staticmethod
+    def unregister():
+        bpy.types.VIEW3D_MT_select_pose.remove(SelectMovedPoseBonesMenu.draw_menu)

@@ -6,7 +6,7 @@ from typing import Set
 
 import bmesh
 import bpy
-
+from mathutils import Euler, Quaternion, Vector
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
                                          is_mmd_tools_installed,
@@ -301,5 +301,49 @@ class RemoveUnusedShapeKeys(bpy.types.Operator):
 
                 # delete it
                 bpy.ops.object.shape_key_remove()
+
+        return {'FINISHED'}
+
+
+class SelectMovedPoseBones(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.select_moved_pose_bones'
+    bl_label = _('Select Moved Pose Bones')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    select_rotated: bpy.props.BoolProperty(name=_('Rotated'), default=False)
+    select_translated: bpy.props.BoolProperty(name=_('Translated'), default=False)
+    select_scaled: bpy.props.BoolProperty(name=_('Scaled'), default=False)
+
+    def execute(self, context):
+        obj: bpy.types.Object
+        for obj in context.selected_objects:
+            if obj.type != 'ARMATURE':
+                continue
+
+            pose_bone: bpy.types.PoseBone
+            for pose_bone in obj.pose.bones:
+                if not self.select_translated:
+                    is_not_translated = True
+                else:
+                    is_not_translated = pose_bone.location == Vector((0, 0, 0))
+
+                if not self.select_rotated:
+                    is_not_rotated = True
+                elif pose_bone.rotation_mode == 'QUATERNION':
+                    is_not_rotated = pose_bone.rotation_quaternion == Quaternion((1, 0, 0, 0))
+                elif pose_bone.rotation_mode == 'AXIS_ANGLE':
+                    is_not_rotated = True
+                else:
+                    is_not_rotated = pose_bone.rotation_euler == Euler((0, 0, 0))
+
+                if not self.select_scaled:
+                    is_not_scaled = True
+                else:
+                    is_not_scaled = pose_bone.scale == Vector((1, 1, 1))
+
+                if is_not_rotated and is_not_translated and is_not_scaled:
+                    continue
+
+                pose_bone.bone.select = True
 
         return {'FINISHED'}
