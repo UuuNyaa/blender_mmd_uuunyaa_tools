@@ -2,11 +2,12 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+import math
 from typing import Set
 
 import bmesh
 import bpy
-from mathutils import Euler, Quaternion, Vector
+from mathutils import Quaternion, Vector
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
                                          is_mmd_tools_installed,
@@ -314,7 +315,14 @@ class SelectMovedPoseBones(bpy.types.Operator):
     select_translated: bpy.props.BoolProperty(name=_('Translated'), default=False)
     select_scaled: bpy.props.BoolProperty(name=_('Scaled'), default=False)
 
+    tolerance: bpy.props.FloatProperty(name=_('Tolerance'), default=1e-09)
+
     def execute(self, context):
+        tolerance = self.tolerance
+
+        def isclose(l: float, r: float) -> bool:
+            return math.isclose(l, r, abs_tol=tolerance)
+
         obj: bpy.types.Object
         for obj in context.selected_objects:
             if obj.type != 'ARMATURE':
@@ -325,21 +333,21 @@ class SelectMovedPoseBones(bpy.types.Operator):
                 if not self.select_translated:
                     is_not_translated = True
                 else:
-                    is_not_translated = pose_bone.location == Vector((0, 0, 0))
+                    is_not_translated = isclose(pose_bone.location.x, 0) and isclose(pose_bone.location.y, 0) and isclose(pose_bone.location.z, 0)
 
                 if not self.select_rotated:
                     is_not_rotated = True
                 elif pose_bone.rotation_mode == 'QUATERNION':
-                    is_not_rotated = pose_bone.rotation_quaternion == Quaternion((1, 0, 0, 0))
+                    is_not_rotated = isclose(pose_bone.rotation_quaternion.w, 1) and isclose(pose_bone.rotation_quaternion.x, 0) and isclose(pose_bone.rotation_quaternion.y, 0) and isclose(pose_bone.rotation_quaternion.z, 0)
                 elif pose_bone.rotation_mode == 'AXIS_ANGLE':
                     is_not_rotated = True
                 else:
-                    is_not_rotated = pose_bone.rotation_euler == Euler((0, 0, 0))
+                    is_not_rotated = isclose(pose_bone.rotation_euler.x, 0) and isclose(pose_bone.rotation_euler.y, 0) and isclose(pose_bone.rotation_euler.z, 0)
 
                 if not self.select_scaled:
                     is_not_scaled = True
                 else:
-                    is_not_scaled = pose_bone.scale == Vector((1, 1, 1))
+                    is_not_scaled = isclose(pose_bone.scale.x, 1) and isclose(pose_bone.scale.y, 1) and isclose(pose_bone.scale.z, 1)
 
                 if is_not_rotated and is_not_translated and is_not_scaled:
                     continue
