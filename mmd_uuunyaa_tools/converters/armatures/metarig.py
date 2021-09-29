@@ -24,15 +24,13 @@ class MetarigArmatureObject(ArmatureEditor):
         # pylint: disable=too-many-statements
         metarig_edit_bones = self.edit_bones
         mmd_edit_bones = mmd_armature_object.strict_edit_bones
-        metarig_edit_bones['spine.001'].head = mmd_edit_bones['上半身'].head
+        metarig_edit_bones['spine.002'].head = mmd_edit_bones['上半身'].head
 
         if MMDBoneType.UPPER_BODY_2 in mmd_armature_object.exist_bone_types:
-            metarig_edit_bones['spine.002'].head = mmd_edit_bones['上半身2'].head
-            metarig_edit_bones['spine.003'].head = self.to_bone_center(mmd_edit_bones['上半身2'])
+            metarig_edit_bones['spine.003'].head = mmd_edit_bones['上半身2'].head
             metarig_edit_bones['spine.003'].tail = mmd_edit_bones['上半身2'].tail
         else:
-            metarig_edit_bones['spine.002'].head = self.to_bone_center(mmd_edit_bones['上半身'])
-            metarig_edit_bones['spine.003'].head = self.to_bone_stretch(mmd_edit_bones['上半身'], 3/4.000)
+            metarig_edit_bones['spine.003'].head = self.to_bone_center(mmd_edit_bones['上半身'])
             metarig_edit_bones['spine.003'].tail = mmd_edit_bones['上半身'].tail
 
         metarig_edit_bones['spine.004'].head = mmd_edit_bones['首'].head
@@ -122,12 +120,13 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['f_pinky.03.R'].tail = mmd_edit_bones['右小指３'].tail
 
         metarig_edit_bones['spine'].head = mmd_edit_bones['下半身'].tail
-        metarig_edit_bones['spine'].tail = mmd_edit_bones['下半身'].head
+        metarig_edit_bones['spine.001'].head = self.to_bone_center(mmd_edit_bones['下半身'])
+        metarig_edit_bones['spine.001'].tail = mmd_edit_bones['下半身'].head
 
         metarig_edit_bones['pelvis.L'].head = mmd_edit_bones['下半身'].tail
         metarig_edit_bones['pelvis.R'].head = mmd_edit_bones['下半身'].tail
-        metarig_edit_bones['pelvis.L'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-metarig_edit_bones['spine'].length/2, mmd_edit_bones['下半身'].head[2]]
-        metarig_edit_bones['pelvis.R'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-metarig_edit_bones['spine'].length/2, mmd_edit_bones['下半身'].head[2]]
+        metarig_edit_bones['pelvis.L'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-mmd_edit_bones['下半身'].length/2, mmd_edit_bones['下半身'].head[2]]
+        metarig_edit_bones['pelvis.R'].tail[1:3] = [mmd_edit_bones['下半身'].tail[1]-mmd_edit_bones['下半身'].length/2, mmd_edit_bones['下半身'].head[2]]
 
         metarig_edit_bones['thigh.L'].head = mmd_edit_bones['左足'].head
         metarig_edit_bones['thigh.L'].tail = mmd_edit_bones['左足'].tail

@@ -26,11 +26,11 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.センター, 'center', 'center', GroupType.TORSO, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.グルーブ, 'groove', 'groove', GroupType.TORSO, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.腰, 'torso', 'torso', GroupType.TORSO, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.上半身, 'spine_fk.001', 'DEF-spine.001', GroupType.TORSO, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.上半身, 'spine_fk.002', 'DEF-spine.002', GroupType.TORSO, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.上半身1, None, None, GroupType.TORSO, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.上半身2, 'spine_fk.002', 'DEF-spine.002', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.首, 'neck', 'ORG-spine.004', GroupType.TORSO, MMDBindType.COPY_PARENT),
-        MMDBindInfo(MMDBoneInfo.頭, 'head', 'ORG-spine.006', GroupType.TORSO, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.上半身2, 'spine_fk.003', 'DEF-spine.003', GroupType.TORSO, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.首, 'neck', 'DEF-spine.004', GroupType.TORSO, MMDBindType.COPY_PARENT),
+        MMDBindInfo(MMDBoneInfo.頭, 'head', 'DEF-spine.006', GroupType.TORSO, MMDBindType.COPY_PARENT),
 
         MMDBindInfo(MMDBoneInfo.両目, 'mmd_uuunyaa_eyes_fk', 'mmd_uuunyaa_eyes_fk', GroupType.FACE, MMDBindType.COPY_EYE),
         MMDBindInfo(MMDBoneInfo.左目, 'mmd_uuunyaa_eye_fk.L', 'MCH-eye.L', GroupType.FACE, MMDBindType.COPY_EYE),
@@ -88,7 +88,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.右小指２, 'f_pinky.02.R', 'ORG-f_pinky.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右小指３, 'f_pinky.03.R', 'ORG-f_pinky.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
 
-        MMDBindInfo(MMDBoneInfo.下半身, 'spine_fk', 'ORG-spine', GroupType.TORSO, MMDBindType.COPY_SPINE),
+        MMDBindInfo(MMDBoneInfo.下半身, 'spine_fk.001', 'DEF-spine.001', GroupType.TORSO, MMDBindType.COPY_SPINE),
 
         MMDBindInfo(MMDBoneInfo.左足D, None, 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足, 'thigh_fk.L', 'ORG-thigh.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
@@ -142,9 +142,9 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
 
     @staticmethod
     def copy_spine(pose_bone, target_object, _, influence_data_path):
-        PoseBoneEditor.add_copy_location_constraint(pose_bone, target_object, 'spine_fk', 'POSE', influence_data_path)
+        PoseBoneEditor.add_copy_location_constraint(pose_bone, target_object, 'spine_fk.001', 'POSE', influence_data_path)
         PoseBoneEditor.add_copy_rotation_constraint(
-            pose_bone, target_object, 'spine_fk', 'LOCAL_WITH_PARENT', influence_data_path,
+            pose_bone, target_object, 'spine_fk.001', 'LOCAL_WITH_PARENT', influence_data_path,
             invert_x=False,
             invert_y=True,
             invert_z=True
@@ -427,9 +427,8 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
 
     def _adjust_torso_bone(self, rig_edit_bones: bpy.types.ArmatureEditBones) -> bpy.types.EditBone:
         thigh_center = self.to_center(rig_edit_bones['ORG-thigh.L'].head, rig_edit_bones['ORG-thigh.R'].head)
-        length = (rig_edit_bones['ORG-spine'].tail.z - thigh_center.z) / 2
-        rig_edit_bones['torso'].head = Vector([0, rig_edit_bones['ORG-spine'].tail.y + length, thigh_center.z + length])
-        rig_edit_bones['torso'].tail = rig_edit_bones['ORG-spine'].tail
+        length = (rig_edit_bones['ORG-spine.001'].tail.z - thigh_center.z) / 2
+        self.move_bone(rig_edit_bones['torso'], head=Vector([0, rig_edit_bones['ORG-spine.001'].tail.y + length, thigh_center.z + length]))
         rig_edit_bones['torso'].roll = 0
 
         return rig_edit_bones['torso']
@@ -586,19 +585,16 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         spine_fk_003_bone.roll = 0
         self.insert_edit_bone(spine_fk_003_bone, parent_bone=rig_edit_bones['MCH-spine.003'])
 
-        # split spine.001 (上半身) and spine (下半身) bones
-        rig_edit_bones['ORG-spine.001'].use_connect = False
-        rig_edit_bones['DEF-spine.001'].use_connect = False
+        # split spine.002 (上半身) and spine.001 (下半身) bones
+        rig_edit_bones['ORG-spine.002'].use_connect = False
+        rig_edit_bones['DEF-spine.002'].use_connect = False
 
-        rig_edit_bones['MCH-spine'].parent = rig_edit_bones['torso']
-        rig_edit_bones['MCH-spine.002'].parent = rig_edit_bones['spine_fk.001']
+        self.move_bone(rig_edit_bones['tweak_spine.002'], head=rig_edit_bones['ORG-spine.002'].head)
+        self.move_bone(rig_edit_bones['spine_fk.002'], head=rig_edit_bones['ORG-spine.002'].head)
+        self.move_bone(rig_edit_bones['MCH-spine.002'], head=rig_edit_bones['ORG-spine.002'].head)
+        self.move_bone(rig_edit_bones['chest'], head=rig_edit_bones['ORG-spine.002'].head)
 
-        self.move_bone(rig_edit_bones['tweak_spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        self.move_bone(rig_edit_bones['spine_fk.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        self.move_bone(rig_edit_bones['MCH-spine.001'], head=rig_edit_bones['ORG-spine.001'].head)
-        self.move_bone(rig_edit_bones['chest'], head=rig_edit_bones['ORG-spine.001'].head)
-
-        self.move_bone(rig_edit_bones['hips'], head=rig_edit_bones['ORG-spine'].tail)
+        self.move_bone(rig_edit_bones['hips'], head=rig_edit_bones['ORG-spine.001'].tail)
 
         # adjust torso bone
         self._adjust_torso_bone(rig_edit_bones)
@@ -632,8 +628,8 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         self._imitate_mmd_eye_behavior(pose_bones)
 
         # set spine
-        PoseBoneEditor.edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', influence=0.000)
-        PoseBoneEditor.edit_constraints(pose_bones['MCH-spine.001'], 'COPY_TRANSFORMS', mute=True)
+        PoseBoneEditor.edit_constraints(pose_bones['MCH-pivot'], 'COPY_TRANSFORMS', mute=True)
+        PoseBoneEditor.edit_constraints(pose_bones['MCH-spine'], 'COPY_TRANSFORMS', mute=True)
 
         # reset rest_length
         # https://blenderartists.org/t/resetting-stretch-to-constraints-via-python/650628
@@ -786,11 +782,11 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         bone_widgets = [
             ('center', 'WGT-Root.Round.', 10.0, 'Root'),
             ('groove', 'WGT-Root.2Way', 20.0, 'Root'),
-            ('torso', 'WGT-rig_torso', 2.5, 'Special'),
+            ('torso', 'WGT-rig_torso', 1.0, 'Special'),
             ('spine_fk', 'WGT-rig_spine_fk', 1.0, 'Tweak'),
-            ('spine_fk.001', 'WGT-rig_spine_fk.002', 1.0, 'Tweak'),
-            ('spine_fk.002', 'WGT-rig_spine_fk.002', 1.0, 'Tweak'),
-            ('spine_fk.003', 'WGT-rig_spine_fk.003', 1.0, 'Tweak'),
+            ('spine_fk.001', 'WGT-rig_spine_fk.001', 2.5, 'Tweak'),
+            ('spine_fk.002', 'WGT-rig_spine_fk.002', 0.8, 'Tweak'),
+            ('spine_fk.003', 'WGT-rig_spine_fk.003', 0.8, 'Tweak'),
             ('mmd_uuunyaa_shoulder_parent.L', 'WGT-rig_upper_arm_tweak.L', 0.5, 'Tweak'),
             ('mmd_uuunyaa_shoulder_parent.R', 'WGT-rig_upper_arm_tweak.R', 0.5, 'Tweak'),
             ('mmd_uuunyaa_upper_arm_twist_fk.L', 'WGT-rig_upper_arm_fk.L', 1.0, 'Tweak'),
@@ -1026,32 +1022,28 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         self._fit_bone(toe_ik_r_bone, mmd_edit_bones, '右つま先ＩＫ')
 
         # split spine.001 (上半身) and spine (下半身)
-        rig_edit_bones['ORG-spine.001'].use_connect = False
-        rig_edit_bones['ORG-spine.001'].head = mmd_edit_bones['上半身'].head
-        rig_edit_bones['DEF-spine.001'].use_connect = False
-        rig_edit_bones['DEF-spine.001'].head = mmd_edit_bones['上半身'].head
-        rig_edit_bones['ORG-spine'].tail = mmd_edit_bones['下半身'].head
-        rig_edit_bones['DEF-spine'].tail = mmd_edit_bones['下半身'].head
+        rig_edit_bones['ORG-spine.002'].use_connect = False
+        rig_edit_bones['ORG-spine.002'].head = mmd_edit_bones['上半身'].head
+        rig_edit_bones['DEF-spine.002'].use_connect = False
+        rig_edit_bones['DEF-spine.002'].head = mmd_edit_bones['上半身'].head
+        rig_edit_bones['ORG-spine.001'].tail = mmd_edit_bones['下半身'].head
+        rig_edit_bones['DEF-spine.001'].tail = mmd_edit_bones['下半身'].head
 
-        rig_edit_bones['MCH-spine'].parent = rig_edit_bones['torso']
-        rig_edit_bones['MCH-spine.002'].parent = rig_edit_bones['spine_fk.001']
+        self.move_bone(rig_edit_bones['tweak_spine.002'], head=mmd_edit_bones['上半身'].head)
+        self.move_bone(rig_edit_bones['spine_fk.002'], head=mmd_edit_bones['上半身'].head, tail=mmd_edit_bones['上半身'].tail)
+        self.move_bone(rig_edit_bones['MCH-spine.002'], head=mmd_edit_bones['上半身'].head)
 
-        self.move_bone(rig_edit_bones['tweak_spine.001'], head=mmd_edit_bones['上半身'].head)
-        self.move_bone(rig_edit_bones['spine_fk.001'], head=mmd_edit_bones['上半身'].head, tail=mmd_edit_bones['上半身'].tail)
-        self.move_bone(rig_edit_bones['MCH-spine.001'], head=mmd_edit_bones['上半身'].head)
-
-        rig_edit_bones['ORG-spine'].tail = mmd_edit_bones['下半身'].head
-        rig_edit_bones['DEF-spine'].tail = mmd_edit_bones['下半身'].head
-        self.move_bone(rig_edit_bones['spine_fk'], head=mmd_edit_bones['下半身'].head)
-        self.move_bone(rig_edit_bones['MCH-spine'], head=mmd_edit_bones['下半身'].head)
+        rig_edit_bones['ORG-spine.001'].tail = mmd_edit_bones['下半身'].head
+        rig_edit_bones['DEF-spine.001'].tail = mmd_edit_bones['下半身'].head
+        self.move_bone(rig_edit_bones['spine_fk.001'], head=mmd_edit_bones['下半身'].head)
+        self.move_bone(rig_edit_bones['MCH-spine.001'], head=mmd_edit_bones['下半身'].head)
         self.move_bone(rig_edit_bones['chest'], head=mmd_edit_bones['下半身'].head)
         self.move_bone(rig_edit_bones['hips'], head=mmd_edit_bones['下半身'].head)
 
         # adjust torso
         torso_bone = self._adjust_torso_bone(rig_edit_bones)
         if MMDBoneType.TOLSO in mmd_armature_object.exist_bone_types:
-            torso_bone.head = mmd_edit_bones['腰'].head
-            torso_bone.tail = mmd_edit_bones['腰'].tail
+            self.move_bone(torso_bone, head=mmd_edit_bones['腰'].head)
             self.fit_edit_bone_rotation(mmd_edit_bones['腰'], torso_bone)
 
         # adjust leg bones
@@ -1181,8 +1173,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         super().imitate_mmd_pose_behavior()
         self._hide_bones({
             'jaw_master',
-            'spine_fk.003',
-            'chest',
+            'spine_fk',
         })
 
     def _hide_bones(self, hide_bone_names: Set[str]):
@@ -1212,11 +1203,8 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         self.setup_pose()
         self._hide_bones({
             'jaw_master',
-            'spine_fk.003',
+            'spine_fk',
         })
-
-        pose_bones: Dict[str, bpy.types.PoseBone] = self.pose_bones
-        PoseBoneEditor.edit_constraints(pose_bones['MCH-spine.003'], 'COPY_TRANSFORMS', mute=True)
 
         # set bind mode
         self.bind_mmd_rigify = 1.000  # Bind
