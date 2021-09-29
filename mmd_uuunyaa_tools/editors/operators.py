@@ -315,7 +315,7 @@ class SelectMovedPoseBones(bpy.types.Operator):
     select_translated: bpy.props.BoolProperty(name=_('Translated'), default=False)
     select_scaled: bpy.props.BoolProperty(name=_('Scaled'), default=False)
 
-    tolerance: bpy.props.FloatProperty(name=_('Tolerance'), default=1e-09)
+    tolerance: bpy.props.FloatProperty(name=_('Tolerance'), default=1e-07)
 
     def execute(self, context):
         tolerance = self.tolerance
