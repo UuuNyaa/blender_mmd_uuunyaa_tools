@@ -172,47 +172,49 @@ translation_dict = {
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "AutoRigアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:48
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:50
     ("*", "MMD-Rigify:"): "MMD-Rigify",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:49
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:52 mmd_uuunyaa_tools/converters/armatures/panels.py:121
+    ("*", "Integrated armature is not selected."): "統合アーマチュアが未選択です。",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:54
     ("*", "Bind"): "束縛",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:50 mmd_uuunyaa_tools/converters/armatures/panels.py:113
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:55 mmd_uuunyaa_tools/converters/armatures/panels.py:123
     ("*", "Eyes"): "目",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:52 mmd_uuunyaa_tools/converters/armatures/panels.py:63 mmd_uuunyaa_tools/converters/armatures/panels.py:115 mmd_uuunyaa_tools/converters/armatures/panels.py:123
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:57 mmd_uuunyaa_tools/converters/armatures/panels.py:68 mmd_uuunyaa_tools/converters/armatures/panels.py:125 mmd_uuunyaa_tools/converters/armatures/panels.py:133
     ("*", "Leg.L"): "脚.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:53 mmd_uuunyaa_tools/converters/armatures/panels.py:64 mmd_uuunyaa_tools/converters/armatures/panels.py:116 mmd_uuunyaa_tools/converters/armatures/panels.py:124
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:58 mmd_uuunyaa_tools/converters/armatures/panels.py:69 mmd_uuunyaa_tools/converters/armatures/panels.py:126 mmd_uuunyaa_tools/converters/armatures/panels.py:134
     ("*", "Leg.R"): "脚.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:55
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:60
     ("*", "Toe.L"): "つま先.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:56
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:61
     ("*", "Toe.R"): "つま先.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:58 mmd_uuunyaa_tools/converters/armatures/panels.py:118
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:63 mmd_uuunyaa_tools/converters/armatures/panels.py:128
     ("*", "IK-FK:"): "IK-FK",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:60 mmd_uuunyaa_tools/converters/armatures/panels.py:120
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:65 mmd_uuunyaa_tools/converters/armatures/panels.py:130
     ("*", "Arm.L"): "腕.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:61 mmd_uuunyaa_tools/converters/armatures/panels.py:121
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:66 mmd_uuunyaa_tools/converters/armatures/panels.py:131
     ("*", "Arm.R"): "腕.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:69
-    ("*", "MMD Layers:"): "MMDレイヤー:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:71 mmd_uuunyaa_tools/converters/armatures/panels.py:128
-    ("*", "Main"): "メイン",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:74
+    ("*", "MMD Layers:"): "MMDレイヤー:",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:76 mmd_uuunyaa_tools/converters/armatures/panels.py:138
+    ("*", "Main"): "メイン",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:79
     ("*", "Others"): "その他",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:77
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:82
     ("*", "Shadow"): "シャドウ",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:80
-    ("*", "Dummy"): "ダミー",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:85
+    ("*", "Dummy"): "ダミー",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:90
     ("*", "UuuNyaa MMD AutoRig"): "UuuNyaa MMD AutoRig",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:112
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:117
     ("*", "MMD-AutoRig:"): "MMD-AutoRig:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:126
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:136
     ("*", "Layers:"): "レイヤー:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:131
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:141
     ("*", "Sub"): "サブ",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:134
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:144
     ("*", "Spine"): "脊柱",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:137
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:147
     ("*", "Limbs"): "肢体",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:60 mmd_uuunyaa_tools/converters/physics/collision.py:25 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:65
     ("*", "Nothing"): "なし",
@@ -380,8 +382,22 @@ translation_dict = {
     ("*", "Surface Deform"): "サーフェス変形",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body_to_cloth.py:76
     ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "{rigid_body_name}に関連するボーンがありません。リジッドボディにボーンを関連付けてください。",
-    #: mmd_uuunyaa_tools/editors/menus.py:14 mmd_uuunyaa_tools/editors/menus.py:34 mmd_uuunyaa_tools/editors/menus.py:54
+    #: mmd_uuunyaa_tools/editors/menus.py:15 mmd_uuunyaa_tools/editors/menus.py:35 mmd_uuunyaa_tools/editors/menus.py:55
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
+    #: mmd_uuunyaa_tools/editors/menus.py:75
+    ("*", "Select Moved"): "操作済選択",
+    #: mmd_uuunyaa_tools/editors/menus.py:80
+    ("Operator", "Moved"): "操作済",
+    ("*", "Moved"): "操作済",
+    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:314
+    ("Operator", "Rotated"): "回転済",
+    ("*", "Rotated"): "回転済",
+    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:315
+    ("Operator", "Translated"): "移動済",
+    ("*", "Translated"): "移動済",
+    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
+    ("Operator", "Scaled"): "スケール済",
+    ("*", "Scaled"): "スケール済",
     #: mmd_uuunyaa_tools/editors/nodes.py:225
     ("*", "Skin Color Adjust"): "肌カラー調整",
     #: mmd_uuunyaa_tools/editors/nodes.py:228 mmd_uuunyaa_tools/tuners/material_tuners.py:261
@@ -414,38 +430,42 @@ translation_dict = {
     ("*", "Wet Adjuster"): "ウエット調節器",
     #: mmd_uuunyaa_tools/editors/nodes.py:270 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射調節器",
-    #: mmd_uuunyaa_tools/editors/operators.py:18
-    ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
     #: mmd_uuunyaa_tools/editors/operators.py:19
+    ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
+    #: mmd_uuunyaa_tools/editors/operators.py:20
     ("*", "Convert materials of selected objects for Eevee."): "選択中オブジェクトマテリアルをEevee用に変換",
-    #: mmd_uuunyaa_tools/editors/operators.py:42
-    ("Operator", "Setup Render Engine for Eevee"): "レンダーエンジンをEevee用に設定",
     #: mmd_uuunyaa_tools/editors/operators.py:43
+    ("Operator", "Setup Render Engine for Eevee"): "レンダーエンジンをEevee用に設定",
+    #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "レンダーエンジンプロパティをEevee用に設定",
-    #: mmd_uuunyaa_tools/editors/operators.py:46
-    ("*", "Use Bloom"): "ブルームを使用",
     #: mmd_uuunyaa_tools/editors/operators.py:47
-    ("*", "Use Motion Blur"): "モーションブラーを使用",
+    ("*", "Use Bloom"): "ブルームを使用",
     #: mmd_uuunyaa_tools/editors/operators.py:48
+    ("*", "Use Motion Blur"): "モーションブラーを使用",
+    #: mmd_uuunyaa_tools/editors/operators.py:49
     ("*", "Use Film Transparent"): "フィルム透過を使用",
-    #: mmd_uuunyaa_tools/editors/operators.py:108
+    #: mmd_uuunyaa_tools/editors/operators.py:109
     ("Operator", "Show Message Box"): "メッセージボックスを表示",
-    #: mmd_uuunyaa_tools/editors/operators.py:129
-    ("Operator", "Remove Unused Vertex Groups"): "未使用頂点グループをすべて削除",
     #: mmd_uuunyaa_tools/editors/operators.py:130
+    ("Operator", "Remove Unused Vertex Groups"): "未使用頂点グループをすべて削除",
+    #: mmd_uuunyaa_tools/editors/operators.py:131
     ("*", "Remove unused vertex groups from the active meshes"): "アクティブメッシュから未使用頂点グループをすべて削除",
-    #: mmd_uuunyaa_tools/editors/operators.py:133
+    #: mmd_uuunyaa_tools/editors/operators.py:134
     ("*", "Weight Threshold"): "ウエイトしきい値",
-    #: mmd_uuunyaa_tools/editors/operators.py:197
-    ("Operator", "Select Shape Key Target Vertices"): "シェイプキー対象の頂点を選択",
     #: mmd_uuunyaa_tools/editors/operators.py:198
+    ("Operator", "Select Shape Key Target Vertices"): "シェイプキー対象の頂点を選択",
+    #: mmd_uuunyaa_tools/editors/operators.py:199
     ("*", "Select shape key target vertices from the active meshes"): "アクティブメッシュのシェイプキー対象の頂点を選択",
-    #: mmd_uuunyaa_tools/editors/operators.py:201 mmd_uuunyaa_tools/editors/operators.py:248
+    #: mmd_uuunyaa_tools/editors/operators.py:202 mmd_uuunyaa_tools/editors/operators.py:249
     ("*", "Distance Threshold"): "距離しきい値",
-    #: mmd_uuunyaa_tools/editors/operators.py:244
-    ("Operator", "Remove Unused Shape Keys"): "未使用シェイプキーをすべて削除",
     #: mmd_uuunyaa_tools/editors/operators.py:245
+    ("Operator", "Remove Unused Shape Keys"): "未使用シェイプキーをすべて削除",
+    #: mmd_uuunyaa_tools/editors/operators.py:246
     ("*", "Remove unused shape keys from the active meshes"): "アクティブメッシュから未使用シェイプキーをすべて削除",
+    #: mmd_uuunyaa_tools/editors/operators.py:311
+    ("Operator", "Select Moved Pose Bones"): "操作済ポーズボーンを選択",
+    #: mmd_uuunyaa_tools/editors/operators.py:318
+    ("*", "Tolerance"): "許容範囲",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "体毛メッシュを追加",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:118
@@ -848,47 +868,49 @@ translation_dict = {
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "将AutoRig骨架转换为MMD兼容",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:48
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:50
     ("*", "MMD-Rigify:"): "MMD-Rigify",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:49
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:52 mmd_uuunyaa_tools/converters/armatures/panels.py:121
+    ("*", "Integrated armature is not selected."): "未选择整合骨架",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:54
     ("*", "Bind"): "绑定",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:50 mmd_uuunyaa_tools/converters/armatures/panels.py:113
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:55 mmd_uuunyaa_tools/converters/armatures/panels.py:123
     ("*", "Eyes"): "两眼",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:52 mmd_uuunyaa_tools/converters/armatures/panels.py:63 mmd_uuunyaa_tools/converters/armatures/panels.py:115 mmd_uuunyaa_tools/converters/armatures/panels.py:123
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:57 mmd_uuunyaa_tools/converters/armatures/panels.py:68 mmd_uuunyaa_tools/converters/armatures/panels.py:125 mmd_uuunyaa_tools/converters/armatures/panels.py:133
     ("*", "Leg.L"): "腿.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:53 mmd_uuunyaa_tools/converters/armatures/panels.py:64 mmd_uuunyaa_tools/converters/armatures/panels.py:116 mmd_uuunyaa_tools/converters/armatures/panels.py:124
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:58 mmd_uuunyaa_tools/converters/armatures/panels.py:69 mmd_uuunyaa_tools/converters/armatures/panels.py:126 mmd_uuunyaa_tools/converters/armatures/panels.py:134
     ("*", "Leg.R"): "腿.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:55
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:60
     ("*", "Toe.L"): "脚趾.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:56
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:61
     ("*", "Toe.R"): "脚趾.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:58 mmd_uuunyaa_tools/converters/armatures/panels.py:118
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:63 mmd_uuunyaa_tools/converters/armatures/panels.py:128
     ("*", "IK-FK:"): "IK-FK",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:60 mmd_uuunyaa_tools/converters/armatures/panels.py:120
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:65 mmd_uuunyaa_tools/converters/armatures/panels.py:130
     ("*", "Arm.L"): "手臂.L",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:61 mmd_uuunyaa_tools/converters/armatures/panels.py:121
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:66 mmd_uuunyaa_tools/converters/armatures/panels.py:131
     ("*", "Arm.R"): "手臂.R",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:69
-    ("*", "MMD Layers:"): "MMD层:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:71 mmd_uuunyaa_tools/converters/armatures/panels.py:128
-    ("*", "Main"): "主",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:74
+    ("*", "MMD Layers:"): "MMD层:",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:76 mmd_uuunyaa_tools/converters/armatures/panels.py:138
+    ("*", "Main"): "主",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:79
     ("*", "Others"): "其他",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:77
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:82
     ("*", "Shadow"): "阴影",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:80
-    ("*", "Dummy"): "伪",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:85
+    ("*", "Dummy"): "伪",
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:90
     ("*", "UuuNyaa MMD AutoRig"): "UuuNyaa MMD AutoRig",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:112
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:117
     ("*", "MMD-AutoRig:"): "MMD-AutoRig:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:126
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:136
     ("*", "Layers:"): "层:",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:131
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:141
     ("*", "Sub"): "次级",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:134
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:144
     ("*", "Spine"): "脊柱",
-    #: mmd_uuunyaa_tools/converters/armatures/panels.py:137
+    #: mmd_uuunyaa_tools/converters/armatures/panels.py:147
     ("*", "Limbs"): "肢体",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:60 mmd_uuunyaa_tools/converters/physics/collision.py:25 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:65
     ("*", "Nothing"): "无",
@@ -1056,8 +1078,22 @@ translation_dict = {
     ("*", "Surface Deform"): "表面形变",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body_to_cloth.py:76
     ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "没有与{rigid_body_name}有关的骨骼，请将骨骼与刚体联系起来。",
-    #: mmd_uuunyaa_tools/editors/menus.py:14 mmd_uuunyaa_tools/editors/menus.py:34 mmd_uuunyaa_tools/editors/menus.py:54
+    #: mmd_uuunyaa_tools/editors/menus.py:15 mmd_uuunyaa_tools/editors/menus.py:35 mmd_uuunyaa_tools/editors/menus.py:55
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
+    #: mmd_uuunyaa_tools/editors/menus.py:75
+    ("*", "Select Moved"): "选择移动过",
+    #: mmd_uuunyaa_tools/editors/menus.py:80
+    ("Operator", "Moved"): "移动过",
+    ("*", "Moved"): "移动过",
+    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:314
+    ("Operator", "Rotated"): "旋转过",
+    ("*", "Rotated"): "旋转过",
+    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:315
+    ("Operator", "Translated"): "平移过",
+    ("*", "Translated"): "平移过",
+    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
+    ("Operator", "Scaled"): "缩放过",
+    ("*", "Scaled"): "缩放过",
     #: mmd_uuunyaa_tools/editors/nodes.py:225
     ("*", "Skin Color Adjust"): "皮肤色调整",
     #: mmd_uuunyaa_tools/editors/nodes.py:228 mmd_uuunyaa_tools/tuners/material_tuners.py:261
@@ -1090,38 +1126,42 @@ translation_dict = {
     ("*", "Wet Adjuster"): "湿润调整器",
     #: mmd_uuunyaa_tools/editors/nodes.py:270 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射调整器",
-    #: mmd_uuunyaa_tools/editors/operators.py:18
-    ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
     #: mmd_uuunyaa_tools/editors/operators.py:19
+    ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
+    #: mmd_uuunyaa_tools/editors/operators.py:20
     ("*", "Convert materials of selected objects for Eevee."): "为Eevee转换选物体的材质",
-    #: mmd_uuunyaa_tools/editors/operators.py:42
-    ("Operator", "Setup Render Engine for Eevee"): "为Eevee设置渲染引擎",
     #: mmd_uuunyaa_tools/editors/operators.py:43
+    ("Operator", "Setup Render Engine for Eevee"): "为Eevee设置渲染引擎",
+    #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "为Eevee设置渲染引擎属性",
-    #: mmd_uuunyaa_tools/editors/operators.py:46
-    ("*", "Use Bloom"): "使用辉光",
     #: mmd_uuunyaa_tools/editors/operators.py:47
-    ("*", "Use Motion Blur"): "使用运动模糊",
+    ("*", "Use Bloom"): "使用辉光",
     #: mmd_uuunyaa_tools/editors/operators.py:48
+    ("*", "Use Motion Blur"): "使用运动模糊",
+    #: mmd_uuunyaa_tools/editors/operators.py:49
     ("*", "Use Film Transparent"): "使用胶片透明",
-    #: mmd_uuunyaa_tools/editors/operators.py:108
+    #: mmd_uuunyaa_tools/editors/operators.py:109
     ("Operator", "Show Message Box"): "显示信息框",
-    #: mmd_uuunyaa_tools/editors/operators.py:129
-    ("Operator", "Remove Unused Vertex Groups"): "删除未用到的顶点组",
     #: mmd_uuunyaa_tools/editors/operators.py:130
+    ("Operator", "Remove Unused Vertex Groups"): "删除未用到的顶点组",
+    #: mmd_uuunyaa_tools/editors/operators.py:131
     ("*", "Remove unused vertex groups from the active meshes"): "从活动网格中删除未用到的顶点组",
-    #: mmd_uuunyaa_tools/editors/operators.py:133
+    #: mmd_uuunyaa_tools/editors/operators.py:134
     ("*", "Weight Threshold"): "权重阈值",
-    #: mmd_uuunyaa_tools/editors/operators.py:197
-    ("Operator", "Select Shape Key Target Vertices"): "选择形态键目标顶点",
     #: mmd_uuunyaa_tools/editors/operators.py:198
+    ("Operator", "Select Shape Key Target Vertices"): "选择形态键目标顶点",
+    #: mmd_uuunyaa_tools/editors/operators.py:199
     ("*", "Select shape key target vertices from the active meshes"): "从活动网格中删选择形态键目标顶点",
-    #: mmd_uuunyaa_tools/editors/operators.py:201 mmd_uuunyaa_tools/editors/operators.py:248
+    #: mmd_uuunyaa_tools/editors/operators.py:202 mmd_uuunyaa_tools/editors/operators.py:249
     ("*", "Distance Threshold"): "距离阈值",
-    #: mmd_uuunyaa_tools/editors/operators.py:244
-    ("Operator", "Remove Unused Shape Keys"): "删除未用到的形态键",
     #: mmd_uuunyaa_tools/editors/operators.py:245
+    ("Operator", "Remove Unused Shape Keys"): "删除未用到的形态键",
+    #: mmd_uuunyaa_tools/editors/operators.py:246
     ("*", "Remove unused shape keys from the active meshes"): "从活动网格中删除未用到的形态键",
+    #: mmd_uuunyaa_tools/editors/operators.py:311
+    ("Operator", "Select Moved Pose Bones"): "选择移动过的姿态骨骼",
+    #: mmd_uuunyaa_tools/editors/operators.py:318
+    ("*", "Tolerance"): "容差",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "添加体毛网格",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:118
