@@ -15,7 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+import importlib
 import os
+import sys
 import traceback
 
 from mmd_uuunyaa_tools import auto_load
@@ -46,10 +48,22 @@ PACKAGE_NAME = __package__
 REGISTER_HOOKS = []
 UNREGISTER_HOOKS = []
 
+addon_updater_ops_spec = importlib.util.spec_from_file_location(
+    f'{PACKAGE_NAME}.addon_updater_ops',
+    os.path.join(PACKAGE_PATH, 'externals', 'addon_updater', 'addon_updater_ops.py')
+)
+addon_updater_ops = importlib.util.module_from_spec(addon_updater_ops_spec)
+sys.modules[f'{PACKAGE_NAME}.addon_updater_ops'] = addon_updater_ops
+addon_updater_ops_spec.loader.exec_module(addon_updater_ops)
+
+
 auto_load.init()
 
 
 def register():
+    addon_updater_ops.register(bl_info)
+    addon_updater_ops.updater._addon_root = PACKAGE_PATH
+
     auto_load.register()
     for hook in REGISTER_HOOKS:
         try:
@@ -59,6 +73,7 @@ def register():
 
 
 def unregister():
+    addon_updater_ops.unregister()
     for hook in UNREGISTER_HOOKS:
         try:
             hook()
