@@ -219,9 +219,9 @@ class MMDRigifyOperatorABC:
         return context.window_manager.invoke_props_dialog(self)
 
 
-class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
-    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_integrate'
-    bl_label = _('Integrate Rigify and MMD Armatures')
+class MMDRigifyIntegrateFocusOnMMD(MMDRigifyOperatorABC, bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_mmd_focused_integrate'
+    bl_label = _('MMD compatibility focused Integrate')
     bl_options = {'REGISTER', 'UNDO'}
 
     is_join_armatures: bpy.props.BoolProperty(name=_('Join Armatures'), description=_('Join MMD and Rigify armatures'), default=True)
@@ -246,10 +246,10 @@ class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
         bpy.ops.object.mode_set(mode='EDIT')
         rigify_armature_object.remove_unused_face_bones()
         rigify_armature_object.fit_bone_rotations(mmd_armature_object)
-        rigify_armature_object.imitate_mmd_bone_structure(mmd_armature_object)
+        rigify_armature_object.imitate_mmd_bone_structure_focus_on_mmd(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='POSE')
-        rigify_armature_object.imitate_mmd_pose_behavior()
+        rigify_armature_object.imitate_mmd_pose_behavior_focus_on_mmd()
         rigify_armature_object.bind_bones(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='OBJECT')
@@ -271,9 +271,9 @@ class MMDRigifyIntegrate(MMDRigifyOperatorABC, bpy.types.Operator):
         return {'FINISHED'}
 
 
-class MMDRigifyBind(bpy.types.Operator, MMDRigifyOperatorABC):
-    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_bind'
-    bl_label = _('Bind MMD to Rigify')
+class MMDRigifyIntegrateFocusOnRigify(bpy.types.Operator, MMDRigifyOperatorABC):
+    bl_idname = 'mmd_uuunyaa_tools.mmd_rigify_rigify_focused_integrate'
+    bl_label = _('Rigify operability focused Integrate')
     bl_options = {'REGISTER', 'UNDO'}
 
     is_join_armatures: bpy.props.BoolProperty(name=_('Join Armatures'), description=_('Join MMD and Rigify armatures'), default=True)
@@ -298,10 +298,10 @@ class MMDRigifyBind(bpy.types.Operator, MMDRigifyOperatorABC):
         bpy.ops.object.mode_set(mode='EDIT')
         rigify_armature_object.remove_unused_face_bones()
         rigify_armature_object.fit_bone_rotations(mmd_armature_object)
-        rigify_armature_object.bind_mmd_bone_structure(mmd_armature_object)
+        rigify_armature_object.imitate_mmd_bone_structure_focus_on_rigify(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='POSE')
-        rigify_armature_object.bind_mmd_pose_behavior()
+        rigify_armature_object.imitate_mmd_pose_behavior_focus_on_rigify()
         rigify_armature_object.bind_bones(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='OBJECT')

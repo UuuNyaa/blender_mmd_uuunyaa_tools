@@ -134,8 +134,18 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['thigh.R'].tail = mmd_edit_bones['右足'].tail
         metarig_edit_bones['shin.L'].tail = mmd_edit_bones['左ひざ'].tail
         metarig_edit_bones['shin.R'].tail = mmd_edit_bones['右ひざ'].tail
-        metarig_edit_bones['foot.L'].tail = mmd_edit_bones['左足首'].tail
-        metarig_edit_bones['foot.R'].tail = mmd_edit_bones['右足首'].tail
+
+        if MMDBoneType.TOE_EX in mmd_armature_object.exist_bone_types:
+            metarig_edit_bones['foot.L'].tail = Vector([mmd_edit_bones['左足首'].tail.x, mmd_edit_bones['左足先EX'].head.y, mmd_edit_bones['左足首'].tail.z])
+            metarig_edit_bones['foot.R'].tail = Vector([mmd_edit_bones['右足首'].tail.x, mmd_edit_bones['右足先EX'].head.y, mmd_edit_bones['右足首'].tail.z])
+            metarig_edit_bones['toe.L'].tail = Vector([mmd_edit_bones['左足首'].tail.x, mmd_edit_bones['左足先EX'].tail.y, mmd_edit_bones['左足首'].tail.z])
+            metarig_edit_bones['toe.R'].tail = Vector([mmd_edit_bones['右足首'].tail.x, mmd_edit_bones['右足先EX'].tail.y, mmd_edit_bones['右足首'].tail.z])
+        else:
+            metarig_edit_bones['foot.L'].tail = mmd_edit_bones['左足首'].tail
+            metarig_edit_bones['foot.R'].tail = mmd_edit_bones['右足首'].tail
+            metarig_edit_bones['toe.L'].tail = mmd_edit_bones['左足首'].tail + Vector([+0.0, -mmd_edit_bones['左足首'].length / 2, +0.0])
+            metarig_edit_bones['toe.R'].tail = mmd_edit_bones['右足首'].tail + Vector([+0.0, -mmd_edit_bones['右足首'].length / 2, +0.0])
+
         metarig_edit_bones['heel.02.L'].tail = mmd_edit_bones['左ひざ'].tail.copy()
         metarig_edit_bones['heel.02.L'].tail[0] += +mmd_edit_bones['左ひざ'].length / 8
         metarig_edit_bones['heel.02.L'].tail[1] += +mmd_edit_bones['左ひざ'].length / 10
@@ -152,8 +162,6 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['heel.02.R'].head[0] += +mmd_edit_bones['右ひざ'].length / 8
         metarig_edit_bones['heel.02.R'].head[1] += +mmd_edit_bones['右ひざ'].length / 10
         metarig_edit_bones['heel.02.R'].head[2] = 0
-        metarig_edit_bones['toe.L'].tail = mmd_edit_bones['左足首'].tail + Vector([+0.0, -mmd_edit_bones['左足首'].length / 2, +0.0])
-        metarig_edit_bones['toe.R'].tail = mmd_edit_bones['右足首'].tail + Vector([+0.0, -mmd_edit_bones['右足首'].length / 2, +0.0])
 
         # fix straight finger bend problem
         # https://blenderartists.org/t/rigify-fingers-issue/1218987

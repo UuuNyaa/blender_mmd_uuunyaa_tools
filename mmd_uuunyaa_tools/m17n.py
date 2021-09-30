@@ -135,7 +135,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:23
     ("Operator", "Clean Koikatsu Armature"): "コイカツアーマチュアを掃除",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:224
-    ("Operator", "Integrate Rigify and MMD Armatures"): "RigifyとMMDアーマチュアを統合",
+    ("Operator", "MMD compatibility focused Integrate"): "MMD互換性を重視して統合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Join Armatures"): "アーマチュアを結合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
@@ -149,7 +149,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:231 mmd_uuunyaa_tools/converters/armatures/operators.py:283
     ("*", "MMD dummy bone layer"): "MMDダミーボーンレイヤー",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:276
-    ("Operator", "Bind MMD to Rigify"): "MMDをRigifyに束縛",
+    ("Operator", "Rigify operability focused Integrate"): "Rigify操作性を重視して統合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:328
     ("Operator", "Convert Rigify Armature to MMD compatible"): "RigifyアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:332
@@ -502,10 +502,6 @@ translation_dict = {
     ("*", "MMD to Rigify:"): "MMDからRigify:",
     #: mmd_uuunyaa_tools/panels.py:36
     ("Operator", "Add Metarig"): "メタリグを追加",
-    #: mmd_uuunyaa_tools/panels.py:42
-    ("Operator", "Integrate Armatures"): "アーマチュアを統合",
-    #: mmd_uuunyaa_tools/panels.py:48
-    ("Operator", "Bind Armatures"): "アーマチュアを束縛",
     #: mmd_uuunyaa_tools/panels.py:53
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
     #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59
@@ -831,7 +827,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:23
     ("Operator", "Clean Koikatsu Armature"): "清洁Koikatsu骨架",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:224
-    ("Operator", "Integrate Rigify and MMD Armatures"): "集成Rigify和MMD骨架",
+    ("Operator", "MMD compatibility focused Integrate"): "注重MMD兼容性的整合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Join Armatures"): "合并骨架",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
@@ -845,7 +841,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:231 mmd_uuunyaa_tools/converters/armatures/operators.py:283
     ("*", "MMD dummy bone layer"): "MMD伪骨骼层",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:276
-    ("Operator", "Bind MMD to Rigify"): "将MMD与Rigify绑定",
+    ("Operator", "Rigify operability focused Integrate"): "注重Rigify操作性的整合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:328
     ("Operator", "Convert Rigify Armature to MMD compatible"): "将Rigify骨架转换为MMD兼容",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:332
@@ -1198,10 +1194,6 @@ translation_dict = {
     ("*", "MMD to Rigify:"): "MMD到Rigify:",
     #: mmd_uuunyaa_tools/panels.py:36
     ("Operator", "Add Metarig"): "添加Metarig",
-    #: mmd_uuunyaa_tools/panels.py:42
-    ("Operator", "Integrate Armatures"): "整合骨架",
-    #: mmd_uuunyaa_tools/panels.py:48
-    ("Operator", "Bind Armatures"): "绑定骨架",
     #: mmd_uuunyaa_tools/panels.py:53
     ("*", "Rigify to MMD:"): "Rigify到MMD:",
     #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59

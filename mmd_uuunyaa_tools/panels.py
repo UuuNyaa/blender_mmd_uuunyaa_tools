@@ -6,8 +6,8 @@ import bpy
 
 from mmd_uuunyaa_tools.converters.armatures.operators import (
     MMDArmatureAddMetarig, MMDAutoRigApplyMMDRestPose, MMDAutoRigConvert,
-    MMDRigifyApplyMMDRestPose, MMDRigifyBind, MMDRigifyConvert,
-    MMDRigifyIntegrate)
+    MMDRigifyApplyMMDRestPose, MMDRigifyConvert, MMDRigifyIntegrateFocusOnMMD,
+    MMDRigifyIntegrateFocusOnRigify)
 from mmd_uuunyaa_tools.editors.operators import (ConvertMaterialsForEevee,
                                                  SetupRenderEngineForEevee)
 from mmd_uuunyaa_tools.m17n import _
@@ -39,15 +39,15 @@ class OperatorPanel(bpy.types.Panel):
 
         row = col.split(factor=0.9, align=True)
         row.operator_context = 'EXEC_DEFAULT'
-        row.operator(MMDRigifyIntegrate.bl_idname, text=_('Integrate Armatures'), icon='GROUP_BONE').is_join_armatures = True
+        row.operator(MMDRigifyIntegrateFocusOnMMD.bl_idname, icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
-        row.operator(MMDRigifyIntegrate.bl_idname, text=_(''), icon='WINDOW')
+        row.operator(MMDRigifyIntegrateFocusOnMMD.bl_idname, text=_(''), icon='WINDOW')
 
         row = col.split(factor=0.9, align=True)
         row.operator_context = 'EXEC_DEFAULT'
-        row.operator(MMDRigifyBind.bl_idname, text=_('Bind Armatures'), icon='GROUP_BONE').is_join_armatures = True
+        row.operator(MMDRigifyIntegrateFocusOnRigify.bl_idname, icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
-        row.operator(MMDRigifyBind.bl_idname, text=_(''), icon='WINDOW')
+        row.operator(MMDRigifyIntegrateFocusOnRigify.bl_idname, text=_(''), icon='WINDOW')
 
         col = layout.column(align=True)
         col.label(text=_('Rigify to MMD:'), icon='OUTLINER_OB_ARMATURE')
