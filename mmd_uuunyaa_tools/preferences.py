@@ -130,6 +130,27 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         max=59
     )
 
+    _translation_texts = [
+        _('Check now for mmd_uuunyaa_tools update'),
+        _('Auto-check for Update'),
+        _('Last check: Never'),
+        _('Addon is up to date'),
+        _('Checking...'),
+        _("Choose 'Update Now' & press OK to install, "),
+        _('or click outside window to defer'),
+        _('No updates available'),
+        _('Press okay to dismiss dialog'),
+        _('Check for update now?'),
+        _('Process update'),
+        _('Decide to install, ignore, or defer new addon update'),
+        _('Update Now'),
+        _('Install update now'),
+        _('Ignore'),
+        _('Ignore this update to prevent future popups'),
+        _('Defer'),
+        _('Defer choice till next blender session'),
+    ]
+
     def draw(self, context):
         layout: bpy.types.UILayout = self.layout  # pylint: disable=no-member
 

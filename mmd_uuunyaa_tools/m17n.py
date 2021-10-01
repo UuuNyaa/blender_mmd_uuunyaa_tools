@@ -24,9 +24,9 @@ def unregister():
 
 translation_dict = {
   "ja_JP": {
-    #: mmd_uuunyaa_tools/__init__.py:39
+    #: mmd_uuunyaa_tools/__init__.py:41
     ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "MMDモデル＆シーン編集のためのユーティリティーツールです。by Uuu(/>ω<)/Nyaa!",
-    #: mmd_uuunyaa_tools/__init__.py:40
+    #: mmd_uuunyaa_tools/__init__.py:42
     ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3Dビュー > サイドバー > MMD Toolsパネル",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "SmutBaseからのアセットダウンロードに失敗しました。レスポンスフォーマットが変わっている可能性があります。",
@@ -466,6 +466,10 @@ translation_dict = {
     ("Operator", "Select Moved Pose Bones"): "操作済ポーズボーンを選択",
     #: mmd_uuunyaa_tools/editors/operators.py:318
     ("*", "Tolerance"): "許容範囲",
+    #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:181
+    ("*", "Update {} ready!"): "更新できます! {}",
+    #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1067 mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1210
+    ("*", "Update now to {}"): "今すぐ更新 {}",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "体毛メッシュを追加",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:118
@@ -508,53 +512,91 @@ translation_dict = {
     ("Operator", "Convert to MMD compatible"): "MMD互換に変換",
     #: mmd_uuunyaa_tools/panels.py:58
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
-    #: mmd_uuunyaa_tools/preferences.py:21
-    ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
     #: mmd_uuunyaa_tools/preferences.py:22
+    ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
+    #: mmd_uuunyaa_tools/preferences.py:23
     ("*", "Larger value is slower"): "大きい値ほど遅い",
-    #: mmd_uuunyaa_tools/preferences.py:29
-    ("*", "Asset JSONs Folder"): "アセットJSONフォルダー",
     #: mmd_uuunyaa_tools/preferences.py:30
+    ("*", "Asset JSONs Folder"): "アセットJSONフォルダー",
+    #: mmd_uuunyaa_tools/preferences.py:31
     ("*", "Path to asset list JSON files"): "アセットJSONファイルのパス",
-    #: mmd_uuunyaa_tools/preferences.py:36
-    ("*", "Asset JSON Update Repository"): "アセットJSON更新リポジトリ",
     #: mmd_uuunyaa_tools/preferences.py:37
+    ("*", "Asset JSON Update Repository"): "アセットJSON更新リポジトリ",
+    #: mmd_uuunyaa_tools/preferences.py:38
     ("*", "Specify the github repository which to retrieve the assets"): "アセットを取得するgithubリポジトリを指定",
-    #: mmd_uuunyaa_tools/preferences.py:42
-    ("*", "Asset JSON Update Query"): "アセットJSON更新クエリ",
     #: mmd_uuunyaa_tools/preferences.py:43
+    ("*", "Asset JSON Update Query"): "アセットJSON更新クエリ",
+    #: mmd_uuunyaa_tools/preferences.py:44
     ("*", "Specify the filter conditions for retrieving assets"): "アセットを取得するフィルタ条件を指定",
-    #: mmd_uuunyaa_tools/preferences.py:48
+    #: mmd_uuunyaa_tools/preferences.py:49
     ("*", "Asset JSON Auto Update on Startup"): "起動時にアセットJSONを更新する",
-    #: mmd_uuunyaa_tools/preferences.py:53
-    ("*", "Asset Cache Folder"): "アセットキャッシュフォルダー",
     #: mmd_uuunyaa_tools/preferences.py:54
+    ("*", "Asset Cache Folder"): "アセットキャッシュフォルダー",
+    #: mmd_uuunyaa_tools/preferences.py:55
     ("*", "Path to asset cache folder"): "アセットキャッシュフォルダーのパス",
-    #: mmd_uuunyaa_tools/preferences.py:60
-    ("*", "Asset Max. Cache Size (MB)"): "アセット最大キャッシュサイズ(MB)",
     #: mmd_uuunyaa_tools/preferences.py:61
+    ("*", "Asset Max. Cache Size (MB)"): "アセット最大キャッシュサイズ(MB)",
+    #: mmd_uuunyaa_tools/preferences.py:62
     ("*", "Maximum size (Mega bytes) of the asset cache folder"): "アセットキャッシュフォルダーの最大サイズ(メガバイト)",
-    #: mmd_uuunyaa_tools/preferences.py:68
-    ("*", "Asset Extract Root Folder"): "アセット展開ルートフォルダー",
     #: mmd_uuunyaa_tools/preferences.py:69
+    ("*", "Asset Extract Root Folder"): "アセット展開ルートフォルダー",
+    #: mmd_uuunyaa_tools/preferences.py:70
     ("*", "Path to extract the cached assets"): "キャッシュしたアセットの展開パス",
-    #: mmd_uuunyaa_tools/preferences.py:75
+    #: mmd_uuunyaa_tools/preferences.py:76
     ("*", "Asset Extract Folder"): "アセット展開フォルダー",
-    #: mmd_uuunyaa_tools/preferences.py:82
+    #: mmd_uuunyaa_tools/preferences.py:83
     ("*", "Asset Extract JSON"): "アセット展開JSON",
-    #: mmd_uuunyaa_tools/preferences.py:90
+    #: mmd_uuunyaa_tools/preferences.py:91
     ("*", "Enable MMD Tools Translation (Reboot required)"): "MMD Tools翻訳の有効化 (再起動が必要です)",
-    #: mmd_uuunyaa_tools/preferences.py:106
-    ("*", "Browse Assets"): "アセットを閲覧",
-    #: mmd_uuunyaa_tools/preferences.py:110
-    ("*", "Query Examples"): "クエリ例",
-    #: mmd_uuunyaa_tools/preferences.py:118
-    ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
+    #: mmd_uuunyaa_tools/preferences.py:134
+    ("Operator", "Check now for mmd_uuunyaa_tools update"): "mmd_uuunyaa_toolsの更新を今すぐチェック",
+    #: mmd_uuunyaa_tools/preferences.py:135
+    ("*", "Auto-check for Update"): "更新を自動的にチェックする",
+    #: mmd_uuunyaa_tools/preferences.py:136
+    ("*", "Last check: Never"): "Last check: 未チェック",
+    #: mmd_uuunyaa_tools/preferences.py:137
+    ("Operator", "Addon is up to date"): "アドオンは最新です",
+    #: mmd_uuunyaa_tools/preferences.py:138
+    ("Operator", "Checking..."): "チェック中...",
     #: mmd_uuunyaa_tools/preferences.py:139
-    ("*", "Credits:"): "クレジット:",
+    ("*", "Choose 'Update Now' & press OK to install, "): "「今すぐ更新」を選択し、OKを押してインストール",
+    #: mmd_uuunyaa_tools/preferences.py:140
+    ("*", "or click outside window to defer"): "またはウィンドウの外をクリックして保留",
+    #: mmd_uuunyaa_tools/preferences.py:141
+    ("*", "No updates available"): "更新はありません",
+    #: mmd_uuunyaa_tools/preferences.py:142
+    ("*", "Press okay to dismiss dialog"): "OKを押してダイアログを閉じる",
     #: mmd_uuunyaa_tools/preferences.py:143
-    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "リジッドボディ物理からクロス物理機能は小威廉伯爵の作品です。",
+    ("*", "Check for update now?"): "今すぐ更新をチェックしますか?",
+    #: mmd_uuunyaa_tools/preferences.py:144
+    ("*", "Process update"): "更新処理",
     #: mmd_uuunyaa_tools/preferences.py:145
+    ("*", "Decide to install, ignore, or defer new addon update"): "アドオンの更新、無視または保留を選択",
+    #: mmd_uuunyaa_tools/preferences.py:146
+    ("*", "Update Now"): "今すぐ更新",
+    #: mmd_uuunyaa_tools/preferences.py:147
+    ("*", "Install update now"): "今すぐ更新をインストール",
+    #: mmd_uuunyaa_tools/preferences.py:148
+    ("*", "Ignore"): "無視",
+    #: mmd_uuunyaa_tools/preferences.py:149
+    ("*", "Ignore this update to prevent future popups"): "このアップデートは無視して今後のポップアップを止める",
+    #: mmd_uuunyaa_tools/preferences.py:150
+    ("*", "Defer"): "保留",
+    #: mmd_uuunyaa_tools/preferences.py:151
+    ("*", "Defer choice till next blender session"): "次回のBlender起動まで保留",
+    #: mmd_uuunyaa_tools/preferences.py:165
+    ("*", "Browse Assets"): "アセットを閲覧",
+    #: mmd_uuunyaa_tools/preferences.py:169
+    ("*", "Query Examples"): "クエリ例",
+    #: mmd_uuunyaa_tools/preferences.py:177
+    ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
+    #: mmd_uuunyaa_tools/preferences.py:197
+    ("*", "(Experimental) Add-on Update"): "(実験的) アドオン更新",
+    #: mmd_uuunyaa_tools/preferences.py:202
+    ("*", "Credits:"): "クレジット:",
+    #: mmd_uuunyaa_tools/preferences.py:206
+    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "リジッドボディ物理からクロス物理機能は小威廉伯爵の作品です。",
+    #: mmd_uuunyaa_tools/preferences.py:208
     ("*", "It was ported with his permission."): "この機能は本人の許可を得て移植したものです。",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "リセット",
@@ -716,9 +758,9 @@ translation_dict = {
     ("*", "Choose the material you want to use"): "マテリアルを選択",
   },
   "zh_CN": {
-    #: mmd_uuunyaa_tools/__init__.py:39
+    #: mmd_uuunyaa_tools/__init__.py:41
     ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "用于MMD模型和场景编辑的实用工具。by Uuu(/>ω<)/Nyaa!",
-    #: mmd_uuunyaa_tools/__init__.py:40
+    #: mmd_uuunyaa_tools/__init__.py:42
     ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3D视图 > 侧栏 > MMD Tools面板",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "从SmutBase下载资产失败。响应格式可能已经改变。",
@@ -1158,6 +1200,10 @@ translation_dict = {
     ("Operator", "Select Moved Pose Bones"): "选择移动过的姿态骨骼",
     #: mmd_uuunyaa_tools/editors/operators.py:318
     ("*", "Tolerance"): "容差",
+    #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:181
+    ("*", "Update {} ready!"): "可以更新!",
+    #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1067 mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1210
+    ("*", "Update now to {}"): "立即更新 {}",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "添加体毛网格",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:118
@@ -1200,53 +1246,91 @@ translation_dict = {
     ("Operator", "Convert to MMD compatible"): "转换为MMD兼容",
     #: mmd_uuunyaa_tools/panels.py:58
     ("*", "(Experimental) Auto-Rig to MMD:"): "(试验特性) Auto-Rig到MMD:",
-    #: mmd_uuunyaa_tools/preferences.py:21
-    ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
     #: mmd_uuunyaa_tools/preferences.py:22
+    ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
+    #: mmd_uuunyaa_tools/preferences.py:23
     ("*", "Larger value is slower"): "数值越大越慢",
-    #: mmd_uuunyaa_tools/preferences.py:29
-    ("*", "Asset JSONs Folder"): "资产JSONs文件夹",
     #: mmd_uuunyaa_tools/preferences.py:30
+    ("*", "Asset JSONs Folder"): "资产JSONs文件夹",
+    #: mmd_uuunyaa_tools/preferences.py:31
     ("*", "Path to asset list JSON files"): "资产清单JSON文件的路径",
-    #: mmd_uuunyaa_tools/preferences.py:36
-    ("*", "Asset JSON Update Repository"): "资产JSON更新仓库",
     #: mmd_uuunyaa_tools/preferences.py:37
+    ("*", "Asset JSON Update Repository"): "资产JSON更新仓库",
+    #: mmd_uuunyaa_tools/preferences.py:38
     ("*", "Specify the github repository which to retrieve the assets"): "指定要检索资产的github仓库",
-    #: mmd_uuunyaa_tools/preferences.py:42
-    ("*", "Asset JSON Update Query"): "资产JSON更新查询",
     #: mmd_uuunyaa_tools/preferences.py:43
+    ("*", "Asset JSON Update Query"): "资产JSON更新查询",
+    #: mmd_uuunyaa_tools/preferences.py:44
     ("*", "Specify the filter conditions for retrieving assets"): "指定检索资产的过滤条件",
-    #: mmd_uuunyaa_tools/preferences.py:48
+    #: mmd_uuunyaa_tools/preferences.py:49
     ("*", "Asset JSON Auto Update on Startup"): "资产JSON在启动时自动更新",
-    #: mmd_uuunyaa_tools/preferences.py:53
-    ("*", "Asset Cache Folder"): "资产缓存的文件夹",
     #: mmd_uuunyaa_tools/preferences.py:54
+    ("*", "Asset Cache Folder"): "资产缓存的文件夹",
+    #: mmd_uuunyaa_tools/preferences.py:55
     ("*", "Path to asset cache folder"): "资产缓存的文件夹的路径",
-    #: mmd_uuunyaa_tools/preferences.py:60
-    ("*", "Asset Max. Cache Size (MB)"): "最大的资产缓存大小(MB)",
     #: mmd_uuunyaa_tools/preferences.py:61
+    ("*", "Asset Max. Cache Size (MB)"): "最大的资产缓存大小(MB)",
+    #: mmd_uuunyaa_tools/preferences.py:62
     ("*", "Maximum size (Mega bytes) of the asset cache folder"): "资产缓存文件夹的最大尺寸(兆字节)",
-    #: mmd_uuunyaa_tools/preferences.py:68
-    ("*", "Asset Extract Root Folder"): "资产提取根文件夹",
     #: mmd_uuunyaa_tools/preferences.py:69
+    ("*", "Asset Extract Root Folder"): "资产提取根文件夹",
+    #: mmd_uuunyaa_tools/preferences.py:70
     ("*", "Path to extract the cached assets"): "提取缓存资产的路径",
-    #: mmd_uuunyaa_tools/preferences.py:75
+    #: mmd_uuunyaa_tools/preferences.py:76
     ("*", "Asset Extract Folder"): "资产提取文件夹",
-    #: mmd_uuunyaa_tools/preferences.py:82
+    #: mmd_uuunyaa_tools/preferences.py:83
     ("*", "Asset Extract JSON"): "资产提取JSON",
-    #: mmd_uuunyaa_tools/preferences.py:90
+    #: mmd_uuunyaa_tools/preferences.py:91
     ("*", "Enable MMD Tools Translation (Reboot required)"): "启用MMD Tools翻译 (需要重新启动)",
-    #: mmd_uuunyaa_tools/preferences.py:106
-    ("*", "Browse Assets"): "浏览资产",
-    #: mmd_uuunyaa_tools/preferences.py:110
-    ("*", "Query Examples"): "查询实例",
-    #: mmd_uuunyaa_tools/preferences.py:118
-    ("*", "Asset Cache Usage:"): "资产缓存使用情况",
+    #: mmd_uuunyaa_tools/preferences.py:134
+    ("Operator", "Check now for mmd_uuunyaa_tools update"): "立即检查mmd_uuunyaa_tools的更新",
+    #: mmd_uuunyaa_tools/preferences.py:135
+    ("*", "Auto-check for Update"): "自动检查更新",
+    #: mmd_uuunyaa_tools/preferences.py:136
+    ("*", "Last check: Never"): "Last check: 未检查",
+    #: mmd_uuunyaa_tools/preferences.py:137
+    ("Operator", "Addon is up to date"): "插件是最新的",
+    #: mmd_uuunyaa_tools/preferences.py:138
+    ("Operator", "Checking..."): "检查...",
     #: mmd_uuunyaa_tools/preferences.py:139
-    ("*", "Credits:"): "版权:",
+    ("*", "Choose 'Update Now' & press OK to install, "): "选择「立即更新」&确定进行安装。",
+    #: mmd_uuunyaa_tools/preferences.py:140
+    ("*", "or click outside window to defer"): "或在窗口外点击推迟",
+    #: mmd_uuunyaa_tools/preferences.py:141
+    ("*", "No updates available"): "没有更新",
+    #: mmd_uuunyaa_tools/preferences.py:142
+    ("*", "Press okay to dismiss dialog"): "按确定关闭对话框",
     #: mmd_uuunyaa_tools/preferences.py:143
-    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "刚体物理到布料物理的功能是小威廉伯爵的工作。",
+    ("*", "Check for update now?"): "立即检查更新？",
+    #: mmd_uuunyaa_tools/preferences.py:144
+    ("*", "Process update"): "更新过程",
     #: mmd_uuunyaa_tools/preferences.py:145
+    ("*", "Decide to install, ignore, or defer new addon update"): "选择更新、忽略或推迟该插件",
+    #: mmd_uuunyaa_tools/preferences.py:146
+    ("*", "Update Now"): "立即更新",
+    #: mmd_uuunyaa_tools/preferences.py:147
+    ("*", "Install update now"): "立即安装更新",
+    #: mmd_uuunyaa_tools/preferences.py:148
+    ("*", "Ignore"): "忽略",
+    #: mmd_uuunyaa_tools/preferences.py:149
+    ("*", "Ignore this update to prevent future popups"): "忽略此更新，以防止今后的弹出窗口",
+    #: mmd_uuunyaa_tools/preferences.py:150
+    ("*", "Defer"): "推迟",
+    #: mmd_uuunyaa_tools/preferences.py:151
+    ("*", "Defer choice till next blender session"): "推迟到下次启动时再做选择",
+    #: mmd_uuunyaa_tools/preferences.py:165
+    ("*", "Browse Assets"): "浏览资产",
+    #: mmd_uuunyaa_tools/preferences.py:169
+    ("*", "Query Examples"): "查询实例",
+    #: mmd_uuunyaa_tools/preferences.py:177
+    ("*", "Asset Cache Usage:"): "资产缓存使用情况",
+    #: mmd_uuunyaa_tools/preferences.py:197
+    ("*", "(Experimental) Add-on Update"): "(试验特性) 插件更新",
+    #: mmd_uuunyaa_tools/preferences.py:202
+    ("*", "Credits:"): "版权:",
+    #: mmd_uuunyaa_tools/preferences.py:206
+    ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "刚体物理到布料物理的功能是小威廉伯爵的工作。",
+    #: mmd_uuunyaa_tools/preferences.py:208
     ("*", "It was ported with his permission."): "这是经他许可的移植。",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "重置",

@@ -170,6 +170,7 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
         return context.window_manager.invoke_props_dialog(self)
 
     def draw(self, context):
+        iface_ = bpy.app.translations.pgettext_iface
         layout = self.layout
         if updater.invalid_updater:
             layout.label(text="Updater module error")
@@ -177,7 +178,7 @@ class AddonUpdaterInstallPopup(bpy.types.Operator):
         elif updater.update_ready:
             col = layout.column()
             col.scale_y = 0.7
-            col.label(text="Update {} ready!".format(updater.update_version),
+            col.label(text=iface_("Update {} ready!").format(updater.update_version),
                       icon="LOOP_FORWARDS")
             col.label(text="Choose 'Update Now' & press OK to install, ",
                       icon="BLANK1")
@@ -999,6 +1000,8 @@ def update_settings_ui(self, context, element=None):
     check_col.prop(settings, "updater_interval_days")
     check_col = sub_row.column(align=True)
 
+    iface_ = bpy.app.translations.pgettext_iface
+
     # Consider un-commenting for local dev (e.g. to set shorter intervals)
     # check_col.prop(settings,"updater_interval_hours")
     # check_col = sub_row.column(align=True)
@@ -1061,7 +1064,7 @@ def update_settings_ui(self, context, element=None):
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterUpdateNow.bl_idname,
-                       text="Update now to " + str(updater.update_version))
+                       text=iface_("Update now to {}").format(str(updater.update_version)))
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
@@ -1121,6 +1124,8 @@ def update_settings_ui_condensed(self, context, element=None):
 
     Alternate draw for user preferences or other places, does not draw a box.
     """
+
+    iface_ = bpy.app.translations.pgettext_iface
 
     # Element is a UI element, such as layout, a row, column, or box.
     if element is None:
@@ -1202,7 +1207,7 @@ def update_settings_ui_condensed(self, context, element=None):
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterUpdateNow.bl_idname,
-                       text="Update now to " + str(updater.update_version))
+                       text=iface_("Update now to {}").format(str(updater.update_version)))
         split = sub_col.split(align=True)
         split.scale_y = 2
         split.operator(AddonUpdaterCheckNow.bl_idname,
