@@ -8,12 +8,13 @@ import tempfile
 
 import bpy
 
-from mmd_uuunyaa_tools import utilities
+from mmd_uuunyaa_tools import addon_updater_ops, utilities
 from mmd_uuunyaa_tools.asset_search.assets import AssetUpdater
 from mmd_uuunyaa_tools.asset_search.operators import DeleteCachedFiles
 from mmd_uuunyaa_tools.m17n import _
 
 
+@addon_updater_ops.make_annotations
 class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
     bl_idname = __package__
 
@@ -91,8 +92,45 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         default=True
     )
 
+    # Addon updater preferences.
+    auto_check_update: bpy.props.BoolProperty(
+        name='Auto-check for Update',
+        description='If enabled, auto-check for updates using an interval',
+        default=False
+    )
 
-    def draw(self, _context):
+    updater_interval_months: bpy.props.IntProperty(
+        name='Months',
+        description='Number of months between checking for updates',
+        default=0,
+        min=0
+    )
+
+    updater_interval_days: bpy.props.IntProperty(
+        name='Days',
+        description='Number of days between checking for updates',
+        default=7,
+        min=0,
+        max=31
+    )
+
+    updater_interval_hours: bpy.props.IntProperty(
+        name='Hours',
+        description='Number of hours between checking for updates',
+        default=0,
+        min=0,
+        max=23
+    )
+
+    updater_interval_minutes: bpy.props.IntProperty(
+        name='Minutes',
+        description='Number of minutes between checking for updates',
+        default=0,
+        min=0,
+        max=59
+    )
+
+    def draw(self, context):
         layout: bpy.types.UILayout = self.layout  # pylint: disable=no-member
 
         col = layout.box().column()
@@ -133,6 +171,10 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
 
         col = layout.box().column()
         col.prop(self, 'mmd_tools_translation_enabled')
+
+        col = layout.box().column()
+        col.label(text=_('(Experimental) Add-on Update'), icon='ERROR')
+        addon_updater_ops.update_settings_ui_condensed(self, context, col)
 
         layout.separator()
         col = layout.column()
