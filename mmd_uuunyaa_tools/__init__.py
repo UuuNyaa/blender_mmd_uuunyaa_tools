@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-import importlib
+import importlib.util
 import os
 import sys
 import traceback
@@ -27,7 +27,7 @@ bl_info = {
     'name': 'mmd_uuunyaa_tools',
     'description': 'Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.',
     'author': 'UuuNyaa',
-    'version': (1, 0, 4),
+    'version': (1, 1, 0),
     'blender': (2, 83, 0),
     'warning': '',
     'location': 'View3D > Tool Shelf > MMD Tools Panel',
@@ -61,8 +61,8 @@ auto_load.init()
 
 
 def register():
+    addon_updater_ops.updater._addon_root = PACKAGE_PATH  # pylint: disable=protected-access
     addon_updater_ops.register(bl_info)
-    addon_updater_ops.updater._addon_root = PACKAGE_PATH
 
     auto_load.register()
     for hook in REGISTER_HOOKS:

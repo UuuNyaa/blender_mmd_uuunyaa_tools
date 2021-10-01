@@ -1302,7 +1302,7 @@ def select_link_function(self, tag):
     """
 
     # -- Default, universal case (and is the only option for GitLab/Bitbucket)
-    link = tag["zipball_url"]
+    link = tag["assets"][0]["browser_download_url"]
 
     # -- Example: select the first (or only) asset instead source code --
     # if "assets" in tag and "browser_download_url" in tag["assets"][0]:
@@ -1374,7 +1374,7 @@ def register(bl_info):
     # Addon subfolder path.
     # "sample/path/to/addon"
     # default is "" or None, meaning root
-    updater.subfolder_path = "mmd_uuunyaa_tools"
+    updater.subfolder_path = None
 
     # Used to check/compare versions.
     updater.current_version = bl_info["version"]
@@ -1395,7 +1395,7 @@ def register(bl_info):
     # 			/addons/{__package__}/{__package__}_updater
 
     # Auto create a backup of the addon when installing other versions.
-    updater.backup_current = True  # True by default
+    updater.backup_current = False  # True by default
 
     # Sample ignore patterns for when creating backup of current during update.
     updater.backup_ignore_patterns = ["__pycache__"]
@@ -1477,7 +1477,7 @@ def register(bl_info):
 
     # Used for development only, "pretend" to install an update to test
     # reloading conditions.
-    updater.fake_install = True  # Set to true to test callback/reloading.
+    updater.fake_install = False  # Set to true to test callback/reloading.
 
     # Show popups, ie if auto-check for update is enabled or a previous
     # check for update in user preferences found a new version, show a popup
@@ -1492,7 +1492,7 @@ def register(bl_info):
     # Set the min and max versions allowed to install.
     # Optional, default None
     # min install (>=) will install this and higher
-    updater.version_min_update = (0, 0, 0)
+    updater.version_min_update = (1, 1, 0)
     # updater.version_min_update = None  # None or default for no minimum.
 
     # Max install (<) will install strictly anything lower than this version

@@ -172,6 +172,10 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col = layout.box().column()
         col.prop(self, 'mmd_tools_translation_enabled')
 
+        col = layout.box().column()
+        col.label(text=_('(Experimental) Add-on Update'), icon='ERROR')
+        addon_updater_ops.update_settings_ui_condensed(self, context, col)
+
         layout.separator()
         col = layout.column()
         col.label(text=_('Credits:'))
@@ -181,5 +185,3 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         row.label(text=_('Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵.'))
         row.operator('wm.url_open', text=_(''), icon='URL').url = 'https://github.com/958261649/Miku_Miku_Rig'
         credit.label(text=_('It was ported with his permission.'))
-
-        addon_updater_ops.update_settings_ui(self, context)
