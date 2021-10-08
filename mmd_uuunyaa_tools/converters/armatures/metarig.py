@@ -211,7 +211,10 @@ class MetarigArmatureObject(ArmatureEditor):
         for metarig_bone in remove_metarig_edit_bones:
             metarig_edit_bones.remove(metarig_bone)
 
-    def set_rigify_parameters(self):
+    def set_rigify_parameters(self, mmd_armature_object: MMDArmatureObject):
+        # set basename
+        self.raw_armature.rigify_rig_basename = mmd_armature_object.mmd_model_name
+
         metarig_pose_bones = self.pose_bones
 
         # fix straight finger bend problem
