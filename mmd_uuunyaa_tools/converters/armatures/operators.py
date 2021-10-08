@@ -81,7 +81,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         metarig_object.fit_bones(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='POSE')
-        metarig_object.set_rigify_parameters()
+        metarig_object.set_rigify_parameters(mmd_armature_object)
 
         bpy.ops.object.mode_set(mode='OBJECT')
 

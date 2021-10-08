@@ -165,6 +165,8 @@ class MMDArmatureObject(ArmatureEditor):
     def __init__(self, mmd_armature_object: bpy.types.Object):
         super().__init__(mmd_armature_object)
 
+        self.mmd_model_name = import_mmd_tools().core.model.Model.findRoot(mmd_armature_object).mmd_root.name
+
         self.mmd_bone_names: Set[str] = set({b.mmd_bone_name for b in MMDBoneInfo})
         self.exist_strict_bone_names: Set[str] = {
             b.mmd_bone.name_j
@@ -249,13 +251,21 @@ class MMDArmatureObject(ArmatureEditor):
         if_far_then_set(mmd_edit_bones['右中指３'], tail=extend_toward_tail(mmd_edit_bones['右中指２'], 1.8))
         if_far_then_set(mmd_edit_bones['右薬指３'], tail=extend_toward_tail(mmd_edit_bones['右薬指２'], 1.8))
         if_far_then_set(mmd_edit_bones['右小指３'], tail=extend_toward_tail(mmd_edit_bones['右小指２'], 1.8))
-        if_far_then_set(mmd_edit_bones['右手首'], tail=extend_toward_tail(mmd_edit_bones['右ひじ'], 1.3))
 
         if_far_then_set(mmd_edit_bones['左親指２'], tail=extend_toward_tail(mmd_edit_bones['左親指１'], 1.8))
         if_far_then_set(mmd_edit_bones['左人指３'], tail=extend_toward_tail(mmd_edit_bones['左人指２'], 1.8))
         if_far_then_set(mmd_edit_bones['左中指３'], tail=extend_toward_tail(mmd_edit_bones['左中指２'], 1.8))
         if_far_then_set(mmd_edit_bones['左薬指３'], tail=extend_toward_tail(mmd_edit_bones['左薬指２'], 1.8))
         if_far_then_set(mmd_edit_bones['左小指３'], tail=extend_toward_tail(mmd_edit_bones['左小指２'], 1.8))
+
+
+        if MMDBoneType.WRIST_TWIST in self.exist_bone_types:
+            mmd_edit_bones['右手捩'].use_connect = False
+            mmd_edit_bones['左手捩'].use_connect = False
+            if_far_then_set(mmd_edit_bones['右ひじ'], tail=mmd_edit_bones['右手首'].head)
+            if_far_then_set(mmd_edit_bones['左ひじ'], tail=mmd_edit_bones['左手首'].head)
+
+        if_far_then_set(mmd_edit_bones['右手首'], tail=extend_toward_tail(mmd_edit_bones['右ひじ'], 1.3))
         if_far_then_set(mmd_edit_bones['左手首'], tail=extend_toward_tail(mmd_edit_bones['左ひじ'], 1.3))
 
         # spine chain
