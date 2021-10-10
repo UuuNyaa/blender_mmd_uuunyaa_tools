@@ -27,6 +27,7 @@ class MMDBoneType(Enum):
     HAND_ACCESSORIES = '手持ちアクセサリ用ダミー'
     SHOULDER_CANCEL = '肩キャンセル'
     THUMB_0 = '親指０'
+    PALM = '指０'
     OTHERS = 'その他・独自'
 
 
@@ -60,19 +61,19 @@ class MMDBoneInfo(Enum):
     左親指０ = (MMDBoneType.THUMB_0, '左親指０')
     左親指１ = (MMDBoneType.STANDARD, '左親指１')
     左親指２ = (MMDBoneType.STANDARD, '左親指２')
-    左人指０ = (MMDBoneType.OTHERS, '左人指０')
+    左人指０ = (MMDBoneType.PALM, '左人指０')
     左人指１ = (MMDBoneType.STANDARD, '左人指１')
     左人指２ = (MMDBoneType.STANDARD, '左人指２')
     左人指３ = (MMDBoneType.STANDARD, '左人指３')
-    左中指０ = (MMDBoneType.OTHERS, '左中指０')
+    左中指０ = (MMDBoneType.PALM, '左中指０')
     左中指１ = (MMDBoneType.STANDARD, '左中指１')
     左中指２ = (MMDBoneType.STANDARD, '左中指２')
     左中指３ = (MMDBoneType.STANDARD, '左中指３')
-    左薬指０ = (MMDBoneType.OTHERS, '左薬指０')
+    左薬指０ = (MMDBoneType.PALM, '左薬指０')
     左薬指１ = (MMDBoneType.STANDARD, '左薬指１')
     左薬指２ = (MMDBoneType.STANDARD, '左薬指２')
     左薬指３ = (MMDBoneType.STANDARD, '左薬指３')
-    左小指０ = (MMDBoneType.OTHERS, '左小指０')
+    左小指０ = (MMDBoneType.PALM, '左小指０')
     左小指１ = (MMDBoneType.STANDARD, '左小指１')
     左小指２ = (MMDBoneType.STANDARD, '左小指２')
     左小指３ = (MMDBoneType.STANDARD, '左小指３')
@@ -86,19 +87,19 @@ class MMDBoneInfo(Enum):
     右親指０ = (MMDBoneType.THUMB_0, '右親指０')
     右親指１ = (MMDBoneType.STANDARD, '右親指１')
     右親指２ = (MMDBoneType.STANDARD, '右親指２')
-    右人指０ = (MMDBoneType.OTHERS, '右人指０')
+    右人指０ = (MMDBoneType.PALM, '右人指０')
     右人指１ = (MMDBoneType.STANDARD, '右人指１')
     右人指２ = (MMDBoneType.STANDARD, '右人指２')
     右人指３ = (MMDBoneType.STANDARD, '右人指３')
-    右中指０ = (MMDBoneType.OTHERS, '右中指０')
+    右中指０ = (MMDBoneType.PALM, '右中指０')
     右中指１ = (MMDBoneType.STANDARD, '右中指１')
     右中指２ = (MMDBoneType.STANDARD, '右中指２')
     右中指３ = (MMDBoneType.STANDARD, '右中指３')
-    右薬指０ = (MMDBoneType.OTHERS, '右薬指０')
+    右薬指０ = (MMDBoneType.PALM, '右薬指０')
     右薬指１ = (MMDBoneType.STANDARD, '右薬指１')
     右薬指２ = (MMDBoneType.STANDARD, '右薬指２')
     右薬指３ = (MMDBoneType.STANDARD, '右薬指３')
-    右小指０ = (MMDBoneType.OTHERS, '右小指０')
+    右小指０ = (MMDBoneType.PALM, '右小指０')
     右小指１ = (MMDBoneType.STANDARD, '右小指１')
     右小指２ = (MMDBoneType.STANDARD, '右小指２')
     右小指３ = (MMDBoneType.STANDARD, '右小指３')
@@ -257,7 +258,6 @@ class MMDArmatureObject(ArmatureEditor):
         if_far_then_set(mmd_edit_bones['左中指３'], tail=extend_toward_tail(mmd_edit_bones['左中指２'], 1.8))
         if_far_then_set(mmd_edit_bones['左薬指３'], tail=extend_toward_tail(mmd_edit_bones['左薬指２'], 1.8))
         if_far_then_set(mmd_edit_bones['左小指３'], tail=extend_toward_tail(mmd_edit_bones['左小指２'], 1.8))
-
 
         if MMDBoneType.WRIST_TWIST in self.exist_bone_types:
             mmd_edit_bones['右手捩'].use_connect = False

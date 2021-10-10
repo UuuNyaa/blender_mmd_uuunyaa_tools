@@ -236,6 +236,10 @@ class EditBoneEditor(ABC):
     def to_center(left: Vector, right: Vector) -> Vector:
         return (left + right) / 2
 
+    @staticmethod
+    def to_stretch(from_: Vector, to_: Vector, stretch_factor: float) -> Vector:
+        return from_ + (to_ - from_) * stretch_factor
+
     @classmethod
     def to_bone_center(cls, bone: bpy.types.EditBone) -> Vector:
         return cls.to_center(bone.head, bone.tail)

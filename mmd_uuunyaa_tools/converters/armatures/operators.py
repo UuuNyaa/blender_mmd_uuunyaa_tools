@@ -360,7 +360,7 @@ class MMDRigifyConvert(bpy.types.Operator):
         rigify_armature_object = RigifyArmatureObject(context.active_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
-        rigify_armature_object.imitate_mmd_bone_structure(None)
+        rigify_armature_object.imitate_mmd_bone_structure()
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
@@ -432,7 +432,7 @@ class MMDAutoRigConvert(bpy.types.Operator):
         autorig_armature_object = AutoRigArmatureObject(context.active_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
-        autorig_armature_object.imitate_mmd_bone_structure(None)
+        autorig_armature_object.imitate_mmd_bone_structure()
 
         bpy.ops.object.mode_set(mode='POSE')
         autorig_armature_object.imitate_mmd_pose_behavior()

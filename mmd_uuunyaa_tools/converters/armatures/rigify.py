@@ -42,23 +42,23 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左ひじ, 'forearm_fk.L', 'ORG-forearm.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.左手捩, 'mmd_uuunyaa_wrist_twist_fk.L', None, GroupType.ARM_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左手首, 'hand_fk.L', 'ORG-hand.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.左親指０, 'thumb.01.L', 'ORG-thumb.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左親指０, 'thumb.01.L', 'ORG-thumb.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左親指１, 'thumb.02.L', 'ORG-thumb.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左親指２, 'thumb.03.L', 'ORG-thumb.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左人指０, None, 'ORG-palm.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左人指１, 'f_index.01.L', 'ORG-f_index.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左人指０, None, 'ORG-palm.01.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左人指１, 'f_index.01.L', 'ORG-f_index.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左人指２, 'f_index.02.L', 'ORG-f_index.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左人指３, 'f_index.03.L', 'ORG-f_index.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左中指０, None, 'ORG-palm.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左中指１, 'f_middle.01.L', 'ORG-f_middle.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左中指０, None, 'ORG-palm.02.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左中指１, 'f_middle.01.L', 'ORG-f_middle.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左中指２, 'f_middle.02.L', 'ORG-f_middle.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左中指３, 'f_middle.03.L', 'ORG-f_middle.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左薬指０, None, 'ORG-palm.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左薬指１, 'f_ring.01.L', 'ORG-f_ring.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左薬指０, None, 'ORG-palm.03.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左薬指１, 'f_ring.01.L', 'ORG-f_ring.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左薬指２, 'f_ring.02.L', 'ORG-f_ring.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左薬指３, 'f_ring.03.L', 'ORG-f_ring.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左小指０, None, 'ORG-palm.04.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.左小指１, 'f_pinky.01.L', 'ORG-f_pinky.01.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左小指０, None, 'ORG-palm.04.L', GroupType.ARM_L, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.左小指１, 'f_pinky.01.L', 'ORG-f_pinky.01.L', GroupType.ARM_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左小指２, 'f_pinky.02.L', 'ORG-f_pinky.02.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.左小指３, 'f_pinky.03.L', 'ORG-f_pinky.03.L', GroupType.ARM_L, MMDBindType.COPY_LOCAL),
 
@@ -71,20 +71,20 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.右親指０, 'thumb.01.R', 'ORG-thumb.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右親指１, 'thumb.02.R', 'ORG-thumb.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右親指２, 'thumb.03.R', 'ORG-thumb.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右人指０, None, 'ORG-palm.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右人指１, 'f_index.01.R', 'ORG-f_index.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右人指０, None, 'ORG-palm.01.R', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右人指１, 'f_index.01.R', 'ORG-f_index.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右人指２, 'f_index.02.R', 'ORG-f_index.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右人指３, 'f_index.03.R', 'ORG-f_index.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右中指０, None, 'ORG-palm.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右中指１, 'f_middle.01.R', 'ORG-f_middle.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右中指０, None, 'ORG-palm.02.R', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右中指１, 'f_middle.01.R', 'ORG-f_middle.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右中指２, 'f_middle.02.R', 'ORG-f_middle.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右中指３, 'f_middle.03.R', 'ORG-f_middle.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右薬指０, None, 'ORG-palm.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右薬指１, 'f_ring.01.R', 'ORG-f_ring.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右薬指０, None, 'ORG-palm.03.R', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右薬指１, 'f_ring.01.R', 'ORG-f_ring.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右薬指２, 'f_ring.02.R', 'ORG-f_ring.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右薬指３, 'f_ring.03.R', 'ORG-f_ring.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右小指０, None, 'ORG-palm.04.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
-        MMDBindInfo(MMDBoneInfo.右小指１, 'f_pinky.01.R', 'ORG-f_pinky.01.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右小指０, None, 'ORG-palm.04.R', GroupType.ARM_R, MMDBindType.COPY_POSE),
+        MMDBindInfo(MMDBoneInfo.右小指１, 'f_pinky.01.R', 'ORG-f_pinky.01.R', GroupType.ARM_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右小指２, 'f_pinky.02.R', 'ORG-f_pinky.02.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
         MMDBindInfo(MMDBoneInfo.右小指３, 'f_pinky.03.R', 'ORG-f_pinky.03.R', GroupType.ARM_R, MMDBindType.COPY_LOCAL),
 
@@ -535,7 +535,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         rig_edit_bones['thigh_fk.L'].layers = list(map(any, zip(rig_edit_bones['thigh_ik.L'].layers, rig_edit_bones['thigh_fk.L'].layers)))
         rig_edit_bones['thigh_fk.R'].layers = list(map(any, zip(rig_edit_bones['thigh_ik.R'].layers, rig_edit_bones['thigh_fk.R'].layers)))
 
-    def imitate_mmd_bone_structure(self, _: MMDArmatureObject):
+    def imitate_mmd_bone_structure(self):
         # pylint: disable=too-many-statements
         rig_edit_bones = self.edit_bones
 
@@ -1026,6 +1026,9 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
             self._fit_bone(wrist_twist_fk_l_bone, mmd_edit_bones, '左手捩')
             self._fit_bone(wrist_twist_fk_r_bone, mmd_edit_bones, '右手捩')
 
+        # adjust palm
+        self._adjust_palm_bone(mmd_armature_object, rig_edit_bones)
+
         # add Leg IKP (足IK親)
         leg_ik_parent_l_bone, leg_ik_parent_r_bone = self._add_leg_ik_parent_bones(rig_edit_bones)
         if MMDBoneType.LEG_IK_PARENT in mmd_armature_object.exist_bone_types:
@@ -1054,7 +1057,18 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
 
         self.imitate_mmd_face_bone_structure(mmd_armature_object)
 
-    def _adjust_toe_bones(self, mmd_armature_object, rig_edit_bones):
+    def _adjust_palm_bone(self, mmd_armature_object: MMDArmatureObject, rig_edit_bones: bpy.types.ArmatureEditBones):
+        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
+            return
+
+        mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.strict_edit_bones
+
+        rig_edit_bones['palm.L'].head = self.to_center(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左小指１'].head)
+        rig_edit_bones['palm.L'].tail = mmd_edit_bones['左小指１'].head
+        rig_edit_bones['palm.R'].head = self.to_center(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右小指１'].head)
+        rig_edit_bones['palm.R'].tail = mmd_edit_bones['右小指１'].head
+
+    def _adjust_toe_bones(self, mmd_armature_object: MMDArmatureObject, rig_edit_bones: bpy.types.ArmatureEditBones):
         # adjust toe (つま先)
         if MMDBoneType.TOE_EX not in mmd_armature_object.exist_bone_types:
             return
@@ -1066,7 +1080,7 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         rig_edit_bones['ORG-toe.R'].align_roll(mmd_edit_bones['左足先EX'].z_axis)
         rig_edit_bones['toe.R'].align_roll(mmd_edit_bones['右足先EX'].z_axis)
 
-    def _split_upper_and_lower_body(self, rig_edit_bones, mmd_edit_bones):
+    def _split_upper_and_lower_body(self, rig_edit_bones: bpy.types.ArmatureEditBones, mmd_edit_bones: bpy.types.ArmatureEditBones):
         # split spine.002 (上半身) and spine.001 (下半身)
         rig_edit_bones['ORG-spine.002'].use_connect = False
         rig_edit_bones['DEF-spine.002'].use_connect = False
@@ -1231,6 +1245,8 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
     def imitate_mmd_bone_structure_focus_on_rigify(self, mmd_armature_object: MMDArmatureObject):
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones
         mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.strict_edit_bones
+
+        self._adjust_palm_bone(mmd_armature_object, rig_edit_bones)
 
         self._adjust_toe_bones(mmd_armature_object, rig_edit_bones)
 

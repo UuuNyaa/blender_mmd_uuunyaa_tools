@@ -420,7 +420,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
 
         return shoulder_cancel_shadow_l_bone, shoulder_cancel_shadow_r_bone
 
-    def imitate_mmd_bone_structure(self, _: MMDArmatureObject):
+    def imitate_mmd_bone_structure(self):
         # pylint: disable=too-many-statements
         rig_edit_bones = self.edit_bones
 
