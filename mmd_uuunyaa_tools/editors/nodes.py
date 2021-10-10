@@ -10,7 +10,8 @@ from bpy.types import (NodeFrame, NodeSocket, ShaderNode, ShaderNodeBsdfGlass,
                        ShaderNodeBsdfPrincipled, ShaderNodeBsdfTransparent,
                        ShaderNodeBump, ShaderNodeGroup, ShaderNodeMath,
                        ShaderNodeMixShader, ShaderNodeOutputMaterial,
-                       ShaderNodeRGBCurve, ShaderNodeTexImage, ShaderNodeValue,
+                       ShaderNodeRGBCurve, ShaderNodeTexImage,
+                       ShaderNodeTexSky, ShaderNodeValue,
                        ShaderNodeVertexColor)
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.m17n import _
@@ -162,6 +163,12 @@ class NodeEditor:
             if isinstance(node, ShaderNodeValue):
                 for node_output in node.outputs:
                     col.prop(node_output, 'default_value', text=node_output.name)
+            elif isinstance(node, ShaderNodeTexSky):
+                if node.sky_type == 'HOSEK_WILKIE':
+                    col.label(text='Sun Direction')
+                    col.prop(node, 'sun_direction', text='')
+                    col.prop(node, 'turbidity')
+                    col.prop(node, 'ground_albedo')
             else:
                 for node_input in node.inputs:
                     if node_input.is_linked:
