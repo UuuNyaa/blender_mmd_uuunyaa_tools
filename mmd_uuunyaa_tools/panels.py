@@ -4,6 +4,7 @@
 
 import bpy
 
+from mmd_uuunyaa_tools.checkers.operators import CheckEeveeRenderingPerformance
 from mmd_uuunyaa_tools.converters.armatures.operators import (
     MMDArmatureAddMetarig, MMDAutoRigApplyMMDRestPose, MMDAutoRigConvert,
     MMDRigifyApplyMMDRestPose, MMDRigifyConvert, MMDRigifyIntegrateFocusOnMMD,
@@ -28,6 +29,7 @@ class OperatorPanel(bpy.types.Panel):
         col.label(text=_('Render:'), icon='SCENE_DATA')
         col.operator(SetupRenderEngineForEevee.bl_idname, icon='SCENE')
         col.operator(ConvertMaterialsForEevee.bl_idname, icon='NODE_MATERIAL')
+        col.operator(CheckEeveeRenderingPerformance.bl_idname, icon='MOD_TIME')
 
         col = layout.column(align=True)
         col.label(text=_('MMD to Rigify:'), icon='OUTLINER_OB_ARMATURE')

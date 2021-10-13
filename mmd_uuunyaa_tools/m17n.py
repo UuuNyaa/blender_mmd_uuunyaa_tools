@@ -128,6 +128,110 @@ translation_dict = {
     ("*", "Write to"): "書込み先",
     #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("Operator", "Update Assets JSON by query"): "アセットJSONをクエリで更新",
+    #: mmd_uuunyaa_tools/checkers/operators.py:15
+    ("Status", "Good"): "良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:16
+    ("Status", "Average"): "普通",
+    #: mmd_uuunyaa_tools/checkers/operators.py:17
+    ("Status", "Warning"): "警告",
+    #: mmd_uuunyaa_tools/checkers/operators.py:18
+    ("Status", "Poor"): "劣る",
+    #: mmd_uuunyaa_tools/checkers/operators.py:19
+    ("Status", "Bad"): "悪い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:20
+    ("Status", "Unknown"): "不明",
+    #: mmd_uuunyaa_tools/checkers/operators.py:52
+    ("Operator", "Check Eevee Rendering Performance"): "Eeveeレンダリングパフォーマンスチェック",
+    #: mmd_uuunyaa_tools/checkers/operators.py:64
+    ("*", "Blender Version"): "Blenderバージョン",
+    #: mmd_uuunyaa_tools/checkers/operators.py:68
+    ("*", ">= 2.93 LTS is Good"): ">= 2.93 LTSが良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:75
+    ("*", "Render Engine"): "レンダーエンジン",
+    #: mmd_uuunyaa_tools/checkers/operators.py:79
+    ("*", "= Eevee is Good"): "= Eeveeが良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:97
+    ("*", "Render Samples"): "レンダーのサンプル数",
+    #: mmd_uuunyaa_tools/checkers/operators.py:101 mmd_uuunyaa_tools/checkers/operators.py:112 mmd_uuunyaa_tools/checkers/operators.py:165
+    ("*", "<= 16 is Good"): "<= 16が良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:108
+    ("*", "Viewport Samples"): "ビューポートのサンプル数",
+    #: mmd_uuunyaa_tools/checkers/operators.py:119
+    ("*", "Use Ambient Occlusion"): "アンビエントオクルージョン(AO)を使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:123 mmd_uuunyaa_tools/checkers/operators.py:133 mmd_uuunyaa_tools/checkers/operators.py:143 mmd_uuunyaa_tools/checkers/operators.py:197 mmd_uuunyaa_tools/checkers/operators.py:218 mmd_uuunyaa_tools/checkers/operators.py:228 mmd_uuunyaa_tools/checkers/operators.py:238 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:258 mmd_uuunyaa_tools/checkers/operators.py:268 mmd_uuunyaa_tools/checkers/operators.py:278 mmd_uuunyaa_tools/checkers/operators.py:288 mmd_uuunyaa_tools/checkers/operators.py:298 mmd_uuunyaa_tools/checkers/operators.py:308 mmd_uuunyaa_tools/checkers/operators.py:318 mmd_uuunyaa_tools/checkers/operators.py:328 mmd_uuunyaa_tools/checkers/operators.py:338 mmd_uuunyaa_tools/checkers/operators.py:348 mmd_uuunyaa_tools/checkers/operators.py:358 mmd_uuunyaa_tools/checkers/operators.py:368 mmd_uuunyaa_tools/checkers/operators.py:378
+    ("*", "= False is Good"): "= Falseが良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:129 mmd_uuunyaa_tools/editors/operators.py:47
+    ("*", "Use Bloom"): "ブルームを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:139 mmd_uuunyaa_tools/editors/operators.py:48
+    ("*", "Use Motion Blur"): "モーションブラーを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:161
+    ("*", "Depth of Field Max Size"): "被写界深度最大サイズ",
+    #: mmd_uuunyaa_tools/checkers/operators.py:183
+    ("*", "Subsurface Scattering Samples"): "サブサーフェススキャッタリングサンプル数",
+    #: mmd_uuunyaa_tools/checkers/operators.py:187
+    ("*", "<= 4 is Good"): "<= 4が良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:193
+    ("*", "Use Screen Space Refraction"): "スクリーンスペース反射を使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:203
+    ("*", "Use Half Res Trace"): "半解像度トレースを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:207
+    ("*", "= True is Good"): "= Trueが良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:214
+    ("*", "Use Compositing"): "コンポジティングを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:224
+    ("*", "Pass Cryptomatte Object"): "Cryptomatteオブジェクトをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:234
+    ("*", "Pass Cryptomatte Material"): "Cryptomatteマテリアルをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:244
+    ("*", "Pass Cryptomatte Asset"): "Cryptomatteアセットをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:254
+    ("*", "Pass Glossy Light"): "スペキュラーライトをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:264
+    ("*", "Pass Diffuse Light"): "ディフューズライトをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:274
+    ("*", "Pass Emit"): "放射をパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:284
+    ("*", "Pass Glossy Color"): "スペキュラーカラーをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:294
+    ("*", "Pass Diffuse Color"): "ディフューズカラーをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:304
+    ("*", "Pass Shadow"): "影をパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:314
+    ("*", "Pass Ambient Occlusion"): "アンビエントオクルージョン(AO)をパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:324
+    ("*", "Pass Normal"): "ノーマルをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:334
+    ("*", "Pass Bloom"): "ブルームをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:344
+    ("*", "Pass Volume Light"): "ボリュームライトをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:354
+    ("*", "Pass Z"): "Zをパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:364
+    ("*", "Pass Environment"): "環境をパス",
+    #: mmd_uuunyaa_tools/checkers/operators.py:374
+    ("*", "Use Sequencer"): "シーケンサーを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
+    ("*", "= FFMPEG is Good"): "= FFMPEGが良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
+    ("*", "File Format"): "ファイルフォーマット",
+    #: mmd_uuunyaa_tools/checkers/operators.py:439
+    ("*", "Meshes Use Auto Smooth"): "メッシュが自動スムーズを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:443 mmd_uuunyaa_tools/checkers/operators.py:476
+    ("*", "= 0 is Good"): "= 0が良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:472
+    ("*", "Materials Use Alpha Hashed"): "マテリアルがアルファハッシュを使用",
+    #: mmd_uuunyaa_tools/checkers/operators.py:482
+    ("*", "Eevee Rendering Performance Checker"): "Eeveeレンダリングパフォーマンスチェッカー",
+    #: mmd_uuunyaa_tools/checkers/operators.py:542
+    ("*", "<= 0% is Good"): "<= 0%が良い",
+    #: mmd_uuunyaa_tools/checkers/operators.py:542
+    ("*", "Total Performance Impact"): "合計パフォーマンスインパクト",
+    #: mmd_uuunyaa_tools/checkers/operators.py:570
+    ("*", "Object with Impact Selection:"): "インパクトのあるオブジェクト選択:",
+    #: mmd_uuunyaa_tools/checkers/operators.py:585
+    ("Operator", "Select Mesh Objects with Use Auto Smooth"): "自動スムーズを使用するメッシュオブジェクトを選択",
+    #: mmd_uuunyaa_tools/checkers/operators.py:608
+    ("Operator", "Select Mesh Objects with Use Alpha Hashed"): "アルファハッシュを使用するメッシュオブジェクトを選択",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "MMDアーマチュアからHuman (metarig)を追加",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:22
@@ -156,7 +260,7 @@ translation_dict = {
     ("*", "Upper Body2 as"): "上半身２として",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:342
     ("*", "Lower Body as"): "下半身として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
     ("Operator", "Apply MMD Rest Pose"): "MMDレストポーズを適用",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
     ("*", "Iterations"): "反復",
@@ -398,37 +502,37 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
     ("Operator", "Scaled"): "スケール済",
     ("*", "Scaled"): "スケール済",
-    #: mmd_uuunyaa_tools/editors/nodes.py:225
+    #: mmd_uuunyaa_tools/editors/nodes.py:232
     ("*", "Skin Color Adjust"): "肌カラー調整",
-    #: mmd_uuunyaa_tools/editors/nodes.py:228 mmd_uuunyaa_tools/tuners/material_tuners.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:235 mmd_uuunyaa_tools/tuners/material_tuners.py:261
     ("*", "Skin Bump"): "肌 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:231
+    #: mmd_uuunyaa_tools/editors/nodes.py:238
     ("*", "Fabric Woven Texture"): "布地織物テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:234 mmd_uuunyaa_tools/tuners/material_tuners.py:389
+    #: mmd_uuunyaa_tools/editors/nodes.py:241 mmd_uuunyaa_tools/tuners/material_tuners.py:389
     ("*", "Fabric Bump"): "布地 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:237
+    #: mmd_uuunyaa_tools/editors/nodes.py:244
     ("*", "Wave Bump"): "波形バンプ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:240
+    #: mmd_uuunyaa_tools/editors/nodes.py:247
     ("*", "Magic Bump"): "マジックバンプ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:243
+    #: mmd_uuunyaa_tools/editors/nodes.py:250
     ("*", "Shadowless BSDF"): "影なしBSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:246
+    #: mmd_uuunyaa_tools/editors/nodes.py:253
     ("*", "Gem BSDF"): "宝石BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:249
+    #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Liquid BSDF"): "液体BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:252
+    #: mmd_uuunyaa_tools/editors/nodes.py:259
     ("*", "Knit Texture"): "編み物Bテクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:255
+    #: mmd_uuunyaa_tools/editors/nodes.py:262
     ("*", "Leather Texture"): "革テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:258
+    #: mmd_uuunyaa_tools/editors/nodes.py:265
     ("*", "Watercolor Texture"): "水彩画テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:268
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:264 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "サブサーフェス調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:267 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:274 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "ウエット調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:270 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:277 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射調節器",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
@@ -438,10 +542,6 @@ translation_dict = {
     ("Operator", "Setup Render Engine for Eevee"): "レンダーエンジンをEevee用に設定",
     #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "レンダーエンジンプロパティをEevee用に設定",
-    #: mmd_uuunyaa_tools/editors/operators.py:47
-    ("*", "Use Bloom"): "ブルームを使用",
-    #: mmd_uuunyaa_tools/editors/operators.py:48
-    ("*", "Use Motion Blur"): "モーションブラーを使用",
     #: mmd_uuunyaa_tools/editors/operators.py:49
     ("*", "Use Film Transparent"): "フィルム透過を使用",
     #: mmd_uuunyaa_tools/editors/operators.py:109
@@ -498,19 +598,19 @@ translation_dict = {
     ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:188
     ("*", "UuuNyaa Extras"): "UuuNyaaその他",
-    #: mmd_uuunyaa_tools/panels.py:18
+    #: mmd_uuunyaa_tools/panels.py:19
     ("*", "UuuNyaa Operator"): "UuuNyaaオペレーター",
-    #: mmd_uuunyaa_tools/panels.py:28
+    #: mmd_uuunyaa_tools/panels.py:29
     ("*", "Render:"): "レンダー:",
-    #: mmd_uuunyaa_tools/panels.py:33
+    #: mmd_uuunyaa_tools/panels.py:35
     ("*", "MMD to Rigify:"): "MMDからRigify:",
-    #: mmd_uuunyaa_tools/panels.py:36
+    #: mmd_uuunyaa_tools/panels.py:38
     ("Operator", "Add Metarig"): "メタリグを追加",
-    #: mmd_uuunyaa_tools/panels.py:53
+    #: mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
-    #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59
+    #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "MMD互換に変換",
-    #: mmd_uuunyaa_tools/panels.py:58
+    #: mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
@@ -862,6 +962,110 @@ translation_dict = {
     ("*", "Write to"): "写给",
     #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("Operator", "Update Assets JSON by query"): "通过查询更新资产JSON",
+    #: mmd_uuunyaa_tools/checkers/operators.py:15
+    ("*", "Good"): "良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:16
+    ("*", "Average"): "平均",
+    #: mmd_uuunyaa_tools/checkers/operators.py:17
+    ("*", "Warning"): "警告",
+    #: mmd_uuunyaa_tools/checkers/operators.py:18
+    ("*", "Poor"): "不好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:19
+    ("*", "Bad"): "不良",
+    #: mmd_uuunyaa_tools/checkers/operators.py:20
+    ("*", "Unknown"): "未知",
+    #: mmd_uuunyaa_tools/checkers/operators.py:52
+    ("Operator", "Check Eevee Rendering Performance"): "检查Eevee的渲染性能",
+    #: mmd_uuunyaa_tools/checkers/operators.py:64
+    ("*", "Blender Version"): "Blender版本",
+    #: mmd_uuunyaa_tools/checkers/operators.py:68
+    ("*", ">= 2.93 LTS is Good"): ">= 2.93 LTS是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:75
+    ("*", "Render Engine"): "渲染引擎",
+    #: mmd_uuunyaa_tools/checkers/operators.py:79
+    ("*", "= Eevee is Good"): "= Eevee是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:97
+    ("*", "Render Samples"): "渲染采样",
+    #: mmd_uuunyaa_tools/checkers/operators.py:101 mmd_uuunyaa_tools/checkers/operators.py:112 mmd_uuunyaa_tools/checkers/operators.py:165
+    ("*", "<= 16 is Good"): "<= 16是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:108
+    ("*", "Viewport Samples"): "视图采样",
+    #: mmd_uuunyaa_tools/checkers/operators.py:119
+    ("*", "Use Ambient Occlusion"): "使用环境光遮蔽 (AO)",
+    #: mmd_uuunyaa_tools/checkers/operators.py:123 mmd_uuunyaa_tools/checkers/operators.py:133 mmd_uuunyaa_tools/checkers/operators.py:143 mmd_uuunyaa_tools/checkers/operators.py:197 mmd_uuunyaa_tools/checkers/operators.py:218 mmd_uuunyaa_tools/checkers/operators.py:228 mmd_uuunyaa_tools/checkers/operators.py:238 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:258 mmd_uuunyaa_tools/checkers/operators.py:268 mmd_uuunyaa_tools/checkers/operators.py:278 mmd_uuunyaa_tools/checkers/operators.py:288 mmd_uuunyaa_tools/checkers/operators.py:298 mmd_uuunyaa_tools/checkers/operators.py:308 mmd_uuunyaa_tools/checkers/operators.py:318 mmd_uuunyaa_tools/checkers/operators.py:328 mmd_uuunyaa_tools/checkers/operators.py:338 mmd_uuunyaa_tools/checkers/operators.py:348 mmd_uuunyaa_tools/checkers/operators.py:358 mmd_uuunyaa_tools/checkers/operators.py:368 mmd_uuunyaa_tools/checkers/operators.py:378
+    ("*", "= False is Good"): "= False是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:129 mmd_uuunyaa_tools/editors/operators.py:47
+    ("*", "Use Bloom"): "使用辉光",
+    #: mmd_uuunyaa_tools/checkers/operators.py:139 mmd_uuunyaa_tools/editors/operators.py:48
+    ("*", "Use Motion Blur"): "使用运动模糊",
+    #: mmd_uuunyaa_tools/checkers/operators.py:161
+    ("*", "Depth of Field Max Size"): "景深最大尺寸",
+    #: mmd_uuunyaa_tools/checkers/operators.py:183
+    ("*", "Subsurface Scattering Samples"): "次表面散射采样",
+    #: mmd_uuunyaa_tools/checkers/operators.py:187
+    ("*", "<= 4 is Good"): "<= 4是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:193
+    ("*", "Use Screen Space Refraction"): "使用屏幕空间折射",
+    #: mmd_uuunyaa_tools/checkers/operators.py:203
+    ("*", "Use Half Res Trace"): "使用半精度追踪",
+    #: mmd_uuunyaa_tools/checkers/operators.py:207
+    ("*", "= True is Good"): "= True是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:214
+    ("*", "Use Compositing"): "使用合成处理",
+    #: mmd_uuunyaa_tools/checkers/operators.py:224
+    ("*", "Pass Cryptomatte Object"): "Cryptomatte物体通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:234
+    ("*", "Pass Cryptomatte Material"): "Cryptomatte材质通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:244
+    ("*", "Pass Cryptomatte Asset"): "Cryptomatte资源通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:254
+    ("*", "Pass Glossy Light"): "高光灯光通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:264
+    ("*", "Pass Diffuse Light"): "漫射灯光通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:274
+    ("*", "Pass Emit"): "自发光(发射)通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:284
+    ("*", "Pass Glossy Color"): "高光颜色通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:294
+    ("*", "Pass Diffuse Color"): "漫射颜色通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:304
+    ("*", "Pass Shadow"): "阴影通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:314
+    ("*", "Pass Ambient Occlusion"): "环境光遮蔽 (AO)通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:324
+    ("*", "Pass Normal"): "法向通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:334
+    ("*", "Pass Bloom"): "辉光通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:344
+    ("*", "Pass Volume Light"): "体积灯光通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:354
+    ("*", "Pass Z"): "Z通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:364
+    ("*", "Pass Environment"): "环境通道",
+    #: mmd_uuunyaa_tools/checkers/operators.py:374
+    ("*", "Use Sequencer"): "使用序列编辑器",
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
+    ("*", "= FFMPEG is Good"): "= FFMPEG是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
+    ("*", "File Format"): "文件格式",
+    #: mmd_uuunyaa_tools/checkers/operators.py:439
+    ("*", "Meshes Use Auto Smooth"): "网格使用自动平滑",
+    #: mmd_uuunyaa_tools/checkers/operators.py:443 mmd_uuunyaa_tools/checkers/operators.py:476
+    ("*", "= 0 is Good"): "= 0是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:472
+    ("*", "Materials Use Alpha Hashed"): "纹理使用Alpha Hashed",
+    #: mmd_uuunyaa_tools/checkers/operators.py:482
+    ("*", "Eevee Rendering Performance Checker"): "Eevee的渲染性能检查器",
+    #: mmd_uuunyaa_tools/checkers/operators.py:542
+    ("*", "<= 0% is Good"): "<= 0%是良好",
+    #: mmd_uuunyaa_tools/checkers/operators.py:542
+    ("*", "Total Performance Impact"): "总的性能影响",
+    #: mmd_uuunyaa_tools/checkers/operators.py:570
+    ("*", "Object with Impact Selection:"): "有影响的物体选:",
+    #: mmd_uuunyaa_tools/checkers/operators.py:585
+    ("Operator", "Select Mesh Objects with Use Auto Smooth"): "选择使用自动平滑的网格物体",
+    #: mmd_uuunyaa_tools/checkers/operators.py:608
+    ("Operator", "Select Mesh Objects with Use Alpha Hashed"): "选择使用Alpha Hashed的网格物体",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "从MMD骨架添加 Human (metarig)",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:22
@@ -890,7 +1094,7 @@ translation_dict = {
     ("*", "Upper Body2 as"): "上半身2为",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:342
     ("*", "Lower Body as"): "下半身为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
     ("Operator", "Apply MMD Rest Pose"): "应用MMD静置姿态",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
     ("*", "Iterations"): "迭代",
@@ -1132,37 +1336,37 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
     ("Operator", "Scaled"): "缩放过",
     ("*", "Scaled"): "缩放过",
-    #: mmd_uuunyaa_tools/editors/nodes.py:225
+    #: mmd_uuunyaa_tools/editors/nodes.py:232
     ("*", "Skin Color Adjust"): "皮肤色调整",
-    #: mmd_uuunyaa_tools/editors/nodes.py:228 mmd_uuunyaa_tools/tuners/material_tuners.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:235 mmd_uuunyaa_tools/tuners/material_tuners.py:261
     ("*", "Skin Bump"): "皮肤 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:231
+    #: mmd_uuunyaa_tools/editors/nodes.py:238
     ("*", "Fabric Woven Texture"): "织物编织纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:234 mmd_uuunyaa_tools/tuners/material_tuners.py:389
+    #: mmd_uuunyaa_tools/editors/nodes.py:241 mmd_uuunyaa_tools/tuners/material_tuners.py:389
     ("*", "Fabric Bump"): "织物 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:237
+    #: mmd_uuunyaa_tools/editors/nodes.py:244
     ("*", "Wave Bump"): "波浪凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:240
+    #: mmd_uuunyaa_tools/editors/nodes.py:247
     ("*", "Magic Bump"): "迷幻凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:243
+    #: mmd_uuunyaa_tools/editors/nodes.py:250
     ("*", "Shadowless BSDF"): "无影BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:246
+    #: mmd_uuunyaa_tools/editors/nodes.py:253
     ("*", "Gem BSDF"): "宝石BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:249
+    #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Liquid BSDF"): "液体BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:252
+    #: mmd_uuunyaa_tools/editors/nodes.py:259
     ("*", "Knit Texture"): "针织纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:255
+    #: mmd_uuunyaa_tools/editors/nodes.py:262
     ("*", "Leather Texture"): "皮革纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:258
+    #: mmd_uuunyaa_tools/editors/nodes.py:265
     ("*", "Watercolor Texture"): "水彩画纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:268
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:264 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "次表面调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:267 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:274 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "湿润调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:270 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:277 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射调整器",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
@@ -1172,10 +1376,6 @@ translation_dict = {
     ("Operator", "Setup Render Engine for Eevee"): "为Eevee设置渲染引擎",
     #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "为Eevee设置渲染引擎属性",
-    #: mmd_uuunyaa_tools/editors/operators.py:47
-    ("*", "Use Bloom"): "使用辉光",
-    #: mmd_uuunyaa_tools/editors/operators.py:48
-    ("*", "Use Motion Blur"): "使用运动模糊",
     #: mmd_uuunyaa_tools/editors/operators.py:49
     ("*", "Use Film Transparent"): "使用胶片透明",
     #: mmd_uuunyaa_tools/editors/operators.py:109
@@ -1232,19 +1432,19 @@ translation_dict = {
     ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:188
     ("*", "UuuNyaa Extras"): "UuuNyaa其他项",
-    #: mmd_uuunyaa_tools/panels.py:18
+    #: mmd_uuunyaa_tools/panels.py:19
     ("*", "UuuNyaa Operator"): "UuuNyaa操作项",
-    #: mmd_uuunyaa_tools/panels.py:28
+    #: mmd_uuunyaa_tools/panels.py:29
     ("*", "Render:"): "渲染:",
-    #: mmd_uuunyaa_tools/panels.py:33
+    #: mmd_uuunyaa_tools/panels.py:35
     ("*", "MMD to Rigify:"): "MMD到Rigify:",
-    #: mmd_uuunyaa_tools/panels.py:36
+    #: mmd_uuunyaa_tools/panels.py:38
     ("Operator", "Add Metarig"): "添加Metarig",
-    #: mmd_uuunyaa_tools/panels.py:53
+    #: mmd_uuunyaa_tools/panels.py:55
     ("*", "Rigify to MMD:"): "Rigify到MMD:",
-    #: mmd_uuunyaa_tools/panels.py:54 mmd_uuunyaa_tools/panels.py:59
+    #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "转换为MMD兼容",
-    #: mmd_uuunyaa_tools/panels.py:58
+    #: mmd_uuunyaa_tools/panels.py:60
     ("*", "(Experimental) Auto-Rig to MMD:"): "(试验特性) Auto-Rig到MMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
