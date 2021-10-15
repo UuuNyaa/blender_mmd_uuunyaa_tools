@@ -963,17 +963,17 @@ translation_dict = {
     #: mmd_uuunyaa_tools/asset_search/panels.py:489
     ("Operator", "Update Assets JSON by query"): "通过查询更新资产JSON",
     #: mmd_uuunyaa_tools/checkers/operators.py:15
-    ("*", "Good"): "良好",
+    ("Status", "Good"): "良好",
     #: mmd_uuunyaa_tools/checkers/operators.py:16
-    ("*", "Average"): "平均",
+    ("Status", "Average"): "平均",
     #: mmd_uuunyaa_tools/checkers/operators.py:17
-    ("*", "Warning"): "警告",
+    ("Status", "Warning"): "警告",
     #: mmd_uuunyaa_tools/checkers/operators.py:18
-    ("*", "Poor"): "不好",
+    ("Status", "Poor"): "不好",
     #: mmd_uuunyaa_tools/checkers/operators.py:19
-    ("*", "Bad"): "不良",
+    ("Status", "Bad"): "不良",
     #: mmd_uuunyaa_tools/checkers/operators.py:20
-    ("*", "Unknown"): "未知",
+    ("Status", "Unknown"): "未知",
     #: mmd_uuunyaa_tools/checkers/operators.py:52
     ("Operator", "Check Eevee Rendering Performance"): "检查Eevee的渲染性能",
     #: mmd_uuunyaa_tools/checkers/operators.py:64

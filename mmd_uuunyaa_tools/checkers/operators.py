@@ -455,7 +455,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         return CheckResult(
             _('Meshes Use Auto Smooth'),
             CheckResultStatus.GOOD if use_auto_smooth_mesh_count == 0 else CheckResultStatus.WARNING,
-            use_auto_smooth_mesh_count * 0.7,
+            min(use_auto_smooth_mesh_count * 0.7, 3),
             f'{use_auto_smooth_mesh_count} / {mesh_count}',
             _('= 0 is Good'),
             editable=False
@@ -488,7 +488,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         return CheckResult(
             _('Materials Use Alpha Hashed'),
             CheckResultStatus.GOOD if alpha_hashed_material_count == 0 else CheckResultStatus.WARNING,
-            alpha_hashed_material_count * 0.4,
+            min(alpha_hashed_material_count * 0.4, 2),
             f'{alpha_hashed_material_count} / {material_count}',
             _('= 0 is Good'),
             editable=False
@@ -568,7 +568,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
                 row.label(text='')
 
             row = row.split(factor=0.15, align=True)
-            row.label(text=result.status.value, icon=result.icon)
+            row.label(text=result.status.value, text_ctxt='Status', icon=result.icon)
             row = row.split(factor=0.75, align=True)
             if result.editable:
                 data, property_name = self.resolve_data_path(context, result.data_path)
