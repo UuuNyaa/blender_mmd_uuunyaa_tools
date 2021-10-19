@@ -211,7 +211,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/checkers/operators.py:374
     ("*", "Use Sequencer"): "シーケンサーを使用",
     #: mmd_uuunyaa_tools/checkers/operators.py:403
-    ("*", "= FFMPEG is Good"): "= FFMPEGが良い",
+    ("*", "= JPEG is Good"): "= JPEGが良い",
     #: mmd_uuunyaa_tools/checkers/operators.py:403
     ("*", "File Format"): "ファイルフォーマット",
     #: mmd_uuunyaa_tools/checkers/operators.py:439
@@ -1045,7 +1045,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/checkers/operators.py:374
     ("*", "Use Sequencer"): "使用序列编辑器",
     #: mmd_uuunyaa_tools/checkers/operators.py:403
-    ("*", "= FFMPEG is Good"): "= FFMPEG是良好",
+    ("*", "= JPEG is Good"): "= JPEG是良好",
     #: mmd_uuunyaa_tools/checkers/operators.py:403
     ("*", "File Format"): "文件格式",
     #: mmd_uuunyaa_tools/checkers/operators.py:439

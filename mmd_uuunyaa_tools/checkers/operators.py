@@ -417,7 +417,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         }
 
         status, impact = format_to_status[context.scene.render.image_settings.file_format]
-        return CheckResult(_('File Format'), status, impact, 'scene.render.image_settings.file_format', _('= FFMPEG is Good'))
+        return CheckResult(_('File Format'), status, impact, 'scene.render.image_settings.file_format', _('= JPEG is Good'))
 
     @staticmethod
     def resolve_data_path(context: bpy.types.Object, data_path: str) -> Tuple[bpy.types.Object, str]:
