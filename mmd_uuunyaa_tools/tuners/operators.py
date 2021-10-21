@@ -91,3 +91,30 @@ class DetachMaterialAdjuster(bpy.types.Operator):
     def execute(self, context):
         material_adjusters.ADJUSTERS[self.adjuster_name](context.object.active_material).detach_and_clean()
         return {'FINISHED'}
+
+
+try:
+    from mmd_uuunyaa_tools.tuners.geometry_nodes_tuners import (
+        TUNERS, GeometryNodesUtilities)
+
+    class TuneGeometryNodes(bpy.types.Operator):
+        bl_idname = 'mmd_uuunyaa_tools.tune_geometry_nodes'
+        bl_label = _('Tune Geometry Nodes')
+        bl_options = {'REGISTER', 'UNDO'}
+
+        geometry_nodes: bpy.props.EnumProperty(
+            items=TUNERS.to_enum_property_items(),
+        )
+
+        @classmethod
+        def poll(cls, context):
+            geometry_node_tree = GeometryNodesUtilities.find_geometry_node_tree(context.active_object)
+            return geometry_node_tree is not None
+
+        def execute(self, context):
+            TUNERS[self.geometry_nodes](
+                GeometryNodesUtilities.find_geometry_node_tree(context.active_object)
+            ).execute()
+            return {'FINISHED'}
+except ImportError:
+    print('[WARN] Geometry Nodes do not exist. Ignore it.')

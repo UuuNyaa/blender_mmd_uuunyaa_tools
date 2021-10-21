@@ -2,8 +2,9 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+
 import bpy
-from mmd_uuunyaa_tools.editors.nodes import MaterialEditor, NodeEditor
+from mmd_uuunyaa_tools.editors.nodes import MaterialEditor
 from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.tuners.lighting_tuners import LightingUtilities
 from mmd_uuunyaa_tools.tuners.material_adjusters import (
@@ -32,7 +33,7 @@ class SkyPanel(bpy.types.Panel):
     def draw(self, context: bpy.types.Context):
         world: bpy.types.World = context.scene.world
 
-        utilities = NodeEditor(world.node_tree)
+        utilities = MaterialEditor(world)
 
         layout = self.layout
 
@@ -45,7 +46,7 @@ class SkyPanel(bpy.types.Panel):
         if not scene_has_irradiance_volumes:
             layout.label(text=_('IrradianceVolume not found. Please add it.'), icon='ERROR')
 
-        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_frame=node_frame))
+        utilities.draw_setting_shader_node_properties(layout, utilities.list_nodes(node_frame=node_frame))
 
         col = layout.column(align=True)
         col.label(text=_('for Eevee lighting, check Render Properties.'))
@@ -141,7 +142,7 @@ class MaterialPanel(bpy.types.Panel):
         if node_frame is None:
             return
 
-        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
+        utilities.draw_setting_shader_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
 
 
 class MaterialAdjusterPanel(bpy.types.Panel):
@@ -183,4 +184,53 @@ class MaterialAdjusterPanel(bpy.types.Panel):
         if node_frame is None:
             return
 
-        utilities.draw_setting_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
+        utilities.draw_setting_shader_node_properties(layout, utilities.list_nodes(node_type=bpy.types.ShaderNodeGroup, node_frame=node_frame))
+
+
+try:
+    from mmd_uuunyaa_tools.editors.geometry_nodes import GeometryEditor
+    from mmd_uuunyaa_tools.tuners.geometry_nodes_tuners import \
+        GeometryNodesUtilities
+
+    class GeometryNodesPanel(bpy.types.Panel):
+        bl_idname = 'UUUNYAA_PT_geometry_nodes_panel'
+        bl_label = _('MMD UuuNyaa Geometry Nodes')
+        bl_space_type = 'PROPERTIES'
+        bl_region_type = 'WINDOW'
+        bl_context = 'modifier'
+
+        @classmethod
+        def poll(cls, context: bpy.types.Context):
+            active_object: bpy.types.Object = context.active_object
+            if active_object.type != 'MESH':
+                return False
+
+            return GeometryNodesUtilities.find_geometry_node_modifier(active_object) is not None
+
+        def draw(self, context: bpy.types.Context):
+            active_object: bpy.types.Object = context.active_object
+
+            modifier = GeometryNodesUtilities.find_geometry_node_modifier(active_object)
+            geometry_node_tree: bpy.types.GeometryNodeTree = modifier.node_group
+            mmd_uuunyaa_tools_geometry_nodes = geometry_node_tree.mmd_uuunyaa_tools_geometry_nodes
+
+            layout = self.layout
+            col = layout.column(align=True)
+
+            # Previews
+            row = col.row()
+            row.template_icon_view(mmd_uuunyaa_tools_geometry_nodes, 'thumbnails', show_labels=True)
+
+            # Modifier Name
+            row = col.row(align=True)
+            row.alignment = 'CENTER'
+            row.label(text=row.enum_item_name(mmd_uuunyaa_tools_geometry_nodes, 'thumbnails', mmd_uuunyaa_tools_geometry_nodes.thumbnails))
+
+            utilities = GeometryEditor(geometry_node_tree)
+            node_frame = utilities.find_node_frame()
+            if node_frame is None:
+                return
+
+            utilities.draw_setting_shader_node_properties(layout, utilities.list_nodes(node_type=bpy.types.GeometryNodeGroup, node_frame=node_frame))
+except ImportError:
+    print('[WARN] Geometry Nodes do not exist. Ignore it.')

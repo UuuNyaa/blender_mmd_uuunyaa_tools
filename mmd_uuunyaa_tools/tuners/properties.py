@@ -4,7 +4,7 @@
 
 import bpy
 from mmd_uuunyaa_tools.m17n import _
-from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners
+from mmd_uuunyaa_tools.tuners import lighting_tuners, material_tuners, geometry_nodes_tuners
 
 
 class LightingPropertyGroup(bpy.types.PropertyGroup):
@@ -47,3 +47,28 @@ class MaterialPropertyGroup(bpy.types.PropertyGroup):
     @staticmethod
     def unregister():
         del bpy.types.Material.mmd_uuunyaa_tools_material
+
+try:
+    from bpy.types import GeometryNodeTree
+
+    class GeometryNodesPropertyGroup(bpy.types.PropertyGroup):
+        @staticmethod
+        def update_geometry_nodes_thumbnails(prop: 'GeometryNodesPropertyGroup', _):
+            bpy.ops.mmd_uuunyaa_tools.tune_geometry_nodes(geometry_nodes=prop.thumbnails)  # pylint: disable=no-member
+
+        thumbnails: bpy.props.EnumProperty(
+            items=geometry_nodes_tuners.TUNERS.to_enum_property_items(),
+            description=_('Choose the geometry nodes you want to use'),
+            update=update_geometry_nodes_thumbnails.__func__,
+        )
+
+        @staticmethod
+        def register():
+            # pylint: disable=assignment-from-no-return
+            GeometryNodeTree.mmd_uuunyaa_tools_geometry_nodes = bpy.props.PointerProperty(type=GeometryNodesPropertyGroup)
+
+        @staticmethod
+        def unregister():
+            del GeometryNodeTree.mmd_uuunyaa_tools_geometry_nodes
+except ImportError:
+    print('[WARN] Geometry Nodes do not exist. Ignore it.')

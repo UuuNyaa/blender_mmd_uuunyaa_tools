@@ -236,7 +236,10 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_object(cls, context: bpy.types.Context) -> CheckResult:
+    def check_use_pass_cryptomatte_object(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+        if not hasattr(context.view_layer, 'use_pass_cryptomatte_object'):
+            return None
+
         return CheckResult(
             _('Pass Cryptomatte Object'),
             CheckResultStatus.BAD if context.view_layer.use_pass_cryptomatte_object else CheckResultStatus.GOOD,
@@ -246,7 +249,10 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_material(cls, context: bpy.types.Context) -> CheckResult:
+    def check_use_pass_cryptomatte_material(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+        if not hasattr(context.view_layer, 'use_pass_cryptomatte_material'):
+            return None
+
         return CheckResult(
             _('Pass Cryptomatte Material'),
             CheckResultStatus.BAD if context.view_layer.use_pass_cryptomatte_material else CheckResultStatus.GOOD,
@@ -256,7 +262,10 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_asset(cls, context: bpy.types.Context) -> CheckResult:
+    def check_use_pass_cryptomatte_asset(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+        if not hasattr(context.view_layer, 'use_pass_cryptomatte_asset'):
+            return None
+
         return CheckResult(
             _('Pass Cryptomatte Asset'),
             CheckResultStatus.BAD if context.view_layer.use_pass_cryptomatte_asset else CheckResultStatus.GOOD,
@@ -356,7 +365,10 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_volume_direct(cls, context: bpy.types.Context) -> CheckResult:
+    def check_use_pass_volume_direct(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+        if not hasattr(context.view_layer.eevee, 'use_pass_volume_direct'):
+            return None
+
         return CheckResult(
             _('Pass Volume Light'),
             CheckResultStatus.WARNING if context.view_layer.eevee.use_pass_volume_direct else CheckResultStatus.GOOD,
@@ -498,7 +510,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         layout: bpy.types.UILayout = self.layout
         layout.label(text=_('Eevee Rendering Performance Checker'), icon='MOD_TIME')
 
-        results = [
+        results = list(filter(lambda e: e is not None, [
             self.check_blender_version(context),
             self.check_render_engine(context),
 
@@ -538,7 +550,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
 
             self.check_meshes_use_auto_smooth(context),
             self.check_materials_method(context),
-        ]
+        ]))
 
         total_impact: float = 0.0
         for result in results:
