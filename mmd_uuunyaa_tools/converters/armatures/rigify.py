@@ -171,16 +171,16 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         constraint.name = 'mmd_uuunyaa_copy_location'
         constraint.target = target_object
         constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL_WITH_PARENT'
-        constraint.owner_space = 'LOCAL_WITH_PARENT'
+        constraint.target_space = 'POSE'
+        constraint.owner_space = 'POSE'
         add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
 
         constraint = pose_bone.constraints.new('COPY_ROTATION')
         constraint.name = 'mmd_uuunyaa_copy_rotation'
         constraint.target = target_object
         constraint.subtarget = subtarget
-        constraint.target_space = 'LOCAL_WITH_PARENT'
-        constraint.owner_space = 'LOCAL_WITH_PARENT'
+        constraint.target_space = 'POSE'
+        constraint.owner_space = 'POSE'
         add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
 
     @staticmethod
