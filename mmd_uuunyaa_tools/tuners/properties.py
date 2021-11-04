@@ -48,8 +48,10 @@ class MaterialPropertyGroup(bpy.types.PropertyGroup):
     def unregister():
         del bpy.types.Material.mmd_uuunyaa_tools_material
 
+
 try:
     from bpy.types import GeometryNodeTree
+    hasattr(geometry_nodes_tuners.TUNERS, 'to_enum_property_items')
 
     class GeometryNodesPropertyGroup(bpy.types.PropertyGroup):
         @staticmethod
@@ -72,3 +74,5 @@ try:
             del GeometryNodeTree.mmd_uuunyaa_tools_geometry_nodes
 except ImportError:
     print('[WARN] Geometry Nodes do not exist. Ignore it.')
+except AttributeError:
+    print('[WARN] Geometry Nodes are not initialized. Ignore it.')
