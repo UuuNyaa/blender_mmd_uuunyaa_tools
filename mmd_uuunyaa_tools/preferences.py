@@ -87,11 +87,6 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         default='{id}.json'
     )
 
-    mmd_tools_translation_enabled: bpy.props.BoolProperty(
-        name=_('Enable MMD Tools Translation (Reboot required)'),
-        default=True
-    )
-
     # Addon updater preferences.
     auto_check_update: bpy.props.BoolProperty(
         name='Auto-check for Update',
@@ -189,9 +184,6 @@ class MMDUuuNyaaToolsAddonPreferences(bpy.types.AddonPreferences):
         col.prop(self, 'asset_extract_root_folder')
         col.prop(self, 'asset_extract_folder')
         col.prop(self, 'asset_extract_json')
-
-        col = layout.box().column()
-        col.prop(self, 'mmd_tools_translation_enabled')
 
         col = layout.box().column()
         col.label(text=_('(Experimental) Add-on Update'), icon='ERROR')

@@ -93,18 +93,18 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左足D, None, 'DEF-thigh.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足, 'thigh_fk.L', 'DEF-thigh.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左ひざD, None, 'DEF-shin.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
-        MMDBindInfo(MMDBoneInfo.左ひざ, 'shin_fk.L', 'DEF-shin.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左ひざ, 'shin_fk.L', 'DEF-shin.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左足首D, None, 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
-        MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'foot_ik.L', 'foot_ik.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'DEF-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
 
         MMDBindInfo(MMDBoneInfo.右足D, None, 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足, 'thigh_fk.R', 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右ひざD, None, 'DEF-shin.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
-        MMDBindInfo(MMDBoneInfo.右ひざ, 'shin_fk.R', 'DEF-shin.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右ひざ, 'shin_fk.R', 'DEF-shin.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右足首D, None, 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
-        MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_LOCAL),
+        MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'foot_ik.R', 'foot_ik.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
         MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'DEF-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
 
@@ -902,20 +902,34 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
 
             if pose_legs:
                 # foot.L
-                pose_bones['mmd_uuunyaa_leg_ik_parent.L'].matrix = (
-                    pose_bones['mmd_uuunyaa_leg_ik_parent.L'].matrix
-                    @ Matrix.Translation(Vector([pose_bones['ORG-thigh.L'].head[0]-pose_bones['ORG-foot.L'].head[0], 0, 0]))
-                )
+                if 'mmd_uuunyaa_leg_ik_parent.L' in pose_bones:
+                    pose_bones['mmd_uuunyaa_leg_ik_parent.L'].matrix = (
+                        pose_bones['mmd_uuunyaa_leg_ik_parent.L'].matrix
+                        @ Matrix.Translation(Vector([pose_bones['ORG-thigh.L'].head[0]-pose_bones['ORG-foot.L'].head[0], 0, 0]))
+                    )
+                else:
+                    pose_bones['foot_ik.L'].matrix = (
+                        pose_bones['foot_ik.L'].matrix
+                        @ Matrix.Translation(Vector([pose_bones['ORG-thigh.L'].head[0]-pose_bones['ORG-foot.L'].head[0], 0, 0]))
+                    )
+
                 pose_bones['foot_ik.L'].matrix = (
                     pose_bones['foot_ik.L'].matrix
                     @ Matrix.Rotation(-pose_bones['ORG-foot.L'].matrix.to_euler().z, 4, 'Z')
                 )
 
                 # foot.R
-                pose_bones['mmd_uuunyaa_leg_ik_parent.R'].matrix = (
-                    pose_bones['mmd_uuunyaa_leg_ik_parent.R'].matrix
-                    @ Matrix.Translation(Vector([pose_bones['ORG-thigh.R'].head[0]-pose_bones['ORG-foot.R'].head[0], 0, 0]))
-                )
+                if 'mmd_uuunyaa_leg_ik_parent.R' in pose_bones:
+                    pose_bones['mmd_uuunyaa_leg_ik_parent.R'].matrix = (
+                        pose_bones['mmd_uuunyaa_leg_ik_parent.R'].matrix
+                        @ Matrix.Translation(Vector([pose_bones['ORG-thigh.R'].head[0]-pose_bones['ORG-foot.R'].head[0], 0, 0]))
+                    )
+                else:
+                    pose_bones['foot_ik.R'].matrix = (
+                        pose_bones['foot_ik.R'].matrix
+                        @ Matrix.Translation(Vector([pose_bones['ORG-thigh.R'].head[0]-pose_bones['ORG-foot.R'].head[0], 0, 0]))
+                    )
+
                 pose_bones['foot_ik.R'].matrix = (
                     pose_bones['foot_ik.R'].matrix
                     @ Matrix.Rotation(-pose_bones['ORG-foot.R'].matrix.to_euler().z, 4, 'Z')
