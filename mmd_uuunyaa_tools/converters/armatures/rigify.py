@@ -97,7 +97,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左足首D, None, 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'foot_ik.L', 'foot_ik.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'DEF-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'ORG-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
 
         MMDBindInfo(MMDBoneInfo.右足D, None, 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足, 'thigh_fk.R', 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
@@ -106,7 +106,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.右足首D, None, 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'foot_ik.R', 'foot_ik.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'DEF-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'ORG-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
 
         MMDBindInfo(MMDBoneInfo.左つま先ＩＫ, 'mmd_uuunyaa_toe_ik.L', 'mmd_uuunyaa_toe_ik.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右つま先ＩＫ, 'mmd_uuunyaa_toe_ik.R', 'mmd_uuunyaa_toe_ik.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
@@ -170,16 +170,16 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         constraint.name = 'mmd_uuunyaa_copy_location'
         constraint.target = target_object
         constraint.subtarget = subtarget
-        constraint.target_space = 'POSE'
-        constraint.owner_space = 'POSE'
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
         add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
 
         constraint = pose_bone.constraints.new('COPY_ROTATION')
         constraint.name = 'mmd_uuunyaa_copy_rotation'
         constraint.target = target_object
         constraint.subtarget = subtarget
-        constraint.target_space = 'POSE'
-        constraint.owner_space = 'POSE'
+        constraint.target_space = 'LOCAL'
+        constraint.owner_space = 'LOCAL'
         add_driver(constraint, target_object, influence_data_path, toe_bind_data_path)
 
     @staticmethod
