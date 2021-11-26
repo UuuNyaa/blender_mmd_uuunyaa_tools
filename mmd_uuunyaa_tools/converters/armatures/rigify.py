@@ -1221,7 +1221,12 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
             'mmd_uuunyaa_eye_fk.L', 'mmd_uuunyaa_eye_fk.R',
             'jaw_master',
         }
+
         rig_edit_bones: bpy.types.ArmatureEditBones = self.edit_bones
+
+        if 'ORG-face' not in rig_edit_bones:
+            return
+
         for rig_edit_bone in rig_edit_bones['ORG-face'].children_recursive:
             if rig_edit_bone.name in use_bone_names:
                 continue
@@ -1238,6 +1243,8 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
     def _hide_bones(self, hide_bone_names: Set[str]):
         rig_bones: bpy.types.ArmatureBones = self.bones
         for hide_bone_name in hide_bone_names:
+            if hide_bone_name not in rig_bones:
+                continue
             rig_bones[hide_bone_name].hide = True
 
     def fit_bone_rotations(self, mmd_armature_object: MMDArmatureObject):

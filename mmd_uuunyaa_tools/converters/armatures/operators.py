@@ -32,7 +32,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
         return MMDArmatureObject.is_mmd_armature_object(context.active_object)
 
-    def create_metarig_object(self) -> bpy.types.Object:
+    def _create_metarig_object(self) -> bpy.types.Object:
         original_cursor_location = bpy.context.scene.cursor.location
         try:
             # Rigifyのメタリグはどこに置いたとしても、
@@ -55,7 +55,7 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
         mmd_object = context.active_object
 
         try:
-            metarig_object = MetarigArmatureObject(self.create_metarig_object())
+            metarig_object = MetarigArmatureObject(self._create_metarig_object())
         except MessageException as ex:
             self.report(type={'ERROR'}, message=str(ex))
             return {'CANCELLED'}
@@ -77,6 +77,9 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
         if self.is_clean_armature:
             mmd_armature_object.clean_armature()
+        
+        if not mmd_armature_object.has_face_bones():
+            metarig_object.remove_face_bones()
 
         metarig_object.fit_bones(mmd_armature_object)
 

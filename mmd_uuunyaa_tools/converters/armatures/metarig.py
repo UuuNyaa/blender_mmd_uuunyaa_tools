@@ -20,6 +20,14 @@ class MetarigArmatureObject(ArmatureEditor):
         self.raw_object.scale = (scale, scale, scale)
         bpy.ops.object.transform_apply(scale=True)
 
+    def remove_face_bones(self):
+        metarig_edit_bones = self.edit_bones
+        metarig_face_bone = metarig_edit_bones['face']
+        for bone in metarig_face_bone.children_recursive:
+            metarig_edit_bones.remove(bone)
+
+        metarig_edit_bones.remove(metarig_face_bone)
+
     def fit_bones(self, mmd_armature_object: MMDArmatureObject):
         # pylint: disable=too-many-statements
         metarig_edit_bones = self.edit_bones
@@ -38,8 +46,9 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['spine.005'].tail = mmd_edit_bones['首'].tail
         metarig_edit_bones['spine.006'].tail = mmd_edit_bones['頭'].tail
 
-        metarig_edit_bones['face'].head = mmd_edit_bones['頭'].head
-        metarig_edit_bones['face'].tail = self.to_bone_center(mmd_edit_bones['頭'])
+        if mmd_armature_object.has_face_bones():
+            metarig_edit_bones['face'].head = mmd_edit_bones['頭'].head
+            metarig_edit_bones['face'].tail = self.to_bone_center(mmd_edit_bones['頭'])
 
         metarig_edit_bones['shoulder.L'].head = mmd_edit_bones['左肩'].head
         metarig_edit_bones['shoulder.L'].tail = mmd_edit_bones['左肩'].tail
@@ -243,7 +252,7 @@ class MetarigArmatureObject(ArmatureEditor):
         for metarig_bone in remove_metarig_edit_bones:
             metarig_edit_bones.remove(metarig_bone)
 
-    def set_rigify_parameters(self, mmd_armature_object: MMDArmatureObject):
+    def set_rigify_parameters(self, _mmd_armature_object: MMDArmatureObject):
         metarig_pose_bones = self.pose_bones
 
         # fix straight finger bend problem

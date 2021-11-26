@@ -187,6 +187,9 @@ class MMDArmatureObject(ArmatureEditor):
     def has_bone_type(self, bone_type: MMDBoneType) -> bool:
         return bone_type in self.exist_bone_types
 
+    def has_face_bones(self) -> bool:
+        return len(set(('両目', '左目', '右目')) & self.exist_strict_bone_names) == 3
+
     def to_strict_mmd_bone_name(self, actual_mmd_bone_name: str) -> str:
         return self.pose_bones[actual_mmd_bone_name].mmd_bone.name_j
 
