@@ -71,8 +71,7 @@ class AssetSearch(bpy.types.Operator):
     bl_options = {'INTERNAL'}
 
     @staticmethod
-    def _on_thumbnail_fetched(context, region, update_time, asset, content):
-        search_result = context.scene.mmd_uuunyaa_tools_asset_search.result
+    def _on_thumbnail_fetched(search_result, region, update_time, asset, content):
         if search_result.update_time != update_time:
             return
 
@@ -122,7 +121,7 @@ class AssetSearch(bpy.types.Operator):
         for asset in search_results[:max_search_result_count]:
             CONTENT_CACHE.async_get_content(
                 asset.thumbnail_url,
-                functools.partial(self._on_thumbnail_fetched, context, context.region, update_time, asset)
+                functools.partial(self._on_thumbnail_fetched, result, context.region, update_time, asset)
             )
 
         tag_names = set()
