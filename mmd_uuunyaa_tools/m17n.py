@@ -1465,7 +1465,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
     ("Operator", "Convert to MMD compatible"): "转换为MMD兼容",
     #: mmd_uuunyaa_tools/panels.py:60
-    ("*", "(Experimental) Auto-Rig to MMD:"): "(试验特性) Auto-Rig到MMD:",
+    ("*", "(Experimental) Auto-Rig to MMD:"): "(实验的) Auto-Rig到MMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
     #: mmd_uuunyaa_tools/preferences.py:23
@@ -1545,7 +1545,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/preferences.py:177
     ("*", "Asset Cache Usage:"): "资产缓存使用情况",
     #: mmd_uuunyaa_tools/preferences.py:197
-    ("*", "(Experimental) Add-on Update"): "(试验特性) 插件更新",
+    ("*", "(Experimental) Add-on Update"): "(实验的) 插件更新",
     #: mmd_uuunyaa_tools/preferences.py:202
     ("*", "Credits:"): "版权:",
     #: mmd_uuunyaa_tools/preferences.py:206
