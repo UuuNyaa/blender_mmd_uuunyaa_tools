@@ -27,10 +27,10 @@ bl_info = {
     'name': 'mmd_uuunyaa_tools',
     'description': 'Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.',
     'author': 'UuuNyaa',
-    'version': (1, 1, 11),
+    'version': (1, 1, 12),
     'blender': (2, 83, 0),
     'warning': '',
-    'location': 'View3D > Tool Shelf > MMD Tools Panel',
+    'location': 'View3D > Sidebar > MMD Tools Panel',
     'wiki_url': 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/wiki',
     'tracker_url': 'https://github.com/UuuNyaa/blender_mmd_uuunyaa_tools/issues',
     'support': 'COMMUNITY',
@@ -39,7 +39,7 @@ bl_info = {
 
 _translation_texts = [
     _('Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!.'),
-    _('View3D > Tool Shelf > MMD Tools Panel'),
+    _('View3D > Sidebar > MMD Tools Panel'),
 ]
 
 PACKAGE_PATH = os.path.dirname(__file__)

@@ -568,9 +568,10 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         shin_ik_r_bone.ik_min_z = math.radians(-180)
         shin_ik_r_bone.ik_max_z = math.radians(0)
 
-        def add_custom_shape_scale_driver(pose_bone: bpy.types.PoseBone, leg_ik_fk_data_path: str, leg_mmd_uuunyaa_data_path: str):
-            pose_bone.driver_remove('custom_shape_scale')
-            driver: bpy.types.Driver = pose_bone.driver_add('custom_shape_scale').driver
+        def add_bone_hide_driver(pose_bone: bpy.types.PoseBone, leg_ik_fk_data_path: str, leg_mmd_uuunyaa_data_path: str):
+            pose_bone.bone.driver_remove('hide')
+            driver: bpy.types.Driver = pose_bone.bone.driver_add('hide').driver
+
             leg_ik_fk_variable: bpy.types.DriverVariable = driver.variables.new()
             leg_ik_fk_variable.name = 'mmd_uuunyaa_leg_ik_fk'
             leg_ik_fk_variable.targets[0].id = self.raw_object
@@ -585,8 +586,8 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         leg_l_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_L_IK_FK].data_path}'
         leg_r_ik_fk_data_path = f'pose.bones{self.datapaths[ControlType.LEG_R_IK_FK].data_path}'
 
-        add_custom_shape_scale_driver(pose_bones['c_leg_pole.l'], leg_l_ik_fk_data_path, leg_l_mmd_uuunyaa_data_path)
-        add_custom_shape_scale_driver(pose_bones['c_leg_pole.r'], leg_r_ik_fk_data_path, leg_r_mmd_uuunyaa_data_path)
+        add_bone_hide_driver(pose_bones['c_leg_pole.l'], leg_l_ik_fk_data_path, leg_l_mmd_uuunyaa_data_path)
+        add_bone_hide_driver(pose_bones['c_leg_pole.r'], leg_r_ik_fk_data_path, leg_r_mmd_uuunyaa_data_path)
 
         for constraint in list_constraints(pose_bones['c_foot_ik.l'], 'CHILD_OF'):
             self.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
@@ -655,7 +656,10 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
 
         for bone_name, custom_shape_name, custom_shape_scale, bone_group_name in bone_widgets:
             pose_bones[bone_name].custom_shape = bpy.data.objects[custom_shape_name]
-            pose_bones[bone_name].custom_shape_scale = custom_shape_scale
+            if hasattr(pose_bones[bone_name], 'custom_shape_scale_xyz'):
+                pose_bones[bone_name].custom_shape_scale_xyz = [custom_shape_scale, custom_shape_scale, custom_shape_scale]
+            else: # SUPPORT_UNTIL: 3.3 LTS
+                pose_bones[bone_name].custom_shape_scale = custom_shape_scale
             pose_bones[bone_name].bone_group = rig_bone_groups[bone_group_name]
 
         if not self.has_face_bones():

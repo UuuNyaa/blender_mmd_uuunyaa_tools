@@ -852,7 +852,10 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
 
         for bone_name, custom_shape_name, custom_shape_scale, bone_group_name in bone_widgets:
             pose_bones[bone_name].custom_shape = bpy.data.objects[custom_shape_name]
-            pose_bones[bone_name].custom_shape_scale = custom_shape_scale
+            if hasattr(pose_bones[bone_name], 'custom_shape_scale_xyz'):
+                pose_bones[bone_name].custom_shape_scale_xyz = [custom_shape_scale, custom_shape_scale, custom_shape_scale]
+            else: # SUPPORT_UNTIL: 3.3 LTS
+                pose_bones[bone_name].custom_shape_scale = custom_shape_scale
             pose_bones[bone_name].bone_group = rig_bone_groups[bone_group_name]
 
         if not self.has_face_bones():

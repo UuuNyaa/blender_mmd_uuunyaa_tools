@@ -27,7 +27,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/__init__.py:41
     ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "MMDモデル＆シーン編集のためのユーティリティーツールです。by Uuu(/>ω<)/Nyaa!",
     #: mmd_uuunyaa_tools/__init__.py:42
-    ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3Dビュー > サイドバー > MMD Toolsパネル",
+    ("*", "View3D > Sidebar > MMD Tools Panel"): "3Dビュー > サイドバー > MMD Toolsパネル",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "SmutBaseからのアセットダウンロードに失敗しました。レスポンスフォーマットが変わっている可能性があります。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:100
@@ -875,7 +875,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/__init__.py:41
     ("*", "Utility tools for MMD model & scene editing by Uuu(/>ω<)/Nyaa!."): "用于MMD模型和场景编辑的实用工具。by Uuu(/>ω<)/Nyaa!",
     #: mmd_uuunyaa_tools/__init__.py:42
-    ("*", "View3D > Tool Shelf > MMD Tools Panel"): "3D视图 > 侧栏 > MMD Tools面板",
+    ("*", "View3D > Sidebar > MMD Tools Panel"): "3D视图 > 侧栏 > MMD Tools面板",
     #: mmd_uuunyaa_tools/asset_search/actions.py:73
     ("*", "Failed to download assets from SmutBase. The response format may have changed."): "从SmutBase下载资产失败。响应格式可能已经改变。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:100
