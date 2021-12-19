@@ -29,51 +29,50 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
         col = layout.column(align=True)
         col.label(text=_('Relevant Selection:'), icon='RESTRICT_SELECT_OFF')
 
-        col = col.grid_flow()
-        row = col.split(factor=0.9, align=True)
-        row.operator_context = 'EXEC_DEFAULT'
-        operator = row.operator('mmd_tools.rigid_body_select', text=_('Select Rigid Body'), icon='RIGID_BODY')
-        operator.properties = set(['collision_group_number', 'shape'])
-        row.operator_context = 'INVOKE_DEFAULT'
-        row.operator('rigidbody.objects_remove', text=_(''), icon='TRASH')
-
-        row = col.split(factor=0.9, align=True)
-        row.operator(SelectCollisionMesh.bl_idname, text=_('Select Collision Mesh'), icon='MOD_PHYSICS')
+        grid = col.grid_flow(row_major=True)
+        row = grid.row(align=True)
+        row.label(text=_('Collision Mesh'), icon='MOD_PHYSICS')
+        row.operator(SelectCollisionMesh.bl_idname, text=_(''), icon='RESTRICT_SELECT_OFF')
         row.operator(RemoveMeshCollision.bl_idname, text=_(''), icon='TRASH')
-
-        row = col.split(factor=0.9, align=True)
-        row.operator(SelectClothMesh.bl_idname, text=_('Select Cloth Mesh'), icon='MOD_CLOTH')
-        row.operator(RemoveMeshCloth.bl_idname, text=_(''), icon='TRASH')
 
         mmd_root_object = mmd_tools.core.model.Model.findRoot(context.active_object)
         if mmd_root_object is None:
             col = layout.column(align=True)
             col.label(text=_('MMD Model is not selected.'), icon='ERROR')
-        else:
-            mmd_root = mmd_root_object.mmd_root
+            return
 
-            col = layout.column(align=True)
-            col.label(text=_('Visibility:'), icon='HIDE_OFF')
-            row = col.grid_flow(align=True)
-            row.prop(mmd_root, 'show_meshes', text=_('Mesh'), toggle=True)
-            row.prop(mmd_root, 'show_armature', text=_('Armature'), toggle=True)
-            row.prop(mmd_root, 'show_rigid_bodies', text=_('Rigid Body'), toggle=True)
-            row.prop(mmd_root_object, 'mmd_uuunyaa_tools_show_cloths', text=_('Cloth'), toggle=True)
+        mmd_root = mmd_root_object.mmd_root
 
-            col = layout.column(align=True)
-            col.label(text=_('Converter:'), icon='SHADERFX')
+        row = grid.row(align=True)
+        row.label(text=_('Rigid Body'), icon='RIGID_BODY')
+        row.operator_context = 'EXEC_DEFAULT'
+        operator = row.operator('mmd_tools.rigid_body_select', text=_(''), icon='RESTRICT_SELECT_OFF')
+        operator.properties = set(['collision_group_number', 'shape'])
+        row.operator_context = 'INVOKE_DEFAULT'
+        row.prop(mmd_root, 'show_rigid_bodies', toggle=True, icon_only=True, icon='HIDE_OFF' if mmd_root.show_rigid_bodies else 'HIDE_ON')
+        row.operator('rigidbody.objects_remove', text=_(''), icon='TRASH')
 
-            row = col.split(factor=0.9, align=True)
-            row.operator_context = 'EXEC_DEFAULT'
-            row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_('Rigid Body to Cloth'), icon='MATCLOTH')
-            row.operator_context = 'INVOKE_DEFAULT'
-            row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
+        row = grid.row(align=True)
+        row.label(text=_('Cloth Mesh'), icon='MOD_CLOTH')
+        row.operator(SelectClothMesh.bl_idname, text=_(''), icon='RESTRICT_SELECT_OFF')
+        row.prop(mmd_root_object, 'mmd_uuunyaa_tools_show_cloths', toggle=True, icon_only=True, icon='HIDE_OFF' if mmd_root_object.mmd_uuunyaa_tools_show_cloths else 'HIDE_ON')
+        row.operator(RemoveMeshCloth.bl_idname, text=_(''), icon='TRASH')
+
+        col = layout.column(align=True)
+        col.label(text=_('Converter:'), icon='SHADERFX')
+
+        row = col.row(align=True)
+        row.operator_context = 'EXEC_DEFAULT'
+        row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_('Rigid Body to Cloth'), icon='MATCLOTH')
+        row.operator_context = 'INVOKE_DEFAULT'
+        row.operator(ConvertRigidBodyToClothOperator.bl_idname, text=_(''), icon='WINDOW')
 
         col = layout.column(align=True)
         col.label(text=_('Pyramid Cloth:'), icon='MESH_CONE')
-        col.operator(AddPyramidMeshByBreastBoneOperator.bl_idname, text=_('Add Pyramid'), icon='CONE')
-        col.operator(ConvertPyramidMeshToClothOperator.bl_idname, text=_('Pyramid to Cloth'), icon='MOD_CLOTH')
-        col.operator(AssignPyramidWeightsOperator.bl_idname, text=_('Repaint Weight'), icon='WPAINT_HLT')
+        grid = col.grid_flow(row_major=True, align=True)
+        grid.row(align=True).operator(AddPyramidMeshByBreastBoneOperator.bl_idname, text=_('Add Pyramid'), icon='CONE')
+        grid.row(align=True).operator(ConvertPyramidMeshToClothOperator.bl_idname, text=_('Pyramid to Cloth'), icon='MOD_CLOTH')
+        grid.row(align=True).operator(AssignPyramidWeightsOperator.bl_idname, text=_('Repaint Weight'), icon='WPAINT_HLT')
 
     @staticmethod
     def _toggle_visibility_of_cloths(obj, context):
