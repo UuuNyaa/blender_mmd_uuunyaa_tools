@@ -24,6 +24,7 @@ class MMDBoneType(Enum):
     LEG_IK_PARENT = '足IK親'
     CONTROL = '操作中心'
     TOE_EX = '足先EX'
+    LEG_D = '足D'
     HAND_ACCESSORIES = '手持ちアクセサリ用ダミー'
     SHOULDER_CANCEL = '肩キャンセル'
     THUMB_0 = '親指０'
@@ -112,9 +113,9 @@ class MMDBoneInfo(Enum):
     左足ＩＫ = (MMDBoneType.STANDARD, '左足ＩＫ')
 
     左足先EX = (MMDBoneType.TOE_EX, '左足先EX')
-    左足D = (MMDBoneType.TOE_EX, '左足D')
-    左ひざD = (MMDBoneType.TOE_EX, '左ひざD')
-    左足首D = (MMDBoneType.TOE_EX, '左足首D')
+    左足D = (MMDBoneType.LEG_D, '左足D')
+    左ひざD = (MMDBoneType.LEG_D, '左ひざD')
+    左足首D = (MMDBoneType.LEG_D, '左足首D')
 
     右足 = (MMDBoneType.STANDARD, '右足')
     右ひざ = (MMDBoneType.STANDARD, '右ひざ')
@@ -122,9 +123,9 @@ class MMDBoneInfo(Enum):
     右足ＩＫ = (MMDBoneType.STANDARD, '右足ＩＫ')
 
     右足先EX = (MMDBoneType.TOE_EX, '右足先EX')
-    右足D = (MMDBoneType.TOE_EX, '右足D')
-    右ひざD = (MMDBoneType.TOE_EX, '右ひざD')
-    右足首D = (MMDBoneType.TOE_EX, '右足首D')
+    右足D = (MMDBoneType.LEG_D, '右足D')
+    右ひざD = (MMDBoneType.LEG_D, '右ひざD')
+    右足首D = (MMDBoneType.LEG_D, '右足首D')
 
     左つま先ＩＫ = (MMDBoneType.STANDARD, '左つま先ＩＫ')
     右つま先ＩＫ = (MMDBoneType.STANDARD, '右つま先ＩＫ')
