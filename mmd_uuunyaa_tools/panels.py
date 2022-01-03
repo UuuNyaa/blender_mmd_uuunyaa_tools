@@ -27,25 +27,27 @@ class OperatorPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text=_('Render:'), icon='SCENE_DATA')
-        col.operator(SetupRenderEngineForEevee.bl_idname, icon='SCENE')
-        col.operator(ConvertMaterialsForEevee.bl_idname, icon='NODE_MATERIAL')
-        col.operator(CheckEeveeRenderingPerformance.bl_idname, icon='MOD_TIME')
+        grid = col.grid_flow(row_major=True, align=True)
+        grid.row(align=True).operator(SetupRenderEngineForEevee.bl_idname, icon='SCENE')
+        grid.row(align=True).operator(ConvertMaterialsForEevee.bl_idname, icon='NODE_MATERIAL')
+        grid.row(align=True).operator(CheckEeveeRenderingPerformance.bl_idname, icon='MOD_TIME')
 
         col = layout.column(align=True)
         col.label(text=_('MMD to Rigify:'), icon='OUTLINER_OB_ARMATURE')
-        row = col.split(factor=0.9, align=True)
+        grid = col.grid_flow(row_major=True, align=True)
+        row = grid.row(align=True)
         row.operator_context = 'EXEC_DEFAULT'
         row.operator(MMDArmatureAddMetarig.bl_idname, text=_('Add Metarig'), icon='ADD').is_clean_armature = True
         row.operator_context = 'INVOKE_DEFAULT'
         row.operator(MMDArmatureAddMetarig.bl_idname, text=_(''), icon='WINDOW')
 
-        row = col.split(factor=0.9, align=True)
+        row = grid.row(align=True)
         row.operator_context = 'EXEC_DEFAULT'
         row.operator(MMDRigifyIntegrateFocusOnMMD.bl_idname, icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
         row.operator(MMDRigifyIntegrateFocusOnMMD.bl_idname, text=_(''), icon='WINDOW')
 
-        row = col.split(factor=0.9, align=True)
+        row = grid.row(align=True)
         row.operator_context = 'EXEC_DEFAULT'
         row.operator(MMDRigifyIntegrateFocusOnRigify.bl_idname, icon='GROUP_BONE').is_join_armatures = True
         row.operator_context = 'INVOKE_DEFAULT'
@@ -53,11 +55,11 @@ class OperatorPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text=_('Rigify to MMD:'), icon='OUTLINER_OB_ARMATURE')
-        col.operator(MMDRigifyConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
-        col.separator()
-        col.operator(MMDRigifyApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))
+        grid = col.grid_flow(row_major=True, align=True)
+        grid.row(align=True).operator(MMDRigifyConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
+        grid.row(align=True).operator(MMDRigifyApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))
 
         col.label(text=_('(Experimental) Auto-Rig to MMD:'), icon='OUTLINER_OB_ARMATURE')
-        col.operator(MMDAutoRigConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
-        col.separator()
-        col.operator(MMDAutoRigApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))
+        grid = col.grid_flow(row_major=True, align=True)
+        grid.row(align=True).operator(MMDAutoRigConvert.bl_idname, text=_('Convert to MMD compatible'), icon='ARMATURE_DATA')
+        grid.row(align=True).operator(MMDAutoRigApplyMMDRestPose.bl_idname, text=_('Apply MMD Rest Pose'))

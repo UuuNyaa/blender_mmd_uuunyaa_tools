@@ -321,6 +321,7 @@ class RemoveMeshCloth(bpy.types.Operator):
 class ConvertRigidBodyToClothOperator(bpy.types.Operator):
     bl_idname = 'mmd_uuunyaa_tools.convert_rigid_body_to_cloth'
     bl_label = _('Convert Rigid Body to Cloth')
+    bl_description = _('Select both the mesh to be deformed and the rigid body')
     bl_options = {'REGISTER', 'UNDO'}
 
     subdivision_level: bpy.props.IntProperty(name=_('Subdivision Levels'), min=0, max=5, default=0)

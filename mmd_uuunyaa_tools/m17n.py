@@ -64,69 +64,69 @@ translation_dict = {
     ("Operator", "Delete Debug Asset JSON"): "デバッグアセットJSONを削除",
     #: mmd_uuunyaa_tools/asset_search/operators.py:72
     ("Operator", "Delete Asset Cached Files"): "アセットキャッシュファイルを削除",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:267
+    #: mmd_uuunyaa_tools/asset_search/panels.py:266
     ("*", "Type:"): "タイプ:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:268
+    #: mmd_uuunyaa_tools/asset_search/panels.py:267
     ("*", "ID:"): "ID:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:270
+    #: mmd_uuunyaa_tools/asset_search/panels.py:269
     ("*", "Name:"): "名前:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:271
+    #: mmd_uuunyaa_tools/asset_search/panels.py:270
     ("*", "Aliases:"): "別名:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:272 mmd_uuunyaa_tools/asset_search/panels.py:349
+    #: mmd_uuunyaa_tools/asset_search/panels.py:271 mmd_uuunyaa_tools/asset_search/panels.py:348
     ("*", "Tags:"): "タグ:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:273
+    #: mmd_uuunyaa_tools/asset_search/panels.py:272
     ("*", "Updated at:"): "更新時刻",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:274
+    #: mmd_uuunyaa_tools/asset_search/panels.py:273
     ("*", "Note:"): "メモ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:276
+    #: mmd_uuunyaa_tools/asset_search/panels.py:275
     ("*", "Source:"): "配信元:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:281
+    #: mmd_uuunyaa_tools/asset_search/panels.py:280
     ("Operator", "Download"): "ダウンロード",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284
+    #: mmd_uuunyaa_tools/asset_search/panels.py:283
     ("*", "Downloading"): "ダウンロード中",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/converters/physics/cloth.py:177
+    #: mmd_uuunyaa_tools/asset_search/panels.py:283 mmd_uuunyaa_tools/asset_search/panels.py:287 mmd_uuunyaa_tools/converters/physics/cloth.py:177
     ("*", "Cache:"): "キャッシュ:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:285
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284
     ("Operator", "Cancel"): "キャンセル",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:289 mmd_uuunyaa_tools/asset_search/panels.py:301
+    #: mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/asset_search/panels.py:300
     ("*", "Path:"): "パス:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:296 mmd_uuunyaa_tools/asset_search/panels.py:302
+    #: mmd_uuunyaa_tools/asset_search/panels.py:295 mmd_uuunyaa_tools/asset_search/panels.py:301
     ("Operator", "Import"): "インポート",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:305 mmd_uuunyaa_tools/asset_search/panels.py:308
+    #: mmd_uuunyaa_tools/asset_search/panels.py:304 mmd_uuunyaa_tools/asset_search/panels.py:307
     ("Operator", "Retry"): "リトライ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:332
+    #: mmd_uuunyaa_tools/asset_search/panels.py:331
     ("*", "UuuNyaa Asset Search"): "UuuNyaaアセットサーチ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:344
+    #: mmd_uuunyaa_tools/asset_search/panels.py:343
     ("*", "Asset type"): "アセットタイプ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:486
+    #: mmd_uuunyaa_tools/asset_search/panels.py:344 mmd_uuunyaa_tools/asset_search/panels.py:485
     ("*", "Query"): "クエリ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:352
+    #: mmd_uuunyaa_tools/asset_search/panels.py:351
     ("*", "Cached"): "キャッシュ済",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:365
+    #: mmd_uuunyaa_tools/asset_search/panels.py:364
     ("*", "{search_result_count} of {search_result_hit_count} results"): "{search_result_count} 件 / {search_result_hit_count} 件中",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:411
+    #: mmd_uuunyaa_tools/asset_search/panels.py:410
     ("*", "Invalid search result, Please search again."): "無効な検索結果です。再検索してください。",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:418
+    #: mmd_uuunyaa_tools/asset_search/panels.py:417
     ("*", "Loading {loading_count} item{plural_form_suffix}..."): "{loading_count} 件をロード中...",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:438
+    #: mmd_uuunyaa_tools/asset_search/panels.py:437
     ("*", "UuuNyaa Assets Operator"): "UuuNyaaアセットオペレーター",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:449
+    #: mmd_uuunyaa_tools/asset_search/panels.py:448
     ("*", "Reload local asset JSON files"): "ローカルアセットJSONファイルをリロード",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:455
+    #: mmd_uuunyaa_tools/asset_search/panels.py:454
     ("*", "Download and Update to the latest assets"): "最新アセットをダウンロードして更新",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:469
+    #: mmd_uuunyaa_tools/asset_search/panels.py:468
     ("*", "Debug"): "デバッグ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:475
+    #: mmd_uuunyaa_tools/asset_search/panels.py:474
     ("*", "Fetch an asset for debug"): "デバッグ用にアセットを取得",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:476
+    #: mmd_uuunyaa_tools/asset_search/panels.py:475
     ("*", "issue #"): "issue番号",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:483
+    #: mmd_uuunyaa_tools/asset_search/panels.py:482
     ("*", "Download and Update to the latest filtered assets for debug"): "デバッグ用にフィルタ済み最新アセットをダウンロードして更新",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:485
+    #: mmd_uuunyaa_tools/asset_search/panels.py:484
     ("*", "Repository"): "リポジトリ",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:487
+    #: mmd_uuunyaa_tools/asset_search/panels.py:486
     ("*", "Write to"): "書込み先",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:489
+    #: mmd_uuunyaa_tools/asset_search/panels.py:488
     ("Operator", "Update Assets JSON by query"): "アセットJSONをクエリで更新",
     #: mmd_uuunyaa_tools/checkers/operators.py:15
     ("Status", "Good"): "良い",
@@ -158,7 +158,7 @@ translation_dict = {
     ("*", "Viewport Samples"): "ビューポートのサンプル数",
     #: mmd_uuunyaa_tools/checkers/operators.py:136
     ("*", "Use Ambient Occlusion"): "アンビエントオクルージョン(AO)を使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:245 mmd_uuunyaa_tools/checkers/operators.py:255 mmd_uuunyaa_tools/checkers/operators.py:265 mmd_uuunyaa_tools/checkers/operators.py:275 mmd_uuunyaa_tools/checkers/operators.py:285 mmd_uuunyaa_tools/checkers/operators.py:295 mmd_uuunyaa_tools/checkers/operators.py:305 mmd_uuunyaa_tools/checkers/operators.py:315 mmd_uuunyaa_tools/checkers/operators.py:325 mmd_uuunyaa_tools/checkers/operators.py:335 mmd_uuunyaa_tools/checkers/operators.py:345 mmd_uuunyaa_tools/checkers/operators.py:355 mmd_uuunyaa_tools/checkers/operators.py:365 mmd_uuunyaa_tools/checkers/operators.py:375 mmd_uuunyaa_tools/checkers/operators.py:385 mmd_uuunyaa_tools/checkers/operators.py:395
+    #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:261 mmd_uuunyaa_tools/checkers/operators.py:274 mmd_uuunyaa_tools/checkers/operators.py:284 mmd_uuunyaa_tools/checkers/operators.py:294 mmd_uuunyaa_tools/checkers/operators.py:304 mmd_uuunyaa_tools/checkers/operators.py:314 mmd_uuunyaa_tools/checkers/operators.py:324 mmd_uuunyaa_tools/checkers/operators.py:334 mmd_uuunyaa_tools/checkers/operators.py:344 mmd_uuunyaa_tools/checkers/operators.py:354 mmd_uuunyaa_tools/checkers/operators.py:364 mmd_uuunyaa_tools/checkers/operators.py:377 mmd_uuunyaa_tools/checkers/operators.py:387 mmd_uuunyaa_tools/checkers/operators.py:397 mmd_uuunyaa_tools/checkers/operators.py:407
     ("*", "= False is Good"): "= Falseが良い",
     #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47
     ("*", "Use Bloom"): "ブルームを使用",
@@ -178,59 +178,59 @@ translation_dict = {
     ("*", "= True is Good"): "= Trueが良い",
     #: mmd_uuunyaa_tools/checkers/operators.py:231
     ("*", "Use Compositing"): "コンポジティングを使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:241
+    #: mmd_uuunyaa_tools/checkers/operators.py:244
     ("*", "Pass Cryptomatte Object"): "Cryptomatteオブジェクトをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:251
+    #: mmd_uuunyaa_tools/checkers/operators.py:257
     ("*", "Pass Cryptomatte Material"): "Cryptomatteマテリアルをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:261
+    #: mmd_uuunyaa_tools/checkers/operators.py:270
     ("*", "Pass Cryptomatte Asset"): "Cryptomatteアセットをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:271
+    #: mmd_uuunyaa_tools/checkers/operators.py:280
     ("*", "Pass Glossy Light"): "スペキュラーライトをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:281
+    #: mmd_uuunyaa_tools/checkers/operators.py:290
     ("*", "Pass Diffuse Light"): "ディフューズライトをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:291
+    #: mmd_uuunyaa_tools/checkers/operators.py:300
     ("*", "Pass Emit"): "放射をパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:301
+    #: mmd_uuunyaa_tools/checkers/operators.py:310
     ("*", "Pass Glossy Color"): "スペキュラーカラーをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:311
+    #: mmd_uuunyaa_tools/checkers/operators.py:320
     ("*", "Pass Diffuse Color"): "ディフューズカラーをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:321
+    #: mmd_uuunyaa_tools/checkers/operators.py:330
     ("*", "Pass Shadow"): "影をパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:331
+    #: mmd_uuunyaa_tools/checkers/operators.py:340
     ("*", "Pass Ambient Occlusion"): "アンビエントオクルージョン(AO)をパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:341
+    #: mmd_uuunyaa_tools/checkers/operators.py:350
     ("*", "Pass Normal"): "ノーマルをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:351
+    #: mmd_uuunyaa_tools/checkers/operators.py:360
     ("*", "Pass Bloom"): "ブルームをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:361
+    #: mmd_uuunyaa_tools/checkers/operators.py:373
     ("*", "Pass Volume Light"): "ボリュームライトをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:371
+    #: mmd_uuunyaa_tools/checkers/operators.py:383
     ("*", "Pass Z"): "Zをパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:381
+    #: mmd_uuunyaa_tools/checkers/operators.py:393
     ("*", "Pass Environment"): "環境をパス",
-    #: mmd_uuunyaa_tools/checkers/operators.py:391
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
     ("*", "Use Sequencer"): "シーケンサーを使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:420
+    #: mmd_uuunyaa_tools/checkers/operators.py:432
     ("*", "= JPEG is Good"): "= JPEGが良い",
-    #: mmd_uuunyaa_tools/checkers/operators.py:420
+    #: mmd_uuunyaa_tools/checkers/operators.py:432
     ("*", "File Format"): "ファイルフォーマット",
-    #: mmd_uuunyaa_tools/checkers/operators.py:456
+    #: mmd_uuunyaa_tools/checkers/operators.py:468
     ("*", "Meshes Use Auto Smooth"): "メッシュが自動スムーズを使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:460 mmd_uuunyaa_tools/checkers/operators.py:493
+    #: mmd_uuunyaa_tools/checkers/operators.py:472 mmd_uuunyaa_tools/checkers/operators.py:505
     ("*", "= 0 is Good"): "= 0が良い",
-    #: mmd_uuunyaa_tools/checkers/operators.py:489
+    #: mmd_uuunyaa_tools/checkers/operators.py:501
     ("*", "Materials Use Alpha Hashed"): "マテリアルがアルファハッシュを使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:499
+    #: mmd_uuunyaa_tools/checkers/operators.py:511
     ("*", "Eevee Rendering Performance Checker"): "Eeveeレンダリングパフォーマンスチェッカー",
-    #: mmd_uuunyaa_tools/checkers/operators.py:559
+    #: mmd_uuunyaa_tools/checkers/operators.py:571
     ("*", "<= 0% is Good"): "<= 0%が良い",
-    #: mmd_uuunyaa_tools/checkers/operators.py:559
+    #: mmd_uuunyaa_tools/checkers/operators.py:571
     ("*", "Total Performance Impact"): "合計パフォーマンスインパクト",
-    #: mmd_uuunyaa_tools/checkers/operators.py:587
+    #: mmd_uuunyaa_tools/checkers/operators.py:599
     ("*", "Object with Impact Selection:"): "インパクトのあるオブジェクト選択:",
-    #: mmd_uuunyaa_tools/checkers/operators.py:602
+    #: mmd_uuunyaa_tools/checkers/operators.py:614
     ("Operator", "Select Mesh Objects with Use Auto Smooth"): "自動スムーズを使用するメッシュオブジェクトを選択",
-    #: mmd_uuunyaa_tools/checkers/operators.py:625
+    #: mmd_uuunyaa_tools/checkers/operators.py:637
     ("Operator", "Select Mesh Objects with Use Alpha Hashed"): "アルファハッシュを使用するメッシュオブジェクトを選択",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "MMDアーマチュアからHuman (metarig)を追加",
@@ -238,41 +238,41 @@ translation_dict = {
     ("Operator", "Clean Armature"): "アーマチュアを掃除",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:23
     ("Operator", "Clean Koikatsu Armature"): "コイカツアーマチュアを掃除",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:224
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227
     ("Operator", "MMD compatibility focused Integrate"): "MMD互換性を重視して統合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
-    ("Operator", "Join Armatures"): "アーマチュアを結合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
-    ("*", "Join MMD and Rigify armatures"): "RigifyとMMDアーマチュアを結合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:228 mmd_uuunyaa_tools/converters/armatures/operators.py:280
-    ("*", "MMD main bone layer"): "MMDメインボーンレイヤー",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:229 mmd_uuunyaa_tools/converters/armatures/operators.py:281
-    ("*", "MMD others bone layer"): "MMDその他ボーンレイヤー",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:230 mmd_uuunyaa_tools/converters/armatures/operators.py:282
-    ("*", "MMD shadow bone layer"): "MMDシャドウボーンレイヤー",
+    ("Operator", "Join Armatures"): "アーマチュアを結合",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:230 mmd_uuunyaa_tools/converters/armatures/operators.py:282
+    ("*", "Join MMD and Rigify armatures"): "RigifyとMMDアーマチュアを結合",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:231 mmd_uuunyaa_tools/converters/armatures/operators.py:283
+    ("*", "MMD main bone layer"): "MMDメインボーンレイヤー",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:232 mmd_uuunyaa_tools/converters/armatures/operators.py:284
+    ("*", "MMD others bone layer"): "MMDその他ボーンレイヤー",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:233 mmd_uuunyaa_tools/converters/armatures/operators.py:285
+    ("*", "MMD shadow bone layer"): "MMDシャドウボーンレイヤー",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:234 mmd_uuunyaa_tools/converters/armatures/operators.py:286
     ("*", "MMD dummy bone layer"): "MMDダミーボーンレイヤー",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:276
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Rigify operability focused Integrate"): "Rigify操作性を重視して統合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:328
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:331
     ("Operator", "Convert Rigify Armature to MMD compatible"): "RigifyアーマチュアをMMD互換に変換",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:332
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:335
     ("*", "Upper Body2 as"): "上半身２として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:342
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
     ("*", "Lower Body as"): "下半身として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:60 mmd_uuunyaa_tools/panels.py:65
     ("Operator", "Apply MMD Rest Pose"): "MMDレストポーズを適用",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
-    ("*", "Iterations"): "反復",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
-    ("*", "Number of solving iterations"): "反復解決回数",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:382 mmd_uuunyaa_tools/converters/armatures/operators.py:451
-    ("*", "Pose arms"): "腕をポーズ",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:383 mmd_uuunyaa_tools/converters/armatures/operators.py:452
-    ("*", "Pose legs"): "脚をポーズ",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
+    ("*", "Iterations"): "反復",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
+    ("*", "Number of solving iterations"): "反復解決回数",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:385 mmd_uuunyaa_tools/converters/armatures/operators.py:454
+    ("*", "Pose arms"): "腕をポーズ",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
+    ("*", "Pose legs"): "脚をポーズ",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:387 mmd_uuunyaa_tools/converters/armatures/operators.py:456
     ("*", "Pose fingers"): "指をポーズ",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:419
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:422
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "AutoRigアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
@@ -336,17 +336,17 @@ translation_dict = {
     ("*", "Batch Operation:"): "一括操作:",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:174 mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:970 mmd_uuunyaa_tools/converters/physics/collision.py:79 mmd_uuunyaa_tools/converters/physics/rigid_body.py:30
     ("Operator", "Copy to Selected"): "選択にコピー",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:179 mmd_uuunyaa_tools/converters/physics/cloth.py:471 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:50
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:179 mmd_uuunyaa_tools/converters/physics/cloth.py:472 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:50
     ("*", "Simulation Start"): "シミュレーション開始",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:180 mmd_uuunyaa_tools/converters/physics/cloth.py:477 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:51
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:180 mmd_uuunyaa_tools/converters/physics/cloth.py:478 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:51
     ("*", "Simulation End"): "シミュレーション終了",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:186
     ("*", "Subdivision:"): "細分化:",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:187 mmd_uuunyaa_tools/converters/physics/cloth.py:326 mmd_uuunyaa_tools/converters/physics/cloth.py:507
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:187 mmd_uuunyaa_tools/converters/physics/cloth.py:327 mmd_uuunyaa_tools/converters/physics/cloth.py:508
     ("*", "Subdivision Levels"): "細分化レベル",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:192
     ("*", "Copy Cloth Adjuster Settings"): "クロス調整器をコピー",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:227 mmd_uuunyaa_tools/converters/physics/panels.py:45
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:227
     ("Operator", "Select Cloth Mesh"): "クロスメッシュを選択",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:230 mmd_uuunyaa_tools/converters/physics/collision.py:120
     ("*", "Same MMD Model"): "同じMMDモデル",
@@ -358,27 +358,29 @@ translation_dict = {
     ("Operator", "Remove Mesh Cloth"): "クロスを除去",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:323
     ("Operator", "Convert Rigid Body to Cloth"): "リジッドボディをクロスに変換",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:327
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:324
+    ("*", "Select both the mesh to be deformed and the rigid body"): "変形対象メッシュとリジッドボディの両方を選択",
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:328
     ("*", "Ribbon Stiffness"): "リボン剛性",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:329
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:330
     ("*", "Physics Mode"): "物理モード",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:334
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:335
     ("*", "Extend Ribbon Area"): "リボンエリア拡張",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:384
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:385
     ("*", "Multiple MMD models selected. Please select single model at a time."): "複数のMMDモデルが選択されています。ひとつずつモデルを選択してください。",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:414 mmd_uuunyaa_tools/converters/physics/collision.py:209 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:180
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:415 mmd_uuunyaa_tools/converters/physics/collision.py:209 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:180
     ("*", "Presets"): "プリセット",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:421
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:422
     ("*", "Vertex Mass"): "頂点の質量",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:434
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:435
     ("*", "Stiffness"): "剛性",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:447 mmd_uuunyaa_tools/converters/physics/collision.py:216
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:448 mmd_uuunyaa_tools/converters/physics/collision.py:216
     ("*", "Damping"): "減衰",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:453
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:454
     ("*", "Collision Quality"): "コリジョンの品質",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:459
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:460
     ("*", "Minimum Distance"): "最小距離",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:465
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:466
     ("*", "Impulse Clamping"): "撃力を制限",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:160
     ("*", "Target bones not found."): "対象ボーンが見つからない",
@@ -420,7 +422,7 @@ translation_dict = {
     ("*", "UuuNyaa Collision Adjuster"): "UuuNyaaコリジョン調整器",
     #: mmd_uuunyaa_tools/converters/physics/collision.py:84
     ("Operator", "Copy Collision Adjuster Settings"): "コリジョン調整器をコピー",
-    #: mmd_uuunyaa_tools/converters/physics/collision.py:117 mmd_uuunyaa_tools/converters/physics/panels.py:41
+    #: mmd_uuunyaa_tools/converters/physics/collision.py:117
     ("Operator", "Select Collision Mesh"): "コリジョンメッシュを選択",
     #: mmd_uuunyaa_tools/converters/physics/collision.py:168
     ("Operator", "Remove Mesh Collision"): "コリジョンを除去",
@@ -444,31 +446,25 @@ translation_dict = {
     ("*", "UuuNyaa Physics"): "UuuNyaa物理演算",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:30
     ("*", "Relevant Selection:"): "関連選択",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:35
-    ("Operator", "Select Rigid Body"): "リジッドボディを選択",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:51
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:34
+    ("*", "Collision Mesh"): "コリジョンメッシュ",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:41
     ("*", "MMD Model is not selected."): "MMDモデルが未選択",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
-    ("*", "Visibility:"): "可視性:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:58
-    ("*", "Mesh"): "メッシュ",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:59
-    ("*", "Armature"): "アーマチュア",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:60
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:47
     ("*", "Rigid Body"): "リジッドボディ",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:61
-    ("*", "Cloth"): "クロス",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:64
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
+    ("*", "Cloth Mesh"): "クロスメッシュ",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:62
     ("*", "Converter:"): "コンバーター:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:68
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:66
     ("Operator", "Rigid Body to Cloth"): "リジッドボディをクロスに",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:71
     ("*", "Pyramid Cloth:"): "ピラミッドクロス:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
     ("Operator", "Add Pyramid"): "ピラミッドを追加",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
     ("Operator", "Pyramid to Cloth"): "ピラミッドをクロスに",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:76
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
     ("Operator", "Repaint Weight"): "ウェイト再ペイント",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body.py:15
     ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaaリジッドボディ調整器",
@@ -486,6 +482,10 @@ translation_dict = {
     ("*", "Surface Deform"): "サーフェス変形",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body_to_cloth.py:76
     ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "{rigid_body_name}に関連するボーンがありません。リジッドボディにボーンを関連付けてください。",
+    #: mmd_uuunyaa_tools/editors/geometry_nodes.py:50
+    ("*", "Point Random Rotation"): "ポイントランダム回転",
+    #: mmd_uuunyaa_tools/editors/geometry_nodes.py:53
+    ("*", "Random Rotation Point Instance"): "ランダム回転ポイントインスタンス",
     #: mmd_uuunyaa_tools/editors/menus.py:15 mmd_uuunyaa_tools/editors/menus.py:35 mmd_uuunyaa_tools/editors/menus.py:55
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: mmd_uuunyaa_tools/editors/menus.py:75
@@ -502,44 +502,40 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
     ("Operator", "Scaled"): "スケール済",
     ("*", "Scaled"): "スケール済",
-    #: mmd_uuunyaa_tools/editors/nodes.py:224
+    #: mmd_uuunyaa_tools/editors/nodes.py:223
     ("*", "Skin Color Adjust"): "肌カラー調整",
-    #: mmd_uuunyaa_tools/editors/nodes.py:227 mmd_uuunyaa_tools/tuners/material_tuners.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:226 mmd_uuunyaa_tools/tuners/material_tuners.py:261
     ("*", "Skin Bump"): "肌 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:230
+    #: mmd_uuunyaa_tools/editors/nodes.py:229
     ("*", "Fabric Woven Texture"): "布地織物テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:233 mmd_uuunyaa_tools/tuners/material_tuners.py:389
+    #: mmd_uuunyaa_tools/editors/nodes.py:232 mmd_uuunyaa_tools/tuners/material_tuners.py:389
     ("*", "Fabric Bump"): "布地 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:236
+    #: mmd_uuunyaa_tools/editors/nodes.py:235
     ("*", "Wave Bump"): "波形バンプ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:239
+    #: mmd_uuunyaa_tools/editors/nodes.py:238
     ("*", "Magic Bump"): "マジックバンプ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:242
+    #: mmd_uuunyaa_tools/editors/nodes.py:241
     ("*", "Shadowless BSDF"): "影なしBSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:245
+    #: mmd_uuunyaa_tools/editors/nodes.py:244
     ("*", "Gem BSDF"): "宝石BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:248
+    #: mmd_uuunyaa_tools/editors/nodes.py:247
     ("*", "Liquid BSDF"): "液体BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:251
+    #: mmd_uuunyaa_tools/editors/nodes.py:250
     ("*", "Knit Texture"): "編み物Bテクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:254
+    #: mmd_uuunyaa_tools/editors/nodes.py:253
     ("*", "Leather Texture"): "革テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:257
+    #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Watercolor Texture"): "水彩画テクスチャ",
-    #: mmd_uuunyaa_tools/editors/nodes.py:260
+    #: mmd_uuunyaa_tools/editors/nodes.py:259
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:263 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:262 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "サブサーフェス調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:266 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "ウエット調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:269 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:311
+    #: mmd_uuunyaa_tools/editors/nodes.py:310
     ("*", "Sun Direction"): "太陽の方向",
-    #: mmd_uuunyaa_tools/editors/nodes.py:351
-    ("*", "Point Random Rotation"): "ポイントランダム回転",
-    #: mmd_uuunyaa_tools/editors/nodes.py:354
-    ("*", "Random Rotation Point Instance"): "ランダム回転ポイントインスタンス",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
     #: mmd_uuunyaa_tools/editors/operators.py:20
@@ -608,15 +604,15 @@ translation_dict = {
     ("*", "UuuNyaa Operator"): "UuuNyaaオペレーター",
     #: mmd_uuunyaa_tools/panels.py:29
     ("*", "Render:"): "レンダー:",
-    #: mmd_uuunyaa_tools/panels.py:35
+    #: mmd_uuunyaa_tools/panels.py:36
     ("*", "MMD to Rigify:"): "MMDからRigify:",
-    #: mmd_uuunyaa_tools/panels.py:38
+    #: mmd_uuunyaa_tools/panels.py:40
     ("Operator", "Add Metarig"): "メタリグを追加",
-    #: mmd_uuunyaa_tools/panels.py:55
+    #: mmd_uuunyaa_tools/panels.py:57
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
-    #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
+    #: mmd_uuunyaa_tools/panels.py:59 mmd_uuunyaa_tools/panels.py:64
     ("Operator", "Convert to MMD compatible"): "MMD互換に変換",
-    #: mmd_uuunyaa_tools/panels.py:60
+    #: mmd_uuunyaa_tools/panels.py:62
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
@@ -652,61 +648,59 @@ translation_dict = {
     ("*", "Asset Extract Folder"): "アセット展開フォルダー",
     #: mmd_uuunyaa_tools/preferences.py:83
     ("*", "Asset Extract JSON"): "アセット展開JSON",
-    #: mmd_uuunyaa_tools/preferences.py:91
-    ("*", "Enable MMD Tools Translation (Reboot required)"): "MMD Tools翻訳の有効化 (再起動が必要です)",
-    #: mmd_uuunyaa_tools/preferences.py:134
+    #: mmd_uuunyaa_tools/preferences.py:129
     ("Operator", "Check now for mmd_uuunyaa_tools update"): "mmd_uuunyaa_toolsの更新を今すぐチェック",
-    #: mmd_uuunyaa_tools/preferences.py:135
+    #: mmd_uuunyaa_tools/preferences.py:130
     ("*", "Auto-check for Update"): "更新を自動的にチェックする",
-    #: mmd_uuunyaa_tools/preferences.py:136
+    #: mmd_uuunyaa_tools/preferences.py:131
     ("*", "Last check: Never"): "Last check: 未チェック",
-    #: mmd_uuunyaa_tools/preferences.py:137
+    #: mmd_uuunyaa_tools/preferences.py:132
     ("Operator", "Addon is up to date"): "アドオンは最新です",
-    #: mmd_uuunyaa_tools/preferences.py:138
+    #: mmd_uuunyaa_tools/preferences.py:133
     ("Operator", "Checking..."): "チェック中...",
-    #: mmd_uuunyaa_tools/preferences.py:139
+    #: mmd_uuunyaa_tools/preferences.py:134
     ("*", "Choose 'Update Now' & press OK to install, "): "「今すぐ更新」を選択し、OKを押してインストール",
-    #: mmd_uuunyaa_tools/preferences.py:140
+    #: mmd_uuunyaa_tools/preferences.py:135
     ("*", "or click outside window to defer"): "またはウィンドウの外をクリックして保留",
-    #: mmd_uuunyaa_tools/preferences.py:141
+    #: mmd_uuunyaa_tools/preferences.py:136
     ("*", "No updates available"): "更新はありません",
-    #: mmd_uuunyaa_tools/preferences.py:142
+    #: mmd_uuunyaa_tools/preferences.py:137
     ("*", "Press okay to dismiss dialog"): "OKを押してダイアログを閉じる",
-    #: mmd_uuunyaa_tools/preferences.py:143
+    #: mmd_uuunyaa_tools/preferences.py:138
     ("*", "Check for update now?"): "今すぐ更新をチェックしますか?",
-    #: mmd_uuunyaa_tools/preferences.py:144
+    #: mmd_uuunyaa_tools/preferences.py:139
     ("*", "Process update"): "更新処理",
-    #: mmd_uuunyaa_tools/preferences.py:145
+    #: mmd_uuunyaa_tools/preferences.py:140
     ("*", "Decide to install, ignore, or defer new addon update"): "アドオンの更新、無視または保留を選択",
-    #: mmd_uuunyaa_tools/preferences.py:146
+    #: mmd_uuunyaa_tools/preferences.py:141
     ("*", "Update Now"): "今すぐ更新",
-    #: mmd_uuunyaa_tools/preferences.py:147
+    #: mmd_uuunyaa_tools/preferences.py:142
     ("*", "Install update now"): "今すぐ更新をインストール",
-    #: mmd_uuunyaa_tools/preferences.py:148
+    #: mmd_uuunyaa_tools/preferences.py:143
     ("*", "Ignore"): "無視",
-    #: mmd_uuunyaa_tools/preferences.py:149
+    #: mmd_uuunyaa_tools/preferences.py:144
     ("*", "Ignore this update to prevent future popups"): "このアップデートは無視して今後のポップアップを止める",
-    #: mmd_uuunyaa_tools/preferences.py:150
+    #: mmd_uuunyaa_tools/preferences.py:145
     ("*", "Defer"): "保留",
-    #: mmd_uuunyaa_tools/preferences.py:151
+    #: mmd_uuunyaa_tools/preferences.py:146
     ("*", "Defer choice till next blender session"): "次回のBlender起動まで保留",
-    #: mmd_uuunyaa_tools/preferences.py:165
+    #: mmd_uuunyaa_tools/preferences.py:160
     ("*", "Browse Assets"): "アセットを閲覧",
-    #: mmd_uuunyaa_tools/preferences.py:169
+    #: mmd_uuunyaa_tools/preferences.py:164
     ("*", "Query Examples"): "クエリ例",
-    #: mmd_uuunyaa_tools/preferences.py:177
+    #: mmd_uuunyaa_tools/preferences.py:172
     ("*", "Asset Cache Usage:"): "アセットキャッシュ利用量",
-    #: mmd_uuunyaa_tools/preferences.py:197
+    #: mmd_uuunyaa_tools/preferences.py:189
     ("*", "(Experimental) Add-on Update"): "(実験的) アドオン更新",
-    #: mmd_uuunyaa_tools/preferences.py:202
+    #: mmd_uuunyaa_tools/preferences.py:194
     ("*", "Credits:"): "クレジット:",
-    #: mmd_uuunyaa_tools/preferences.py:206
+    #: mmd_uuunyaa_tools/preferences.py:198
     ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "リジッドボディ物理からクロス物理機能は小威廉伯爵の作品です。",
-    #: mmd_uuunyaa_tools/preferences.py:208
+    #: mmd_uuunyaa_tools/preferences.py:200
     ("*", "It was ported with his permission."): "この機能は本人の許可を得て移植したものです。",
-    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:46 mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
+    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:43 mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "リセット",
-    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:62
+    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:58
     ("*", "Sequins"): "スパンコール",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
     ("*", "Left Accent"): "左アクセント",
@@ -724,7 +718,7 @@ translation_dict = {
     ("*", "Specular"): "スペキュラー",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "粗さ",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:183
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:181
     ("*", "Wet"): "ウェット",
     ("Operator", "Wet"): "ウェット",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106 mmd_uuunyaa_tools/tuners/material_adjusters.py:152
@@ -733,7 +727,7 @@ translation_dict = {
     ("*", "Max"): "最大",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108 mmd_uuunyaa_tools/tuners/material_adjusters.py:154
     ("*", "Blood Color"): "血液カラー",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:182
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:180
     ("*", "Subsurface"): "サブサーフェス",
     ("Operator", "Subsurface"): "サブサーフェス",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
@@ -838,37 +832,37 @@ translation_dict = {
     ("Operator", "Attach Material Adjuster"): "マテリアル調整器を付加",
     #: mmd_uuunyaa_tools/tuners/operators.py:82
     ("Operator", "Detach Material Adjuster"): "マテリアル調整器を除去",
-    #: mmd_uuunyaa_tools/tuners/operators.py:98
+    #: mmd_uuunyaa_tools/tuners/operators.py:102
     ("Operator", "Tune Geometry Nodes"): "ジオメトリノードを調整",
-    #: mmd_uuunyaa_tools/tuners/panels.py:21
+    #: mmd_uuunyaa_tools/tuners/panels.py:19
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
-    #: mmd_uuunyaa_tools/tuners/panels.py:31
+    #: mmd_uuunyaa_tools/tuners/panels.py:29
     ("*", "Light Strength"): "照明強度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:32
+    #: mmd_uuunyaa_tools/tuners/panels.py:30
     ("*", "Image Strength"): "表示強度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:44
+    #: mmd_uuunyaa_tools/tuners/panels.py:42
     ("*", "UuuNyaa World not found."): "UuuNyaaワールドが見つからない",
-    #: mmd_uuunyaa_tools/tuners/panels.py:49
+    #: mmd_uuunyaa_tools/tuners/panels.py:47
     ("*", "IrradianceVolume not found. Please add it."): "イラディアンスボリュームが見つからないので追加してください",
-    #: mmd_uuunyaa_tools/tuners/panels.py:54
+    #: mmd_uuunyaa_tools/tuners/panels.py:52
     ("*", "for Eevee lighting, check Render Properties."): "Eevee照明用 レンダープロパティを確認",
-    #: mmd_uuunyaa_tools/tuners/panels.py:59
+    #: mmd_uuunyaa_tools/tuners/panels.py:57
     ("*", "Bake Indirect Lighting"): "間接照明をベイク",
-    #: mmd_uuunyaa_tools/tuners/panels.py:77
+    #: mmd_uuunyaa_tools/tuners/panels.py:75
     ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:116
+    #: mmd_uuunyaa_tools/tuners/panels.py:114
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaaマテリアル",
-    #: mmd_uuunyaa_tools/tuners/panels.py:152
+    #: mmd_uuunyaa_tools/tuners/panels.py:150
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaaマテリアル調整器",
-    #: mmd_uuunyaa_tools/tuners/panels.py:169
+    #: mmd_uuunyaa_tools/tuners/panels.py:167
     ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name} は未未対応です。プリンシプルBSDFから出力のある他のマテリアルを選択してください。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:194
+    #: mmd_uuunyaa_tools/tuners/panels.py:197
     ("*", "MMD UuuNyaa Geometry Nodes"): "MMD UuuNyaaジオメトリノード",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "照明を選択",
     #: mmd_uuunyaa_tools/tuners/properties.py:38
     ("*", "Choose the material you want to use"): "マテリアルを選択",
-    #: mmd_uuunyaa_tools/tuners/properties.py:59
+    #: mmd_uuunyaa_tools/tuners/properties.py:63
     ("*", "Choose the geometry nodes you want to use"): "ジオメトリノードを選択",
   },
   "zh_CN": {
@@ -912,69 +906,69 @@ translation_dict = {
     ("Operator", "Delete Debug Asset JSON"): "删除调试资产JSON",
     #: mmd_uuunyaa_tools/asset_search/operators.py:72
     ("Operator", "Delete Asset Cached Files"): "删除资产缓存的文件",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:267
+    #: mmd_uuunyaa_tools/asset_search/panels.py:266
     ("*", "Type:"): "类型:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:268
+    #: mmd_uuunyaa_tools/asset_search/panels.py:267
     ("*", "ID:"): "ID:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:270
+    #: mmd_uuunyaa_tools/asset_search/panels.py:269
     ("*", "Name:"): "名称:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:271
+    #: mmd_uuunyaa_tools/asset_search/panels.py:270
     ("*", "Aliases:"): "别称:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:272 mmd_uuunyaa_tools/asset_search/panels.py:349
+    #: mmd_uuunyaa_tools/asset_search/panels.py:271 mmd_uuunyaa_tools/asset_search/panels.py:348
     ("*", "Tags:"): "标签:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:273
+    #: mmd_uuunyaa_tools/asset_search/panels.py:272
     ("*", "Updated at:"): "更新时刻:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:274
+    #: mmd_uuunyaa_tools/asset_search/panels.py:273
     ("*", "Note:"): "说明:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:276
+    #: mmd_uuunyaa_tools/asset_search/panels.py:275
     ("*", "Source:"): "来源:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:281
+    #: mmd_uuunyaa_tools/asset_search/panels.py:280
     ("Operator", "Download"): "下载",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284
+    #: mmd_uuunyaa_tools/asset_search/panels.py:283
     ("*", "Downloading"): "现在下载",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:284 mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/converters/physics/cloth.py:177
+    #: mmd_uuunyaa_tools/asset_search/panels.py:283 mmd_uuunyaa_tools/asset_search/panels.py:287 mmd_uuunyaa_tools/converters/physics/cloth.py:177
     ("*", "Cache:"): "缓存:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:285
+    #: mmd_uuunyaa_tools/asset_search/panels.py:284
     ("Operator", "Cancel"): "取消",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:289 mmd_uuunyaa_tools/asset_search/panels.py:301
+    #: mmd_uuunyaa_tools/asset_search/panels.py:288 mmd_uuunyaa_tools/asset_search/panels.py:300
     ("*", "Path:"): "路径:",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:296 mmd_uuunyaa_tools/asset_search/panels.py:302
+    #: mmd_uuunyaa_tools/asset_search/panels.py:295 mmd_uuunyaa_tools/asset_search/panels.py:301
     ("Operator", "Import"): "导入",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:305 mmd_uuunyaa_tools/asset_search/panels.py:308
+    #: mmd_uuunyaa_tools/asset_search/panels.py:304 mmd_uuunyaa_tools/asset_search/panels.py:307
     ("Operator", "Retry"): "重试",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:332
+    #: mmd_uuunyaa_tools/asset_search/panels.py:331
     ("*", "UuuNyaa Asset Search"): "UuuNyaa资产搜索",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:344
+    #: mmd_uuunyaa_tools/asset_search/panels.py:343
     ("*", "Asset type"): "资产类型",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:345 mmd_uuunyaa_tools/asset_search/panels.py:486
+    #: mmd_uuunyaa_tools/asset_search/panels.py:344 mmd_uuunyaa_tools/asset_search/panels.py:485
     ("*", "Query"): "查询",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:352
+    #: mmd_uuunyaa_tools/asset_search/panels.py:351
     ("*", "Cached"): "缓存了",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:365
+    #: mmd_uuunyaa_tools/asset_search/panels.py:364
     ("*", "{search_result_count} of {search_result_hit_count} results"): "{search_result_count} 项 / {search_result_hit_count} 项中",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:411
+    #: mmd_uuunyaa_tools/asset_search/panels.py:410
     ("*", "Invalid search result, Please search again."): "Invalid search result, Please search again.",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:418
+    #: mmd_uuunyaa_tools/asset_search/panels.py:417
     ("*", "Loading {loading_count} item{plural_form_suffix}..."): "正在加载{loading_count}个项目...",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:438
+    #: mmd_uuunyaa_tools/asset_search/panels.py:437
     ("*", "UuuNyaa Assets Operator"): "UuuNyaa资产操作项",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:449
+    #: mmd_uuunyaa_tools/asset_search/panels.py:448
     ("*", "Reload local asset JSON files"): "重新加载本地资产JSON文件",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:455
+    #: mmd_uuunyaa_tools/asset_search/panels.py:454
     ("*", "Download and Update to the latest assets"): "下载并更新到最新的资产",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:469
+    #: mmd_uuunyaa_tools/asset_search/panels.py:468
     ("*", "Debug"): "调试",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:475
+    #: mmd_uuunyaa_tools/asset_search/panels.py:474
     ("*", "Fetch an asset for debug"): "取出一个资产进行调试",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:476
+    #: mmd_uuunyaa_tools/asset_search/panels.py:475
     ("*", "issue #"): "issue编号",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:483
+    #: mmd_uuunyaa_tools/asset_search/panels.py:482
     ("*", "Download and Update to the latest filtered assets for debug"): "下载并更新到最新的过滤资产进行调试",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:485
+    #: mmd_uuunyaa_tools/asset_search/panels.py:484
     ("*", "Repository"): "仓库",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:487
+    #: mmd_uuunyaa_tools/asset_search/panels.py:486
     ("*", "Write to"): "写给",
-    #: mmd_uuunyaa_tools/asset_search/panels.py:489
+    #: mmd_uuunyaa_tools/asset_search/panels.py:488
     ("Operator", "Update Assets JSON by query"): "通过查询更新资产JSON",
     #: mmd_uuunyaa_tools/checkers/operators.py:15
     ("Status", "Good"): "良好",
@@ -1006,7 +1000,7 @@ translation_dict = {
     ("*", "Viewport Samples"): "视图采样",
     #: mmd_uuunyaa_tools/checkers/operators.py:136
     ("*", "Use Ambient Occlusion"): "使用环境光遮蔽 (AO)",
-    #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:245 mmd_uuunyaa_tools/checkers/operators.py:255 mmd_uuunyaa_tools/checkers/operators.py:265 mmd_uuunyaa_tools/checkers/operators.py:275 mmd_uuunyaa_tools/checkers/operators.py:285 mmd_uuunyaa_tools/checkers/operators.py:295 mmd_uuunyaa_tools/checkers/operators.py:305 mmd_uuunyaa_tools/checkers/operators.py:315 mmd_uuunyaa_tools/checkers/operators.py:325 mmd_uuunyaa_tools/checkers/operators.py:335 mmd_uuunyaa_tools/checkers/operators.py:345 mmd_uuunyaa_tools/checkers/operators.py:355 mmd_uuunyaa_tools/checkers/operators.py:365 mmd_uuunyaa_tools/checkers/operators.py:375 mmd_uuunyaa_tools/checkers/operators.py:385 mmd_uuunyaa_tools/checkers/operators.py:395
+    #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:261 mmd_uuunyaa_tools/checkers/operators.py:274 mmd_uuunyaa_tools/checkers/operators.py:284 mmd_uuunyaa_tools/checkers/operators.py:294 mmd_uuunyaa_tools/checkers/operators.py:304 mmd_uuunyaa_tools/checkers/operators.py:314 mmd_uuunyaa_tools/checkers/operators.py:324 mmd_uuunyaa_tools/checkers/operators.py:334 mmd_uuunyaa_tools/checkers/operators.py:344 mmd_uuunyaa_tools/checkers/operators.py:354 mmd_uuunyaa_tools/checkers/operators.py:364 mmd_uuunyaa_tools/checkers/operators.py:377 mmd_uuunyaa_tools/checkers/operators.py:387 mmd_uuunyaa_tools/checkers/operators.py:397 mmd_uuunyaa_tools/checkers/operators.py:407
     ("*", "= False is Good"): "= False是良好",
     #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47
     ("*", "Use Bloom"): "使用辉光",
@@ -1026,59 +1020,59 @@ translation_dict = {
     ("*", "= True is Good"): "= True是良好",
     #: mmd_uuunyaa_tools/checkers/operators.py:231
     ("*", "Use Compositing"): "使用合成处理",
-    #: mmd_uuunyaa_tools/checkers/operators.py:241
+    #: mmd_uuunyaa_tools/checkers/operators.py:244
     ("*", "Pass Cryptomatte Object"): "Cryptomatte物体通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:251
+    #: mmd_uuunyaa_tools/checkers/operators.py:257
     ("*", "Pass Cryptomatte Material"): "Cryptomatte材质通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:261
+    #: mmd_uuunyaa_tools/checkers/operators.py:270
     ("*", "Pass Cryptomatte Asset"): "Cryptomatte资源通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:271
+    #: mmd_uuunyaa_tools/checkers/operators.py:280
     ("*", "Pass Glossy Light"): "高光灯光通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:281
+    #: mmd_uuunyaa_tools/checkers/operators.py:290
     ("*", "Pass Diffuse Light"): "漫射灯光通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:291
+    #: mmd_uuunyaa_tools/checkers/operators.py:300
     ("*", "Pass Emit"): "自发光(发射)通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:301
+    #: mmd_uuunyaa_tools/checkers/operators.py:310
     ("*", "Pass Glossy Color"): "高光颜色通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:311
+    #: mmd_uuunyaa_tools/checkers/operators.py:320
     ("*", "Pass Diffuse Color"): "漫射颜色通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:321
+    #: mmd_uuunyaa_tools/checkers/operators.py:330
     ("*", "Pass Shadow"): "阴影通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:331
+    #: mmd_uuunyaa_tools/checkers/operators.py:340
     ("*", "Pass Ambient Occlusion"): "环境光遮蔽 (AO)通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:341
+    #: mmd_uuunyaa_tools/checkers/operators.py:350
     ("*", "Pass Normal"): "法向通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:351
+    #: mmd_uuunyaa_tools/checkers/operators.py:360
     ("*", "Pass Bloom"): "辉光通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:361
+    #: mmd_uuunyaa_tools/checkers/operators.py:373
     ("*", "Pass Volume Light"): "体积灯光通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:371
+    #: mmd_uuunyaa_tools/checkers/operators.py:383
     ("*", "Pass Z"): "Z通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:381
+    #: mmd_uuunyaa_tools/checkers/operators.py:393
     ("*", "Pass Environment"): "环境通道",
-    #: mmd_uuunyaa_tools/checkers/operators.py:391
+    #: mmd_uuunyaa_tools/checkers/operators.py:403
     ("*", "Use Sequencer"): "使用序列编辑器",
-    #: mmd_uuunyaa_tools/checkers/operators.py:420
+    #: mmd_uuunyaa_tools/checkers/operators.py:432
     ("*", "= JPEG is Good"): "= JPEG是良好",
-    #: mmd_uuunyaa_tools/checkers/operators.py:420
+    #: mmd_uuunyaa_tools/checkers/operators.py:432
     ("*", "File Format"): "文件格式",
-    #: mmd_uuunyaa_tools/checkers/operators.py:456
+    #: mmd_uuunyaa_tools/checkers/operators.py:468
     ("*", "Meshes Use Auto Smooth"): "网格使用自动平滑",
-    #: mmd_uuunyaa_tools/checkers/operators.py:460 mmd_uuunyaa_tools/checkers/operators.py:493
+    #: mmd_uuunyaa_tools/checkers/operators.py:472 mmd_uuunyaa_tools/checkers/operators.py:505
     ("*", "= 0 is Good"): "= 0是良好",
-    #: mmd_uuunyaa_tools/checkers/operators.py:489
+    #: mmd_uuunyaa_tools/checkers/operators.py:501
     ("*", "Materials Use Alpha Hashed"): "纹理使用Alpha Hashed",
-    #: mmd_uuunyaa_tools/checkers/operators.py:499
+    #: mmd_uuunyaa_tools/checkers/operators.py:511
     ("*", "Eevee Rendering Performance Checker"): "Eevee的渲染性能检查器",
-    #: mmd_uuunyaa_tools/checkers/operators.py:559
+    #: mmd_uuunyaa_tools/checkers/operators.py:571
     ("*", "<= 0% is Good"): "<= 0%是良好",
-    #: mmd_uuunyaa_tools/checkers/operators.py:559
+    #: mmd_uuunyaa_tools/checkers/operators.py:571
     ("*", "Total Performance Impact"): "总的性能影响",
-    #: mmd_uuunyaa_tools/checkers/operators.py:587
+    #: mmd_uuunyaa_tools/checkers/operators.py:599
     ("*", "Object with Impact Selection:"): "有影响的物体选:",
-    #: mmd_uuunyaa_tools/checkers/operators.py:602
+    #: mmd_uuunyaa_tools/checkers/operators.py:614
     ("Operator", "Select Mesh Objects with Use Auto Smooth"): "选择使用自动平滑的网格物体",
-    #: mmd_uuunyaa_tools/checkers/operators.py:625
+    #: mmd_uuunyaa_tools/checkers/operators.py:637
     ("Operator", "Select Mesh Objects with Use Alpha Hashed"): "选择使用Alpha Hashed的网格物体",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:19
     ("Operator", "Add Human (metarig) from MMD Armature"): "从MMD骨架添加 Human (metarig)",
@@ -1086,41 +1080,41 @@ translation_dict = {
     ("Operator", "Clean Armature"): "清洁骨架",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:23
     ("Operator", "Clean Koikatsu Armature"): "清洁Koikatsu骨架",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:224
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227
     ("Operator", "MMD compatibility focused Integrate"): "注重MMD兼容性的整合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
-    ("Operator", "Join Armatures"): "合并骨架",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:227 mmd_uuunyaa_tools/converters/armatures/operators.py:279
-    ("*", "Join MMD and Rigify armatures"): "合并Rigify和MMD骨架",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:228 mmd_uuunyaa_tools/converters/armatures/operators.py:280
-    ("*", "MMD main bone layer"): "MMD主骨骼层",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:229 mmd_uuunyaa_tools/converters/armatures/operators.py:281
-    ("*", "MMD others bone layer"): "MMD其他骨骼层",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:230 mmd_uuunyaa_tools/converters/armatures/operators.py:282
-    ("*", "MMD shadow bone layer"): "MMD阴影骨骼层",
+    ("Operator", "Join Armatures"): "合并骨架",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:230 mmd_uuunyaa_tools/converters/armatures/operators.py:282
+    ("*", "Join MMD and Rigify armatures"): "合并Rigify和MMD骨架",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:231 mmd_uuunyaa_tools/converters/armatures/operators.py:283
+    ("*", "MMD main bone layer"): "MMD主骨骼层",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:232 mmd_uuunyaa_tools/converters/armatures/operators.py:284
+    ("*", "MMD others bone layer"): "MMD其他骨骼层",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:233 mmd_uuunyaa_tools/converters/armatures/operators.py:285
+    ("*", "MMD shadow bone layer"): "MMD阴影骨骼层",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:234 mmd_uuunyaa_tools/converters/armatures/operators.py:286
     ("*", "MMD dummy bone layer"): "MMD伪骨骼层",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:276
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Rigify operability focused Integrate"): "注重Rigify操作性的整合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:328
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:331
     ("Operator", "Convert Rigify Armature to MMD compatible"): "将Rigify骨架转换为MMD兼容",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:332
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:335
     ("*", "Upper Body2 as"): "上半身2为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:342
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
     ("*", "Lower Body as"): "下半身为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:378 mmd_uuunyaa_tools/converters/armatures/operators.py:447 mmd_uuunyaa_tools/panels.py:58 mmd_uuunyaa_tools/panels.py:63
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:60 mmd_uuunyaa_tools/panels.py:65
     ("Operator", "Apply MMD Rest Pose"): "应用MMD静置姿态",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
-    ("*", "Iterations"): "迭代",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450
-    ("*", "Number of solving iterations"): "解算迭代的次数",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:382 mmd_uuunyaa_tools/converters/armatures/operators.py:451
-    ("*", "Pose arms"): "姿势手臂",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:383 mmd_uuunyaa_tools/converters/armatures/operators.py:452
-    ("*", "Pose legs"): "姿势腿",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
+    ("*", "Iterations"): "迭代",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
+    ("*", "Number of solving iterations"): "解算迭代的次数",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:385 mmd_uuunyaa_tools/converters/armatures/operators.py:454
+    ("*", "Pose arms"): "姿势手臂",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
+    ("*", "Pose legs"): "姿势腿",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:387 mmd_uuunyaa_tools/converters/armatures/operators.py:456
     ("*", "Pose fingers"): "姿势手指",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:419
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:422
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "将AutoRig骨架转换为MMD兼容",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
@@ -1184,17 +1178,17 @@ translation_dict = {
     ("*", "Batch Operation:"): "批量操作:",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:174 mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:970 mmd_uuunyaa_tools/converters/physics/collision.py:79 mmd_uuunyaa_tools/converters/physics/rigid_body.py:30
     ("Operator", "Copy to Selected"): "复制到选定项",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:179 mmd_uuunyaa_tools/converters/physics/cloth.py:471 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:50
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:179 mmd_uuunyaa_tools/converters/physics/cloth.py:472 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:50
     ("*", "Simulation Start"): "模拟起始帧",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:180 mmd_uuunyaa_tools/converters/physics/cloth.py:477 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:51
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:180 mmd_uuunyaa_tools/converters/physics/cloth.py:478 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:51
     ("*", "Simulation End"): "模拟结束帧",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:186
     ("*", "Subdivision:"): "细分:",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:187 mmd_uuunyaa_tools/converters/physics/cloth.py:326 mmd_uuunyaa_tools/converters/physics/cloth.py:507
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:187 mmd_uuunyaa_tools/converters/physics/cloth.py:327 mmd_uuunyaa_tools/converters/physics/cloth.py:508
     ("*", "Subdivision Levels"): "细分级别",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:192
     ("*", "Copy Cloth Adjuster Settings"): "复制布料调整器设置",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:227 mmd_uuunyaa_tools/converters/physics/panels.py:45
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:227
     ("Operator", "Select Cloth Mesh"): "选择布料网格",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:230 mmd_uuunyaa_tools/converters/physics/collision.py:120
     ("*", "Same MMD Model"): "相同的MMD模型",
@@ -1206,27 +1200,29 @@ translation_dict = {
     ("Operator", "Remove Mesh Cloth"): "移除网格布料",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:323
     ("Operator", "Convert Rigid Body to Cloth"): "将刚体转换为布料",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:327
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:324
+    ("*", "Select both the mesh to be deformed and the rigid body"): "选择要变形的网格和刚体",
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:328
     ("*", "Ribbon Stiffness"): "丝带硬度",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:329
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:330
     ("*", "Physics Mode"): "物理模式",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:334
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:335
     ("*", "Extend Ribbon Area"): "扩展丝带区域",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:384
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:385
     ("*", "Multiple MMD models selected. Please select single model at a time."): "选择了多个MMD模型。请一次选择单一型号。",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:414 mmd_uuunyaa_tools/converters/physics/collision.py:209 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:180
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:415 mmd_uuunyaa_tools/converters/physics/collision.py:209 mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:180
     ("*", "Presets"): "预设",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:421
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:422
     ("*", "Vertex Mass"): "顶点质量",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:434
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:435
     ("*", "Stiffness"): "硬度",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:447 mmd_uuunyaa_tools/converters/physics/collision.py:216
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:448 mmd_uuunyaa_tools/converters/physics/collision.py:216
     ("*", "Damping"): "阻尼",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:453
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:454
     ("*", "Collision Quality"): "碰撞质量",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:459
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:460
     ("*", "Minimum Distance"): "最小距离",
-    #: mmd_uuunyaa_tools/converters/physics/cloth.py:465
+    #: mmd_uuunyaa_tools/converters/physics/cloth.py:466
     ("*", "Impulse Clamping"): "冲量钳制",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:160
     ("*", "Target bones not found."): "没有找到目标骨骼",
@@ -1268,7 +1264,7 @@ translation_dict = {
     ("*", "UuuNyaa Collision Adjuster"): "UuuNyaa碰撞调整器",
     #: mmd_uuunyaa_tools/converters/physics/collision.py:84
     ("Operator", "Copy Collision Adjuster Settings"): "复制碰撞调整器设置",
-    #: mmd_uuunyaa_tools/converters/physics/collision.py:117 mmd_uuunyaa_tools/converters/physics/panels.py:41
+    #: mmd_uuunyaa_tools/converters/physics/collision.py:117
     ("Operator", "Select Collision Mesh"): "选择碰撞网格",
     #: mmd_uuunyaa_tools/converters/physics/collision.py:168
     ("Operator", "Remove Mesh Collision"): "移除碰撞网格",
@@ -1292,31 +1288,25 @@ translation_dict = {
     ("*", "UuuNyaa Physics"): "UuuNyaa物理计算",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:30
     ("*", "Relevant Selection:"): "相关选:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:35
-    ("Operator", "Select Rigid Body"): "刚体选",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:51
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:34
+    ("*", "Collision Mesh"): "碰撞网格",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:41
     ("*", "MMD Model is not selected."): "未选择MMD模型",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
-    ("*", "Visibility:"): "可见性:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:58
-    ("*", "Mesh"): "网格",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:59
-    ("*", "Armature"): "骨架",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:60
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:47
     ("*", "Rigid Body"): "刚体",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:61
-    ("*", "Cloth"): "布料",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:64
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
+    ("*", "Cloth Mesh"): "布料网格",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:62
     ("*", "Converter:"): "转换器:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:68
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:66
     ("Operator", "Rigid Body to Cloth"): "将刚体转换为布料",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:71
     ("*", "Pyramid Cloth:"): "金字塔布料:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
     ("Operator", "Add Pyramid"): "添加金字塔",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
     ("Operator", "Pyramid to Cloth"): "将金字塔转换为布料",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:76
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
     ("Operator", "Repaint Weight"): "重新权重绘制",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body.py:15
     ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaa刚体调整器",
@@ -1334,6 +1324,10 @@ translation_dict = {
     ("*", "Surface Deform"): "表面形变",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body_to_cloth.py:76
     ("*", "No bones related with {rigid_body_name}, Please relate a bone to the Rigid Body."): "没有与{rigid_body_name}有关的骨骼，请将骨骼与刚体联系起来。",
+    #: mmd_uuunyaa_tools/editors/geometry_nodes.py:50
+    ("*", "Point Random Rotation"): "点随机旋转",
+    #: mmd_uuunyaa_tools/editors/geometry_nodes.py:53
+    ("*", "Random Rotation Point Instance"): "随机旋转点实例",
     #: mmd_uuunyaa_tools/editors/menus.py:15 mmd_uuunyaa_tools/editors/menus.py:35 mmd_uuunyaa_tools/editors/menus.py:55
     ("*", "MMD UuuNyaa"): "MMD UuuNyaa",
     #: mmd_uuunyaa_tools/editors/menus.py:75
@@ -1350,44 +1344,40 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:316
     ("Operator", "Scaled"): "缩放过",
     ("*", "Scaled"): "缩放过",
-    #: mmd_uuunyaa_tools/editors/nodes.py:224
+    #: mmd_uuunyaa_tools/editors/nodes.py:223
     ("*", "Skin Color Adjust"): "皮肤色调整",
-    #: mmd_uuunyaa_tools/editors/nodes.py:227 mmd_uuunyaa_tools/tuners/material_tuners.py:261
+    #: mmd_uuunyaa_tools/editors/nodes.py:226 mmd_uuunyaa_tools/tuners/material_tuners.py:261
     ("*", "Skin Bump"): "皮肤 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:230
+    #: mmd_uuunyaa_tools/editors/nodes.py:229
     ("*", "Fabric Woven Texture"): "织物编织纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:233 mmd_uuunyaa_tools/tuners/material_tuners.py:389
+    #: mmd_uuunyaa_tools/editors/nodes.py:232 mmd_uuunyaa_tools/tuners/material_tuners.py:389
     ("*", "Fabric Bump"): "织物 凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:236
+    #: mmd_uuunyaa_tools/editors/nodes.py:235
     ("*", "Wave Bump"): "波浪凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:239
+    #: mmd_uuunyaa_tools/editors/nodes.py:238
     ("*", "Magic Bump"): "迷幻凹凸",
-    #: mmd_uuunyaa_tools/editors/nodes.py:242
+    #: mmd_uuunyaa_tools/editors/nodes.py:241
     ("*", "Shadowless BSDF"): "无影BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:245
+    #: mmd_uuunyaa_tools/editors/nodes.py:244
     ("*", "Gem BSDF"): "宝石BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:248
+    #: mmd_uuunyaa_tools/editors/nodes.py:247
     ("*", "Liquid BSDF"): "液体BSDF",
-    #: mmd_uuunyaa_tools/editors/nodes.py:251
+    #: mmd_uuunyaa_tools/editors/nodes.py:250
     ("*", "Knit Texture"): "针织纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:254
+    #: mmd_uuunyaa_tools/editors/nodes.py:253
     ("*", "Leather Texture"): "皮革纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:257
+    #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Watercolor Texture"): "水彩画纹理",
-    #: mmd_uuunyaa_tools/editors/nodes.py:260
+    #: mmd_uuunyaa_tools/editors/nodes.py:259
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:263 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:262 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "次表面调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:266 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "湿润调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:269 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:311
+    #: mmd_uuunyaa_tools/editors/nodes.py:310
     ("*", "Sun Direction"): "太阳方向",
-    #: mmd_uuunyaa_tools/editors/nodes.py:351
-    ("*", "Point Random Rotation"): "点随机旋转",
-    #: mmd_uuunyaa_tools/editors/nodes.py:354
-    ("*", "Random Rotation Point Instance"): "随机旋转点实例",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
     #: mmd_uuunyaa_tools/editors/operators.py:20
@@ -1456,15 +1446,15 @@ translation_dict = {
     ("*", "UuuNyaa Operator"): "UuuNyaa操作项",
     #: mmd_uuunyaa_tools/panels.py:29
     ("*", "Render:"): "渲染:",
-    #: mmd_uuunyaa_tools/panels.py:35
+    #: mmd_uuunyaa_tools/panels.py:36
     ("*", "MMD to Rigify:"): "MMD到Rigify:",
-    #: mmd_uuunyaa_tools/panels.py:38
+    #: mmd_uuunyaa_tools/panels.py:40
     ("Operator", "Add Metarig"): "添加Metarig",
-    #: mmd_uuunyaa_tools/panels.py:55
+    #: mmd_uuunyaa_tools/panels.py:57
     ("*", "Rigify to MMD:"): "Rigify到MMD:",
-    #: mmd_uuunyaa_tools/panels.py:56 mmd_uuunyaa_tools/panels.py:61
+    #: mmd_uuunyaa_tools/panels.py:59 mmd_uuunyaa_tools/panels.py:64
     ("Operator", "Convert to MMD compatible"): "转换为MMD兼容",
-    #: mmd_uuunyaa_tools/panels.py:60
+    #: mmd_uuunyaa_tools/panels.py:62
     ("*", "(Experimental) Auto-Rig to MMD:"): "(实验的) Auto-Rig到MMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
@@ -1500,61 +1490,59 @@ translation_dict = {
     ("*", "Asset Extract Folder"): "资产提取文件夹",
     #: mmd_uuunyaa_tools/preferences.py:83
     ("*", "Asset Extract JSON"): "资产提取JSON",
-    #: mmd_uuunyaa_tools/preferences.py:91
-    ("*", "Enable MMD Tools Translation (Reboot required)"): "启用MMD Tools翻译 (需要重新启动)",
-    #: mmd_uuunyaa_tools/preferences.py:134
+    #: mmd_uuunyaa_tools/preferences.py:129
     ("Operator", "Check now for mmd_uuunyaa_tools update"): "立即检查mmd_uuunyaa_tools的更新",
-    #: mmd_uuunyaa_tools/preferences.py:135
+    #: mmd_uuunyaa_tools/preferences.py:130
     ("*", "Auto-check for Update"): "自动检查更新",
-    #: mmd_uuunyaa_tools/preferences.py:136
+    #: mmd_uuunyaa_tools/preferences.py:131
     ("*", "Last check: Never"): "Last check: 未检查",
-    #: mmd_uuunyaa_tools/preferences.py:137
+    #: mmd_uuunyaa_tools/preferences.py:132
     ("Operator", "Addon is up to date"): "插件是最新的",
-    #: mmd_uuunyaa_tools/preferences.py:138
+    #: mmd_uuunyaa_tools/preferences.py:133
     ("Operator", "Checking..."): "检查...",
-    #: mmd_uuunyaa_tools/preferences.py:139
+    #: mmd_uuunyaa_tools/preferences.py:134
     ("*", "Choose 'Update Now' & press OK to install, "): "选择「立即更新」&确定进行安装。",
-    #: mmd_uuunyaa_tools/preferences.py:140
+    #: mmd_uuunyaa_tools/preferences.py:135
     ("*", "or click outside window to defer"): "或在窗口外点击推迟",
-    #: mmd_uuunyaa_tools/preferences.py:141
+    #: mmd_uuunyaa_tools/preferences.py:136
     ("*", "No updates available"): "没有更新",
-    #: mmd_uuunyaa_tools/preferences.py:142
+    #: mmd_uuunyaa_tools/preferences.py:137
     ("*", "Press okay to dismiss dialog"): "按确定关闭对话框",
-    #: mmd_uuunyaa_tools/preferences.py:143
+    #: mmd_uuunyaa_tools/preferences.py:138
     ("*", "Check for update now?"): "立即检查更新？",
-    #: mmd_uuunyaa_tools/preferences.py:144
+    #: mmd_uuunyaa_tools/preferences.py:139
     ("*", "Process update"): "更新过程",
-    #: mmd_uuunyaa_tools/preferences.py:145
+    #: mmd_uuunyaa_tools/preferences.py:140
     ("*", "Decide to install, ignore, or defer new addon update"): "选择更新、忽略或推迟该插件",
-    #: mmd_uuunyaa_tools/preferences.py:146
+    #: mmd_uuunyaa_tools/preferences.py:141
     ("*", "Update Now"): "立即更新",
-    #: mmd_uuunyaa_tools/preferences.py:147
+    #: mmd_uuunyaa_tools/preferences.py:142
     ("*", "Install update now"): "立即安装更新",
-    #: mmd_uuunyaa_tools/preferences.py:148
+    #: mmd_uuunyaa_tools/preferences.py:143
     ("*", "Ignore"): "忽略",
-    #: mmd_uuunyaa_tools/preferences.py:149
+    #: mmd_uuunyaa_tools/preferences.py:144
     ("*", "Ignore this update to prevent future popups"): "忽略此更新，以防止今后的弹出窗口",
-    #: mmd_uuunyaa_tools/preferences.py:150
+    #: mmd_uuunyaa_tools/preferences.py:145
     ("*", "Defer"): "推迟",
-    #: mmd_uuunyaa_tools/preferences.py:151
+    #: mmd_uuunyaa_tools/preferences.py:146
     ("*", "Defer choice till next blender session"): "推迟到下次启动时再做选择",
-    #: mmd_uuunyaa_tools/preferences.py:165
+    #: mmd_uuunyaa_tools/preferences.py:160
     ("*", "Browse Assets"): "浏览资产",
-    #: mmd_uuunyaa_tools/preferences.py:169
+    #: mmd_uuunyaa_tools/preferences.py:164
     ("*", "Query Examples"): "查询实例",
-    #: mmd_uuunyaa_tools/preferences.py:177
+    #: mmd_uuunyaa_tools/preferences.py:172
     ("*", "Asset Cache Usage:"): "资产缓存使用情况",
-    #: mmd_uuunyaa_tools/preferences.py:197
+    #: mmd_uuunyaa_tools/preferences.py:189
     ("*", "(Experimental) Add-on Update"): "(实验的) 插件更新",
-    #: mmd_uuunyaa_tools/preferences.py:202
+    #: mmd_uuunyaa_tools/preferences.py:194
     ("*", "Credits:"): "版权:",
-    #: mmd_uuunyaa_tools/preferences.py:206
+    #: mmd_uuunyaa_tools/preferences.py:198
     ("*", "Rigid body Physics to Cloth Physics feature is the work of 小威廉伯爵."): "刚体物理到布料物理的功能是小威廉伯爵的工作。",
-    #: mmd_uuunyaa_tools/preferences.py:208
+    #: mmd_uuunyaa_tools/preferences.py:200
     ("*", "It was ported with his permission."): "这是经他许可的移植。",
-    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:46 mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
+    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:43 mmd_uuunyaa_tools/tuners/lighting_tuners.py:53 mmd_uuunyaa_tools/tuners/material_tuners.py:25
     ("*", "Reset"): "重置",
-    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:62
+    #: mmd_uuunyaa_tools/tuners/geometry_nodes_tuners.py:58
     ("*", "Sequins"): "亮片",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:66
     ("*", "Left Accent"): "左侧重点",
@@ -1572,7 +1560,7 @@ translation_dict = {
     ("*", "Specular"): "高光",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "糙度",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:183
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:181
     ("*", "Wet"): "湿润",
     ("Operator", "Wet"): "湿润",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106 mmd_uuunyaa_tools/tuners/material_adjusters.py:152
@@ -1581,7 +1569,7 @@ translation_dict = {
     ("*", "Max"): "最大",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108 mmd_uuunyaa_tools/tuners/material_adjusters.py:154
     ("*", "Blood Color"): "血液颜色",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:182
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:180
     ("*", "Subsurface"): "次表面",
     ("Operator", "Subsurface"): "次表面",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
@@ -1686,37 +1674,37 @@ translation_dict = {
     ("Operator", "Attach Material Adjuster"): "附上材质调整器",
     #: mmd_uuunyaa_tools/tuners/operators.py:82
     ("Operator", "Detach Material Adjuster"): "分离材质调整器",
-    #: mmd_uuunyaa_tools/tuners/operators.py:98
+    #: mmd_uuunyaa_tools/tuners/operators.py:102
     ("Operator", "Tune Geometry Nodes"): "几何节点调整",
-    #: mmd_uuunyaa_tools/tuners/panels.py:21
+    #: mmd_uuunyaa_tools/tuners/panels.py:19
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa天空",
-    #: mmd_uuunyaa_tools/tuners/panels.py:31
+    #: mmd_uuunyaa_tools/tuners/panels.py:29
     ("*", "Light Strength"): "光照强度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:32
+    #: mmd_uuunyaa_tools/tuners/panels.py:30
     ("*", "Image Strength"): "表示强度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:44
+    #: mmd_uuunyaa_tools/tuners/panels.py:42
     ("*", "UuuNyaa World not found."): "没有找到UuuNyaa世界环境",
-    #: mmd_uuunyaa_tools/tuners/panels.py:49
+    #: mmd_uuunyaa_tools/tuners/panels.py:47
     ("*", "IrradianceVolume not found. Please add it."): "没有找到辐射体积。请添加它。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:54
+    #: mmd_uuunyaa_tools/tuners/panels.py:52
     ("*", "for Eevee lighting, check Render Properties."): "对于Eevee照明，请检查渲染属性。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:59
+    #: mmd_uuunyaa_tools/tuners/panels.py:57
     ("*", "Bake Indirect Lighting"): "烘焙间接光照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:77
+    #: mmd_uuunyaa_tools/tuners/panels.py:75
     ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:116
+    #: mmd_uuunyaa_tools/tuners/panels.py:114
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaa材质",
-    #: mmd_uuunyaa_tools/tuners/panels.py:152
+    #: mmd_uuunyaa_tools/tuners/panels.py:150
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaa材质调整器",
-    #: mmd_uuunyaa_tools/tuners/panels.py:169
+    #: mmd_uuunyaa_tools/tuners/panels.py:167
     ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name}是不支持的。选择要从原理化BSDF输出的其他材质。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:194
+    #: mmd_uuunyaa_tools/tuners/panels.py:197
     ("*", "MMD UuuNyaa Geometry Nodes"): "MMD UuuNyaa几何节点调整器",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "选择你的照明",
     #: mmd_uuunyaa_tools/tuners/properties.py:38
     ("*", "Choose the material you want to use"): "选择你的材质",
-    #: mmd_uuunyaa_tools/tuners/properties.py:59
+    #: mmd_uuunyaa_tools/tuners/properties.py:63
     ("*", "Choose the geometry nodes you want to use"): "选择你的几何节点",
   },
 }
