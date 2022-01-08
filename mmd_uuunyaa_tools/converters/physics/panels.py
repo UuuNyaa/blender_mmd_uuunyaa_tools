@@ -10,6 +10,7 @@ from mmd_uuunyaa_tools.converters.physics.cloth_pyramid import (
     ConvertPyramidMeshToClothOperator)
 from mmd_uuunyaa_tools.converters.physics.collision import (
     RemoveMeshCollision, SelectCollisionMesh)
+from mmd_uuunyaa_tools.converters.physics.cloth_bone import StretchBoneToVertexOperator
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import import_mmd_tools
 
@@ -28,12 +29,16 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
 
         col = layout.column(align=True)
         col.label(text=_('Relevant Selection:'), icon='RESTRICT_SELECT_OFF')
-
         grid = col.grid_flow(row_major=True)
         row = grid.row(align=True)
         row.label(text=_('Collision Mesh'), icon='MOD_PHYSICS')
         row.operator(SelectCollisionMesh.bl_idname, text=_(''), icon='RESTRICT_SELECT_OFF')
         row.operator(RemoveMeshCollision.bl_idname, text=_(''), icon='TRASH')
+
+        col = layout.column(align=True)
+        col.label(text=_('Misc:'), icon='BLENDER')
+        grid = col.grid_flow(row_major=True)
+        grid.row(align=True).operator(StretchBoneToVertexOperator.bl_idname, text=_('Stretch Bone to Vertex'), icon='CONSTRAINT_BONE')
 
         mmd_root_object = mmd_tools.core.model.Model.findRoot(context.active_object)
         if mmd_root_object is None:
