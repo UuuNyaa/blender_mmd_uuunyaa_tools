@@ -89,14 +89,14 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.下半身, 'c_root.x', 'root.x', GroupType.TORSO, MMDBindType.NONE),
 
         MMDBindInfo(MMDBoneInfo.左足, 'c_thigh_ik.l', 'thigh.l', GroupType.LEG_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左ひざ, None, 'leg.l', GroupType.LEG_L, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.左足首, None, 'foot.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左ひざ, 'c_leg_fk.l', 'leg.l', GroupType.LEG_L, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.左足首, 'c_foot_fk.l', 'foot.l', GroupType.LEG_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'c_foot_ik.l', 'c_foot_ik.l', GroupType.LEG_L, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.左足先EX, 'c_toes_ik.l', 'toes_01.l', GroupType.LEG_L, MMDBindType.NONE),
 
         MMDBindInfo(MMDBoneInfo.右足, 'c_thigh_ik.r', 'thigh.r', GroupType.LEG_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右ひざ, None, 'leg.r', GroupType.LEG_R, MMDBindType.NONE),
-        MMDBindInfo(MMDBoneInfo.右足首, None, 'foot.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右ひざ, 'c_leg_fk.r', 'leg.r', GroupType.LEG_R, MMDBindType.NONE),
+        MMDBindInfo(MMDBoneInfo.右足首, 'c_foot_fk.r', 'foot.r', GroupType.LEG_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'c_foot_ik.r', 'c_foot_ik.r', GroupType.LEG_R, MMDBindType.NONE),
         MMDBindInfo(MMDBoneInfo.右足先EX, 'c_toes_ik.r', 'toes_01.r', GroupType.LEG_R, MMDBindType.NONE),
 
@@ -150,6 +150,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         }
 
         datapaths: Dict[ControlType, DataPath] = {
+            ControlType.BIND_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, self.prop_name_mmd_uuunyaa_bind_mmd_autorig),
             ControlType.EYE_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_eye_mmd_autorig'),
             ControlType.LEG_L_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_leg_l_mmd_autorig'),
             ControlType.LEG_R_MMD_UUUNYAA: DataPath(self.prop_storage_bone_name, 'mmd_uuunyaa_leg_r_mmd_autorig'),
@@ -685,8 +686,8 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
             for constraint in pose_bone.constraints:
                 self.update_influence_driver(constraint, self.raw_object, influence_data_path, invert_influence=invert_influence)
 
-        update_influence_drivers(pose_bones['c_eye.l'], eye_mmd_uuunyaa_data_path)
-        update_influence_drivers(pose_bones['c_eye.r'], eye_mmd_uuunyaa_data_path)
+        update_influence_drivers(pose_bones['c_eye.l'], eye_mmd_uuunyaa_data_path, invert_influence=True)
+        update_influence_drivers(pose_bones['c_eye.r'], eye_mmd_uuunyaa_data_path, invert_influence=True)
 
     def pose_mmd_rest(self, dependency_graph: bpy.types.Depsgraph, iterations: int, pose_arms: bool, pose_legs: bool, pose_fingers: bool):
         # pylint: disable=too-many-arguments, too-many-locals

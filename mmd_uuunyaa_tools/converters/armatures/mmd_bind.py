@@ -145,7 +145,7 @@ class MMDBindArmatureObjectABC(ArmatureEditor, PoseBoneEditor):
         self.add_copy_rotation_constraint(target_eye_l_bone, self.raw_object, control_eye_l_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True)
         self.add_copy_rotation_constraint(target_eye_r_bone, self.raw_object, control_eye_r_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True)
         self.add_copy_rotation_constraint(control_eye_l_bone, self.raw_object, control_eyes_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True, mix_mode='ADD')
-        self.add_copy_rotation_constraint(control_eye_r_bone, self.raw_object,  control_eyes_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True, mix_mode='ADD')
+        self.add_copy_rotation_constraint(control_eye_r_bone, self.raw_object, control_eyes_bone.name, 'LOCAL', eye_mmd_uuunyaa_data_path, invert_influence=True, mix_mode='ADD')
 
     def _get_property(self, control_type: ControlType):
         datapath = self.datapaths.get(control_type)
