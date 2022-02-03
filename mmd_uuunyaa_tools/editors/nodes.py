@@ -267,6 +267,9 @@ class MaterialEditor(NodeEditor):
     def get_emission_adjuster_node(self) -> ShaderNodeGroup:
         return self.get_node_group(_('Emission Adjuster'), label='Emission Adjuster')
 
+    def get_glitter_adjuster_node(self) -> ShaderNodeGroup:
+        return self.get_node_group(_('Glitter Adjuster'), label='Glitter Adjuster')
+
     def reset(self):
         node_frame = self.find_adjusters_node_frame()
         if node_frame is not None:

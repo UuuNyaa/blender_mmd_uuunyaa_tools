@@ -8,7 +8,8 @@ from mmd_uuunyaa_tools.editors.nodes import MaterialEditor
 from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.tuners.lighting_tuners import LightingUtilities
 from mmd_uuunyaa_tools.tuners.material_adjusters import (
-    MaterialAdjusterUtilities, SubsurfaceAdjuster, WetAdjuster)
+    GlitterAdjuster, MaterialAdjusterUtilities, SubsurfaceAdjuster,
+    WetAdjuster)
 from mmd_uuunyaa_tools.tuners.operators import (AttachMaterialAdjuster,
                                                 DetachMaterialAdjuster,
                                                 FreezeLighting)
@@ -179,6 +180,7 @@ class MaterialAdjusterPanel(bpy.types.Panel):
 
         draw_operator(grid, SubsurfaceAdjuster,  text=_('Subsurface'), icon='SHADING_RENDERED')
         draw_operator(grid, WetAdjuster,  text=_('Wet'), icon='MOD_FLUIDSIM')
+        draw_operator(grid, GlitterAdjuster,  text=_('Glitter'), icon='PMARKER_ACT')
 
         node_frame = utilities.find_adjusters_node_frame()
         if node_frame is None:

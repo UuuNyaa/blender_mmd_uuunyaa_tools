@@ -184,8 +184,55 @@ class EmissionAdjuster(MaterialAdjusterABC):
 
         self.nodes.remove(node_emission_adjuster)
 
+class GlitterAdjuster(MaterialAdjusterABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_ADJUSTER_GLITTER'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Glitter Adjuster')
+
+    translation_properties = [
+        _('Specular'),
+        _('Roughness'),
+        _('Glitter'),
+    ]
+
+    def attach(self):
+        node_frame = self.get_adjusters_node_frame()
+        node_glitter_adjuster = self.find_node(ShaderNodeGroup, label=GlitterAdjuster.get_name(), node_frame=node_frame)
+
+        node_shader = self.find_active_principled_shader_node()
+        node_glitter_adjuster = self.edit(self.get_glitter_adjuster_node(), {
+            'Specular': self.to_link_or_value(node_shader.inputs['Specular']),
+            'Roughness': self.to_link_or_value(node_shader.inputs['Roughness']),
+            'Normal': self.to_link_or_value(node_shader.inputs['Normal']),
+        }, {'location': self.grid_to_position(-2, -12), 'parent': node_frame})
+
+        self.edit(node_shader, {
+            'Specular': node_glitter_adjuster.outputs['Specular'],
+            'Roughness': node_glitter_adjuster.outputs['Roughness'],
+            'Normal': node_glitter_adjuster.outputs['Normal'],
+        }, force=True)
+
+        return node_glitter_adjuster
+
+    def detach(self):
+        node_glitter_adjuster = self.get_glitter_adjuster_node()
+
+        self.edit(self.find_active_principled_shader_node(), {
+            'Specular': self.to_link_or_value(node_glitter_adjuster.inputs['Specular']),
+            'Roughness': self.to_link_or_value(node_glitter_adjuster.inputs['Roughness']),
+            'Normal': self.to_link_or_value(node_glitter_adjuster.inputs['Normal']),
+        }, force=True)
+
+        self.nodes.remove(node_glitter_adjuster)
+
+
 
 ADJUSTERS = {
     WetAdjuster.get_name(): WetAdjuster,
     SubsurfaceAdjuster.get_name(): SubsurfaceAdjuster,
+    GlitterAdjuster.get_name(): GlitterAdjuster,
 }
