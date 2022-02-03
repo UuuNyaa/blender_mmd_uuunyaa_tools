@@ -382,6 +382,8 @@ translation_dict = {
     ("*", "Minimum Distance"): "最小距離",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:466
     ("*", "Impulse Clamping"): "撃力を制限",
+    #: mmd_uuunyaa_tools/converters/physics/cloth_bone.py:15 mmd_uuunyaa_tools/converters/physics/panels.py:41
+    ("*", "Stretch Bone to Vertex"): "ボーンを頂点にストレッチ",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:160
     ("*", "Target bones not found."): "対象ボーンが見つからない",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:775
@@ -442,29 +444,31 @@ translation_dict = {
     ("*", "Brush Default"): "ブラシ デフォルト",
     #: mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:187
     ("*", "Active Surface"): "アクティブサーフェス",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:21
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:22
     ("*", "UuuNyaa Physics"): "UuuNyaa物理演算",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:30
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:31
     ("*", "Relevant Selection:"): "関連選択",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:34
     ("*", "Collision Mesh"): "コリジョンメッシュ",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:41
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:39
+    ("*", "Misc:"): "その他",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:46
     ("*", "MMD Model is not selected."): "MMDモデルが未選択",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:47
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:52
     ("*", "Rigid Body"): "リジッドボディ",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:61
     ("*", "Cloth Mesh"): "クロスメッシュ",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:62
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:67
     ("*", "Converter:"): "コンバーター:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:66
-    ("Operator", "Rigid Body to Cloth"): "リジッドボディをクロスに",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:71
+    ("Operator", "Rigid Body to Cloth"): "リジッドボディをクロスに",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:76
     ("*", "Pyramid Cloth:"): "ピラミッドクロス:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:78
     ("Operator", "Add Pyramid"): "ピラミッドを追加",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:79
     ("Operator", "Pyramid to Cloth"): "ピラミッドをクロスに",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:80
     ("Operator", "Repaint Weight"): "ウェイト再ペイント",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body.py:15
     ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaaリジッドボディ調整器",
@@ -533,8 +537,10 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "ウエット調節器",
     #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
-    ("*", "Emission Adjuster"): "发射調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:310
+    ("*", "Emission Adjuster"): "エミッション調節器",
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:194
+    ("*", "Glitter Adjuster"): "グリッター調整器",
+    #: mmd_uuunyaa_tools/editors/nodes.py:313
     ("*", "Sun Direction"): "太陽の方向",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
@@ -714,11 +720,11 @@ translation_dict = {
     ("*", "Light Probe Grid"): "イラディアンスボリューム",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:136
     ("*", "Shadowless"): "シャドウレス",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61 mmd_uuunyaa_tools/tuners/material_adjusters.py:197
     ("*", "Specular"): "スペキュラー",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_adjusters.py:198 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "粗さ",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:181
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:182
     ("*", "Wet"): "ウェット",
     ("Operator", "Wet"): "ウェット",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106 mmd_uuunyaa_tools/tuners/material_adjusters.py:152
@@ -727,11 +733,13 @@ translation_dict = {
     ("*", "Max"): "最大",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108 mmd_uuunyaa_tools/tuners/material_adjusters.py:154
     ("*", "Blood Color"): "血液カラー",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:180
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:181
     ("*", "Subsurface"): "サブサーフェス",
     ("Operator", "Subsurface"): "サブサーフェス",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
     ("*", "Subsurface Color"): "サブサーフェスカラー",
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:199 mmd_uuunyaa_tools/tuners/panels.py:183
+    ("*", "Glitter"): "グリッター",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:48
     ("*", "Transparent"): "伝播",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:73
@@ -834,29 +842,29 @@ translation_dict = {
     ("Operator", "Detach Material Adjuster"): "マテリアル調整器を除去",
     #: mmd_uuunyaa_tools/tuners/operators.py:102
     ("Operator", "Tune Geometry Nodes"): "ジオメトリノードを調整",
-    #: mmd_uuunyaa_tools/tuners/panels.py:19
+    #: mmd_uuunyaa_tools/tuners/panels.py:20
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa Sky",
-    #: mmd_uuunyaa_tools/tuners/panels.py:29
-    ("*", "Light Strength"): "照明強度",
     #: mmd_uuunyaa_tools/tuners/panels.py:30
+    ("*", "Light Strength"): "照明強度",
+    #: mmd_uuunyaa_tools/tuners/panels.py:31
     ("*", "Image Strength"): "表示強度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:42
+    #: mmd_uuunyaa_tools/tuners/panels.py:43
     ("*", "UuuNyaa World not found."): "UuuNyaaワールドが見つからない",
-    #: mmd_uuunyaa_tools/tuners/panels.py:47
+    #: mmd_uuunyaa_tools/tuners/panels.py:48
     ("*", "IrradianceVolume not found. Please add it."): "イラディアンスボリュームが見つからないので追加してください",
-    #: mmd_uuunyaa_tools/tuners/panels.py:52
+    #: mmd_uuunyaa_tools/tuners/panels.py:53
     ("*", "for Eevee lighting, check Render Properties."): "Eevee照明用 レンダープロパティを確認",
-    #: mmd_uuunyaa_tools/tuners/panels.py:57
+    #: mmd_uuunyaa_tools/tuners/panels.py:58
     ("*", "Bake Indirect Lighting"): "間接照明をベイク",
-    #: mmd_uuunyaa_tools/tuners/panels.py:75
+    #: mmd_uuunyaa_tools/tuners/panels.py:76
     ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:114
+    #: mmd_uuunyaa_tools/tuners/panels.py:115
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaaマテリアル",
-    #: mmd_uuunyaa_tools/tuners/panels.py:150
+    #: mmd_uuunyaa_tools/tuners/panels.py:151
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaaマテリアル調整器",
-    #: mmd_uuunyaa_tools/tuners/panels.py:167
+    #: mmd_uuunyaa_tools/tuners/panels.py:168
     ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name} は未未対応です。プリンシプルBSDFから出力のある他のマテリアルを選択してください。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:197
+    #: mmd_uuunyaa_tools/tuners/panels.py:199
     ("*", "MMD UuuNyaa Geometry Nodes"): "MMD UuuNyaaジオメトリノード",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "照明を選択",
@@ -1224,6 +1232,8 @@ translation_dict = {
     ("*", "Minimum Distance"): "最小距离",
     #: mmd_uuunyaa_tools/converters/physics/cloth.py:466
     ("*", "Impulse Clamping"): "冲量钳制",
+    #: mmd_uuunyaa_tools/converters/physics/cloth_bone.py:15 mmd_uuunyaa_tools/converters/physics/panels.py:41
+    ("*", "Stretch Bone to Vertex"): "拉伸骨骼到顶点",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:160
     ("*", "Target bones not found."): "没有找到目标骨骼",
     #: mmd_uuunyaa_tools/converters/physics/cloth_pyramid.py:775
@@ -1284,29 +1294,31 @@ translation_dict = {
     ("*", "Brush Default"): "笔刷 默认",
     #: mmd_uuunyaa_tools/converters/physics/dynamic_paint.py:187
     ("*", "Active Surface"): "活动表面",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:21
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:22
     ("*", "UuuNyaa Physics"): "UuuNyaa物理计算",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:30
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:31
     ("*", "Relevant Selection:"): "相关选:",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:34
     ("*", "Collision Mesh"): "碰撞网格",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:41
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:39
+    ("*", "Misc:"): "杂项",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:46
     ("*", "MMD Model is not selected."): "未选择MMD模型",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:47
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:52
     ("*", "Rigid Body"): "刚体",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:56
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:61
     ("*", "Cloth Mesh"): "布料网格",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:62
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:67
     ("*", "Converter:"): "转换器:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:66
-    ("Operator", "Rigid Body to Cloth"): "将刚体转换为布料",
     #: mmd_uuunyaa_tools/converters/physics/panels.py:71
+    ("Operator", "Rigid Body to Cloth"): "将刚体转换为布料",
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:76
     ("*", "Pyramid Cloth:"): "金字塔布料:",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:73
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:78
     ("Operator", "Add Pyramid"): "添加金字塔",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:74
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:79
     ("Operator", "Pyramid to Cloth"): "将金字塔转换为布料",
-    #: mmd_uuunyaa_tools/converters/physics/panels.py:75
+    #: mmd_uuunyaa_tools/converters/physics/panels.py:80
     ("Operator", "Repaint Weight"): "重新权重绘制",
     #: mmd_uuunyaa_tools/converters/physics/rigid_body.py:15
     ("*", "UuuNyaa Rigid Body Adjuster"): "UuuNyaa刚体调整器",
@@ -1376,7 +1388,9 @@ translation_dict = {
     ("*", "Wet Adjuster"): "湿润调整器",
     #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Emission Adjuster"): "发射调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:310
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:194
+    ("*", "Glitter Adjuster"): "闪耀调整器",
+    #: mmd_uuunyaa_tools/editors/nodes.py:313
     ("*", "Sun Direction"): "太阳方向",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
@@ -1556,11 +1570,11 @@ translation_dict = {
     ("*", "Light Probe Grid"): "辐射体积",
     #: mmd_uuunyaa_tools/tuners/lighting_tuners.py:136
     ("*", "Shadowless"): "无影",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:61 mmd_uuunyaa_tools/tuners/material_adjusters.py:197
     ("*", "Specular"): "高光",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_tuners.py:645
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:62 mmd_uuunyaa_tools/tuners/material_adjusters.py:198 mmd_uuunyaa_tools/tuners/material_tuners.py:645
     ("*", "Roughness"): "糙度",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:181
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:63 mmd_uuunyaa_tools/tuners/panels.py:182
     ("*", "Wet"): "湿润",
     ("Operator", "Wet"): "湿润",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:106 mmd_uuunyaa_tools/tuners/material_adjusters.py:152
@@ -1569,11 +1583,13 @@ translation_dict = {
     ("*", "Max"): "最大",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:108 mmd_uuunyaa_tools/tuners/material_adjusters.py:154
     ("*", "Blood Color"): "血液颜色",
-    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:180
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:109 mmd_uuunyaa_tools/tuners/material_adjusters.py:155 mmd_uuunyaa_tools/tuners/panels.py:181
     ("*", "Subsurface"): "次表面",
     ("Operator", "Subsurface"): "次表面",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
     ("*", "Subsurface Color"): "次表面颜色",
+    #: mmd_uuunyaa_tools/tuners/material_adjusters.py:199 mmd_uuunyaa_tools/tuners/panels.py:183
+    ("*", "Glitter"): "闪耀",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:48
     ("*", "Transparent"): "透明",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:73
@@ -1676,29 +1692,29 @@ translation_dict = {
     ("Operator", "Detach Material Adjuster"): "分离材质调整器",
     #: mmd_uuunyaa_tools/tuners/operators.py:102
     ("Operator", "Tune Geometry Nodes"): "几何节点调整",
-    #: mmd_uuunyaa_tools/tuners/panels.py:19
+    #: mmd_uuunyaa_tools/tuners/panels.py:20
     ("*", "MMD UuuNyaa Sky"): "MMD UuuNyaa天空",
-    #: mmd_uuunyaa_tools/tuners/panels.py:29
-    ("*", "Light Strength"): "光照强度",
     #: mmd_uuunyaa_tools/tuners/panels.py:30
+    ("*", "Light Strength"): "光照强度",
+    #: mmd_uuunyaa_tools/tuners/panels.py:31
     ("*", "Image Strength"): "表示强度",
-    #: mmd_uuunyaa_tools/tuners/panels.py:42
+    #: mmd_uuunyaa_tools/tuners/panels.py:43
     ("*", "UuuNyaa World not found."): "没有找到UuuNyaa世界环境",
-    #: mmd_uuunyaa_tools/tuners/panels.py:47
+    #: mmd_uuunyaa_tools/tuners/panels.py:48
     ("*", "IrradianceVolume not found. Please add it."): "没有找到辐射体积。请添加它。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:52
+    #: mmd_uuunyaa_tools/tuners/panels.py:53
     ("*", "for Eevee lighting, check Render Properties."): "对于Eevee照明，请检查渲染属性。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:57
+    #: mmd_uuunyaa_tools/tuners/panels.py:58
     ("*", "Bake Indirect Lighting"): "烘焙间接光照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:75
+    #: mmd_uuunyaa_tools/tuners/panels.py:76
     ("*", "MMD UuuNyaa Lighting"): "MMD UuuNyaa照明",
-    #: mmd_uuunyaa_tools/tuners/panels.py:114
+    #: mmd_uuunyaa_tools/tuners/panels.py:115
     ("*", "MMD UuuNyaa Material"): "MMD UuuNyaa材质",
-    #: mmd_uuunyaa_tools/tuners/panels.py:150
+    #: mmd_uuunyaa_tools/tuners/panels.py:151
     ("*", "MMD UuuNyaa Material Adjuster"): "MMD UuuNyaa材质调整器",
-    #: mmd_uuunyaa_tools/tuners/panels.py:167
+    #: mmd_uuunyaa_tools/tuners/panels.py:168
     ("*", "{material_name} is unsupported. Select other material to be output from Principled BSDF."): "{material_name}是不支持的。选择要从原理化BSDF输出的其他材质。",
-    #: mmd_uuunyaa_tools/tuners/panels.py:197
+    #: mmd_uuunyaa_tools/tuners/panels.py:199
     ("*", "MMD UuuNyaa Geometry Nodes"): "MMD UuuNyaa几何节点调整器",
     #: mmd_uuunyaa_tools/tuners/properties.py:17
     ("*", "Choose the lighting you want to use"): "选择你的照明",
