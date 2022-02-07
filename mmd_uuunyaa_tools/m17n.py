@@ -739,7 +739,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
     ("*", "Subsurface Color"): "サブサーフェスカラー",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:199 mmd_uuunyaa_tools/tuners/panels.py:183
-    ("*", "Glitter"): "グリッター",
+    ("Operator", "Glitter"): "グリッター",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:48
     ("*", "Transparent"): "伝播",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:73
@@ -1589,7 +1589,7 @@ translation_dict = {
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:110 mmd_uuunyaa_tools/tuners/material_adjusters.py:156
     ("*", "Subsurface Color"): "次表面颜色",
     #: mmd_uuunyaa_tools/tuners/material_adjusters.py:199 mmd_uuunyaa_tools/tuners/panels.py:183
-    ("*", "Glitter"): "闪耀",
+    ("Operator", "Glitter"): "闪耀",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:48
     ("*", "Transparent"): "透明",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:73
