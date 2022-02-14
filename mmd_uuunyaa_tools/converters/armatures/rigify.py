@@ -1074,15 +1074,15 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         self.imitate_mmd_face_bone_structure(mmd_armature_object)
 
     def _adjust_palm_bone(self, mmd_armature_object: MMDArmatureObject, rig_edit_bones: bpy.types.ArmatureEditBones):
-        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
-            return
-
         mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.strict_edit_bones
 
-        rig_edit_bones['palm.L'].head = self.to_center(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左小指１'].head)
-        rig_edit_bones['palm.L'].tail = mmd_edit_bones['左小指１'].head
-        rig_edit_bones['palm.R'].head = self.to_center(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右小指１'].head)
-        rig_edit_bones['palm.R'].tail = mmd_edit_bones['右小指１'].head
+        if '左小指０' not in mmd_edit_bones:
+            rig_edit_bones['palm.L'].head = self.to_center(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左小指１'].head)
+            rig_edit_bones['palm.L'].tail = mmd_edit_bones['左小指１'].head
+
+        if '右小指０' not in mmd_edit_bones:
+            rig_edit_bones['palm.R'].head = self.to_center(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右小指１'].head)
+            rig_edit_bones['palm.R'].tail = mmd_edit_bones['右小指１'].head
 
     def _adjust_toe_bones(self, mmd_armature_object: MMDArmatureObject, rig_edit_bones: bpy.types.ArmatureEditBones):
         # adjust toe (つま先)

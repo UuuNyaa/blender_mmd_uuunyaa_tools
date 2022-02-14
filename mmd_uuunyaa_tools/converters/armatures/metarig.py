@@ -80,14 +80,17 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['thumb.03.L'].tail = mmd_edit_bones['左親指２'].tail
         metarig_edit_bones['thumb.03.R'].tail = mmd_edit_bones['右親指２'].tail
 
-        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
+        if '左人指０' in mmd_edit_bones:
             metarig_edit_bones['palm.01.L'].head = mmd_edit_bones['左人指０'].head
             metarig_edit_bones['palm.01.L'].tail = mmd_edit_bones['左人指０'].tail
-            metarig_edit_bones['palm.01.R'].head = mmd_edit_bones['右人指０'].head
-            metarig_edit_bones['palm.01.R'].tail = mmd_edit_bones['右人指０'].tail
         else:
             metarig_edit_bones['palm.01.L'].head = self.to_stretch(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左人指１'].head, 0.99)
             metarig_edit_bones['palm.01.L'].tail = mmd_edit_bones['左人指１'].head
+
+        if '右人指０' in mmd_edit_bones:
+            metarig_edit_bones['palm.01.R'].head = mmd_edit_bones['右人指０'].head
+            metarig_edit_bones['palm.01.R'].tail = mmd_edit_bones['右人指０'].tail
+        else:
             metarig_edit_bones['palm.01.R'].head = self.to_stretch(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右人指１'].head, 0.99)
             metarig_edit_bones['palm.01.R'].tail = mmd_edit_bones['右人指１'].head
 
@@ -100,14 +103,17 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['f_index.03.L'].tail = mmd_edit_bones['左人指３'].tail
         metarig_edit_bones['f_index.03.R'].tail = mmd_edit_bones['右人指３'].tail
 
-        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
+        if '左中指０' in mmd_edit_bones:
             metarig_edit_bones['palm.02.L'].head = mmd_edit_bones['左中指０'].head
             metarig_edit_bones['palm.02.L'].tail = mmd_edit_bones['左中指０'].tail
-            metarig_edit_bones['palm.02.R'].head = mmd_edit_bones['右中指０'].head
-            metarig_edit_bones['palm.02.R'].tail = mmd_edit_bones['右中指０'].tail
         else:
             metarig_edit_bones['palm.02.L'].head = self.to_stretch(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左中指１'].head, 0.99)
             metarig_edit_bones['palm.02.L'].tail = mmd_edit_bones['左中指１'].head
+
+        if '右中指０' in mmd_edit_bones:
+            metarig_edit_bones['palm.02.R'].head = mmd_edit_bones['右中指０'].head
+            metarig_edit_bones['palm.02.R'].tail = mmd_edit_bones['右中指０'].tail
+        else:
             metarig_edit_bones['palm.02.R'].head = self.to_stretch(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右中指１'].head, 0.99)
             metarig_edit_bones['palm.02.R'].tail = mmd_edit_bones['右中指１'].head
 
@@ -120,14 +126,17 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['f_middle.03.L'].tail = mmd_edit_bones['左中指３'].tail
         metarig_edit_bones['f_middle.03.R'].tail = mmd_edit_bones['右中指３'].tail
 
-        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
+        if '左薬指０' in mmd_edit_bones:
             metarig_edit_bones['palm.03.L'].head = mmd_edit_bones['左薬指０'].head
             metarig_edit_bones['palm.03.L'].tail = mmd_edit_bones['左薬指０'].tail
-            metarig_edit_bones['palm.03.R'].head = mmd_edit_bones['右薬指０'].head
-            metarig_edit_bones['palm.03.R'].tail = mmd_edit_bones['右薬指０'].tail
         else:
             metarig_edit_bones['palm.03.L'].head = self.to_stretch(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左薬指１'].head, 0.99)
             metarig_edit_bones['palm.03.L'].tail = mmd_edit_bones['左薬指１'].head
+
+        if '右薬指０' in mmd_edit_bones:
+            metarig_edit_bones['palm.03.R'].head = mmd_edit_bones['右薬指０'].head
+            metarig_edit_bones['palm.03.R'].tail = mmd_edit_bones['右薬指０'].tail
+        else:
             metarig_edit_bones['palm.03.R'].head = self.to_stretch(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右薬指１'].head, 0.99)
             metarig_edit_bones['palm.03.R'].tail = mmd_edit_bones['右薬指１'].head
 
@@ -140,14 +149,17 @@ class MetarigArmatureObject(ArmatureEditor):
         metarig_edit_bones['f_ring.03.L'].tail = mmd_edit_bones['左薬指３'].tail
         metarig_edit_bones['f_ring.03.R'].tail = mmd_edit_bones['右薬指３'].tail
 
-        if MMDBoneType.PALM in mmd_armature_object.exist_bone_types:
+        if '左小指０' in mmd_edit_bones:
             metarig_edit_bones['palm.04.L'].head = mmd_edit_bones['左小指０'].head
             metarig_edit_bones['palm.04.L'].tail = mmd_edit_bones['左小指０'].tail
-            metarig_edit_bones['palm.04.R'].head = mmd_edit_bones['右小指０'].head
-            metarig_edit_bones['palm.04.R'].tail = mmd_edit_bones['右小指０'].tail
         else:
             metarig_edit_bones['palm.04.L'].head = self.to_stretch(mmd_edit_bones['左ひじ'].tail, mmd_edit_bones['左小指１'].head, 0.99)
             metarig_edit_bones['palm.04.L'].tail = mmd_edit_bones['左小指１'].head
+
+        if '右小指０' in mmd_edit_bones:
+            metarig_edit_bones['palm.04.R'].head = mmd_edit_bones['右小指０'].head
+            metarig_edit_bones['palm.04.R'].tail = mmd_edit_bones['右小指０'].tail
+        else:
             metarig_edit_bones['palm.04.R'].head = self.to_stretch(mmd_edit_bones['右ひじ'].tail, mmd_edit_bones['右小指１'].head, 0.99)
             metarig_edit_bones['palm.04.R'].tail = mmd_edit_bones['右小指１'].head
 
