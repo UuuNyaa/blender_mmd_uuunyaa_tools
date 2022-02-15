@@ -3,7 +3,7 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import os
-from typing import Union
+from typing import Optional
 
 import bpy
 from mmd_uuunyaa_tools import PACKAGE_PATH
@@ -26,7 +26,7 @@ class LightingUtilities:
     def object_marker(self) -> ObjectMarker:
         return self.object_appender
 
-    def find_active_lighting(self) -> Union[bpy.types.Object, None]:
+    def find_active_lighting(self) -> Optional[bpy.types.Object]:
         for obj in self.collection.objects.values():
             if obj.type != 'EMPTY' or obj.parent is not None or not self.object_marker.is_marked(obj):
                 continue

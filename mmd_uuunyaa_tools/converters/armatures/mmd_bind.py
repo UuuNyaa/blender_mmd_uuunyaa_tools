@@ -5,7 +5,7 @@
 from abc import abstractmethod
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
 import bpy
 from mmd_uuunyaa_tools.converters.armatures.mmd import MMDBoneInfo
@@ -38,8 +38,8 @@ class MMDBindType(Enum):
 class MMDBindInfo:
     bone_info: MMDBoneInfo
 
-    pose_bone_name: Union[str, None]
-    bind_bone_name: Union[str, None]
+    pose_bone_name: Optional[str]
+    bind_bone_name: Optional[str]
 
     group_type: GroupType
     bind_type: MMDBindType
@@ -109,7 +109,7 @@ class MMDBindArmatureObjectABC(ArmatureEditor, PoseBoneEditor):
 
             self.add_prop(prop_storage_bone, data_path.prop_name)
 
-    def assign_mmd_bone_names(self, mmd2pose_bone_name_overrides: Union[Dict[str, str], None] = None):
+    def assign_mmd_bone_names(self, mmd2pose_bone_name_overrides: Optional[Dict[str, str]] = None):
         pose_bones = self.pose_bones
         mmd_bone_name2pose_bone_names = {b.bone_info.mmd_bone_name: b.pose_bone_name for b in self.mmd_bind_infos}
 

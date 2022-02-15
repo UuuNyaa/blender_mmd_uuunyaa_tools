@@ -7,7 +7,7 @@ import os
 import re
 from abc import ABC
 from dataclasses import dataclass
-from typing import Dict, Iterable, List, Union
+from typing import Dict, Iterable, List, Optional
 
 import bpy
 import rna_prop_ui
@@ -107,7 +107,7 @@ class PoseBoneEditor(ABC):
         target_object: bpy.types.Object,
         subtarget: str,
         space: str,
-        influence_data_path: Union[str, None] = None,
+        influence_data_path: Optional[str] = None,
         invert_influence: bool = False,
         **kwargs
     ) -> bpy.types.Constraint:
@@ -131,7 +131,7 @@ class PoseBoneEditor(ABC):
         target_object: bpy.types.Object,
         subtarget: str,
         space: str,
-        influence_data_path: Union[str, None] = None,
+        influence_data_path: Optional[str] = None,
         invert_influence: bool = False,
         **kwargs
     ) -> bpy.types.Constraint:
@@ -155,7 +155,7 @@ class PoseBoneEditor(ABC):
         target_object: bpy.types.Object,
         subtarget: str,
         space: str,
-        influence_data_path: Union[str, None] = None,
+        influence_data_path: Optional[str] = None,
         invert_influence: bool = False,
         **kwargs
     ) -> bpy.types.Constraint:
@@ -179,7 +179,7 @@ class PoseBoneEditor(ABC):
         target_object: bpy.types.Object,
         subtarget: str,
         space: str,
-        influence_data_path: Union[str, None] = None,
+        influence_data_path: Optional[str] = None,
         invert_influence: bool = False,
         **kwargs
     ) -> bpy.types.Constraint:
@@ -204,7 +204,7 @@ class PoseBoneEditor(ABC):
         subtarget: str,
         chain_count: int,
         iterations: int,
-        influence_data_path: Union[str, None] = None,
+        influence_data_path: Optional[str] = None,
         invert_influence: bool = False,
         **kwargs
     ) -> bpy.types.Constraint:
@@ -249,7 +249,7 @@ class EditBoneEditor(ABC):
         return bone.head + bone.vector * stretch_factor
 
     @staticmethod
-    def to_bone_suffix(bone_name: str) -> Union[str, None]:
+    def to_bone_suffix(bone_name: str) -> Optional[str]:
         match = re.search(r'[_\.]([lLrR])$', bone_name)
         if not match:
             return None

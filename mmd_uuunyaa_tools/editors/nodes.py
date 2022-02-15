@@ -4,7 +4,7 @@
 
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, Tuple, Union
+from typing import Any, Dict, Iterable, Optional, Tuple
 
 import bpy
 from bpy.types import (Node, NodeFrame, NodeGroup, NodeSocket, ShaderNode,
@@ -192,7 +192,7 @@ class MaterialEditor(NodeEditor):
     def find_principled_shader_node(self) -> ShaderNodeBsdfPrincipled:
         return self.find_node(ShaderNodeBsdfPrincipled, label='', name='Principled BSDF')
 
-    def find_active_principled_shader_node(self) -> Union[ShaderNodeBsdfPrincipled, None]:
+    def find_active_principled_shader_node(self) -> Optional[ShaderNodeBsdfPrincipled]:
         node_output = self.get_output_node()
         node_socket = node_output.inputs['Surface']
         node_socket_links = node_socket.links

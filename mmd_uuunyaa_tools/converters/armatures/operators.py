@@ -2,7 +2,7 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Iterable, Tuple, Union
+from typing import Iterable, Optional, Tuple
 
 import bpy
 from mmd_uuunyaa_tools.converters.armatures import (AutoRigArmatureObject,
@@ -93,11 +93,11 @@ class MMDArmatureAddMetarig(bpy.types.Operator):
 
 class MMDRigifyOperatorABC:
     @classmethod
-    def find_armature_objects(cls, objects: Iterable[bpy.types.Object]) -> Tuple[Union[bpy.types.Object, None], Union[bpy.types.Object, None]]:
+    def find_armature_objects(cls, objects: Iterable[bpy.types.Object]) -> Tuple[Optional[bpy.types.Object], Optional[bpy.types.Object]]:
         mmd_tools = import_mmd_tools()
 
-        rigify_object: Union[bpy.types.Object, None] = None
-        mmd_object: Union[bpy.types.Object, None] = None
+        rigify_object: Optional[bpy.types.Object] = None
+        mmd_object: Optional[bpy.types.Object] = None
 
         for obj in objects:
             if obj.type != 'ARMATURE':

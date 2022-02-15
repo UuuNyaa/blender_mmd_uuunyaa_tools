@@ -13,7 +13,7 @@ import shutil
 import stat
 import urllib
 import zipfile
-from typing import List, Union
+from typing import List, Optional
 
 import bpy
 import requests
@@ -372,7 +372,7 @@ class ImportActionExecutor:
         bpy.ops.object.delete()
 
     @staticmethod
-    def execute_import_action(asset: AssetDescription, target_file: Union[str, None]):
+    def execute_import_action(asset: AssetDescription, target_file: Optional[str]):
         tree = ast.parse(asset.import_action)
 
         functions = {

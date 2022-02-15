@@ -6,7 +6,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, Iterable, List, Set, Tuple, Union
+from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 import bmesh
 import bpy
@@ -268,8 +268,8 @@ class RigidBodyToClothConverter:
         cloth_bm.normal_update()
 
     @staticmethod
-    def extend_side_vertices(cloth_bm: bmesh.types.BMesh, vertices: Vertices, edges: Edges) -> List[Union[bmesh.types.BMVert, None]]:
-        new_side_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
+    def extend_side_vertices(cloth_bm: bmesh.types.BMesh, vertices: Vertices, edges: Edges) -> List[Optional[bmesh.types.BMVert]]:
+        new_side_verts: List[Optional[bmesh.types.BMVert]] = [None for i in range(len(cloth_bm.verts))]
 
         for vert in vertices.side_verts:
             for edge in vert.link_edges:
@@ -285,10 +285,10 @@ class RigidBodyToClothConverter:
         return new_side_verts
 
     @staticmethod
-    def extend_ribbon_vertices(cloth_bm: bmesh.types.BMesh) -> List[Union[bmesh.types.BMVert, None]]:
+    def extend_ribbon_vertices(cloth_bm: bmesh.types.BMesh) -> List[Optional[bmesh.types.BMVert]]:
         # 挤出飘带顶点
         # extrude ribbon edge
-        new_ribbon_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
+        new_ribbon_verts: List[Optional[bmesh.types.BMVert]] = [None for i in range(len(cloth_bm.verts))]
 
         for vert in cloth_bm.verts:
             if not vert.is_wire:
@@ -312,8 +312,8 @@ class RigidBodyToClothConverter:
                 cloth_bm.faces.new([vert1, vert2, vert3, vert4])
 
     @staticmethod
-    def extend_up_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges, physics_mode: PhysicsMode) -> List[Union[bmesh.types.BMVert, None]]:
-        new_up_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
+    def extend_up_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges, physics_mode: PhysicsMode) -> List[Optional[bmesh.types.BMVert]]:
+        new_up_verts: List[Optional[bmesh.types.BMVert]] = [None for i in range(len(cloth_bm.verts))]
 
         # 延长头部顶点
         # extend root vertex
@@ -344,8 +344,8 @@ class RigidBodyToClothConverter:
         return new_up_verts
 
     @staticmethod
-    def extend_down_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges) -> List[Union[bmesh.types.BMVert, None]]:
-        new_down_verts: List[Union[bmesh.types.BMVert, None]] = [None for i in range(len(cloth_bm.verts))]
+    def extend_down_edges(cloth_bm: bmesh.types.BMesh, pose_bones: List[bpy.types.PoseBone], vertices: Vertices, edges: Edges) -> List[Optional[bmesh.types.BMVert]]:
+        new_down_verts: List[Optional[bmesh.types.BMVert]] = [None for i in range(len(cloth_bm.verts))]
         # 延长尾部顶点
         # extend tail vertex
         for vert in vertices.down_verts:

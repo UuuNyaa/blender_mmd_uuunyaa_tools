@@ -6,7 +6,7 @@ import datetime
 import math
 from dataclasses import dataclass
 from enum import IntEnum
-from typing import Dict, List, Set, Tuple, Union
+from typing import Dict, List, Optional, Set, Tuple
 
 import bmesh
 import bpy
@@ -408,7 +408,7 @@ def assign_deform_weights(pyramid_armature_object: bpy.types.Object, deform_mesh
     vertex_kdtree.balance()
 
     def collect_nid2weight(position: Vector, scale: float):
-        max_weight: Union[float, None] = None
+        max_weight: Optional[float] = None
         nid2weight: Dict[int, float] = {}
         for _co, near_uid, near_span in vertex_kdtree.find_n(position, 16):
             weight = math.exp(-near_span/scale)
@@ -627,7 +627,7 @@ def to_apex_vertex(deform_bmesh: bmesh.types.BMesh, to_world_matrix, target_dire
 
     mesh_max_weight = 0.0
 
-    apex_location: Union[Vector, None] = None
+    apex_location: Optional[Vector] = None
 
     tri_loops: Tuple[bmesh.types.BMLoop, bmesh.types.BMLoop, bmesh.types.BMLoop]
     for tri_loops in deform_bmesh.calc_loop_triangles():

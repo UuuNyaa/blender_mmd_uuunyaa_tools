@@ -2,7 +2,7 @@
 # Copyright 2022 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Optional, Tuple
 
 import bpy
 import mathutils
@@ -34,26 +34,23 @@ class StretchBoneToVertexOperator(bpy.types.Operator):
         return False
 
     def execute(self, context: bpy.types.Context):
-        target_pose_bones: List[bpy.types.PoseBone] = [b for b in context.selected_pose_bones]
+        target_pose_bones: List[bpy.types.PoseBone] = list(context.selected_pose_bones)
         target_mesh_objects: List[bpy.types.Object] = [o for o in context.selected_objects if o.type == 'MESH' and not o.hide]
 
-        i2vm: Dict[int, Tuple[bpy.types.MeshVertex, bpy.types.Object]] = {i: vm for i, vm in enumerate((v, m) for m in target_mesh_objects for v in m.data.vertices)}
+        i2vm: Dict[int, Tuple[bpy.types.MeshVertex, bpy.types.Object]] = dict(enumerate((v, m) for m in target_mesh_objects for v in m.data.vertices))
 
-        mesh_object: Union[bpy.types.Object, None] = None
+        mesh_object: Optional[bpy.types.Object] = None
         mesh_matrix: Matrix = Matrix()
         vertex_index = mathutils.kdtree.KDTree(len(i2vm))
         for i, (v, m) in i2vm.items():
             if m != mesh_object:
                 mesh_object = m
                 mesh_matrix = m.matrix_world
-                
+
             vertex_index.insert(mesh_matrix @ v.co, i)
         vertex_index.balance()
 
         distance_threshold: float = self.distance_threshold
-
-        index: int
-        distance: float
 
         def clear_and_new_constraint(constraints: bpy.types.PoseBoneConstraints, type_name: str):
             c: bpy.types.Constraint
@@ -63,7 +60,7 @@ class StretchBoneToVertexOperator(bpy.types.Operator):
                 pose_bone.constraints.remove(c)
             return constraints.new(type=type_name)
 
-        def set_vertex_group(co: Vector, name: str) -> Tuple[Union[bpy.types.MeshVertex, None], Union[bpy.types.Object, None]]:
+        def set_vertex_group(co: Vector, name: str) -> Tuple[Optional[bpy.types.MeshVertex], Optional[bpy.types.Object]]:
             _co, index, distance = vertex_index.find(co)
             if distance > distance_threshold:
                 return None, None

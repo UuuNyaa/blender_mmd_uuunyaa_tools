@@ -5,7 +5,7 @@
 import functools
 import time
 from enum import Enum
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple
 
 import bpy
 import bpy.utils.previews
@@ -16,7 +16,7 @@ from mmd_uuunyaa_tools.asset_search.operators import DeleteDebugAssetJson, Reloa
 from mmd_uuunyaa_tools.m17n import _, iface_
 from mmd_uuunyaa_tools.utilities import get_preferences, label_multiline, to_human_friendly_text, to_int32
 
-PREVIEWS: Union[bpy.utils.previews.ImagePreviewCollection, None]
+PREVIEWS: Optional[bpy.utils.previews.ImagePreviewCollection]
 
 
 class AssetState(Enum):
@@ -38,7 +38,7 @@ class Utilities:
         )
 
     @staticmethod
-    def get_asset_state(asset: AssetDescription) -> Tuple[AssetState, Union[Content, None], Union[Task, None]]:
+    def get_asset_state(asset: AssetDescription) -> Tuple[AssetState, Optional[Content], Optional[Task]]:
         if ASSETS.is_extracted(asset.id):
             return (AssetState.EXTRACTED, None, None)
 

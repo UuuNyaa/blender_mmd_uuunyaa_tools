@@ -5,7 +5,7 @@
 import math
 from dataclasses import dataclass
 from enum import Enum
-from typing import Set, Tuple, Union
+from typing import Optional, Set, Tuple
 
 import bpy
 from mmd_uuunyaa_tools.m17n import _, iface_
@@ -55,7 +55,7 @@ class CheckResult:
     status: CheckResultStatus
     impact: float
     data_path: str
-    message: Union[str, None]
+    message: Optional[str]
     indent: int = 0
     editable: bool = True
 
@@ -236,7 +236,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_object(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+    def check_use_pass_cryptomatte_object(cls, context: bpy.types.Context) -> Optional[CheckResult]:
         if not hasattr(context.view_layer, 'use_pass_cryptomatte_object'):
             return None
 
@@ -249,7 +249,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_material(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+    def check_use_pass_cryptomatte_material(cls, context: bpy.types.Context) -> Optional[CheckResult]:
         if not hasattr(context.view_layer, 'use_pass_cryptomatte_material'):
             return None
 
@@ -262,7 +262,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_cryptomatte_asset(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+    def check_use_pass_cryptomatte_asset(cls, context: bpy.types.Context) -> Optional[CheckResult]:
         if not hasattr(context.view_layer, 'use_pass_cryptomatte_asset'):
             return None
 
@@ -365,7 +365,7 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_use_pass_volume_direct(cls, context: bpy.types.Context) -> Union[CheckResult, None]:
+    def check_use_pass_volume_direct(cls, context: bpy.types.Context) -> Optional[CheckResult]:
         if not hasattr(context.view_layer.eevee, 'use_pass_volume_direct'):
             return None
 

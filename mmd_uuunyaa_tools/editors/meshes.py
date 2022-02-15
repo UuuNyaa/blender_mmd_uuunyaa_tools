@@ -2,11 +2,11 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Any, Dict, Iterable, List, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import bpy
 
-SettingsOrNone = Union[Dict[str, Any], None]
+SettingsOrNone = Optional[Dict[str, Any]]
 
 
 class MeshEditor:
@@ -59,7 +59,7 @@ class MeshEditor:
             **kwargs
         )
 
-    def find_subsurface_modifier(self, name: str) -> Union[bpy.types.SubsurfModifier, None]:
+    def find_subsurface_modifier(self, name: str) -> Optional[bpy.types.SubsurfModifier]:
         for modifier in self.mesh_object.modifiers:
             if modifier.type == 'SUBSURF' and modifier.name == name:
                 return modifier
@@ -78,7 +78,7 @@ class MeshEditor:
             **kwargs
         )
 
-    def find_armature_modifier(self, name: Union[str, None]) -> Union[bpy.types.ArmatureModifier, None]:
+    def find_armature_modifier(self, name: Optional[str]) -> Optional[bpy.types.ArmatureModifier]:
         for modifier in self.mesh_object.modifiers:
             if modifier.type != 'ARMATURE':
                 continue
@@ -100,7 +100,7 @@ class MeshEditor:
             **kwargs
         )
 
-    def find_singleton_modifier(self, modifier_type: str) -> Union[bpy.types.Modifier, None]:
+    def find_singleton_modifier(self, modifier_type: str) -> Optional[bpy.types.Modifier]:
         if modifier_type not in {'CLOTH', 'COLLISION', 'DYNAMIC_PAINT'}:
             raise NotImplementedError(f'{modifier_type} is not supported.')
 
@@ -126,7 +126,7 @@ class MeshEditor:
 
         self.mesh_object.modifiers.remove(modifier)
 
-    def find_cloth_modifier(self) -> Union[bpy.types.ClothModifier, None]:
+    def find_cloth_modifier(self) -> Optional[bpy.types.ClothModifier]:
         return self.find_singleton_modifier('CLOTH')
 
     def get_cloth_modifier(self, name: str = 'Cloth') -> bpy.types.ClothModifier:
@@ -135,13 +135,13 @@ class MeshEditor:
     def edit_cloth_modifier(self, name: str, **kwargs) -> bpy.types.ClothModifier:
         return self.edit_singleton_modifier(self.get_cloth_modifier(name), **kwargs)
 
-    def find_cloth_settings(self) -> Union[bpy.types.ClothSettings, None]:
+    def find_cloth_settings(self) -> Optional[bpy.types.ClothSettings]:
         modifier = self.find_cloth_modifier()
         if modifier is None:
             return None
         return modifier.settings
 
-    def find_cloth_collision_settings(self) -> Union[bpy.types.ClothCollisionSettings, None]:
+    def find_cloth_collision_settings(self) -> Optional[bpy.types.ClothCollisionSettings]:
         modifier = self.find_cloth_modifier()
         if modifier is None:
             return None
@@ -150,10 +150,10 @@ class MeshEditor:
     def remove_cloth_modifier(self):
         self.remove_singleton_modifier('CLOTH')
 
-    def find_collision_modifier(self) -> Union[bpy.types.CollisionModifier, None]:
+    def find_collision_modifier(self) -> Optional[bpy.types.CollisionModifier]:
         return self.find_singleton_modifier('COLLISION')
 
-    def find_collision_settings(self) -> Union[bpy.types.CollisionSettings, None]:
+    def find_collision_settings(self) -> Optional[bpy.types.CollisionSettings]:
         modifier = self.find_collision_modifier()
         if modifier is None:
             return None
@@ -184,13 +184,13 @@ class MeshEditor:
     def remove_collision_modifier(self):
         self.remove_singleton_modifier('COLLISION')
 
-    def find_dynamic_paint_modifier(self) -> Union[bpy.types.DynamicPaintModifier, None]:
+    def find_dynamic_paint_modifier(self) -> Optional[bpy.types.DynamicPaintModifier]:
         return self.find_singleton_modifier('DYNAMIC_PAINT')
 
     def get_dynamic_paint_modifier(self, name: str = 'Dynamic Paint') -> bpy.types.DynamicPaintModifier:
         return self.get_singleton_modifier('DYNAMIC_PAINT', name)
 
-    def find_dynamic_paint_brush_settings(self) -> Union[bpy.types.DynamicPaintBrushSettings, None]:
+    def find_dynamic_paint_brush_settings(self) -> Optional[bpy.types.DynamicPaintBrushSettings]:
         modifier = self.find_dynamic_paint_modifier()
         if modifier is None:
             return None
@@ -208,7 +208,7 @@ class MeshEditor:
 
         return modifier
 
-    def find_dynamic_paint_canvas_settings(self) -> Union[bpy.types.DynamicPaintCanvasSettings, None]:
+    def find_dynamic_paint_canvas_settings(self) -> Optional[bpy.types.DynamicPaintCanvasSettings]:
         modifier = self.find_dynamic_paint_modifier()
         if modifier is None:
             return None
@@ -226,7 +226,7 @@ class MeshEditor:
 
         return modifier
 
-    def find_rigid_body_object(self) -> Union[bpy.types.RigidBodyObject, None]:
+    def find_rigid_body_object(self) -> Optional[bpy.types.RigidBodyObject]:
         return self.mesh_object.rigid_body
 
     @staticmethod
@@ -237,7 +237,7 @@ class MeshEditor:
 
         return False
 
-    def find_vertex_group(self, name: str) -> Union[bpy.types.VertexGroup, None]:
+    def find_vertex_group(self, name: str) -> Optional[bpy.types.VertexGroup]:
         return self.mesh_object.vertex_groups.get(name, None)
 
     def add_vertex_group(self, name: str) -> bpy.types.VertexGroup:
@@ -259,7 +259,7 @@ class MeshEditor:
             )
         return vertex_group
 
-    def find_armature_object(self) -> Union[bpy.types.Object, None]:
+    def find_armature_object(self) -> Optional[bpy.types.Object]:
         return self.mesh_object.find_armature()
 
 

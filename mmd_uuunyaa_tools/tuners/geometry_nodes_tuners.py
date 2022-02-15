@@ -2,7 +2,7 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
-from typing import Union
+from typing import Optional
 
 import bpy
 from mmd_uuunyaa_tools.m17n import _
@@ -13,14 +13,14 @@ try:
 
     class GeometryNodesUtilities:
         @staticmethod
-        def find_geometry_node_tree(obj: bpy.types.Object) -> Union[bpy.types.GeometryNodeTree, None]:
+        def find_geometry_node_tree(obj: bpy.types.Object) -> Optional[bpy.types.GeometryNodeTree]:
             modifier = GeometryNodesUtilities.find_geometry_node_modifier(obj)
             if modifier:
                 return modifier.node_group
             return None
 
         @staticmethod
-        def find_geometry_node_modifier(obj: bpy.types.Object) -> Union[bpy.types.NodesModifier, None]:
+        def find_geometry_node_modifier(obj: bpy.types.Object) -> Optional[bpy.types.NodesModifier]:
             modifier: bpy.types.Modifier
             for modifier in obj.modifiers:
                 if not modifier.is_active:

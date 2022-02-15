@@ -12,10 +12,11 @@ import traceback
 from abc import ABC, abstractmethod
 from concurrent.futures import Future, ThreadPoolExecutor
 from enum import Enum
-from typing import Callable, Dict, List, OrderedDict, Union
+from typing import Callable, Dict, List, Optional, OrderedDict
 
 from mmd_uuunyaa_tools import REGISTER_HOOKS
-from mmd_uuunyaa_tools.asset_search.url_resolvers import URLResolver, URLResolverABC
+from mmd_uuunyaa_tools.asset_search.url_resolvers import (URLResolver,
+                                                          URLResolverABC)
 from mmd_uuunyaa_tools.utilities import get_preferences
 
 URL = str
@@ -99,11 +100,11 @@ class CacheABC(ABC):
         pass
 
     @abstractmethod
-    def try_get_content(self, url: URL) -> Union[Content, None]:
+    def try_get_content(self, url: URL) -> Optional[Content]:
         pass
 
     @abstractmethod
-    def try_get_task(self, url: URL) -> Union[Task, None]:
+    def try_get_task(self, url: URL) -> Optional[Task]:
         pass
 
     @abstractmethod
@@ -305,7 +306,7 @@ class ContentCache(CacheABC):
 
         return True
 
-    def try_get_content(self, url: URL) -> Union[Content, None]:
+    def try_get_content(self, url: URL) -> Optional[Content]:
         content_id = Content.to_content_id(url)
         with self._lock:
             if content_id not in self._contents:
@@ -340,7 +341,7 @@ class ContentCache(CacheABC):
 
             return content
 
-    def try_get_task(self, url: URL) -> Union[Task, None]:
+    def try_get_task(self, url: URL) -> Optional[Task]:
         with self._lock:
             return self._tasks[url] if url in self._tasks else None
 
@@ -401,10 +402,10 @@ class ReloadableContentCache(CacheABC):
     def remove_content(self, url: URL) -> bool:
         return self._cache.remove_content(url)
 
-    def try_get_content(self, url: URL) -> Union[Content, None]:
+    def try_get_content(self, url: URL) -> Optional[Content]:
         return self._cache.try_get_content(url)
 
-    def try_get_task(self, url: URL) -> Union[Task, None]:
+    def try_get_task(self, url: URL) -> Optional[Task]:
         return self._cache.try_get_task(url)
 
     def async_get_content(self, url: URL, callback: Callback) -> Future:
