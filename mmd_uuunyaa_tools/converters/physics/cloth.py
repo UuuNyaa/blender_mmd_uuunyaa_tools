@@ -179,7 +179,7 @@ class UuuNyaaClothAdjuster(bpy.types.Panel):
         row.prop(cloth_settings, 'frame_start', text=_('Simulation Start'))
         row.prop(cloth_settings, 'frame_end', text=_('Simulation End'))
 
-        if MeshEditor(mesh_object).find_subsurface_modifier('mmd_uuunyaa_physics_cloth_subsurface') is None:
+        if MeshEditor(mesh_object).find_subsurface_modifier('physics_cloth_subsurface') is None:
             return
 
         col = layout.column(align=True)
@@ -481,32 +481,60 @@ class ClothAdjusterSettingsPropertyGroup(bpy.types.PropertyGroup):
     )
 
     @staticmethod
-    def _set_subdivision_levels(prop, value):
+    def _set_subdivision_levels(prop, subdivision_level):
         cloth_mesh_object: bpy.types.Object = prop.id_data
-        cloth_modifier: bpy.types.ClothModifier = MeshEditor(prop.id_data).find_subsurface_modifier(name='mmd_uuunyaa_physics_cloth_subsurface')
-        cloth_modifier.levels = value
-        cloth_modifier.render_levels = value
+        cloth_mesh_editor = MeshEditor(cloth_mesh_object)
 
-        for obj in bpy.data.objects:
-            if obj.type != 'MESH':
-                continue
+        cloth_subsurface_modifier = cloth_mesh_editor.find_subsurface_modifier(name='physics_cloth_subsurface')
+        if cloth_subsurface_modifier is None:
+            return
 
-            for modifier in obj.modifiers:
-                if modifier.type != 'SURFACE_DEFORM':
-                    continue
-
-                if modifier.target != cloth_mesh_object:
-                    continue
-
-                # bind/unbind -> unbind/bind
-                # pylint: disable=redundant-keyword-arg
-                bpy.ops.object.surfacedeform_bind({'object': obj}, modifier=modifier.name)
-                bpy.ops.object.surfacedeform_bind({'object': obj}, modifier=modifier.name)
+        def set_bind_modifier(modifier: bpy.types.Modifier, bind: bool):
+            if modifier is None:
                 return
+
+            if bind and not modifier.show_viewport:
+                return
+
+            if modifier.type == 'SURFACE_DEFORM':
+                if bind == modifier.is_bound:
+                    return
+                bpy.ops.object.surfacedeform_bind({'object': modifier.id_data}, modifier=modifier.name)
+            elif modifier.type == 'CORRECTIVE_SMOOTH':
+                if bind == modifier.is_bind:
+                    return
+                bpy.ops.object.correctivesmooth_bind({'object': modifier.id_data}, modifier=modifier.name)
+
+        def set_bind_modifiers(modifiers: Iterable[bpy.types.Modifier], bind: bool):
+            for modifier in modifiers:
+                set_bind_modifier(modifier, bind)
+
+        cloth_corrective_smooth_modifier = cloth_mesh_editor.find_corrective_smooth_modifier()
+        target_mesh_modifiers: List[bpy.types.SurfaceDeformModifier] = [
+            m
+            for o in bpy.data.objects
+            for m in o.modifiers
+            if m.type == 'SURFACE_DEFORM' and m.target == cloth_mesh_object
+        ]
+
+        if cloth_corrective_smooth_modifier is not None:
+            if subdivision_level == 0:
+                cloth_corrective_smooth_modifier.show_viewport = False
+            else:
+                cloth_corrective_smooth_modifier.show_viewport = True
+                set_bind_modifier(cloth_corrective_smooth_modifier, False)
+
+        set_bind_modifiers(target_mesh_modifiers, False)
+
+        cloth_subsurface_modifier.levels = subdivision_level
+        cloth_subsurface_modifier.render_levels = subdivision_level
+
+        set_bind_modifier(cloth_corrective_smooth_modifier, True)
+        set_bind_modifiers(target_mesh_modifiers, True)
 
     subdivision_levels: bpy.props.IntProperty(
         name=_('Subdivision Levels'), min=0, soft_max=2, max=6,
-        get=lambda p: getattr(MeshEditor(p.id_data).find_subsurface_modifier(name='mmd_uuunyaa_physics_cloth_subsurface'), 'levels', 0),
+        get=lambda p: getattr(MeshEditor(p.id_data).find_subsurface_modifier(name='physics_cloth_subsurface'), 'levels', 0),
         set=_set_subdivision_levels.__func__,
     )
 

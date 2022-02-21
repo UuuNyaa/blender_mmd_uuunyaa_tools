@@ -88,20 +88,23 @@ class MeshEditor:
 
         return None
 
-    def add_corrective_smooth_modifier(self, name: str, **kwargs) -> bpy.types.Modifier:
+    def add_corrective_smooth_modifier(self, name: str, **kwargs) -> bpy.types.CorrectiveSmoothModifier:
         return self.add_modifier(
             'CORRECTIVE_SMOOTH', name,
             **kwargs
         )
 
-    def add_surface_deform_modifier(self, name: str, **kwargs) -> bpy.types.Modifier:
+    def find_corrective_smooth_modifier(self) -> Optional[bpy.types.CorrectiveSmoothModifier]:
+        return self.find_singleton_modifier('CORRECTIVE_SMOOTH')
+
+    def add_surface_deform_modifier(self, name: str, **kwargs) -> bpy.types.SurfaceDeformModifier:
         return self.add_modifier(
             'SURFACE_DEFORM', name,
             **kwargs
         )
 
     def find_singleton_modifier(self, modifier_type: str) -> Optional[bpy.types.Modifier]:
-        if modifier_type not in {'CLOTH', 'COLLISION', 'DYNAMIC_PAINT'}:
+        if modifier_type not in {'CLOTH', 'COLLISION', 'CORRECTIVE_SMOOTH', 'DYNAMIC_PAINT'}:
             raise NotImplementedError(f'{modifier_type} is not supported.')
 
         for modifier in self.mesh_object.modifiers:
