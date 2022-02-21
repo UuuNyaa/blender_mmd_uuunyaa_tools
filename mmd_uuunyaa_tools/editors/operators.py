@@ -96,10 +96,63 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
         eevee.gi_irradiance_smoothing = 0.50
 
         # Film > Transparent
-        bpy.data.scenes['Scene'].render.film_transparent = self.film_transparent
+        context.scene.render.film_transparent = self.film_transparent
 
-        # Color Management > Look: High Contrast
-        bpy.data.scenes['Scene'].view_settings.look = 'High Contrast'
+        # Color Management
+        # > View Transform: Filmic
+        context.scene.view_settings.view_transform = 'Filmic'
+        # > Look: High Contrast
+        context.scene.view_settings.look = 'High Contrast'
+
+        return {'FINISHED'}
+
+
+class SetupRenderEngineForWorkbench(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.setup_render_engine_for_workbench'
+    bl_label = _('Setup Render Engine for Workbench')
+    bl_description = _('Setup render engine properties for Workbench.')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    use_shadow: bpy.props.BoolProperty(name=_('Use Shadow'), default=True)
+    use_dof: bpy.props.BoolProperty(name=_('Use Depth of Field'), default=True)
+    film_transparent: bpy.props.BoolProperty(name=_('Use Film Transparent'), default=False)
+
+    @classmethod
+    def poll(cls, _context):
+        return True
+
+    def execute(self, context: bpy.types.Context):
+        if context.scene.render.engine != 'BLENDER_WORKBENCH':
+            context.scene.render.engine = 'BLENDER_WORKBENCH'
+
+        shading = context.scene.display.shading
+
+        # Lighting: Flat
+        shading.light = 'FLAT'
+
+        # Color: Texture
+        shading.color_type = 'TEXTURE'
+
+        # Options
+        # > Cavity: enable
+        shading.show_cavity = self.use_shadow
+        # > Type: World
+        shading.cavity_type = 'WORLD'
+        # > Ridge: 0.200
+        shading.cavity_ridge_factor = 0.200
+        # > Valley: 1.000
+        shading.cavity_valley_factor = 1.000
+        # > Depth of Field: enable
+        shading.use_dof = self.use_dof
+
+        # Film > Transparent
+        context.scene.render.film_transparent = self.film_transparent
+
+        # Color Management
+        # > View Transform: Standard
+        context.scene.view_settings.view_transform = 'Standard'
+        # > Look: None
+        context.scene.view_settings.look = 'None'
 
         return {'FINISHED'}
 
