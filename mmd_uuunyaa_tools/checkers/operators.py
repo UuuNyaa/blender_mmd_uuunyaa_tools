@@ -443,12 +443,12 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         return (context, path_fragments[-1])
 
     @classmethod
-    def check_meshes_use_auto_smooth(cls, _context) -> CheckResult:
+    def check_meshes_use_auto_smooth(cls, context: bpy.types.Context) -> CheckResult:
         mesh_count = 0
         use_auto_smooth_mesh_count = 0
 
         obj: bpy.types.Object
-        for obj in bpy.data.objects:
+        for obj in context.view_layer.objects:
             if obj.type != 'MESH':
                 continue
 
@@ -474,11 +474,11 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
         )
 
     @classmethod
-    def check_materials_method(cls, _context) -> CheckResult:
+    def check_materials_method(cls, context: bpy.types.Context) -> CheckResult:
         active_materials: Set[bpy.types.Material] = set()
 
         obj: bpy.types.Object
-        for obj in bpy.data.objects:
+        for obj in context.view_layer.objects:
             if obj.type != 'MESH':
                 continue
 
@@ -487,6 +487,8 @@ class CheckEeveeRenderingPerformance(bpy.types.Operator):
 
             material_slot: bpy.types.MaterialSlot
             for material_slot in obj.material_slots:
+                if material_slot.material is None:
+                    continue
                 active_materials.add(material_slot.material)
 
         material_count = len(active_materials)
@@ -614,9 +616,9 @@ class SelectMeshObjectsWithUseAutoSmooth(bpy.types.Operator):
     bl_label = _('Select Mesh Objects with Use Auto Smooth')
     bl_options = {'REGISTER', 'UNDO'}
 
-    def execute(self, _context):
+    def execute(self, context: bpy.types.Context):
         obj: bpy.types.Object
-        for obj in bpy.data.objects:
+        for obj in context.view_layer.objects:
             if obj.type != 'MESH':
                 continue
 
@@ -637,9 +639,9 @@ class SelectMeshObjectsWithSlowMaterial(bpy.types.Operator):
     bl_label = _('Select Mesh Objects with Use Alpha Hashed')
     bl_options = {'REGISTER', 'UNDO'}
 
-    def execute(self, _context):
+    def execute(self, context: bpy.types.Context):
         obj: bpy.types.Object
-        for obj in bpy.data.objects:
+        for obj in context.view_layer.objects:
             if obj.type != 'MESH':
                 continue
 
@@ -649,6 +651,8 @@ class SelectMeshObjectsWithSlowMaterial(bpy.types.Operator):
             material_slot: bpy.types.MaterialSlot
             for material_slot in obj.material_slots:
                 material = material_slot.material
+                if material is None:
+                    continue
 
                 if material.blend_method != 'HASHED' and material.shadow_method != 'HASHED':
                     continue
