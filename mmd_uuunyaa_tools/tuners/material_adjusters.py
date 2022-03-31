@@ -139,51 +139,6 @@ class SubsurfaceAdjuster(MaterialAdjusterABC):
         self.nodes.remove(node_subsurface_adjuster)
 
 
-class EmissionAdjuster(MaterialAdjusterABC):
-    @classmethod
-    def get_id(cls) -> str:
-        return 'MATERIAL_ADJUSTER_EMISSION'
-
-    @classmethod
-    def get_name(cls) -> str:
-        return _('Emission Adjuster')
-
-    translation_properties = [
-        _('Min'),
-        _('Max'),
-        _('Blood Color'),
-        _('Subsurface'),
-        _('Subsurface Color'),
-    ]
-
-    def attach(self) -> ShaderNodeGroup:
-        node_frame = self.get_adjusters_node_frame()
-        node_emission_adjuster = self.find_node(ShaderNodeGroup, label=self.get_name(), node_frame=node_frame)
-
-        node_shader = self.find_active_principled_shader_node()
-        node_emission_adjuster = self.edit(self.get_emission_adjuster_node(), {
-            'Min': self.to_link_or_value(node_shader.inputs['Subsurface']),
-            'Max': 0.300,
-            'Blood Color': self.to_link_or_value(node_shader.inputs['Subsurface Color']),
-        }, {'location': self.grid_to_position(-2, -8), 'parent': node_frame})
-
-        self.edit(node_shader, {
-            'Subsurface':  node_emission_adjuster.outputs['Subsurface'],
-            'Subsurface Color': node_emission_adjuster.outputs['Subsurface Color'],
-        }, force=True)
-
-        return node_emission_adjuster
-
-    def detach(self):
-        node_emission_adjuster = self.get_emission_adjuster_node()
-
-        self.edit(self.find_active_principled_shader_node(), {
-            'Subsurface': self.to_link_or_value(node_emission_adjuster.inputs['Min']),
-            'Subsurface Color': self.to_link_or_value(node_emission_adjuster.inputs['Blood Color']),
-        }, force=True)
-
-        self.nodes.remove(node_emission_adjuster)
-
 class GlitterAdjuster(MaterialAdjusterABC):
     @classmethod
     def get_id(cls) -> str:
@@ -230,9 +185,55 @@ class GlitterAdjuster(MaterialAdjusterABC):
         self.nodes.remove(node_glitter_adjuster)
 
 
+class EmissionAdjuster(MaterialAdjusterABC):
+    @classmethod
+    def get_id(cls) -> str:
+        return 'MATERIAL_ADJUSTER_EMISSION'
+
+    @classmethod
+    def get_name(cls) -> str:
+        return _('Emission Adjuster')
+
+    translation_properties = [
+        _('Color'),
+        _('Threshold'),
+        _('Strength'),
+        _('Emission'),
+        _('Emission Strength'),
+    ]
+
+    def attach(self) -> ShaderNodeGroup:
+        node_frame = self.get_adjusters_node_frame()
+        node_emission_adjuster = self.find_node(ShaderNodeGroup, label=self.get_name(), node_frame=node_frame)
+
+        node_shader = self.find_active_principled_shader_node()
+        node_emission_adjuster = self.edit(self.get_emission_adjuster_node(), {
+            'Color': self.to_link_or_value(node_shader.inputs['Base Color']),
+            'Threshold': 0.500,
+            'Strength': 5.000,
+        }, {'location': self.grid_to_position(-2, -14), 'parent': node_frame})
+
+        self.edit(node_shader, {
+            'Emission':  node_emission_adjuster.outputs['Emission'],
+            'Emission Strength': node_emission_adjuster.outputs['Emission Strength'],
+        }, force=True)
+
+        return node_emission_adjuster
+
+    def detach(self):
+        node_emission_adjuster = self.get_emission_adjuster_node()
+
+        self.edit(self.find_active_principled_shader_node(), {
+            'Emission': self.hex_to_rgba(0x000000),
+            'Emission Strength': 1.000,
+        }, force=True)
+
+        self.nodes.remove(node_emission_adjuster)
+
 
 ADJUSTERS = {
     WetAdjuster.get_name(): WetAdjuster,
     SubsurfaceAdjuster.get_name(): SubsurfaceAdjuster,
     GlitterAdjuster.get_name(): GlitterAdjuster,
+    EmissionAdjuster.get_name(): EmissionAdjuster,
 }

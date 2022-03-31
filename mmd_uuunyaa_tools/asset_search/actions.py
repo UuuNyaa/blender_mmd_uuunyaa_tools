@@ -286,7 +286,7 @@ class ImportActionExecutor:
 
     @staticmethod
     def import_collections(blend_file_path, *collection_names, asset=None):
-        asset_path, _ = _Utilities.resolve_path(asset)
+        asset_path, _asset_json = _Utilities.resolve_path(asset)
 
         print(f'import_collections({blend_file_path},{collection_names},{asset_path})')
         bpy.ops.wm.append(
@@ -298,7 +298,7 @@ class ImportActionExecutor:
 
     @staticmethod
     def import_world(blend_file_path, world_name, asset=None):
-        asset_path, _ = _Utilities.resolve_path(asset)
+        asset_path, _asset_json = _Utilities.resolve_path(asset)
 
         print(f'import_world({blend_file_path},{world_name},{asset_path})')
 
@@ -311,7 +311,7 @@ class ImportActionExecutor:
 
     @staticmethod
     def import_pmx(pmx_file_path, scale=0.08, asset=None):
-        asset_path, _ = _Utilities.resolve_path(asset)
+        asset_path, _asset_json = _Utilities.resolve_path(asset)
 
         print(f'import_pmx({pmx_file_path},{scale},{asset_path})')
         try:
@@ -323,7 +323,7 @@ class ImportActionExecutor:
 
     @staticmethod
     def import_vmd(vmd_file_path, scale=0.08, asset=None):
-        asset_path, _ = _Utilities.resolve_path(asset)
+        asset_path, _asset_json = _Utilities.resolve_path(asset)
 
         print(f'import_vmd({vmd_file_path},{scale},{asset_path})')
         try:
@@ -339,7 +339,7 @@ class ImportActionExecutor:
 
     @staticmethod
     def import_vpd(vpd_file_path, scale=0.08, asset=None):
-        asset_path, _ = _Utilities.resolve_path(asset)
+        asset_path, _asset_json = _Utilities.resolve_path(asset)
 
         print(f'import_vpd({vpd_file_path},{scale},{asset_path})')
         try:
