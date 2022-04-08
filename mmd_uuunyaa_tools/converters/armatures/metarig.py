@@ -300,3 +300,11 @@ class MetarigArmatureObject(ArmatureEditor):
         # limbs.super_limb
         metarig_pose_bones['thigh.L'].rigify_parameters.rotation_axis = 'x'
         metarig_pose_bones['thigh.R'].rigify_parameters.rotation_axis = 'x'
+
+
+        # fix toe problem
+        # limbs.leg
+        # TODO: Review when the Rigify bug is fixed
+        #       https://developer.blender.org/T96748
+        metarig_pose_bones['thigh.L'].rigify_parameters.extra_ik_toe = False
+        metarig_pose_bones['thigh.R'].rigify_parameters.extra_ik_toe = False

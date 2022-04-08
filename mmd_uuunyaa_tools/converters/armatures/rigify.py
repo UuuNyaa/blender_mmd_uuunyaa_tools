@@ -97,7 +97,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.左足首D, None, 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.左足首, 'foot_fk.L', 'DEF-foot.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.左足ＩＫ, 'foot_ik.L', 'foot_ik.L', GroupType.LEG_L, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'ORG-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.左足先EX, 'toe.L', 'DEF-toe.L', GroupType.LEG_L, MMDBindType.COPY_TOE),
 
         MMDBindInfo(MMDBoneInfo.右足D, None, 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足, 'thigh_fk.R', 'DEF-thigh.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
@@ -106,7 +106,7 @@ class RigifyArmatureObject(MMDBindArmatureObjectABC):
         MMDBindInfo(MMDBoneInfo.右足首D, None, 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_LEG_D),
         MMDBindInfo(MMDBoneInfo.右足首, 'foot_fk.R', 'DEF-foot.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右足ＩＫ, 'foot_ik.R', 'foot_ik.R', GroupType.LEG_R, MMDBindType.COPY_POSE),
-        MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'ORG-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
+        MMDBindInfo(MMDBoneInfo.右足先EX, 'toe.R', 'DEF-toe.R', GroupType.LEG_R, MMDBindType.COPY_TOE),
 
         MMDBindInfo(MMDBoneInfo.左つま先ＩＫ, 'mmd_uuunyaa_toe_ik.L', 'mmd_uuunyaa_toe_ik.L', GroupType.LEG_L, MMDBindType.COPY_PARENT),
         MMDBindInfo(MMDBoneInfo.右つま先ＩＫ, 'mmd_uuunyaa_toe_ik.R', 'mmd_uuunyaa_toe_ik.R', GroupType.LEG_R, MMDBindType.COPY_PARENT),
@@ -1092,8 +1092,11 @@ class MMDRigifyArmatureObject(RigifyArmatureObject):
         mmd_edit_bones: bpy.types.ArmatureEditBones = mmd_armature_object.strict_edit_bones
 
         rig_edit_bones['ORG-toe.L'].align_roll(mmd_edit_bones['左足先EX'].z_axis)
+        rig_edit_bones['DEF-toe.L'].align_roll(mmd_edit_bones['左足先EX'].z_axis)
         rig_edit_bones['toe.L'].align_roll(mmd_edit_bones['左足先EX'].z_axis)
+
         rig_edit_bones['ORG-toe.R'].align_roll(mmd_edit_bones['左足先EX'].z_axis)
+        rig_edit_bones['DEF-toe.R'].align_roll(mmd_edit_bones['右足先EX'].z_axis)
         rig_edit_bones['toe.R'].align_roll(mmd_edit_bones['右足先EX'].z_axis)
 
     def _split_upper_and_lower_body(self, rig_edit_bones: bpy.types.ArmatureEditBones, mmd_edit_bones: bpy.types.ArmatureEditBones):
