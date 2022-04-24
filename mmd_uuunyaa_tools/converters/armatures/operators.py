@@ -350,6 +350,11 @@ class MMDRigifyConvert(bpy.types.Operator):
         default='spine_fk'
     )
 
+    remove_unused_face_bones: bpy.props.BoolProperty(
+        name=_('Remove unused face bones'),
+        default=False
+    )
+
     @classmethod
     def poll(cls, context):
         if context.mode != 'OBJECT':
@@ -361,9 +366,13 @@ class MMDRigifyConvert(bpy.types.Operator):
 
     def execute(self, context: bpy.types.Context):
         rigify_armature_object = RigifyArmatureObject(context.active_object)
+        mmd_rigify_armature_object = MMDRigifyArmatureObject(context.active_object)
 
         bpy.ops.object.mode_set(mode='EDIT')
         rigify_armature_object.imitate_mmd_bone_structure()
+
+        if self.remove_unused_face_bones:
+            mmd_rigify_armature_object.remove_unused_face_bones()
 
         bpy.ops.object.mode_set(mode='POSE')
         rigify_armature_object.imitate_mmd_pose_behavior()
