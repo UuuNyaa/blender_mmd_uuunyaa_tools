@@ -160,9 +160,9 @@ translation_dict = {
     ("*", "Use Ambient Occlusion"): "アンビエントオクルージョン(AO)を使用",
     #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:261 mmd_uuunyaa_tools/checkers/operators.py:274 mmd_uuunyaa_tools/checkers/operators.py:284 mmd_uuunyaa_tools/checkers/operators.py:294 mmd_uuunyaa_tools/checkers/operators.py:304 mmd_uuunyaa_tools/checkers/operators.py:314 mmd_uuunyaa_tools/checkers/operators.py:324 mmd_uuunyaa_tools/checkers/operators.py:334 mmd_uuunyaa_tools/checkers/operators.py:344 mmd_uuunyaa_tools/checkers/operators.py:354 mmd_uuunyaa_tools/checkers/operators.py:364 mmd_uuunyaa_tools/checkers/operators.py:377 mmd_uuunyaa_tools/checkers/operators.py:387 mmd_uuunyaa_tools/checkers/operators.py:397 mmd_uuunyaa_tools/checkers/operators.py:407
     ("*", "= False is Good"): "= Falseが良い",
-    #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47
+    #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47 mmd_uuunyaa_tools/editors/operators.py:122
     ("*", "Use Bloom"): "ブルームを使用",
-    #: mmd_uuunyaa_tools/checkers/operators.py:156 mmd_uuunyaa_tools/editors/operators.py:48
+    #: mmd_uuunyaa_tools/checkers/operators.py:156 mmd_uuunyaa_tools/editors/operators.py:48 mmd_uuunyaa_tools/editors/operators.py:123
     ("*", "Use Motion Blur"): "モーションブラーを使用",
     #: mmd_uuunyaa_tools/checkers/operators.py:178
     ("*", "Depth of Field Max Size"): "被写界深度最大サイズ",
@@ -260,7 +260,7 @@ translation_dict = {
     ("*", "Upper Body2 as"): "上半身２として",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
     ("*", "Lower Body as"): "下半身として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:60 mmd_uuunyaa_tools/panels.py:65
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:62 mmd_uuunyaa_tools/panels.py:67
     ("Operator", "Apply MMD Rest Pose"): "MMDレストポーズを適用",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
     ("*", "Iterations"): "反復",
@@ -497,13 +497,13 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:80
     ("Operator", "Moved"): "操作済",
     ("*", "Moved"): "操作済",
-    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:367
+    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:448
     ("Operator", "Rotated"): "回転済",
     ("*", "Rotated"): "回転済",
-    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:368
+    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:449
     ("Operator", "Translated"): "移動済",
     ("*", "Translated"): "移動済",
-    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:369
+    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:450
     ("Operator", "Scaled"): "スケール済",
     ("*", "Scaled"): "スケール済",
     #: mmd_uuunyaa_tools/editors/nodes.py:223
@@ -531,16 +531,18 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Watercolor Texture"): "水彩画テクスチャ",
     #: mmd_uuunyaa_tools/editors/nodes.py:259
+    ("*", "Toon Shader Texture"): "トーンシェーダーテクスチャ",
+    #: mmd_uuunyaa_tools/editors/nodes.py:262
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:262 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "サブサーフェス調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "ウエット調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:195
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:195
     ("*", "Emission Adjuster"): "放射調節器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:274 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Glitter Adjuster"): "グリッター調整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:313
+    #: mmd_uuunyaa_tools/editors/nodes.py:316
     ("*", "Sun Direction"): "太陽の方向",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "マテリアルをEevee用に変換",
@@ -550,37 +552,41 @@ translation_dict = {
     ("Operator", "Setup Render Engine for Eevee"): "レンダーエンジンをEevee用に設定",
     #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "レンダーエンジンプロパティをEevee用に設定",
-    #: mmd_uuunyaa_tools/editors/operators.py:49 mmd_uuunyaa_tools/editors/operators.py:118
+    #: mmd_uuunyaa_tools/editors/operators.py:49 mmd_uuunyaa_tools/editors/operators.py:124 mmd_uuunyaa_tools/editors/operators.py:199
     ("*", "Use Film Transparent"): "フィルム透過を使用",
-    #: mmd_uuunyaa_tools/editors/operators.py:112
-    ("*", "Setup Render Engine for Workbench"): "レンダーエンジンをWorkbench用に設定",
-    #: mmd_uuunyaa_tools/editors/operators.py:113
+    #: mmd_uuunyaa_tools/editors/operators.py:118
+    ("Operator", "Setup Render Engine for Toon Eevee"): "レンダーエンジンをトーンEevee用に設定",
+    #: mmd_uuunyaa_tools/editors/operators.py:119
+    ("*", "Setup render engine properties for Toon Eevee."): "レンダーエンジンプロパティをトーンEevee用に設定",
+    #: mmd_uuunyaa_tools/editors/operators.py:193
+    ("Operator", "Setup Render Engine for Workbench"): "レンダーエンジンをWorkbench用に設定",
+    #: mmd_uuunyaa_tools/editors/operators.py:194
     ("*", "Setup render engine properties for Workbench."): "レンダーエンジンプロパティをWorkbench用に設定",
-    #: mmd_uuunyaa_tools/editors/operators.py:116
+    #: mmd_uuunyaa_tools/editors/operators.py:197
     ("*", "Use Shadow"): "シャドウを使用",
-    #: mmd_uuunyaa_tools/editors/operators.py:117
+    #: mmd_uuunyaa_tools/editors/operators.py:198
     ("*", "Use Depth of Field"): "被写界深度を使用",
-    #: mmd_uuunyaa_tools/editors/operators.py:162
+    #: mmd_uuunyaa_tools/editors/operators.py:243
     ("Operator", "Show Message Box"): "メッセージボックスを表示",
-    #: mmd_uuunyaa_tools/editors/operators.py:183
+    #: mmd_uuunyaa_tools/editors/operators.py:264
     ("Operator", "Remove Unused Vertex Groups"): "未使用頂点グループをすべて削除",
-    #: mmd_uuunyaa_tools/editors/operators.py:184
+    #: mmd_uuunyaa_tools/editors/operators.py:265
     ("*", "Remove unused vertex groups from the active meshes"): "アクティブメッシュから未使用頂点グループをすべて削除",
-    #: mmd_uuunyaa_tools/editors/operators.py:187
+    #: mmd_uuunyaa_tools/editors/operators.py:268
     ("*", "Weight Threshold"): "ウエイトしきい値",
-    #: mmd_uuunyaa_tools/editors/operators.py:251
+    #: mmd_uuunyaa_tools/editors/operators.py:332
     ("Operator", "Select Shape Key Target Vertices"): "シェイプキー対象の頂点を選択",
-    #: mmd_uuunyaa_tools/editors/operators.py:252
+    #: mmd_uuunyaa_tools/editors/operators.py:333
     ("*", "Select shape key target vertices from the active meshes"): "アクティブメッシュのシェイプキー対象の頂点を選択",
-    #: mmd_uuunyaa_tools/editors/operators.py:255 mmd_uuunyaa_tools/editors/operators.py:302
+    #: mmd_uuunyaa_tools/editors/operators.py:336 mmd_uuunyaa_tools/editors/operators.py:383
     ("*", "Distance Threshold"): "距離しきい値",
-    #: mmd_uuunyaa_tools/editors/operators.py:298
+    #: mmd_uuunyaa_tools/editors/operators.py:379
     ("Operator", "Remove Unused Shape Keys"): "未使用シェイプキーをすべて削除",
-    #: mmd_uuunyaa_tools/editors/operators.py:299
+    #: mmd_uuunyaa_tools/editors/operators.py:380
     ("*", "Remove unused shape keys from the active meshes"): "アクティブメッシュから未使用シェイプキーをすべて削除",
-    #: mmd_uuunyaa_tools/editors/operators.py:364
+    #: mmd_uuunyaa_tools/editors/operators.py:445
     ("Operator", "Select Moved Pose Bones"): "操作済ポーズボーンを選択",
-    #: mmd_uuunyaa_tools/editors/operators.py:371
+    #: mmd_uuunyaa_tools/editors/operators.py:452
     ("*", "Tolerance"): "許容範囲",
     #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:181
     ("*", "Update {} ready!"): "更新できます! {}",
@@ -614,19 +620,19 @@ translation_dict = {
     ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:188
     ("*", "UuuNyaa Extras"): "UuuNyaaその他",
-    #: mmd_uuunyaa_tools/panels.py:19
+    #: mmd_uuunyaa_tools/panels.py:20
     ("*", "UuuNyaa Operator"): "UuuNyaaオペレーター",
-    #: mmd_uuunyaa_tools/panels.py:29
+    #: mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "レンダー:",
-    #: mmd_uuunyaa_tools/panels.py:36
+    #: mmd_uuunyaa_tools/panels.py:38
     ("*", "MMD to Rigify:"): "MMDからRigify:",
-    #: mmd_uuunyaa_tools/panels.py:40
+    #: mmd_uuunyaa_tools/panels.py:42
     ("Operator", "Add Metarig"): "メタリグを追加",
-    #: mmd_uuunyaa_tools/panels.py:57
+    #: mmd_uuunyaa_tools/panels.py:59
     ("*", "Rigify to MMD:"): "RigifyからMMD:",
-    #: mmd_uuunyaa_tools/panels.py:59 mmd_uuunyaa_tools/panels.py:64
+    #: mmd_uuunyaa_tools/panels.py:61 mmd_uuunyaa_tools/panels.py:66
     ("Operator", "Convert to MMD compatible"): "MMD互換に変換",
-    #: mmd_uuunyaa_tools/panels.py:62
+    #: mmd_uuunyaa_tools/panels.py:64
     ("*", "(Experimental) Auto-Rig to MMD:"): "(実験的) Auto-RigからMMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "アセットサーチ結果の最大表示件数",
@@ -845,6 +851,16 @@ translation_dict = {
     ("*", "Background Scale"): "背景スケール",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:876
     ("*", "Bleed Strength"): "滲み強度",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:909
+    ("*", "Toon Shader"): "トーンシェーダー",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:912
+    ("*", "Base Color"): "ベースカラー",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:913
+    ("*", "Highlight Color"): "ハイライトカラー",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:914
+    ("*", "Shadow Color"): "影のカラー",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:915
+    ("*", "Rim Light Strength"): "リムライト強度",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("Operator", "Tune Lighting"): "ライト調整",
     #: mmd_uuunyaa_tools/tuners/operators.py:31
@@ -1025,9 +1041,9 @@ translation_dict = {
     ("*", "Use Ambient Occlusion"): "使用环境光遮蔽 (AO)",
     #: mmd_uuunyaa_tools/checkers/operators.py:140 mmd_uuunyaa_tools/checkers/operators.py:150 mmd_uuunyaa_tools/checkers/operators.py:160 mmd_uuunyaa_tools/checkers/operators.py:214 mmd_uuunyaa_tools/checkers/operators.py:235 mmd_uuunyaa_tools/checkers/operators.py:248 mmd_uuunyaa_tools/checkers/operators.py:261 mmd_uuunyaa_tools/checkers/operators.py:274 mmd_uuunyaa_tools/checkers/operators.py:284 mmd_uuunyaa_tools/checkers/operators.py:294 mmd_uuunyaa_tools/checkers/operators.py:304 mmd_uuunyaa_tools/checkers/operators.py:314 mmd_uuunyaa_tools/checkers/operators.py:324 mmd_uuunyaa_tools/checkers/operators.py:334 mmd_uuunyaa_tools/checkers/operators.py:344 mmd_uuunyaa_tools/checkers/operators.py:354 mmd_uuunyaa_tools/checkers/operators.py:364 mmd_uuunyaa_tools/checkers/operators.py:377 mmd_uuunyaa_tools/checkers/operators.py:387 mmd_uuunyaa_tools/checkers/operators.py:397 mmd_uuunyaa_tools/checkers/operators.py:407
     ("*", "= False is Good"): "= False是良好",
-    #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47
+    #: mmd_uuunyaa_tools/checkers/operators.py:146 mmd_uuunyaa_tools/editors/operators.py:47 mmd_uuunyaa_tools/editors/operators.py:122
     ("*", "Use Bloom"): "使用辉光",
-    #: mmd_uuunyaa_tools/checkers/operators.py:156 mmd_uuunyaa_tools/editors/operators.py:48
+    #: mmd_uuunyaa_tools/checkers/operators.py:156 mmd_uuunyaa_tools/editors/operators.py:48 mmd_uuunyaa_tools/editors/operators.py:123
     ("*", "Use Motion Blur"): "使用运动模糊",
     #: mmd_uuunyaa_tools/checkers/operators.py:178
     ("*", "Depth of Field Max Size"): "景深最大尺寸",
@@ -1125,7 +1141,7 @@ translation_dict = {
     ("*", "Upper Body2 as"): "上半身2为",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
     ("*", "Lower Body as"): "下半身为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:60 mmd_uuunyaa_tools/panels.py:65
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:62 mmd_uuunyaa_tools/panels.py:67
     ("Operator", "Apply MMD Rest Pose"): "应用MMD静置姿态",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
     ("*", "Iterations"): "迭代",
@@ -1362,13 +1378,13 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/menus.py:80
     ("Operator", "Moved"): "移动过",
     ("*", "Moved"): "移动过",
-    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:367
+    #: mmd_uuunyaa_tools/editors/menus.py:85 mmd_uuunyaa_tools/editors/operators.py:448
     ("Operator", "Rotated"): "旋转过",
     ("*", "Rotated"): "旋转过",
-    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:368
+    #: mmd_uuunyaa_tools/editors/menus.py:90 mmd_uuunyaa_tools/editors/operators.py:449
     ("Operator", "Translated"): "平移过",
     ("*", "Translated"): "平移过",
-    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:369
+    #: mmd_uuunyaa_tools/editors/menus.py:95 mmd_uuunyaa_tools/editors/operators.py:450
     ("Operator", "Scaled"): "缩放过",
     ("*", "Scaled"): "缩放过",
     #: mmd_uuunyaa_tools/editors/nodes.py:223
@@ -1396,16 +1412,18 @@ translation_dict = {
     #: mmd_uuunyaa_tools/editors/nodes.py:256
     ("*", "Watercolor Texture"): "水彩画纹理",
     #: mmd_uuunyaa_tools/editors/nodes.py:259
+    ("*", "Toon Shader Texture"): "卡通着色器纹理",
+    #: mmd_uuunyaa_tools/editors/nodes.py:262
     ("*", "MMDTexUV"): "MMDTexUV",
-    #: mmd_uuunyaa_tools/editors/nodes.py:262 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
+    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:103
     ("*", "Subsurface Adjuster"): "次表面调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:265 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
+    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:58
     ("*", "Wet Adjuster"): "湿润调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:268 mmd_uuunyaa_tools/tuners/material_adjusters.py:195
+    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:195
     ("*", "Emission Adjuster"): "发射调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:271 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
+    #: mmd_uuunyaa_tools/editors/nodes.py:274 mmd_uuunyaa_tools/tuners/material_adjusters.py:149
     ("*", "Glitter Adjuster"): "闪耀调整器",
-    #: mmd_uuunyaa_tools/editors/nodes.py:313
+    #: mmd_uuunyaa_tools/editors/nodes.py:316
     ("*", "Sun Direction"): "太阳方向",
     #: mmd_uuunyaa_tools/editors/operators.py:19
     ("Operator", "Convert Materials for Eevee"): "转换材质给Eevee",
@@ -1415,37 +1433,41 @@ translation_dict = {
     ("Operator", "Setup Render Engine for Eevee"): "为Eevee设置渲染引擎",
     #: mmd_uuunyaa_tools/editors/operators.py:44
     ("*", "Setup render engine properties for Eevee."): "为Eevee设置渲染引擎属性",
-    #: mmd_uuunyaa_tools/editors/operators.py:49 mmd_uuunyaa_tools/editors/operators.py:118
+    #: mmd_uuunyaa_tools/editors/operators.py:49 mmd_uuunyaa_tools/editors/operators.py:124 mmd_uuunyaa_tools/editors/operators.py:199
     ("*", "Use Film Transparent"): "使用胶片透明",
-    #: mmd_uuunyaa_tools/editors/operators.py:112
-    ("*", "Setup Render Engine for Workbench"): "为Workbench设置渲染引擎",
-    #: mmd_uuunyaa_tools/editors/operators.py:113
+    #: mmd_uuunyaa_tools/editors/operators.py:118
+    ("Operator", "Setup Render Engine for Toon Eevee"): "为卡通Eevee设置渲染引擎",
+    #: mmd_uuunyaa_tools/editors/operators.py:119
+    ("*", "Setup render engine properties for Toon Eevee."): "为卡通Eevee设置渲染引擎属性",
+    #: mmd_uuunyaa_tools/editors/operators.py:193
+    ("Operator", "Setup Render Engine for Workbench"): "为Workbench设置渲染引擎",
+    #: mmd_uuunyaa_tools/editors/operators.py:194
     ("*", "Setup render engine properties for Workbench."): "为Workbench设置渲染引擎属性",
-    #: mmd_uuunyaa_tools/editors/operators.py:116
+    #: mmd_uuunyaa_tools/editors/operators.py:197
     ("*", "Use Shadow"): "使用阴影",
-    #: mmd_uuunyaa_tools/editors/operators.py:117
+    #: mmd_uuunyaa_tools/editors/operators.py:198
     ("*", "Use Depth of Field"): "使用景深",
-    #: mmd_uuunyaa_tools/editors/operators.py:162
+    #: mmd_uuunyaa_tools/editors/operators.py:243
     ("Operator", "Show Message Box"): "显示信息框",
-    #: mmd_uuunyaa_tools/editors/operators.py:183
+    #: mmd_uuunyaa_tools/editors/operators.py:264
     ("Operator", "Remove Unused Vertex Groups"): "删除未用到的顶点组",
-    #: mmd_uuunyaa_tools/editors/operators.py:184
+    #: mmd_uuunyaa_tools/editors/operators.py:265
     ("*", "Remove unused vertex groups from the active meshes"): "从活动网格中删除未用到的顶点组",
-    #: mmd_uuunyaa_tools/editors/operators.py:187
+    #: mmd_uuunyaa_tools/editors/operators.py:268
     ("*", "Weight Threshold"): "权重阈值",
-    #: mmd_uuunyaa_tools/editors/operators.py:251
+    #: mmd_uuunyaa_tools/editors/operators.py:332
     ("Operator", "Select Shape Key Target Vertices"): "选择形态键目标顶点",
-    #: mmd_uuunyaa_tools/editors/operators.py:252
+    #: mmd_uuunyaa_tools/editors/operators.py:333
     ("*", "Select shape key target vertices from the active meshes"): "从活动网格中删选择形态键目标顶点",
-    #: mmd_uuunyaa_tools/editors/operators.py:255 mmd_uuunyaa_tools/editors/operators.py:302
+    #: mmd_uuunyaa_tools/editors/operators.py:336 mmd_uuunyaa_tools/editors/operators.py:383
     ("*", "Distance Threshold"): "距离阈值",
-    #: mmd_uuunyaa_tools/editors/operators.py:298
+    #: mmd_uuunyaa_tools/editors/operators.py:379
     ("Operator", "Remove Unused Shape Keys"): "删除未用到的形态键",
-    #: mmd_uuunyaa_tools/editors/operators.py:299
+    #: mmd_uuunyaa_tools/editors/operators.py:380
     ("*", "Remove unused shape keys from the active meshes"): "从活动网格中删除未用到的形态键",
-    #: mmd_uuunyaa_tools/editors/operators.py:364
+    #: mmd_uuunyaa_tools/editors/operators.py:445
     ("Operator", "Select Moved Pose Bones"): "选择移动过的姿态骨骼",
-    #: mmd_uuunyaa_tools/editors/operators.py:371
+    #: mmd_uuunyaa_tools/editors/operators.py:452
     ("*", "Tolerance"): "容差",
     #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:181
     ("*", "Update {} ready!"): "可以更新!",
@@ -1479,19 +1501,19 @@ translation_dict = {
     ("Operator", "Skin Hair"): "体毛",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:188
     ("*", "UuuNyaa Extras"): "UuuNyaa其他项",
-    #: mmd_uuunyaa_tools/panels.py:19
+    #: mmd_uuunyaa_tools/panels.py:20
     ("*", "UuuNyaa Operator"): "UuuNyaa操作项",
-    #: mmd_uuunyaa_tools/panels.py:29
+    #: mmd_uuunyaa_tools/panels.py:30
     ("*", "Render:"): "渲染:",
-    #: mmd_uuunyaa_tools/panels.py:36
+    #: mmd_uuunyaa_tools/panels.py:38
     ("*", "MMD to Rigify:"): "MMD到Rigify:",
-    #: mmd_uuunyaa_tools/panels.py:40
+    #: mmd_uuunyaa_tools/panels.py:42
     ("Operator", "Add Metarig"): "添加Metarig",
-    #: mmd_uuunyaa_tools/panels.py:57
+    #: mmd_uuunyaa_tools/panels.py:59
     ("*", "Rigify to MMD:"): "Rigify到MMD:",
-    #: mmd_uuunyaa_tools/panels.py:59 mmd_uuunyaa_tools/panels.py:64
+    #: mmd_uuunyaa_tools/panels.py:61 mmd_uuunyaa_tools/panels.py:66
     ("Operator", "Convert to MMD compatible"): "转换为MMD兼容",
-    #: mmd_uuunyaa_tools/panels.py:62
+    #: mmd_uuunyaa_tools/panels.py:64
     ("*", "(Experimental) Auto-Rig to MMD:"): "(实验的) Auto-Rig到MMD:",
     #: mmd_uuunyaa_tools/preferences.py:22
     ("*", "Asset Search Results Max. Display Count"): "显示的资产搜索结果的最大数量",
@@ -1710,6 +1732,16 @@ translation_dict = {
     ("*", "Background Scale"): "背景缩放",
     #: mmd_uuunyaa_tools/tuners/material_tuners.py:876
     ("*", "Bleed Strength"): "渗水强度",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:909
+    ("*", "Toon Shader"): "卡通着色器",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:912
+    ("*", "Base Color"): "基础色",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:913
+    ("*", "Highlight Color"): "高亮色",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:914
+    ("*", "Shadow Color"): "阴影色",
+    #: mmd_uuunyaa_tools/tuners/material_tuners.py:915
+    ("*", "Rim Light Strength"): "边缘光强度",
     #: mmd_uuunyaa_tools/tuners/operators.py:13
     ("Operator", "Tune Lighting"): "照明调整",
     #: mmd_uuunyaa_tools/tuners/operators.py:31

@@ -255,6 +255,9 @@ class MaterialEditor(NodeEditor):
     def get_watercolor_texture_node(self) -> ShaderNodeGroup:
         return self.get_node_group(_('Watercolor Texture'), label='Watercolor Texture')
 
+    def get_toon_shader_texture_node(self) -> ShaderNodeGroup:
+        return self.get_node_group(_('Toon Shader Texture'), label='Toon Shader Texture')
+
     def get_tex_uv(self) -> ShaderNodeGroup:
         return self.get_node_group(_('MMDTexUV'), name='mmd_tex_uv')
 

@@ -10,6 +10,7 @@ from mmd_uuunyaa_tools.converters.armatures.operators import (
     MMDRigifyApplyMMDRestPose, MMDRigifyConvert, MMDRigifyIntegrateFocusOnMMD,
     MMDRigifyIntegrateFocusOnRigify)
 from mmd_uuunyaa_tools.editors.operators import (SetupRenderEngineForEevee,
+                                                 SetupRenderEngineForToonEevee,
                                                  SetupRenderEngineForWorkbench)
 from mmd_uuunyaa_tools.m17n import _
 
@@ -30,6 +31,7 @@ class OperatorPanel(bpy.types.Panel):
         grid = col.grid_flow(row_major=True, align=True)
         grid.row(align=True).operator(SetupRenderEngineForEevee.bl_idname, icon='SCENE')
         grid.row(align=True).operator(SetupRenderEngineForWorkbench.bl_idname, icon='SCENE')
+        grid.row(align=True).operator(SetupRenderEngineForToonEevee.bl_idname, icon='SCENE')
         grid.row(align=True).operator(CheckEeveeRenderingPerformance.bl_idname, icon='MOD_TIME')
 
         col = layout.column(align=True)

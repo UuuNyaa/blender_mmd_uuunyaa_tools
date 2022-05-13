@@ -58,6 +58,12 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
 
         eevee = context.scene.eevee
 
+        # Sampling
+        # > Render: 8
+        eevee.taa_render_samples = 16
+        # > Viewport: 8
+        eevee.taa_samples = 16
+
         # Ambient Occlusion: enable
         eevee.use_gtao = True
         # > Distance: 0.1 m
@@ -80,7 +86,7 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
         # > Refrection: enable
         eevee.use_ssr_refraction = True
         # > Edge Fading: 0.000
-        eevee.ssr_border_fade = 0.000
+        eevee.ssr_border_fade = 0.075
 
         # Motion Blur
         eevee.use_motion_blur = self.use_motion_blur
@@ -103,6 +109,81 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
         context.scene.view_settings.view_transform = 'Filmic'
         # > Look: High Contrast
         context.scene.view_settings.look = 'High Contrast'
+
+        return {'FINISHED'}
+
+
+class SetupRenderEngineForToonEevee(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.setup_render_engine_for_toon_eevee'
+    bl_label = _('Setup Render Engine for Toon Eevee')
+    bl_description = _('Setup render engine properties for Toon Eevee.')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    use_bloom: bpy.props.BoolProperty(name=_('Use Bloom'), default=True)
+    use_motion_blur: bpy.props.BoolProperty(name=_('Use Motion Blur'), default=False)
+    film_transparent: bpy.props.BoolProperty(name=_('Use Film Transparent'), default=False)
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        if context.scene.render.engine != 'BLENDER_EEVEE':
+            context.scene.render.engine = 'BLENDER_EEVEE'
+
+        eevee = context.scene.eevee
+
+        # Sampling
+        # > Render: 8
+        eevee.taa_render_samples = 8
+        # > Viewport: 8
+        eevee.taa_samples = 8
+
+        # Ambient Occlusion: enable
+        eevee.use_gtao = True
+        # > Distance: 0.1 m
+        eevee.gtao_distance = 0.100
+
+        # Bloom: enable
+        eevee.use_bloom = self.use_bloom
+        if self.use_bloom:
+            # > Threshold: 1.000
+            eevee.bloom_threshold = 1.000
+            # > Intensity: 0.100
+            eevee.bloom_intensity = 0.100
+
+        # Depth of Field
+        # > Max Size: 16 px
+        eevee.bokeh_max_size = 16.000
+
+        # Screen Space Reflections: enable
+        eevee.use_ssr = True
+        # > Refrection: enable
+        eevee.use_ssr_refraction = True
+        # > Edge Fading: 0.000
+        eevee.ssr_border_fade = 0.075
+
+        # Motion Blur
+        eevee.use_motion_blur = self.use_motion_blur
+
+        # Shadows
+        # > Cube Size 1024 px
+        eevee.shadow_cube_size = '1024'
+        # > Cascade Size 2048 px
+        eevee.shadow_cascade_size = '2048'
+
+        # Indirect lighting: enable
+        # > Irradiance Smoothing: 0.50
+        eevee.gi_irradiance_smoothing = 0.50
+
+        # Film > Transparent
+        context.scene.render.film_transparent = self.film_transparent
+
+        # Color Management
+        # > View Transform: Standard
+        context.scene.view_settings.view_transform = 'Standard'
+        # > Look: None
+        context.scene.view_settings.look = 'None'
 
         return {'FINISHED'}
 
