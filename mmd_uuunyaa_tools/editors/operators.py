@@ -96,6 +96,8 @@ class SetupRenderEngineForEevee(bpy.types.Operator):
         eevee.shadow_cube_size = '1024'
         # > Cascade Size 2048 px
         eevee.shadow_cascade_size = '2048'
+        # > Soft Shadows: True
+        eevee.use_soft_shadows = True
 
         # Indirect lighting: enable
         # > Irradiance Smoothing: 0.50
@@ -121,6 +123,7 @@ class SetupRenderEngineForToonEevee(bpy.types.Operator):
 
     use_bloom: bpy.props.BoolProperty(name=_('Use Bloom'), default=True)
     use_motion_blur: bpy.props.BoolProperty(name=_('Use Motion Blur'), default=False)
+    use_soft_shadows: bpy.props.BoolProperty(name=_('Use Soft Shadows'), default=True)
     film_transparent: bpy.props.BoolProperty(name=_('Use Film Transparent'), default=False)
 
     @classmethod
@@ -171,6 +174,8 @@ class SetupRenderEngineForToonEevee(bpy.types.Operator):
         eevee.shadow_cube_size = '1024'
         # > Cascade Size 2048 px
         eevee.shadow_cascade_size = '2048'
+        # > Soft Shadows
+        eevee.use_soft_shadows = self.use_soft_shadows
 
         # Indirect lighting: enable
         # > Irradiance Smoothing: 0.50
