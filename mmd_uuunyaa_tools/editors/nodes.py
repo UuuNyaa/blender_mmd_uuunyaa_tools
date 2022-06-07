@@ -4,7 +4,7 @@
 
 import os
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Iterable, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple, Union
 
 import bpy
 from bpy.types import (Node, NodeFrame, NodeGroup, NodeSocket, ShaderNode,
@@ -216,8 +216,18 @@ class MaterialEditor(NodeEditor):
     def get_vertex_color_node(self) -> ShaderNodeVertexColor:
         return self.get_node(ShaderNodeVertexColor, label='Vertex Color')
 
+    def get_mmd_shader_node(self) -> ShaderNodeGroup:
+        return self.find_node(ShaderNodeGroup, name='mmd_shader')
+
     def get_base_texture_node(self) -> ShaderNodeTexImage:
         return self.find_node(ShaderNodeTexImage, label='Mmd Base Tex')
+
+    def get_diffuse_color_node(self) -> Union[ShaderNodeGroup, ShaderNodeTexImage, None]:
+        mmd_shader_node = self.get_mmd_shader_node()
+        if mmd_shader_node and 'Color' in mmd_shader_node.outputs:
+            return mmd_shader_node
+
+        return self.get_base_texture_node()
 
     def get_skin_color_adjust_node(self) -> ShaderNodeRGBCurve:
         return self.get_node_group(_('Skin Color Adjust'), label='Skin Color Adjust')

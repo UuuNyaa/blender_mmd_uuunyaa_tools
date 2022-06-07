@@ -75,17 +75,15 @@ class EyeHighlightMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shadowless_bsdf_node(), {
-                'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFFFFF),
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFFFFFF),
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Emission': self.hex_to_rgba(0x999999),
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class EyeWhiteMaterialTuner(MaterialTunerABC):
@@ -100,17 +98,15 @@ class EyeWhiteMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shadowless_bsdf_node(), {
-                'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFFFFF),
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFFFFFF),
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Emission': self.hex_to_rgba(0x666666),
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class EyeIrisMaterialTuner(MaterialTunerABC):
@@ -125,22 +121,20 @@ class EyeIrisMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x00001E),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x00001E),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.500,
                 'Clearcoat': 1.000,
                 'Clearcoat Roughness': 0.030,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class EyeLashMaterialTuner(MaterialTunerABC):
@@ -155,20 +149,18 @@ class EyeLashMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x122837),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x122837),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 1.000,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class HairMatteMaterialTuner(MaterialTunerABC):
@@ -183,20 +175,18 @@ class HairMatteMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x698E9A),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x698E9A),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.600,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class SkinMucosaMaterialTuner(MaterialTunerABC):
@@ -211,16 +201,16 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         node_skin_bump = self.edit(self.get_skin_bump_node(), {
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
             'Scale': 1.000,
             'Strength': 1.000,
         }, {'location': self.grid_to_position(-2, -4), 'parent': node_frame})
 
         node_skin_color_adjust = self.edit(self.get_skin_color_adjust_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFE7170),
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFE7170),
         }, {'location': self.grid_to_position(-2, +0), 'parent': node_frame})
 
         self.edit(self.get_output_node(), {
@@ -233,7 +223,7 @@ class SkinMucosaMaterialTuner(MaterialTunerABC):
                 'Clearcoat': 0.500,
                 'Clearcoat Roughness': 0.600,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': node_skin_bump.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
@@ -263,16 +253,16 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         node_skin_bump = self.edit(self.get_skin_bump_node(), {
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
             'Scale': 1.000,
             'Strength': 1.000,
         }, {'location': self.grid_to_position(-2, -4), 'parent': node_frame})
 
         node_skin_color_adjust = self.edit(self.get_skin_color_adjust_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xEEAA99),
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xEEAA99),
         }, {'location': self.grid_to_position(-2, +0), 'parent': node_frame})
 
         self.edit(self.get_output_node(), {
@@ -283,7 +273,7 @@ class SkinBumpMaterialTuner(MaterialTunerABC):
                 'Specular': 0.500,
                 'Roughness': 0.700,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': node_skin_bump.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
@@ -305,20 +295,18 @@ class MetalNobleMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFC356),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFFC356),
                 'Subsurface': 0.001,
                 'Metallic': 1.000,
                 'Roughness': 0.000,
                 'IOR': 0.500,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class MetalBaseMaterialTuner(MaterialTunerABC):
@@ -333,19 +321,17 @@ class MetalBaseMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x8E9194),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x8E9194),
                 'Subsurface': 0.001,
                 'Metallic': 1.000,
                 'Roughness': 0.400,
                 'IOR': 2.500,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class StoneGemMaterialTuner(MaterialTunerABC):
@@ -360,11 +346,11 @@ class StoneGemMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_gem_bsdf_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x7E8FD4),
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x7E8FD4),
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'IOR': 2.000,
                 'Transmission': 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
@@ -375,8 +361,6 @@ class StoneGemMaterialTuner(MaterialTunerABC):
             'shadow_method': 'OPAQUE',
             'use_screen_refraction': True,
         })
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class FabricBumpMaterialTuner(MaterialTunerABC):
@@ -391,18 +375,18 @@ class FabricBumpMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x999999),
                 'Subsurface': 0.001,
                 'Specular': 0.130,
                 'Roughness': 1.000,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': self.edit(self.get_fabric_bump_node(), {
-                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+                    'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
                     'Scale': 1.000,
                     'Strength': 1.000,
                 }, {'location': self.grid_to_position(-2, -4), 'parent': node_frame}).outputs['Normal'],
@@ -422,18 +406,18 @@ class FabricWaveMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x999999),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 1.000,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': self.edit(self.get_wave_bump_node(), {
-                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+                    'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
                     'Scale': 100.000,
                     'Angle': 0.000,
                     'Fac': 0.500,
@@ -473,11 +457,11 @@ class FabricCottonMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         node_fabric_woven_texture = self.edit(self.get_fabric_woven_texture_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
-            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x999999),
+            'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
             'Impurity': 0.200,
             'Scale': 10.000,
             'Angle': 0.000,
@@ -544,11 +528,11 @@ class FabricSilkMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         node_fabric_woven_texture = self.edit(self.get_fabric_woven_texture_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x999999),
-            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x999999),
+            'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
             'Impurity': 0.100,
             'Scale': 100.000,
             'Angle': 0.000,
@@ -607,12 +591,12 @@ class FabricKnitMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         knit_texture = self.edit(self.get_knit_texture_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFBAAE),
-            'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFFBAAE),
+            'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             'Hole Alpha': 0.000,
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
             'Random Hue': 0.500,
             'Scale': 30.000,
             'X Compression': 1.500,
@@ -653,16 +637,16 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         leather_texture = self.edit(self.get_leather_texture_node(), {
-            'Primary Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x000000),
+            'Primary Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x000000),
             'Secondary Color': self.hex_to_rgba(0x333333),
             'Roughness': 0.450,
             'Old/New': 4.000,
             'Scale': 100.000,
             'Strength': 0.150,
             'Tartiary Detail': 2.000,
-            'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+            'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
         }, {'location': self.grid_to_position(-2, +0), 'parent': node_frame})
 
         self.edit(self.get_output_node(), {
@@ -673,7 +657,7 @@ class FabricLeatherMaterialTuner(MaterialTunerABC):
                 'Roughness': leather_texture.outputs['Roughness'],
                 'Sheen': 0.300,
                 'IOR': 1.450,
-                'Alpha': 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': leather_texture.outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
@@ -691,20 +675,18 @@ class PlasticGlossMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x666666),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.100,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class PlasticBumpMaterialTuner(MaterialTunerABC):
@@ -719,21 +701,21 @@ class PlasticBumpMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x666666),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.100,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
                 'Normal': self.edit(self.get_magic_bump_node(), {
                     'Scale': 10.000,
                     'Angle': 0.000,
                     'Strength': 0.200,
-                    'Vector': self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)}).outputs['Base UV'],
+                    'Vector': self.edit(self.get_tex_uv(), properties={}).outputs['Base UV'],
                 }, {'location': self.grid_to_position(-2, -4), 'parent': node_frame}).outputs['Normal'],
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
@@ -751,20 +733,18 @@ class PlasticMatteMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
-                'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x666666),
+                'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x666666),
                 'Subsurface': 0.001,
                 'Specular': 0.500,
                 'Roughness': 0.700,
                 'IOR': 1.450,
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class PlasticEmissionMaterialTuner(MaterialTunerABC):
@@ -779,7 +759,7 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
 
         self.edit(self.get_output_node(), {
             'Surface': self.edit(self.get_shader_node(), {
@@ -788,12 +768,10 @@ class PlasticEmissionMaterialTuner(MaterialTunerABC):
                 'Specular': 0.500,
                 'Roughness': 0.700,
                 'IOR': 1.450,
-                'Emission': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFF6666),
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Emission': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFF6666),
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class LiquidWaterMaterialTuner(MaterialTunerABC):
@@ -879,9 +857,9 @@ class ArtisticWatercolorMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         node_watercolor_texture = self.edit(self.get_watercolor_texture_node(), {
-            'Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0xFFCCCC),
+            'Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0xFFCCCC),
             'Scale': 2.000,
             'Background Scale': 3.000,
             'Bleed Strength': 1.000,
@@ -892,11 +870,9 @@ class ArtisticWatercolorMaterialTuner(MaterialTunerABC):
                 'Base Color': self.hex_to_rgba(0x000000),
                 'Specular': 0.000,
                 'Emission': node_watercolor_texture.outputs['Color'],
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 class ToonShaderMaterialTuner(MaterialTunerABC):
@@ -918,9 +894,9 @@ class ToonShaderMaterialTuner(MaterialTunerABC):
     def execute(self):
         self.reset()
         node_frame = self.get_node_frame(self.get_name())
-        node_base_texture = self.edit(self.get_base_texture_node(), properties={'location': self.grid_to_position(-6, +0)})
+        node_diffuse_color = self.edit(self.get_diffuse_color_node(), properties={})
         node_toon_shader_texture = self.edit(self.get_toon_shader_texture_node(), {
-            'Base Color': node_base_texture.outputs['Color'] if node_base_texture else self.hex_to_rgba(0x99CCCC),
+            'Base Color': node_diffuse_color.outputs['Color'] if node_diffuse_color else self.hex_to_rgba(0x99CCCC),
             'Roughness': 1.000,
             'Highlight Color': (0.5, 0.5, 0.5, 1.0),
             'Shadow Color': (0.5, 0.5, 0.5, 1.0),
@@ -933,11 +909,9 @@ class ToonShaderMaterialTuner(MaterialTunerABC):
                 'Specular': 0.000,
                 'Roughness': 0.000,
                 'Emission': node_toon_shader_texture.outputs['Color'],
-                'Alpha': node_base_texture.outputs['Alpha'] if node_base_texture else 1.000,
+                'Alpha': node_diffuse_color.outputs['Alpha'] if node_diffuse_color else 1.000,
             }, {'location': self.grid_to_position(+0, +0), 'parent': node_frame}).outputs['BSDF'],
         }, {'location': self.grid_to_position(+3, +0)}, force=True)
-
-        self.edit(self.get_tex_uv(), properties={'location': self.grid_to_position(-8, +0)})
 
 
 TUNERS = TunerRegistry(
