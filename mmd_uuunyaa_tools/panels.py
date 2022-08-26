@@ -148,12 +148,13 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
         mmd_model = mmd_tools.core.model.Model(mmd_root_object)
         hide = not mmd_root_object.mmd_uuunyaa_tools_show_cloths
 
-        cloth_object: bpy.types.Object
-        for cloth_object in mmd_model.cloths():
-            cloth_object.hide = hide
+        with mmd_tools.bpyutils.activate_layer_collection(mmd_root_object):
+            cloth_object: bpy.types.Object
+            for cloth_object in mmd_model.cloths():
+                cloth_object.hide = hide
 
-        if hide and context.active_object is None:
-            context.view_layer.objects.active = mmd_root_object
+            if hide and context.active_object is None:
+                context.view_layer.objects.active = mmd_root_object
 
     @staticmethod
     def register():
