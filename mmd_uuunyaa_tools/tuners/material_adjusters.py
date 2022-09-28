@@ -209,8 +209,8 @@ class EmissionAdjuster(MaterialAdjusterABC):
         node_shader = self.find_active_principled_shader_node()
         node_emission_adjuster = self.edit(self.get_emission_adjuster_node(), {
             'Color': self.to_link_or_value(node_shader.inputs['Base Color']),
-            'Threshold': 0.500,
-            'Strength': 5.000,
+            'Threshold': 1.000,
+            'Strength': 1.000,
         }, {'location': self.grid_to_position(-2, -14), 'parent': node_frame})
 
         self.edit(node_shader, {
