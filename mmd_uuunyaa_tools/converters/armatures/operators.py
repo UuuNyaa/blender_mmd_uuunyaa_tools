@@ -284,6 +284,7 @@ class MMDRigifyIntegrateFocusOnRigify(bpy.types.Operator, MMDRigifyOperatorABC):
     mmd_others_bone_layer: bpy.props.IntProperty(name=_('MMD others bone layer'), default=25, min=0, max=31)
     mmd_shadow_bone_layer: bpy.props.IntProperty(name=_('MMD shadow bone layer'), default=26, min=0, max=31)
     mmd_dummy_bone_layer: bpy.props.IntProperty(name=_('MMD dummy bone layer'), default=27, min=0, max=31)
+    rename_mmd_bones: bpy.props.BoolProperty(name=_('Rename MMD bones'), default=False)
 
     @staticmethod
     def set_view_layers(rigify_armature_object: bpy.types.Object):
@@ -321,7 +322,8 @@ class MMDRigifyIntegrateFocusOnRigify(bpy.types.Operator, MMDRigifyOperatorABC):
             )
             rigify_armature_object = MMDRigifyArmatureObject(mmd_armature_raw_object)
 
-        rigify_armature_object.assign_mmd_bone_names()
+        if self.rename_mmd_bones:
+            rigify_armature_object.assign_mmd_bone_names()
 
         return {'FINISHED'}
 

@@ -254,25 +254,27 @@ translation_dict = {
     ("*", "MMD dummy bone layer"): "MMDダミーボーンレイヤー",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Rigify operability focused Integrate"): "Rigify操作性を重視して統合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:331
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:287
+    ("*", "Rename MMD bones"): "MMDボーンをリネーム",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:333
     ("Operator", "Convert Rigify Armature to MMD compatible"): "RigifyアーマチュアをMMD互換に変換",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:335
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:337
     ("*", "Upper Body2 as"): "上半身２として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:347
     ("*", "Lower Body as"): "下半身として",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:75 mmd_uuunyaa_tools/panels.py:80
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:383 mmd_uuunyaa_tools/converters/armatures/operators.py:452 mmd_uuunyaa_tools/panels.py:75 mmd_uuunyaa_tools/panels.py:80
     ("Operator", "Apply MMD Rest Pose"): "MMDレストポーズを適用",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
-    ("*", "Iterations"): "反復",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
-    ("*", "Number of solving iterations"): "反復解決回数",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:385 mmd_uuunyaa_tools/converters/armatures/operators.py:454
-    ("*", "Pose arms"): "腕をポーズ",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
-    ("*", "Pose legs"): "脚をポーズ",
+    ("*", "Iterations"): "反復",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
+    ("*", "Number of solving iterations"): "反復解決回数",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:387 mmd_uuunyaa_tools/converters/armatures/operators.py:456
+    ("*", "Pose arms"): "腕をポーズ",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:388 mmd_uuunyaa_tools/converters/armatures/operators.py:457
+    ("*", "Pose legs"): "脚をポーズ",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:389 mmd_uuunyaa_tools/converters/armatures/operators.py:458
     ("*", "Pose fingers"): "指をポーズ",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:422
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:424
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "AutoRigアーマチュアをMMD互換に変換",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
@@ -568,9 +570,9 @@ translation_dict = {
     ("*", "Update {} ready!"): "更新できます! {}",
     #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1067 mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1210
     ("*", "Update now to {}"): "今すぐ更新 {}",
-    #: mmd_uuunyaa_tools/generators/physics.py:15 mmd_uuunyaa_tools/panels.py:143
+    #: mmd_uuunyaa_tools/generators/physics.py:13 mmd_uuunyaa_tools/panels.py:143
     ("Operator", "Add Center of Gravity"): "重心を追加",
-    #: mmd_uuunyaa_tools/generators/physics.py:18
+    #: mmd_uuunyaa_tools/generators/physics.py:16
     ("*", "Radius"): "半径",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "体毛メッシュを追加",
@@ -909,8 +911,6 @@ translation_dict = {
     ("*", "Choose the material you want to use"): "マテリアルを選択",
     #: mmd_uuunyaa_tools/tuners/properties.py:63
     ("*", "Choose the geometry nodes you want to use"): "ジオメトリノードを選択",
-    #: MISSING
-    ("*", "Size"): "サイズ",
   },
   "zh_CN": {
     #: mmd_uuunyaa_tools/__init__.py:41
@@ -1143,25 +1143,27 @@ translation_dict = {
     ("*", "MMD dummy bone layer"): "MMD伪骨骼层",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:279
     ("Operator", "Rigify operability focused Integrate"): "注重Rigify操作性的整合",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:331
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:287
+    ("*", "Rename MMD bones"): "重命名MMD骨骼",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:333
     ("Operator", "Convert Rigify Armature to MMD compatible"): "将Rigify骨架转换为MMD兼容",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:335
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:337
     ("*", "Upper Body2 as"): "上半身2为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:345
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:347
     ("*", "Lower Body as"): "下半身为",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:381 mmd_uuunyaa_tools/converters/armatures/operators.py:450 mmd_uuunyaa_tools/panels.py:75 mmd_uuunyaa_tools/panels.py:80
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:383 mmd_uuunyaa_tools/converters/armatures/operators.py:452 mmd_uuunyaa_tools/panels.py:75 mmd_uuunyaa_tools/panels.py:80
     ("Operator", "Apply MMD Rest Pose"): "应用MMD静置姿态",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
-    ("*", "Iterations"): "迭代",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:384 mmd_uuunyaa_tools/converters/armatures/operators.py:453
-    ("*", "Number of solving iterations"): "解算迭代的次数",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:385 mmd_uuunyaa_tools/converters/armatures/operators.py:454
-    ("*", "Pose arms"): "姿势手臂",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
-    ("*", "Pose legs"): "姿势腿",
+    ("*", "Iterations"): "迭代",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:386 mmd_uuunyaa_tools/converters/armatures/operators.py:455
+    ("*", "Number of solving iterations"): "解算迭代的次数",
     #: mmd_uuunyaa_tools/converters/armatures/operators.py:387 mmd_uuunyaa_tools/converters/armatures/operators.py:456
+    ("*", "Pose arms"): "姿势手臂",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:388 mmd_uuunyaa_tools/converters/armatures/operators.py:457
+    ("*", "Pose legs"): "姿势腿",
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:389 mmd_uuunyaa_tools/converters/armatures/operators.py:458
     ("*", "Pose fingers"): "姿势手指",
-    #: mmd_uuunyaa_tools/converters/armatures/operators.py:422
+    #: mmd_uuunyaa_tools/converters/armatures/operators.py:424
     ("Operator", "Convert AutoRig Armature to MMD compatible"): "将AutoRig骨架转换为MMD兼容",
     #: mmd_uuunyaa_tools/converters/armatures/panels.py:14
     ("*", "UuuNyaa MMD Rigify"): "UuuNyaa MMD Rigify",
@@ -1457,9 +1459,9 @@ translation_dict = {
     ("*", "Update {} ready!"): "可以更新!",
     #: mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1067 mmd_uuunyaa_tools/externals/addon_updater/addon_updater_ops.py:1210
     ("*", "Update now to {}"): "立即更新 {}",
-    #: mmd_uuunyaa_tools/generators/physics.py:15 mmd_uuunyaa_tools/panels.py:143
+    #: mmd_uuunyaa_tools/generators/physics.py:13 mmd_uuunyaa_tools/panels.py:143
     ("Operator", "Add Center of Gravity"): "添加重心",
-    #: mmd_uuunyaa_tools/generators/physics.py:18
+    #: mmd_uuunyaa_tools/generators/physics.py:16
     ("*", "Radius"): "半径",
     #: mmd_uuunyaa_tools/generators/skin_hair.py:117
     ("*", "Add Skin Hair Mesh"): "添加体毛网格",
@@ -1798,8 +1800,6 @@ translation_dict = {
     ("*", "Choose the material you want to use"): "选择你的材质",
     #: mmd_uuunyaa_tools/tuners/properties.py:63
     ("*", "Choose the geometry nodes you want to use"): "选择你的几何节点",
-    #: MISSING
-    ("*", "Size"): "",
   },
 }
 # ##### END AUTOGENERATED I18N SECTION #####
