@@ -481,6 +481,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
             constraint.name = name
             for key, value in kwargs.items():
                 setattr(constraint, key, value)
+            return constraint
 
         # shoulders
         add_constraint(
@@ -555,7 +556,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         shin_ik_l_bone = pose_bones['leg_ik_nostr.l']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.l'], 'IK'):
             self.add_influence_driver(constraint, self.raw_object, leg_l_mmd_uuunyaa_data_path)
-        self.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', 2, 200, leg_l_mmd_uuunyaa_data_path, invert_influence=True)
+        self.add_ik_constraint(shin_ik_l_bone, self.raw_object, 'foot_ik_target.l', 2, 200, leg_l_mmd_uuunyaa_data_path, invert_influence=True, use_stretch=False)
         shin_ik_l_bone.use_ik_limit_z = True
         shin_ik_l_bone.ik_min_z = math.radians(0)
         shin_ik_l_bone.ik_max_z = math.radians(180)
@@ -564,7 +565,7 @@ class AutoRigArmatureObject(MMDBindArmatureObjectABC):
         shin_ik_r_bone = pose_bones['leg_ik_nostr.r']
         for constraint in list_constraints(pose_bones['leg_ik_nostr.r'], 'IK'):
             self.add_influence_driver(constraint, self.raw_object, leg_r_mmd_uuunyaa_data_path)
-        self.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', 2, 200, leg_r_mmd_uuunyaa_data_path, invert_influence=True)
+        self.add_ik_constraint(shin_ik_r_bone, self.raw_object, 'foot_ik_target.r', 2, 200, leg_r_mmd_uuunyaa_data_path, invert_influence=True, use_stretch=False)
         shin_ik_r_bone.use_ik_limit_z = True
         shin_ik_r_bone.ik_min_z = math.radians(-180)
         shin_ik_r_bone.ik_max_z = math.radians(0)
