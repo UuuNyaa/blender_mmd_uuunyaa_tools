@@ -34,9 +34,11 @@ translation_dict = {
     ("*", "Failed to download assets from BowlRoll. Incorrect download key."): "BowlRollからのアセットダウンロードに失敗しました。ダウンロードキーが正しくありません。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:116
     ("*", "Failed to download assets from Google Drive. Incorrect download key."): "Google Driveからのアセットダウンロードに失敗しました。ダウンロードキーが正しくありません。",
-    #: mmd_uuunyaa_tools/asset_search/actions.py:137
+    #: mmd_uuunyaa_tools/asset_search/actions.py:141
+    ("*", "Failed to download assets from OneDrive. Incorrect download key."): "OneDriveからのアセットダウンロードに失敗しました。ダウンロードキーが正しくありません。",
+    #: mmd_uuunyaa_tools/asset_search/actions.py:155
     ("*", "Failed to download assets from uploader.jp. The response format may have changed."): "uploader.jpからのアセットダウンロードに失敗しました。レスポンスフォーマットが変わっている可能性があります。",
-    #: mmd_uuunyaa_tools/asset_search/actions.py:405
+    #: mmd_uuunyaa_tools/asset_search/actions.py:424
     ("*", "The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences."): "ファイルパスが長すぎます。アドオンプリファレンスのアセット展開ルートフォルダーを短くすることで軽減できます。",
     #: mmd_uuunyaa_tools/asset_search/assets.py:33
     ("*", "All"): "全て",
@@ -923,9 +925,11 @@ translation_dict = {
     ("*", "Failed to download assets from BowlRoll. Incorrect download key."): "从BowlRoll下载资产失败。下载密钥不正确。",
     #: mmd_uuunyaa_tools/asset_search/actions.py:116
     ("*", "Failed to download assets from Google Drive. Incorrect download key."): "从Google Drive下载资产失败。下载密钥不正确。",
-    #: mmd_uuunyaa_tools/asset_search/actions.py:137
+    #: mmd_uuunyaa_tools/asset_search/actions.py:141
+    ("*", "Failed to download assets from OneDrive. Incorrect download key."): "从OneDrive下载资产失败。下载密钥不正确。",
+    #: mmd_uuunyaa_tools/asset_search/actions.py:155
     ("*", "Failed to download assets from uploader.jp. The response format may have changed."): "从uploader.jp下载资产失败。响应格式可能已经改变。",
-    #: mmd_uuunyaa_tools/asset_search/actions.py:405
+    #: mmd_uuunyaa_tools/asset_search/actions.py:424
     ("*", "The file path is too long. This can be alleviated to some extent by shortening the Asset Extract Root Folder in the Add-on Preferences."): "文件路径太长。这可以通过缩短插件首选项中的资产提取根文件夹来在一定程度上缓解。",
     #: mmd_uuunyaa_tools/asset_search/assets.py:33
     ("*", "All"): "全部",

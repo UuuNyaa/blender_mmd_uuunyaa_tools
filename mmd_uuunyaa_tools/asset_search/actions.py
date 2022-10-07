@@ -133,6 +133,24 @@ class DownloadActionExecutor:
         )
 
     @staticmethod
+    def onedrive(url: str) -> requests.models.Response:
+        # https://stackoverflow.com/questions/37857098/download-onedrive-file-from-curl-since-theyve-changed-their-urls-construction
+        parsed = urllib.parse.urlparse(url)
+        match = re.match(r'^/[^/]+/(s!.*)$', parsed.path)
+        if not match:
+            raise ValueError(_('Failed to download assets from OneDrive. Incorrect download key.'))
+
+        file_id = match.groups()[0]
+        download_url = f'https://api.onedrive.com/v1.0/shares/{file_id}/root/content'
+
+        session = requests.Session()
+        return session.get(
+            download_url,
+            stream=True,
+            allow_redirects=True
+        )
+
+    @staticmethod
     def uploader(url: str, password=None) -> requests.models.Response:
         error_message = _('Failed to download assets from uploader.jp. The response format may have changed.')
         session = requests.Session()
@@ -166,6 +184,7 @@ class DownloadActionExecutor:
             'smutbase': functools.partial(DownloadActionExecutor.smutbase),
             'bowlroll': functools.partial(DownloadActionExecutor.bowlroll),
             'gdrive': functools.partial(DownloadActionExecutor.gdrive),
+            'onedrive': functools.partial(DownloadActionExecutor.onedrive),
             'uploader': functools.partial(DownloadActionExecutor.uploader),
         }
 
