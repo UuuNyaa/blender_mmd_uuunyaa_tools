@@ -2,12 +2,15 @@
 # Copyright 2021 UuuNyaa <UuuNyaa@gmail.com>
 # This file is part of MMD UuuNyaa Tools.
 
+from dataclasses import dataclass
+import itertools
+from operator import itemgetter
 import math
-from typing import Set
+import random
+from typing import Dict, List, Optional, Set, Tuple
 
 import bmesh
 import bpy
-from mathutils import Quaternion, Vector
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
                                          is_mmd_tools_installed,
@@ -494,3 +497,256 @@ class SelectMovedPoseBones(bpy.types.Operator):
                 pose_bone.bone.select = True
 
         return {'FINISHED'}
+
+
+@dataclass
+class Segment:
+    index: int
+    area: float
+    groups: Set[int]
+    largest_group: int
+    largest_area: float
+
+
+class SegmentMeshOperator(bpy.types.Operator):
+    bl_idname = 'mmd_uuunyaa_tools.segment_mesh'
+    bl_label = _('Segment Mesh')
+    bl_options = {'REGISTER', 'UNDO'}
+
+    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.10, min=0, soft_max=1.0)
+    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Theshold'), default=0.02, min=0, soft_max=1.0)
+    weight_threshold: bpy.props.FloatProperty(name=_('Weight Theshold'), default=0.0, min=0, soft_max=1.0)
+    segmentation_vertex_color_attribute_name: bpy.props.StringProperty(name=_('Segmentation Vertex Color Attribute Name'), default='controlnet_segmentation')
+    segmentation_vertex_color_random_seed: bpy.props.IntProperty(name=_('Segmentation Vertex Color Random Seed'), default=0)
+
+    def execute(self, context: bpy.types.Context):
+        maximum_area_threshold = self.maximum_area_threshold
+        minimum_area_threshold = self.minimum_area_threshold
+        weight_threshold = self.weight_threshold
+        segmentation_vertex_color_attribute_name = self.segmentation_vertex_color_attribute_name
+        mesh_object = context.active_object
+
+        target_bmesh: bmesh.types.BMesh = bmesh.new()
+
+        vertex_groups: bpy.types.VertexGroups = mesh_object.vertex_groups
+        ignore_vertex_group_indices = {
+            vg.index
+            for vg in vertex_groups
+            if vg.name in {'mmd_vertex_order', 'mmd_edge_scale'}
+        }
+
+        mesh: bpy.types.Mesh = mesh_object.data
+        target_bmesh.from_mesh(mesh, face_normals=False)
+        deform_layer = target_bmesh.verts.layers.deform.verify()
+        color_layer = (
+            target_bmesh.loops.layers.color[segmentation_vertex_color_attribute_name]
+            if segmentation_vertex_color_attribute_name in target_bmesh.loops.layers.color
+            else target_bmesh.loops.layers.color.new(segmentation_vertex_color_attribute_name)
+        )
+
+        vgi2adjacent_vgis: Dict[int, Set[int]] = dict()
+
+        vgi2area: Dict[int, float] = dict()
+
+        vgi2fis: Dict[int, Set[int]] = dict()
+
+        vgi2weight: Dict[int, float] = dict()
+
+        face: bmesh.types.BMFace
+        for face in target_bmesh.faces:
+            vgi2weight.clear()
+            vert: bmesh.types.BMVert
+            for vert in face.verts:
+                for vertex_group_index, weight in vert[deform_layer].items():
+                    if weight < weight_threshold:
+                        continue
+                    if vertex_group_index in ignore_vertex_group_indices:
+                        continue
+                    vgi2weight[vertex_group_index] = vgi2weight.get(vertex_group_index, 0.0) + weight
+
+            sorted_vgi2weight = sorted(vgi2weight.items(), key=itemgetter(1), reverse=True)
+            # for f in sorted_vgi2weight:
+            #     for t in sorted_vgi2weight:
+            #         if f == t:
+            #             continue
+            #         vgi2adjacent_vgis.setdefault(f[0], set()).add(t[0])
+
+            if len(sorted_vgi2weight) > 1:
+                f = sorted_vgi2weight[0][0]
+                t = sorted_vgi2weight[1][0]
+                vgi2adjacent_vgis.setdefault(f, set()).add(t)
+                vgi2adjacent_vgis.setdefault(t, set()).add(f)
+
+            vertex_group_index = sorted_vgi2weight[0][0]
+            vgi2area[vertex_group_index] = vgi2area.get(vertex_group_index, 0.0) + face.calc_area()
+            vgi2fis.setdefault(vertex_group_index, set()).add(face.index)
+
+        vgi2segment: Dict[int, Segment] = {
+            gi: Segment(si, area, {gi}, gi, area)
+            for si, (gi, area) in enumerate(vgi2area.items())
+        }
+
+        for vgi, avgis in vgi2adjacent_vgis.items():
+            print(vgi, avgis)
+
+        def merge(src: Segment, dst: Segment):
+            if dst.largest_area < src.largest_area:
+                dst.largest_group = src.largest_group
+                dst.largest_area = src.largest_area
+            dst.area += src.area
+            dst.groups.update(src.groups)
+            replace_index = src.index
+            for gi, segment in vgi2segment.items():
+                if segment.index != replace_index:
+                    continue
+                vgi2segment[gi] = dst
+
+        for vgi, _ in sorted(vgi2area.items(), key=itemgetter(1)):
+            if vgi not in vgi2adjacent_vgis:
+                continue
+
+            if vgi not in vgi2segment:
+                continue
+
+            segment = vgi2segment[vgi]
+            if maximum_area_threshold <= segment.area:
+                continue
+
+            merging = True
+            while merging:
+                merging = False
+
+                for adjacent_segment in sorted((vgi2segment[avgi] for avgi in vgi2adjacent_vgis[vgi] if avgi in vgi2segment), key=lambda e: e.area):
+                    if segment.index == adjacent_segment.index:
+                        continue
+                    merged_area = segment.area + adjacent_segment.area
+                    if maximum_area_threshold <= merged_area and minimum_area_threshold < segment.area:
+                        continue
+
+                    merge(adjacent_segment, segment)
+                    merging = True
+                    break
+
+        segments = [next(s) for i, (_, s) in enumerate(itertools.groupby(sorted(vgi2segment.values(), key=lambda e: e.index), key=lambda e: e.index))]
+
+        if len(segments) > len(SEGMANTATION_COLORS):
+            self.report(type={'ERROR'}, message='Too many segments; increase the Maximum Area Theshold to reduce the segments.')
+            return {'CANCELLED'}
+
+        # data_materials = bpy.data.materials
+        # setup_controlnet_segment_materials(data_materials)
+
+        faces = target_bmesh.faces
+        faces.ensure_lookup_table()
+
+        segmantation_colors = SEGMANTATION_COLORS.copy()
+        rng = random.Random(self.segmentation_vertex_color_random_seed)
+        rng.shuffle(segmantation_colors)
+
+        for index, segment in enumerate(segments):
+            # material_name = f'controlnet_segment.{index:03}'
+            # if index + 1 < len(mesh_materials):
+            #     mesh_materials[index] = data_materials[material_name]
+            # else:
+            #     mesh_materials.append(data_materials[material_name])
+
+            segmentation_color = segmantation_colors[index]
+
+            for fid in (fi for gi in segment.groups for fi in vgi2fis[gi]):
+                face = faces[fid]
+                # face.material_index = index
+                for loop in face.loops:
+                    loop[color_layer] = segmentation_color
+
+        target_bmesh.to_mesh(mesh)
+
+        for material in mesh.materials:
+            setup_output_aov(material.node_tree, segmentation_vertex_color_attribute_name)
+
+        if not segmentation_vertex_color_attribute_name in context.view_layer.aovs:
+            aov = context.view_layer.aovs.add()
+            aov.name = segmentation_vertex_color_attribute_name
+
+        for segment in sorted(segments, key=lambda s: s.area):
+            print(segment, [vertex_groups[vgi].name for vgi in segment.groups])
+
+        return {'FINISHED'}
+
+
+RGBA = Tuple[float, float, float, float]
+
+
+def setup_controlnet_segment_materials(data_materials: bpy.types.BlendDataMaterials):
+    for index, rgba in enumerate(SEGMANTATION_COLORS):
+        name = f'controlnet_segment.{index:03}'
+        if name in data_materials:
+            continue
+
+        material = data_materials.new(name=name)
+        material.use_nodes = True
+        material.use_fake_user = True
+        setup_shader(material.node_tree, rgba)
+
+
+def setup_output_aov(node_tree: bpy.types.NodeTree, segmentation_output_aov_name: str):
+    nodes = node_tree.nodes
+    segmentation_output_aov_node: Optional[bpy.types.ShaderNodeOutputAOV] = next((n for n in nodes if n.type == 'OUTPUT_AOV' and n.name == segmentation_output_aov_name), None)
+    if segmentation_output_aov_node is None:
+        segmentation_output_aov_node = nodes.new(type=bpy.types.ShaderNodeOutputAOV.__name__)
+        segmentation_output_aov_node.name = segmentation_output_aov_name
+        segmentation_output_aov_node.location = (300, 600)
+
+    if len(segmentation_output_aov_node.inputs['Color'].links) > 0:
+        return
+
+    segmentation_vertex_color_node: bpy.types.ShaderNodeVertexColor = nodes.new(type=bpy.types.ShaderNodeVertexColor.__name__)
+    segmentation_vertex_color_node.layer_name = segmentation_output_aov_name
+    segmentation_vertex_color_node.location = (0, 600)
+    node_tree.links.new(
+        segmentation_vertex_color_node.outputs[0],
+        segmentation_output_aov_node.inputs[0]
+    )
+
+
+def setup_shader(node_tree: bpy.types.NodeTree, rgba: RGBA):
+    if node_tree:
+        node_tree.links.clear()
+        node_tree.nodes.clear()
+    nodes = node_tree.nodes
+    links = node_tree.links
+    output = nodes.new(type=bpy.types.ShaderNodeOutputMaterial.__name__)
+    output.location = (300, 0)
+    emission = nodes.new(type=bpy.types.ShaderNodeEmission.__name__)
+    emission.location = (0, 0)
+    emission.inputs[0].default_value = rgba
+    emission.inputs[1].default_value = 1
+
+    links.new(emission.outputs[0], output.inputs[0])
+
+
+def to_blender_color(c):
+    c = min(max(0, c), 255) / 255
+    return c / 12.92 if c < 0.04045 else math.pow((c + 0.055) / 1.055, 2.4)
+
+
+SEGMANTATION_COLORS: List[RGBA] = [
+    (
+        to_blender_color(0xff & (rgb >> 16)),  # Red
+        to_blender_color(0xff & (rgb >> 8)),  # Blue
+        to_blender_color(0xff & (rgb)),  # Green
+        1.0,  # Alpha
+    )
+    for rgb in [
+        0xff0000, 0xffa300, 0xff6600, 0xc2ff00, 0x008fff, 0x33ff00, 0x0052ff, 0x00ff29,
+        0x00ffad, 0x0a00ff, 0xadff00, 0x00ff99, 0xff5c00, 0xff00ff, 0xff00f5, 0xff0066,
+        0xffad00, 0xff0014, 0xffb8b8, 0x001fff, 0x00ff3d, 0x0047ff, 0xff00cc, 0x00ffc2,
+        0x00ff52, 0x000aff, 0x0070ff, 0x3300ff, 0x00c2ff, 0x007aff, 0x00ffa3, 0xff9900,
+        0x00ff0a, 0xff7000, 0x8fff00, 0x5200ff, 0xa3ff00, 0xffeb00, 0x08b8aa, 0x8500ff,
+        0x00ff5c, 0xb800ff, 0xff001f, 0x00b8ff, 0x00d6ff, 0xff0070, 0x5cff00, 0x00e0ff,
+        0x70e0ff, 0x46b8a0, 0xa300ff, 0x9900ff, 0x47ff00, 0xff00a3, 0xffcc00, 0xff008f,
+        0x00ffeb, 0x85ff00, 0xff00eb, 0xf500ff, 0xff007a, 0xfff500, 0x0abed4, 0xd6ff00,
+        0x00ccff, 0x1400ff, 0xffff00, 0x0099ff, 0x0029ff, 0x00ffcc, 0x2900ff, 0x29ff00,
+        0xad00ff, 0x00f5ff, 0x4700ff, 0x7a00ff, 0x00ffb8, 0x005cff, 0xb8ff00, 0x0085ff,
+        0xffd600, 0x19c2c2, 0x66ff00, 0x5c00ff,
+    ]
+]
