@@ -5,13 +5,13 @@
 import collections
 import dataclasses
 import itertools
-from operator import itemgetter
 import math
 import random
 from typing import Dict, List, Optional, Set, Tuple
 
 import bmesh
 import bpy
+import mathutils
 from mmd_uuunyaa_tools.m17n import _
 from mmd_uuunyaa_tools.utilities import (import_mmd_tools,
                                          is_mmd_tools_installed,
@@ -500,33 +500,68 @@ class SelectMovedPoseBones(bpy.types.Operator):
         return {'FINISHED'}
 
 
+TriLoopIndex = int
+LoopPairId = int
+VertexPairId = int
+VertexIndex = int
+VertexGroupPairId = int
+SegmentContactId = int
+SegmentPairId = int
+
+
 @dataclasses.dataclass
 class Segment:
     index: int
-    area: float
-    groups: Set[int]
-    largest_group: int
-    largest_area: float
+    area: float = 0.0
+    tri_loop0s: Set[bmesh.types.BMLoop] = dataclasses.field(default_factory=set)
+    segment_contact_ids: Set[SegmentContactId] = dataclasses.field(default_factory=set)
+
+    def __hash__(self):
+        return self.index
+
+    def __eq__(self, other):
+        return self.index == other.index
 
 
 @dataclasses.dataclass
 class Cost:
-    weight: float
+    total: float
+    vertex_group_weight: float
+    vertex_group_change: float
     angle: float
     material: float
-    length: float
+    edge_length: float
 
 
 @dataclasses.dataclass
-class VertexGroupData:
-    area: float = 0.0
-    adjacent_vertex_group_indices: Set[int] = dataclasses.field(default_factory=set)
-    faces: Set[bmesh.types.BMFace] = dataclasses.field(default_factory=set)
+class SegmentContact:
+    index: SegmentContactId
+    cost: float
+    cost_normalized: float
+    length: float
+    segment0: Segment
+    segment1: Segment
 
+    def segment_contacts(self, segment: Segment) -> bool:
+        return self.segment0 == segment or self.segment1 == segment
 
-LoopPairId = int
-VertexPairId = int
-VertexGroupPairId = int
+    def segment_replace(self, src: Segment, dst: Segment) -> bool:
+        replaced = False
+        if self.segment0 == src:
+            self.segment0 = dst
+            replaced = True
+
+        if self.segment1 == src:
+            self.segment1 = dst
+            replaced = True
+
+        return replaced
+
+    def __hash__(self):
+        return self.index
+
+    def __eq__(self, other):
+        return self.index == other.index
 
 
 def _to_loop_pair_id(loop0: bmesh.types.BMLoop, loop1: bmesh.types.BMLoop, loop_pair_shift: int) -> LoopPairId:
@@ -545,13 +580,15 @@ def _to_vertex_pair_id(vert0: bmesh.types.BMVert, vert1: bmesh.types.BMVert, ver
     return vert0_index + (vert1_index << vertex_pair_shift)
 
 
-def _to_vertex_group_pair_id(vgi0: int, vgi1: int, vertex_group_pair_shift: int) -> VertexGroupPairId:
-    if vgi0 > vgi1:
-        return vgi1 + (vgi0 << vertex_group_pair_shift)
-    return vgi0 + (vgi1 << vertex_group_pair_shift)
+def _to_segment_pair_id(segment0: Segment, segment1: Segment, segment_pair_shift: int) -> SegmentPairId:
+    segment0_index = segment0.index
+    segment1_index = segment1.index
+    if segment0_index > segment1_index:
+        return segment1_index + (segment0_index << segment_pair_shift)
+    return segment0_index + (segment1_index << segment_pair_shift)
 
 
-def _to_tri_loop_index(loop: bmesh.types.BMLoop) -> int:
+def _to_tri_loop_index(loop: bmesh.types.BMLoop) -> TriLoopIndex:
     li0 = loop.index
     li1 = loop.link_loop_next.index
     li2 = loop.link_loop_prev.index
@@ -561,10 +598,9 @@ def _to_tri_loop_index(loop: bmesh.types.BMLoop) -> int:
         if li1 > li2:
             return li2
         return li1
-    else:
-        if li0 > li2:
-            return li2
-        return li0
+    if li0 > li2:
+        return li2
+    return li0
 
 
 class SegmentMeshOperator(bpy.types.Operator):
@@ -572,21 +608,30 @@ class SegmentMeshOperator(bpy.types.Operator):
     bl_label = _('Segment Mesh')
     bl_options = {'REGISTER', 'UNDO'}
 
-    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.10, min=0, soft_max=1.0)
+    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.85, min=0, soft_max=1.0)
     minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Theshold'), default=0.02, min=0, soft_max=1.0)
-    weight_threshold: bpy.props.FloatProperty(name=_('Weight Theshold'), default=0.0, min=0, soft_max=1.0)
+    cost_threshold: bpy.props.FloatProperty(name=_('Cost Theshold'), default=2.5, min=0, soft_max=1.0)
+
     segmentation_vertex_color_attribute_name: bpy.props.StringProperty(name=_('Segmentation Vertex Color Attribute Name'), default='controlnet_segmentation')
     segmentation_vertex_color_random_seed: bpy.props.IntProperty(name=_('Segmentation Vertex Color Random Seed'), default=0)
 
     def execute(self, context: bpy.types.Context):
+        import cProfile
+        cProfile.runctx('self._execute(context)', globals(), locals(), sort=2)
+        return {'FINISHED'}
+
+    def _execute(self, context: bpy.types.Context):
         maximum_area_threshold = self.maximum_area_threshold
         minimum_area_threshold = self.minimum_area_threshold
-        weight_threshold = self.weight_threshold
+        cost_threshold = self.cost_threshold
         segmentation_vertex_color_attribute_name = self.segmentation_vertex_color_attribute_name
 
-        angle_cost_weight = 1.0
-        vertex_group_cost_weight = 1.0
-        material_cost_weight = 1.0
+        vertex_group_weight_cost_factor = 0.1
+        vertex_group_change_cost_factor = 0.5
+        angle_cost_factor = 1.0
+        material_cost_factor = 0.3
+
+        segmantation_color_count = len(SEGMANTATION_COLORS)
 
         mesh_object = context.active_object
 
@@ -620,18 +665,16 @@ class SegmentMeshOperator(bpy.types.Operator):
 
         vertex_group_pair_shift = int(math.log2(max(ignore_vertex_group_indices)) + 1)
 
-        try_loops = target_bmesh.calc_loop_triangles()
-        loop_count = 3 * len(try_loops)
+        tri_loops = target_bmesh.calc_loop_triangles()
+        loop_count = 3 * len(tri_loops)
         loop_pair_shift = int(math.log2(loop_count) / 2 + 1)
 
         vertex_count = len(target_bmesh.verts)
         vertex_pair_shift = int(math.log2(vertex_count) / 2 + 1)
 
-        vgi2data: Dict[int, VertexGroupData] = collections.defaultdict(lambda: VertexGroupData())
-
         vpi2weights: Dict[VertexPairId, float] = dict()
 
-        def calc_weight_distance(vert0: bmesh.types.BMVert, vert1: bmesh.types.BMVert) -> float:
+        def calc_vertex_group_weight_cost(vert0: bmesh.types.BMVert, vert1: bmesh.types.BMVert) -> float:
             vpi = _to_vertex_pair_id(vert0, vert1, vertex_pair_shift)
             if vpi in vpi2weights:
                 return vpi2weights[vpi]
@@ -646,143 +689,250 @@ class SegmentMeshOperator(bpy.types.Operator):
             for vgi1, weight1 in vgi2weights1.items():
                 weight += abs(weight1 - vgi2weights0.get(vgi1, 0.0))
 
-            return vpi2weights.setdefault(vpi, weight/2)
+            return vpi2weights.setdefault(vpi, weight)
 
-        # vertex_group_pair_id to cost map
-        vgpi2costs: Dict[VertexGroupPairId, Cost] = collections.defaultdict(lambda: Cost(0.0, 0.0, 0.0, 0.0))
+        tli2heaviest_vgi: Dict[TriLoopIndex, int] = {}
 
-        # tri_loop_index to vertex_group_index map
-        tli2vgis: Dict[int, int] = dict()
+        def calc_heaviest_vertex_group_index(tli: TriLoopIndex, loop: bmesh.types.BMLoop) -> int:
+            if tli in tli2heaviest_vgi:
+                return tli2heaviest_vgi[tli]
 
-        def to_vertex_group_index(loop: bmesh.types.BMLoop) -> int:
-            tli = _to_tri_loop_index(loop)
-            if tli in tli2vgis:
-                return tli2vgis[tli]
+            max_vgi: int = -1
+            max_weight: float = -1.0
+            vgi2weights: Dict[int, float] = {}
+            for vgi, weight in itertools.chain(
+                vi2vgi2weights[loop.vert.index].items(),
+                vi2vgi2weights[loop.link_loop_next.vert.index].items(),
+                vi2vgi2weights[loop.link_loop_prev.vert.index].items()
+            ):
+                weight += vgi2weights.get(vgi, 0)
+                if weight > max_weight:
+                    max_vgi = vgi
+                    max_weight = weight
+                vgi2weights[vgi] = weight
+            return tli2heaviest_vgi.setdefault(tli, max_vgi)
 
-            vgi2weights: Dict[int, float] = dict()
-            for loop in (loop.link_loop_prev, loop, loop.link_loop_next):
-                loop_edge_length = loop.edge.calc_length()
-                for vgi, weight in vi2vgi2weights[loop.vert.index].items():
-                    vgi2weights[vgi] = vgi2weights.get(vgi, 0.0) + weight * loop_edge_length
+        # loop_pair_id to cost map
+        lpi2costs: Dict[LoopPairId, Cost] = {}
 
-            return tli2vgis.setdefault(
-                tli,
-                next(
-                    iter(sorted(
-                        vgi2weights.items(),
-                        key=itemgetter(1),
-                        reverse=True
-                    )),
-                    (-1, 0)
-                )[0]
-            )
+        __next_segment_id: int = 0
 
-        looked_loop_pairs: set[LoopPairId] = set()
+        def new_segment():
+            nonlocal __next_segment_id
+            __next_segment_id += 1
+            return Segment(__next_segment_id)
+
+        # tri_loop_index to segment map
+        tli2segment: Dict[TriLoopIndex, Segment] = collections.defaultdict(new_segment)
+
+        # segment_contact_index to segment_contact map
+        sci2segment_contacts: Dict[SegmentContactId, SegmentContact] = {}
+
+        half_pi_inverse = 2 / math.pi
+
+        next_segment_contact_id: SegmentContactId = 0
 
         tri_loop: List[bmesh.types.BMLoop, bmesh.types.BMLoop, bmesh.types.BMLoop]
-        for tri_loop in try_loops:
+        for tri_loop in tri_loops:
             tri_loop0 = tri_loop[0]
-            this_vgi = to_vertex_group_index(tri_loop0)
             this_face = tri_loop0.face
 
-            this_data = vgi2data[this_vgi]
-            this_data.area += this_face.calc_area()
-            this_data.faces.add(this_face)
+            this_tli = _to_tri_loop_index(tri_loop0)
+            this_heaviest_vertex_group_index = calc_heaviest_vertex_group_index(this_tli, tri_loop0)
+
+            this_segment = tli2segment[this_tli]
+            this_segment.area = mathutils.geometry.area_tri(tri_loop0.vert.co, tri_loop[1].vert.co, tri_loop[2].vert.co)  # pylint: disable=assignment-from-no-return
+            this_segment.tri_loop0s.add(tri_loop0)
 
             for this_loop in tri_loop:
-                loop_length = -1
+                edge_length = -1
                 that_loop = this_loop
                 while (that_loop := that_loop.link_loop_radial_next) != this_loop:
                     lpi = _to_loop_pair_id(this_loop, that_loop, loop_pair_shift)
-                    if lpi in looked_loop_pairs:
-                        continue
-                    looked_loop_pairs.add(lpi)
-
-                    that_vgi = to_vertex_group_index(that_loop)
-                    if this_vgi == that_vgi:
+                    if lpi in lpi2costs:
                         continue
 
-                    vgpi = _to_vertex_group_pair_id(this_vgi, that_vgi, vertex_group_pair_shift)
-
-                    if loop_length < 0:
+                    if edge_length < 0:
                         this_edge = this_loop.edge
-                        loop_length = this_edge.calc_length()
+                        edge_length = this_edge.calc_length()
                         this_verts = this_edge.verts
                         vert0 = this_verts[0]
                         vert1 = this_verts[1]
                         this_vert2 = this_loop.link_loop_prev.vert
 
-                        this_loop_weight_distance = calc_weight_distance(vert0, this_vert2) + calc_weight_distance(vert1, this_vert2)
+                        this_loop_vertex_group_weight_cost = calc_vertex_group_weight_cost(vert0, this_vert2) + calc_vertex_group_weight_cost(vert1, this_vert2)
+                        # this_loop_vertex_group_id = calc_vertex_group_index(vert0, vert1, this_vert2)
 
-                    cost = vgpi2costs[vgpi]
-                    cost.length += loop_length
-
+                    that_tli = _to_tri_loop_index(that_loop)
+                    that_heaviest_vertex_group_index = calc_heaviest_vertex_group_index(that_tli, that_loop)
                     that_vert2 = that_loop.link_loop_prev.vert
-                    cost.weight += loop_length * (this_loop_weight_distance + calc_weight_distance(vert0, that_vert2) + calc_weight_distance(vert1, that_vert2))
-
-                    cost.angle += loop_length * (this_loop.calc_normal().angle(that_loop.calc_normal()))
-
                     that_face = that_loop.face
-                    cost.material += loop_length * (0 if this_face.material_index == that_face.material_index else 1)
+                    that_segment = tli2segment[that_tli]
 
-                    this_data.adjacent_vertex_group_indices.add(that_vgi)
-                    vgi2data[that_vgi].adjacent_vertex_group_indices.add(this_vgi)
+                    # cost:vertex weight = 1:1
+                    cost_vertex_group_weight = edge_length * 0.25 * (this_loop_vertex_group_weight_cost + calc_vertex_group_weight_cost(vert0, that_vert2) + calc_vertex_group_weight_cost(vert1, that_vert2))
 
-        vgi2segment: Dict[int, Segment] = {
-            vgi: Segment(si, data.area, {vgi}, vgi, data.area)
-            for si, (vgi, data) in enumerate(vgi2data.items())
-        }
+                    # cost:vertex group change = 1:1
+                    cost_vertex_group_change = edge_length * (0 if this_heaviest_vertex_group_index == that_heaviest_vertex_group_index else 1)
+
+                    # cost:angle = 1:90 degrees
+                    cost_angle = edge_length * half_pi_inverse * this_loop.calc_normal().angle(that_loop.calc_normal())
+
+                    # cost:material = 1:1
+                    cost_material = edge_length * (0 if this_face.material_index == that_face.material_index else 1)
+
+                    cost_total = vertex_group_weight_cost_factor * cost_vertex_group_weight + vertex_group_change_cost_factor * cost_vertex_group_change + angle_cost_factor * cost_angle + material_cost_factor * cost_material
+
+                    lpi2costs[lpi] = Cost(
+                        cost_total,
+                        cost_vertex_group_weight,
+                        cost_vertex_group_change,
+                        cost_angle,
+                        cost_material,
+                        edge_length,
+                    )
+
+                    segment_contact = SegmentContact(
+                        next_segment_contact_id := next_segment_contact_id+1,
+                        cost_total,
+                        cost_total/edge_length,
+                        edge_length,
+                        this_segment,
+                        that_segment
+                    )
+                    sci2segment_contacts[segment_contact.index] = segment_contact
+                    this_segment.segment_contact_ids.add(segment_contact.index)
+                    that_segment.segment_contact_ids.add(segment_contact.index)
 
         # with open('output.tsv', 'wt') as f:
-        #     for vgi, data in vgi2data.items():
-        #         for v in data.adjacent_vertex_group_indices:
-        #             cost = vgpi2costs[_to_vertex_group_pair_id(vgi, v, vertex_group_pair_shift)]
-        #             print(f'{vertex_groups[vgi].name}\t{vertex_groups[v].name}\t{cost.length}\t{cost.angle}\t{cost.material}\t{cost.weight}', file=f)
+        #     for lpi, cost in lpi2costs.items():
+        #         print(f'{lpi}\t{cost.edge_length}\t{cost.angle}\t{cost.material}\t{cost.vertex_group}', file=f)
 
-        # angle/length threshold 0.3
+        segment_count = len(tli2segment)
+        if segment_count == 0:
+            self.report({'WARNING'}, "There is no target segment; In Edit Mode, select the faces you want to paint.")
+            return {'FINISHED'}
 
-        def merge(src: Segment, dst: Segment):
-            if dst.largest_area < src.largest_area:
-                dst.largest_group = src.largest_group
-                dst.largest_area = src.largest_area
-            dst.area += src.area
-            dst.groups.update(src.groups)
-            replace_index = src.index
-            for vgi, segment in vgi2segment.items():
-                if segment.index != replace_index:
+        segment_pair_shift = int(math.log2(segment_count) / 2 + 1)
+
+        def remove_segment_contact(sci: SegmentContactId):
+            sc = sci2segment_contacts.pop(sci)
+            sc.segment0.segment_contact_ids.discard(sci)
+            sc.segment1.segment_contact_ids.discard(sci)
+
+        spi2mergable_segment_contacts: Dict[SegmentPairId, Set[SegmentContact]] = collections.defaultdict(set)
+        result_segments: Set[Segment] = set()
+        result_loop_count: int = 0
+
+        cost = 0.0
+        target_cost = -1.0
+
+        merging = True
+        while merging:
+
+            merging = False
+
+            # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+            # current_segment_count = len(current_segments) + len(result_segments)
+            # print(f"[0] segments: {current_segment_count}, contacts: {len(sci2segment_contacts)}, loops: {result_loop_count + len({l for s in current_segments for l in s.tri_loop0s})}, cost: {cost} < {target_cost}")
+
+            target_cost = -1
+
+            # if current_segment_count > segmantation_color_count:
+            #     if len(sci2segment_contacts) > 0:
+            #         cost_threshold += 1
+            #         merging = True
+
+            for sci, _segment_contact in sorted(sci2segment_contacts.items(), key=lambda e: e[1].cost_normalized):
+                segment_contact = sci2segment_contacts.get(sci)
+                if segment_contact is None:
                     continue
-                vgi2segment[vgi] = dst
 
-        for vgpi, cost in vgpi2costs.items():
-            pass
-
-        data: VertexGroupData
-        for vgi, data in sorted(vgi2data.items(), key=lambda e: e[1].area):
-            segment = vgi2segment[vgi]
-            if maximum_area_threshold <= segment.area:
-                continue
-
-            merging = True
-            while merging:
-                merging = False
-
-                for adjacent_segment in sorted((vgi2segment[avgi] for avgi in data.adjacent_vertex_group_indices), key=lambda e: e.area):
-                    if segment.index == adjacent_segment.index:
-                        continue
-
-                    merged_area = segment.area + adjacent_segment.area
-                    if maximum_area_threshold <= merged_area and minimum_area_threshold < segment.area:
-                        continue
-
-                    merge(adjacent_segment, segment)
-                    merging = True
+                cost = segment_contact.cost_normalized
+                if cost > cost_threshold:
                     break
 
-        segments = [next(s) for i, (_, s) in enumerate(itertools.groupby(sorted(vgi2segment.values(), key=lambda e: e.index), key=lambda e: e.index))]
+                if 0 < target_cost < cost:
+                    break
 
-        if len(segments) > len(SEGMANTATION_COLORS):
-            self.report(type={'ERROR'}, message='Too many segments; increase the Maximum Area Theshold to reduce the segments.')
-            return {'CANCELLED'}
+                target_cost = cost * 1.01
+
+                dst_segment = segment_contact.segment0
+                src_segment = segment_contact.segment1
+
+                if dst_segment.area + src_segment.area > maximum_area_threshold:
+                    continue
+
+                merging = True
+
+                # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+                # print(f"[1] segments: {len(current_segments) + len(result_segments)}, contacts: {len(sci2segment_contacts)}, cost: {cost} < {target_cost}")
+
+                dst_segment.tri_loop0s.update(src_segment.tri_loop0s)
+                dst_segment.area += src_segment.area
+
+                remove_segment_contact(sci)
+
+                # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+                # print(f"[2] segments: {len(current_segments)}, contacts: {len(sci2segment_contacts)}, loops: {len({l for s in current_segments for l in s.tri_loop0s})}")
+                # update contacts of src_segment
+                dst_segment_contact_ids = dst_segment.segment_contact_ids
+                src_segment_contact_ids = src_segment.segment_contact_ids
+                for src_sci in list(src_segment_contact_ids):
+                    sc = sci2segment_contacts[src_sci]
+                    if sc.segment_replace(src_segment, dst_segment):
+                        if sc.segment0 == sc.segment1:
+                            remove_segment_contact(src_sci)
+                        else:
+                            dst_segment_contact_ids.add(src_sci)
+                            src_segment_contact_ids.discard(src_sci)
+
+                if len(dst_segment_contact_ids) == 0:
+                    # dst_segment is isolated
+                    result_segments.add(dst_segment)
+                    result_loop_count += len(dst_segment.tri_loop0s)
+                    continue
+
+                # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+                # print(f"[3] segments: {len(current_segments)}, contacts: {len(sci2segment_contacts)}, loops: {len({l for s in current_segments for l in s.tri_loop0s})}")
+                # collect mergable segment contacts
+                spi2mergable_segment_contacts.clear()
+                for edge_sci in dst_segment_contact_ids:
+                    sc = sci2segment_contacts[edge_sci]
+                    spi = _to_segment_pair_id(sc.segment0, sc.segment1, segment_pair_shift)
+                    spi2mergable_segment_contacts[spi].add(sc)
+
+                # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+                # print(f"[4] segments: {len(current_segments)}, contacts: {len(sci2segment_contacts)}, loops: {len({l for s in current_segments for l in s.tri_loop0s})}")
+                # merge mergable segment contacts
+                for mergable_segment_contacts in spi2mergable_segment_contacts.values():
+                    if len(mergable_segment_contacts) <= 1:
+                        continue
+
+                    mergable_segment_contacts_iter = iter(mergable_segment_contacts)
+                    merged_sc = next(mergable_segment_contacts_iter)
+                    for sc in mergable_segment_contacts_iter:
+                        merged_sc.cost += sc.cost
+                        merged_sc.length += sc.length
+                        remove_segment_contact(sc.index)
+                    merged_sc.cost_normalized = merged_sc.cost / merged_sc.length
+
+                # current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+                # print(f"[5] segments: {len(current_segments)}, contacts: {len(sci2segment_contacts)}, loops: {len({l for s in current_segments for l in s.tri_loop0s})}")
+
+        # angle/length threshold 0.3
+        current_segments = {s for sc in sci2segment_contacts.values() for s in (sc.segment0, sc.segment1)}
+        print(f"[6] segments: {len(current_segments) + len(result_segments)}, contacts: {len(sci2segment_contacts)}, loops: {result_loop_count + len({l for s in current_segments for l in s.tri_loop0s})}")
+
+        result_segments.update({
+            s
+            for sc in sci2segment_contacts.values()
+            for s in (sc.segment0, sc.segment1)
+        })
+
+        # if len(result_segments) > segmantation_color_count:
+        #     self.report(type={'ERROR'}, message=f"Too many segments {len(result_segments)}; increase the Maximum Area Theshold to reduce the segments.")
+        #     return {'CANCELLED'}
 
         # data_materials = bpy.data.materials
         # setup_controlnet_segment_materials(data_materials)
@@ -791,19 +941,22 @@ class SegmentMeshOperator(bpy.types.Operator):
         rng = random.Random(self.segmentation_vertex_color_random_seed)
         rng.shuffle(segmantation_colors)
 
-        for index, segment in enumerate(segments):
-            # material_name = f'controlnet_segment.{index:03}'
-            # if index + 1 < len(mesh_materials):
-            #     mesh_materials[index] = data_materials[material_name]
-            # else:
-            #     mesh_materials.append(data_materials[material_name])
+        total_tri_loops = 0
+        max_segment_area = -1.0
 
-            segmentation_color = segmantation_colors[index]
+        for index, segment in enumerate(result_segments):
+            if max_segment_area < segment.area:
+                max_segment_area = segment.area
 
-            for face in (f for vgi in segment.groups for f in vgi2data[vgi].faces):
-                # face.material_index = index
-                for this_loop in face.loops:
-                    this_loop[color_layer] = segmentation_color
+            segmentation_color = segmantation_colors[index % segmantation_color_count]
+            total_tri_loops += len(segment.tri_loop0s)
+            for tri_loop0 in segment.tri_loop0s:
+                tri_loop0[color_layer] = segmentation_color
+                tri_loop0.link_loop_prev[color_layer] = segmentation_color
+                tri_loop0.link_loop_next[color_layer] = segmentation_color
+
+        print(f'total tri loops: {total_tri_loops}')
+        print(f'max segment area: {max_segment_area}')
 
         target_bmesh.to_mesh(mesh)
 
@@ -883,6 +1036,7 @@ SEGMANTATION_COLORS: List[RGBA] = [
         to_blender_color(0xff & (rgb)),  # Green
         1.0,  # Alpha
     )
+    # for rgb in range(5000)
     for rgb in [
         0xff0000, 0xffa300, 0xff6600, 0xc2ff00, 0x008fff, 0x33ff00, 0x0052ff, 0x00ff29,
         0x00ffad, 0x0a00ff, 0xadff00, 0x00ff99, 0xff5c00, 0xff00ff, 0xff00f5, 0xff0066,

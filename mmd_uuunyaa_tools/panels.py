@@ -18,7 +18,8 @@ from mmd_uuunyaa_tools.converters.physics.cloth_pyramid import (
     ConvertPyramidMeshToClothOperator)
 from mmd_uuunyaa_tools.converters.physics.collision import (
     RemoveMeshCollision, SelectCollisionMesh)
-from mmd_uuunyaa_tools.editors.operators import (SetupRenderEngineForEevee,
+from mmd_uuunyaa_tools.editors.operators import (SegmentMeshOperator,
+                                                 SetupRenderEngineForEevee,
                                                  SetupRenderEngineForToonEevee,
                                                  SetupRenderEngineForWorkbench)
 from mmd_uuunyaa_tools.generators.physics import AddCenterOfGravityObject
@@ -38,6 +39,9 @@ class OperatorPanel(bpy.types.Panel):
 
     def draw(self, _context):
         layout = self.layout
+
+        col = layout.column(align=True)
+        col.operator(SegmentMeshOperator.bl_idname)
 
         col = layout.column(align=True)
         col.label(text=_('Render:'), icon='SCENE_DATA')
