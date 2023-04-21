@@ -563,6 +563,6 @@ def get_ignore_vertex_group_indices(mesh_object: bpy.types.Object) -> Set[int]:
     ignore_vertex_group_indices = {
         vg.index
         for vg in mesh_object.vertex_groups
-        if vg.name in deform_bone_names
+        if vg.name not in deform_bone_names
     }
     return ignore_vertex_group_indices
