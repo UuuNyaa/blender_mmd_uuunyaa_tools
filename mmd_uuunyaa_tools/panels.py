@@ -18,7 +18,7 @@ from mmd_uuunyaa_tools.converters.physics.cloth_pyramid import (
     ConvertPyramidMeshToClothOperator)
 from mmd_uuunyaa_tools.converters.physics.collision import (
     RemoveMeshCollision, SelectCollisionMesh)
-from mmd_uuunyaa_tools.editors.operators import (SegmentMeshOperator,
+from mmd_uuunyaa_tools.editors.operators import (PaintSelectedFacesOperator, RestoreSegmentationColorPaletteOperator, SetupSegmentationColorPaletteOperator, AutoSegmentationOperator,
                                                  SetupRenderEngineForEevee,
                                                  SetupRenderEngineForToonEevee,
                                                  SetupRenderEngineForWorkbench)
@@ -39,9 +39,6 @@ class OperatorPanel(bpy.types.Panel):
 
     def draw(self, _context):
         layout = self.layout
-
-        col = layout.column(align=True)
-        col.operator(SegmentMeshOperator.bl_idname)
 
         col = layout.column(align=True)
         col.label(text=_('Render:'), icon='SCENE_DATA')
@@ -171,3 +168,112 @@ class UuuNyaaPhysicsPanel(bpy.types.Panel):
     @staticmethod
     def unregister():
         del bpy.types.Object.mmd_uuunyaa_tools_show_cloths
+
+
+class UuuNyaaSegmentationPanel(bpy.types.Panel):
+    bl_idname = 'UUUNYAA_PT_segmentation'
+    bl_label = _('UuuNyaa Segmentation')
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Tool'
+
+    @classmethod
+    def poll(cls, context: bpy.types.Context):
+        return context.mode in {'PAINT_VERTEX', 'EDIT_MESH'}
+
+    def draw(self, context: bpy.types.Context):
+        layout = self.layout
+
+        mmd_uuunyaa_tools_segmentation = context.scene.mmd_uuunyaa_tools_segmentation
+
+        col = layout.column()
+        col.prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_attribute_name', text="Color Layer&AOV Name")
+        if not SetupSegmentationColorPaletteOperator.poll(context):
+            col.operator(RestoreSegmentationColorPaletteOperator.bl_idname, icon='MOD_TINT')
+            col.template_palette(context.tool_settings.vertex_paint, 'palette')
+            row = col.row(align=True)
+            op = row.operator(PaintSelectedFacesOperator.bl_idname, icon='BRUSH_DATA')
+            op.segmentation_vertex_color_attribute_name = mmd_uuunyaa_tools_segmentation.segmentation_vertex_color_attribute_name
+            op.random_color = False
+            op = row.operator(PaintSelectedFacesOperator.bl_idname, text='',  icon='RESTRICT_COLOR_OFF')
+            op.segmentation_vertex_color_attribute_name = mmd_uuunyaa_tools_segmentation.segmentation_vertex_color_attribute_name
+            op.random_color = True
+        else:
+            col.operator(SetupSegmentationColorPaletteOperator.bl_idname, icon='RESTRICT_COLOR_ON')
+
+        col.label(text='Auto Segmentation:', icon='MOD_EXPLODE')
+        box = col.box().column(align=True)
+
+        box.label(text='Thresholds:')
+        flow = box.grid_flow()
+        flow.row(align=True).prop(mmd_uuunyaa_tools_segmentation, 'cost_threshold', text="Cost")
+        row = flow.row(align=True)
+        row.prop(mmd_uuunyaa_tools_segmentation, 'maximum_area_threshold', text="Area Max")
+        row.prop(mmd_uuunyaa_tools_segmentation, 'minimum_area_threshold', text="Min")
+
+        box.label(text='Cost Factors:')
+        flow = box.grid_flow()
+        row = flow.row(align=True)
+        row.row().prop(mmd_uuunyaa_tools_segmentation, 'face_angle_cost_factor', text="Face Angle")
+        row.row().prop(mmd_uuunyaa_tools_segmentation, 'material_change_cost_factor', text="Material Change")
+
+        row = flow.row(align=True)
+        row.alignment = 'RIGHT'
+        row.label(text='Edge ')
+        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_sharp_cost_factor', text="Sharp")
+        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_seam_cost_factor', text="Seam")
+
+        row = flow.row(align=True)
+        row.alignment = 'RIGHT'
+        row.label(text='Verget Group ')
+        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_weight_cost_factor', text="Weight")
+        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_change_cost_factor', text="Change")
+
+        box.label(text='Other Parameters:')
+        flow = box.grid_flow()
+        flow.row().prop(mmd_uuunyaa_tools_segmentation, 'edge_length_factor')
+        flow.row().prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_random_seed', text="Color Random Seed")
+
+        op = col.operator(AutoSegmentationOperator.bl_idname, text="Execute Auto Segmentation", icon='BRUSH_DATA')
+        op.cost_threshold = mmd_uuunyaa_tools_segmentation.cost_threshold
+        op.maximum_area_threshold = mmd_uuunyaa_tools_segmentation.maximum_area_threshold
+        op.minimum_area_threshold = mmd_uuunyaa_tools_segmentation.minimum_area_threshold
+        op.face_angle_cost_factor = mmd_uuunyaa_tools_segmentation.face_angle_cost_factor
+        op.material_change_cost_factor = mmd_uuunyaa_tools_segmentation.material_change_cost_factor
+        op.edge_sharp_cost_factor = mmd_uuunyaa_tools_segmentation.edge_sharp_cost_factor
+        op.edge_seam_cost_factor = mmd_uuunyaa_tools_segmentation.edge_seam_cost_factor
+        op.vertex_group_weight_cost_factor = mmd_uuunyaa_tools_segmentation.vertex_group_weight_cost_factor
+        op.vertex_group_change_cost_factor = mmd_uuunyaa_tools_segmentation.vertex_group_change_cost_factor
+        op.edge_length_factor = mmd_uuunyaa_tools_segmentation.edge_length_factor
+        op.segmentation_vertex_color_random_seed = mmd_uuunyaa_tools_segmentation.segmentation_vertex_color_random_seed
+        op.segmentation_vertex_color_attribute_name = mmd_uuunyaa_tools_segmentation.segmentation_vertex_color_attribute_name
+
+        # tool_settings.vertex_paint.brush.color
+
+
+class SegmentationPropertyGroup(bpy.types.PropertyGroup):
+    cost_threshold: bpy.props.FloatProperty(name=_('Cost Theshold'), default=2.5, min=0, soft_max=3.0, step=1)
+
+    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.200, min=0, soft_max=1.0, precision=3, step=1)
+    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Theshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
+
+    face_angle_cost_factor: bpy.props.FloatProperty(name=_('Face Angle Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
+    material_change_cost_factor: bpy.props.FloatProperty(name=_('Material Change Cost Factor'), default=0.3, min=0, soft_max=1.0, step=1)
+    edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=1.0, min=0, soft_max=1.0, step=1)
+    edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
+    vertex_group_weight_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Weight Cost Factor'), default=0.1, min=0, soft_max=1.0, step=1)
+    vertex_group_change_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Change Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
+
+    edge_length_factor: bpy.props.FloatProperty(name=_('Edge Length Factor'), default=1.0, min=0, soft_max=1.0, step=1)
+
+    segmentation_vertex_color_random_seed: bpy.props.IntProperty(name=_('Segmentation Vertex Color Random Seed'), default=0, min=0)
+    segmentation_vertex_color_attribute_name: bpy.props.StringProperty(name=_('Segmentation Vertex Color Attribute Name'), default='Segmentation')
+
+    @staticmethod
+    def register():
+        # pylint: disable=assignment-from-no-return
+        bpy.types.Scene.mmd_uuunyaa_tools_segmentation = bpy.props.PointerProperty(type=SegmentationPropertyGroup)
+
+    @staticmethod
+    def unregister():
+        del bpy.types.Scene.mmd_uuunyaa_tools_segmentation
