@@ -502,15 +502,15 @@ class AutoSegmentationOperator(bpy.types.Operator):
     bl_label = _('Auto Segmentation')
     bl_options = {'REGISTER', 'UNDO'}
 
-    cost_threshold: bpy.props.FloatProperty(name=_('Cost Theshold'), default=2.5, min=0, soft_max=3.0, step=1)
+    cost_threshold: bpy.props.FloatProperty(name=_('Cost Threshold'), default=2.5, min=0, soft_max=3.0, step=1)
 
-    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.200, min=0, soft_max=1.0, precision=3, step=1)
-    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Theshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
+    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Threshold'), default=0.500, min=0, soft_max=1.0, precision=3, step=1)
+    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Threshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
 
     face_angle_cost_factor: bpy.props.FloatProperty(name=_('Face Angle Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
     material_change_cost_factor: bpy.props.FloatProperty(name=_('Material Change Cost Factor'), default=0.3, min=0, soft_max=1.0, step=1)
-    edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=1.0, min=0, soft_max=1.0, step=1)
-    edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
+    edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
+    edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
     vertex_group_weight_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Weight Cost Factor'), default=0.1, min=0, soft_max=1.0, step=1)
     vertex_group_change_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Change Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
 
@@ -555,7 +555,7 @@ class AutoSegmentationOperator(bpy.types.Operator):
             segments = segment_result.segments
 
             if len(segments) == 0:
-                self.report({'WARNING'}, "There is no target segment; In Edit Mode, select the faces you want to paint.")
+                self.report({'WARNING'}, _("There is no target segment; In Edit Mode, select the faces you want to paint."))
                 return {'FINISHED'}
 
             max_segment_area = sys.float_info.min
@@ -613,9 +613,14 @@ class PaintSelectedFacesOperator(bpy.types.Operator):
         try:
             bpy.ops.object.mode_set(mode='OBJECT')
 
+            segment_color = None
+            if not self.random_color:
+                if context.tool_settings.vertex_paint.palette.colors.active is not None:
+                    segment_color = list(context.tool_settings.vertex_paint.palette.colors.active.color) + [1.0]
+
             segmentation.paint_selected_face_colors(
                 mesh_object,
-                None if self.random_color else list(context.tool_settings.vertex_paint.palette.colors.active.color) + [1.0],
+                segment_color,
                 self.segmentation_vertex_color_attribute_name
             )
 

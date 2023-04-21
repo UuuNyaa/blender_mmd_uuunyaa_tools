@@ -187,8 +187,10 @@ class UuuNyaaSegmentationPanel(bpy.types.Panel):
         mmd_uuunyaa_tools_segmentation = context.scene.mmd_uuunyaa_tools_segmentation
 
         col = layout.column()
-        col.prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_attribute_name', text="Color Layer&AOV Name")
-        if not SetupSegmentationColorPaletteOperator.poll(context):
+        col.prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_attribute_name', text=_("Color Layer&AOV Name"))
+        if SetupSegmentationColorPaletteOperator.poll(context):
+            col.operator(SetupSegmentationColorPaletteOperator.bl_idname, icon='RESTRICT_COLOR_ON')
+        else:
             col.operator(RestoreSegmentationColorPaletteOperator.bl_idname, icon='MOD_TINT')
             col.template_palette(context.tool_settings.vertex_paint, 'palette')
             row = col.row(align=True)
@@ -198,43 +200,41 @@ class UuuNyaaSegmentationPanel(bpy.types.Panel):
             op = row.operator(PaintSelectedFacesOperator.bl_idname, text='',  icon='RESTRICT_COLOR_OFF')
             op.segmentation_vertex_color_attribute_name = mmd_uuunyaa_tools_segmentation.segmentation_vertex_color_attribute_name
             op.random_color = True
-        else:
-            col.operator(SetupSegmentationColorPaletteOperator.bl_idname, icon='RESTRICT_COLOR_ON')
 
-        col.label(text='Auto Segmentation:', icon='MOD_EXPLODE')
+        col.label(text=_('Auto Segmentation:'), icon='MOD_EXPLODE')
         box = col.box().column(align=True)
 
-        box.label(text='Thresholds:')
+        box.label(text=_('Thresholds:'))
         flow = box.grid_flow()
-        flow.row(align=True).prop(mmd_uuunyaa_tools_segmentation, 'cost_threshold', text="Cost")
+        flow.row(align=True).prop(mmd_uuunyaa_tools_segmentation, 'cost_threshold', text=_("Cost"))
         row = flow.row(align=True)
-        row.prop(mmd_uuunyaa_tools_segmentation, 'maximum_area_threshold', text="Area Max")
-        row.prop(mmd_uuunyaa_tools_segmentation, 'minimum_area_threshold', text="Min")
+        row.prop(mmd_uuunyaa_tools_segmentation, 'maximum_area_threshold', text=_("Area Max"))
+        row.prop(mmd_uuunyaa_tools_segmentation, 'minimum_area_threshold', text=_("Min"))
 
-        box.label(text='Cost Factors:')
+        box.label(text=_('Cost Factors:'))
         flow = box.grid_flow()
         row = flow.row(align=True)
-        row.row().prop(mmd_uuunyaa_tools_segmentation, 'face_angle_cost_factor', text="Face Angle")
-        row.row().prop(mmd_uuunyaa_tools_segmentation, 'material_change_cost_factor', text="Material Change")
+        row.row().prop(mmd_uuunyaa_tools_segmentation, 'face_angle_cost_factor', text=_("Face Angle"))
+        row.row().prop(mmd_uuunyaa_tools_segmentation, 'material_change_cost_factor', text=_("Material Change"))
 
         row = flow.row(align=True)
         row.alignment = 'RIGHT'
-        row.label(text='Edge ')
-        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_sharp_cost_factor', text="Sharp")
-        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_seam_cost_factor', text="Seam")
+        row.label(text=_('Edge '))
+        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_sharp_cost_factor', text=_("Sharp"))
+        row.prop(mmd_uuunyaa_tools_segmentation, 'edge_seam_cost_factor', text=_("Seam"))
 
         row = flow.row(align=True)
         row.alignment = 'RIGHT'
-        row.label(text='Verget Group ')
-        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_weight_cost_factor', text="Weight")
-        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_change_cost_factor', text="Change")
+        row.label(text=_('Vertex Group '))
+        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_weight_cost_factor', text=_("Weight"))
+        row.prop(mmd_uuunyaa_tools_segmentation, 'vertex_group_change_cost_factor', text=_("Change"))
 
-        box.label(text='Other Parameters:')
+        box.label(text=_('Other Parameters:'))
         flow = box.grid_flow()
         flow.row().prop(mmd_uuunyaa_tools_segmentation, 'edge_length_factor')
-        flow.row().prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_random_seed', text="Color Random Seed")
+        flow.row().prop(mmd_uuunyaa_tools_segmentation, 'segmentation_vertex_color_random_seed', text=_("Color Random Seed"))
 
-        op = col.operator(AutoSegmentationOperator.bl_idname, text="Execute Auto Segmentation", icon='BRUSH_DATA')
+        op = col.operator(AutoSegmentationOperator.bl_idname, text=_("Execute Auto Segmentation"), icon='BRUSH_DATA')
         op.cost_threshold = mmd_uuunyaa_tools_segmentation.cost_threshold
         op.maximum_area_threshold = mmd_uuunyaa_tools_segmentation.maximum_area_threshold
         op.minimum_area_threshold = mmd_uuunyaa_tools_segmentation.minimum_area_threshold
@@ -252,15 +252,15 @@ class UuuNyaaSegmentationPanel(bpy.types.Panel):
 
 
 class SegmentationPropertyGroup(bpy.types.PropertyGroup):
-    cost_threshold: bpy.props.FloatProperty(name=_('Cost Theshold'), default=2.5, min=0, soft_max=3.0, step=1)
+    cost_threshold: bpy.props.FloatProperty(name=_('Cost Threshold'), default=2.5, min=0, soft_max=3.0, step=1)
 
-    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Theshold'), default=0.200, min=0, soft_max=1.0, precision=3, step=1)
-    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Theshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
+    maximum_area_threshold: bpy.props.FloatProperty(name=_('Maximum Area Threshold'), default=0.500, min=0, soft_max=1.0, precision=3, step=1)
+    minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Threshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
 
     face_angle_cost_factor: bpy.props.FloatProperty(name=_('Face Angle Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
     material_change_cost_factor: bpy.props.FloatProperty(name=_('Material Change Cost Factor'), default=0.3, min=0, soft_max=1.0, step=1)
-    edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=1.0, min=0, soft_max=1.0, step=1)
-    edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
+    edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
+    edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
     vertex_group_weight_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Weight Cost Factor'), default=0.1, min=0, soft_max=1.0, step=1)
     vertex_group_change_cost_factor: bpy.props.FloatProperty(name=_('Vertex Group Change Cost Factor'), default=0.5, min=0, soft_max=1.0, step=1)
 
