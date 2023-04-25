@@ -14,6 +14,7 @@ from typing import Dict, List, Optional, Set, Tuple
 import bmesh
 import bpy
 import mathutils
+import statistics
 
 
 def _to_blender_color(uint8_color: int) -> float:
@@ -54,6 +55,14 @@ SEGMANTATION_COLORS: List[RGBA] = [
     ]
 ]
 
+
+SQRT_PI = math.sqrt(math.pi)
+
+
+def _area_to_circumference(area: float) -> float:
+    return math.sqrt(area)/SQRT_PI
+
+
 TriLoopIndex = int
 LoopPairId = int
 VertexPairId = int
@@ -67,6 +76,8 @@ SegmentPairId = int
 class Segment:
     index: int
     area: float = 0.0
+    perimeter: float = 0.0
+    non_contact_perimeter: float = 0.0
     tri_loop0s: Set[bmesh.types.BMLoop] = dataclasses.field(default_factory=set)
     segment_contact_ids: Set[SegmentContactId] = dataclasses.field(default_factory=set)
 
@@ -105,6 +116,24 @@ class SegmentContact:
 
     def __eq__(self, other):
         return self.index == other.index
+
+    def calc_perimeter_cost(self):
+        segment0 = self.segment0
+        segment0_perimeter = segment0.perimeter
+        segment0_area = segment0.area
+
+        segment1 = self.segment1
+        segment1_perimeter = segment1.perimeter
+        segment1_area = segment1.area
+
+        mean_ratio = statistics.mean((
+            segment0_perimeter/_area_to_circumference(segment0_area),
+            segment1_perimeter/_area_to_circumference(segment1_area),
+        ))
+
+        merged_ratio = (segment0_perimeter+segment1_perimeter-2*self.length)/_area_to_circumference(segment0_area+segment1_area)
+
+        return merged_ratio/mean_ratio
 
 
 @dataclasses.dataclass
@@ -185,6 +214,7 @@ def auto_segment(
     minimum_area_threshold: float,
     contact_length_factor: float,
     face_angle_cost_factor: float,
+    perimeter_cost_factor: float,
     vertex_group_weight_cost_factor: float,
     vertex_group_change_cost_factor: float,
     material_change_cost_factor: float,
@@ -196,6 +226,7 @@ def auto_segment(
     sci2segment_contacts, segment_count = _calc_segment_contacts(
         contact_length_factor,
         face_angle_cost_factor,
+        perimeter_cost_factor,
         vertex_group_weight_cost_factor,
         vertex_group_change_cost_factor,
         material_change_cost_factor,
@@ -266,6 +297,9 @@ def auto_segment(
                         dst_segment_contact_ids.add(src_sci)
                         src_segment_contact_ids.discard(src_sci)
 
+            dst_segment.perimeter = dst_segment.non_contact_perimeter + sum(sci2segment_contacts[sci].length for sci in dst_segment.segment_contact_ids)
+            # assert dst_segment.perimeter == sum_contact_length, f"{dst_segment.index} <- {src_segment.index}"
+
             if len(dst_segment_contact_ids) == 0:
                 # dst_segment is isolated
                 result_segments.add(dst_segment)
@@ -297,7 +331,7 @@ def auto_segment(
                     break
 
                 # update the cost and then sort cost_sorted_segment_contacts
-                merged_sc.cost_normalized = merged_sc.cost / (merged_sc.length * contact_length_factor if contact_length_factor > 0 else 1)
+                merged_sc.cost_normalized = perimeter_cost_factor * merged_sc.calc_perimeter_cost() + (merged_sc.cost / (merged_sc.length * contact_length_factor if contact_length_factor > 0 else 1))
                 bisect.insort_left(
                     cost_sorted_segment_contacts,
                     cost_sorted_segment_contacts.pop(i),
@@ -385,6 +419,7 @@ def setup_aovs(aovs: bpy.types.AOVs, segmentation_vertex_color_attribute_name: s
 def _calc_segment_contacts(
     contact_length_factor: float,
     face_angle_cost_factor: float,
+    perimeter_cost_factor: float,
     vertex_group_weight_cost_factor: float,
     vertex_group_change_cost_factor: float,
     material_change_cost_factor: float,
@@ -472,8 +507,14 @@ def _calc_segment_contacts(
         this_heaviest_vertex_group_index = _calc_heaviest_vertex_group_index(this_tli, tri_loop0)
 
         this_segment = tli2segment[this_tli]
-        this_segment.area = mathutils.geometry.area_tri(tri_loop0.vert.co, tri_loop[1].vert.co, tri_loop[2].vert.co)  # pylint: disable=assignment-from-no-return
+        v0: mathutils.Vector = tri_loop0.vert.co
+        v1: mathutils.Vector = tri_loop[1].vert.co
+        v2: mathutils.Vector = tri_loop[2].vert.co
+        this_segment.area = mathutils.geometry.area_tri(v0, v1, v2)  # pylint: disable=assignment-from-no-return
+        this_segment.perimeter = (v0-v1).length + (v1-v2).length + (v2-v0).length
         this_segment.tri_loop0s.add(tri_loop0)
+
+        this_segment_contact_perimeter = 0.0
 
         for this_loop in tri_loop:
             edge_length = -1
@@ -540,9 +581,15 @@ def _calc_segment_contacts(
                     this_segment,
                     that_segment
                 )
+                this_segment_contact_perimeter += edge_length
                 sci2segment_contacts[segment_contact.index] = segment_contact
                 this_segment.segment_contact_ids.add(segment_contact.index)
                 that_segment.segment_contact_ids.add(segment_contact.index)
+
+        this_segment.non_contact_perimeter = this_segment.perimeter - this_segment_contact_perimeter
+
+    for segment_contact in sci2segment_contacts.values():
+        segment_contact.cost_normalized += perimeter_cost_factor * segment_contact.calc_perimeter_cost()
 
     return sci2segment_contacts, len(tli2segment)
 

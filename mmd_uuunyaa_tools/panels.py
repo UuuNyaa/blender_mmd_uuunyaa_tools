@@ -215,6 +215,7 @@ class UuuNyaaSegmentationPanel(bpy.types.Panel):
         flow = box.grid_flow()
         row = flow.row(align=True)
         row.row().prop(mmd_uuunyaa_tools_segmentation, 'face_angle_cost_factor', text=_("Face Angle"))
+        row.row().prop(mmd_uuunyaa_tools_segmentation, 'perimeter_cost_factor', text=_("Perimeter"))
         row.row().prop(mmd_uuunyaa_tools_segmentation, 'material_change_cost_factor', text=_("Material Change"))
 
         row = flow.row(align=True)
@@ -239,6 +240,7 @@ class UuuNyaaSegmentationPanel(bpy.types.Panel):
         op.maximum_area_threshold = mmd_uuunyaa_tools_segmentation.maximum_area_threshold
         op.minimum_area_threshold = mmd_uuunyaa_tools_segmentation.minimum_area_threshold
         op.face_angle_cost_factor = mmd_uuunyaa_tools_segmentation.face_angle_cost_factor
+        op.perimeter_cost_factor = mmd_uuunyaa_tools_segmentation.perimeter_cost_factor
         op.material_change_cost_factor = mmd_uuunyaa_tools_segmentation.material_change_cost_factor
         op.edge_sharp_cost_factor = mmd_uuunyaa_tools_segmentation.edge_sharp_cost_factor
         op.edge_seam_cost_factor = mmd_uuunyaa_tools_segmentation.edge_seam_cost_factor
@@ -258,6 +260,7 @@ class SegmentationPropertyGroup(bpy.types.PropertyGroup):
     minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Threshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
 
     face_angle_cost_factor: bpy.props.FloatProperty(name=_('Face Angle Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
+    perimeter_cost_factor: bpy.props.FloatProperty(name=_('Perimeter Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
     material_change_cost_factor: bpy.props.FloatProperty(name=_('Material Change Cost Factor'), default=0.3, min=0, soft_max=1.0, step=1)
     edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
     edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
