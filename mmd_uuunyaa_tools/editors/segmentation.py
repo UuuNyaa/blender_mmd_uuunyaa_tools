@@ -14,7 +14,6 @@ from typing import Dict, List, Optional, Set, Tuple
 import bmesh
 import bpy
 import mathutils
-import statistics
 
 
 def _to_blender_color(uint8_color: int) -> float:
@@ -126,17 +125,32 @@ class SegmentContact:
         segment1_perimeter = segment1.perimeter
         segment1_area = segment1.area
 
-        mean_ratio = statistics.mean((
-            segment0_perimeter/_area_to_circumference(segment0_area),
-            segment1_perimeter/_area_to_circumference(segment1_area),
-        ))
+        mean_ratio = (
+            (segment0_area+segment1_area)
+            / (
+                segment0_area/(segment0_perimeter/_area_to_circumference(segment0_area))
+                + segment1_area/(segment1_perimeter/_area_to_circumference(segment1_area))
+            )
+        )
+        # Code with the same meaning as below.
+        # mean_ratio = statistics.harmonic_mean(
+        #     (
+        #         segment0_perimeter/_area_to_circumference(segment0_area),
+        #         segment1_perimeter/_area_to_circumference(segment1_area),
+        #     ),
+        #     (
+        #         segment0_area,
+        #         segment1_area,
+        #     )
+        # )
 
         merged_ratio = (segment0_perimeter+segment1_perimeter-2*self.length)/_area_to_circumference(segment0_area+segment1_area)
+        result = max(merged_ratio/mean_ratio - 1, 0)
 
-        return merged_ratio/mean_ratio
+        return result
 
 
-@dataclasses.dataclass
+@ dataclasses.dataclass
 class SegmentResult:
     segments: Set[Segment]
     remain_segment_contacts: List[SegmentContact]
@@ -259,6 +273,8 @@ def auto_segment(
 
     last_merged_cost: float = 0
 
+    is_not_perimeter_cost_factor_0 = perimeter_cost_factor != 0
+
     merging = True
     while merging:
 
@@ -288,23 +304,22 @@ def auto_segment(
 
             dst_segment_contact_ids = dst_segment.segment_contact_ids
             src_segment_contact_ids = src_segment.segment_contact_ids
-            for src_sci in list(src_segment_contact_ids):
+            for src_sci in src_segment_contact_ids:
                 sc = sci2segment_contacts[src_sci]
                 if sc.segment_replace(src_segment, dst_segment):
                     if sc.segment0 == sc.segment1:
                         _remove_segment_contact(src_sci)
                     else:
                         dst_segment_contact_ids.add(src_sci)
-                        src_segment_contact_ids.discard(src_sci)
-
-            dst_segment.perimeter = dst_segment.non_contact_perimeter + sum(sci2segment_contacts[sci].length for sci in dst_segment.segment_contact_ids)
-            # assert dst_segment.perimeter == sum_contact_length, f"{dst_segment.index} <- {src_segment.index}"
 
             if len(dst_segment_contact_ids) == 0:
                 # dst_segment is isolated
                 result_segments.add(dst_segment)
                 result_loop_count += len(dst_segment.tri_loop0s)
                 continue
+
+            if is_not_perimeter_cost_factor_0:
+                dst_segment.perimeter = dst_segment.non_contact_perimeter + sum(sci2segment_contacts[sci].length for sci in dst_segment_contact_ids)
 
             # collect mergable segment contacts
             spi2mergable_segment_contacts: Dict[SegmentPairId, Set[SegmentContact]] = collections.defaultdict(set)
@@ -331,7 +346,7 @@ def auto_segment(
                     break
 
                 # update the cost and then sort cost_sorted_segment_contacts
-                merged_sc.cost_normalized = perimeter_cost_factor * merged_sc.calc_perimeter_cost() + (merged_sc.cost / (merged_sc.length * contact_length_factor if contact_length_factor > 0 else 1))
+                merged_sc.cost_normalized = (perimeter_cost_factor * merged_sc.calc_perimeter_cost() if is_not_perimeter_cost_factor_0 else 0) + (merged_sc.cost / (merged_sc.length * contact_length_factor if contact_length_factor > 0 else 1))
                 bisect.insort_left(
                     cost_sorted_segment_contacts,
                     cost_sorted_segment_contacts.pop(i),
@@ -588,8 +603,9 @@ def _calc_segment_contacts(
 
         this_segment.non_contact_perimeter = this_segment.perimeter - this_segment_contact_perimeter
 
-    for segment_contact in sci2segment_contacts.values():
-        segment_contact.cost_normalized += perimeter_cost_factor * segment_contact.calc_perimeter_cost()
+    if perimeter_cost_factor != 0:
+        for segment_contact in sci2segment_contacts.values():
+            segment_contact.cost_normalized += perimeter_cost_factor * segment_contact.calc_perimeter_cost()
 
     return sci2segment_contacts, len(tli2segment)
 

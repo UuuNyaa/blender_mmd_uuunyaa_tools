@@ -4,6 +4,7 @@
 
 import math
 import sys
+import time
 from typing import Set
 
 import bmesh
@@ -508,7 +509,7 @@ class AutoSegmentationOperator(bpy.types.Operator):
     minimum_area_threshold: bpy.props.FloatProperty(name=_('Minimum Area Threshold'), default=0.001, min=0, soft_max=1.0, precision=3, step=1)
 
     face_angle_cost_factor: bpy.props.FloatProperty(name=_('Face Angle Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
-    perimeter_cost_factor: bpy.props.FloatProperty(name=_('Perimeter Cost Factor'), default=1.0, min=0, soft_max=2.0, step=1)
+    perimeter_cost_factor: bpy.props.FloatProperty(name=_('Perimeter Cost Factor'), default=0.0, min=0, soft_max=10.0, step=1)
     material_change_cost_factor: bpy.props.FloatProperty(name=_('Material Change Cost Factor'), default=0.3, min=0, soft_max=1.0, step=1)
     edge_sharp_cost_factor: bpy.props.FloatProperty(name=_('Edge Sharp Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
     edge_seam_cost_factor: bpy.props.FloatProperty(name=_('Edge Seam Cost Factor'), default=0.0, min=0, soft_max=1.0, step=1)
@@ -517,7 +518,7 @@ class AutoSegmentationOperator(bpy.types.Operator):
 
     edge_length_factor: bpy.props.FloatProperty(name=_('Edge Length Factor'), default=1.0, min=0, soft_max=1.0, step=1)
 
-    segmentation_vertex_color_random_seed: bpy.props.IntProperty(name=_('Segmentation Vertex Color Random Seed'), default=0)
+    segmentation_vertex_color_random_seed: bpy.props.IntProperty(name=_('Segmentation Vertex Color Random Seed'), default=0, min=0)
     segmentation_vertex_color_attribute_name: bpy.props.StringProperty(name=_('Segmentation Vertex Color Attribute Name'), default='Segmentation')
 
     @classmethod
@@ -533,10 +534,14 @@ class AutoSegmentationOperator(bpy.types.Operator):
         try:
             bpy.ops.object.mode_set(mode='OBJECT')
 
+            operator_start_secs = time.perf_counter()
+
             target_bmesh: bmesh.types.BMesh = bmesh.new()
             mesh: bpy.types.Mesh = mesh_object.data
             target_bmesh.from_mesh(mesh, face_normals=False, vertex_normals=False)
             color_layer = segmentation.get_color_layer(target_bmesh, self.segmentation_vertex_color_attribute_name)
+
+            auto_segment_start_secs = time.perf_counter()
 
             segment_result = segmentation.auto_segment(
                 target_bmesh,
@@ -553,6 +558,8 @@ class AutoSegmentationOperator(bpy.types.Operator):
                 self.edge_seam_cost_factor,
                 segmentation.get_ignore_vertex_group_indices(mesh_object)
             )
+
+            auto_segment_end_secs = time.perf_counter()
 
             segments = segment_result.segments
 
@@ -573,10 +580,6 @@ class AutoSegmentationOperator(bpy.types.Operator):
             cost_sorted_segment_contacts = segment_result.remain_segment_contacts
             max_cost_normalized = cost_sorted_segment_contacts[-1].cost_normalized if len(cost_sorted_segment_contacts) > 0 else 0
 
-            self.report({'INFO'}, f"""contact: {len(cost_sorted_segment_contacts)}, cost last/max: {segment_result.last_merged_cost}/{max_cost_normalized}
-segment: {len(segments)}, area min/max: {min_segment_area}/{max_segment_area}
-loop: {total_tri_loops}""")
-
             segmentation.assign_vertex_colors(
                 segments,
                 color_layer,
@@ -584,10 +587,18 @@ loop: {total_tri_loops}""")
             )
 
             target_bmesh.to_mesh(mesh)
-            del segment_result
 
             segmentation.setup_materials(mesh, self.segmentation_vertex_color_attribute_name)
             segmentation.setup_aovs(context.view_layer.aovs, self.segmentation_vertex_color_attribute_name)
+
+            operator_end_secs = time.perf_counter()
+
+            self.report({'INFO'}, f"""contact: {len(cost_sorted_segment_contacts)}, cost last/max: {segment_result.last_merged_cost}/{max_cost_normalized}
+segment: {len(segments)}, area min/max: {min_segment_area}/{max_segment_area}
+loop: {total_tri_loops}
+operation: {operator_end_secs-operator_start_secs} secs, auto_segment {auto_segment_end_secs-auto_segment_start_secs} secs
+""")
+
         finally:
             bpy.ops.object.mode_set(mode=previous_mode)
 
