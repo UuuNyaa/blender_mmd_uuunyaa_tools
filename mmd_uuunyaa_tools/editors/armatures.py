@@ -13,6 +13,7 @@ import bpy
 import rna_prop_ui
 from mathutils import Matrix, Vector
 from mmd_uuunyaa_tools import PACKAGE_PATH
+from mmd_uuunyaa_tools.utilities import raise_installation_error
 
 PATH_BLENDS_RIGSHAPELIBRARY = os.path.join(PACKAGE_PATH, 'blends', 'RigShapeLibrary.blend')
 
@@ -309,8 +310,11 @@ class EditBoneEditor(ABC):
         if len(custom_shape_names) == 0:
             return
 
-        with bpy.data.libraries.load(PATH_BLENDS_RIGSHAPELIBRARY, link=False) as (_, data_to):
-            data_to.objects = custom_shape_names
+        try:
+            with bpy.data.libraries.load(PATH_BLENDS_RIGSHAPELIBRARY, link=False) as (_, data_to):
+                data_to.objects = custom_shape_names
+        except OSError as exception:
+            raise_installation_error(exception)
 
 
 class ArmatureEditor(EditBoneEditor, PoseBoneEditor):

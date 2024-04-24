@@ -346,20 +346,26 @@ class ContentCache(CacheABC):
             return self._tasks[url] if url in self._tasks else None
 
     def async_get_content(self, url: URL, callback: Callback) -> Future:
+        def queue_callback():
+            task = self._tasks[url]
+            if task.state not in {Task.State.QUEUING, Task.State.RUNNING}:
+                raise ValueError(f'task (={task.url}) is invalid state (={task.state})')
+            task.callbacks.append(callback)
+            return task.future
+
         with self._lock:
+            if url in self._tasks:
+                return queue_callback()
+
             content = self.try_get_content(url)
             if content is not None:
-                if content.state in {Content.State.CACHED, Content.State.FETCHING}:
-                    return self._executor.submit(self._invoke_callback, callback, content)
-
-                self.remove_content(url)
-
-            elif url in self._tasks:
-                task = self._tasks[url]
-
-                if task.state in {Task.State.QUEUING, Task.State.RUNNING}:
-                    task.callbacks.append(callback)
-                    return task.future
+                match content.state:
+                    case Content.State.CACHED:
+                        return self._executor.submit(self._invoke_callback, callback, content)
+                    case Content.State.FETCHING:
+                        return queue_callback()
+                    case _: # maybe failed
+                        self.remove_content(url)
 
             task = Task(url, Task.State.QUEUING, [callback])
             task.future = self._executor.submit(self._fetch, task)

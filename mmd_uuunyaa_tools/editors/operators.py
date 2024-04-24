@@ -362,18 +362,18 @@ class SelectShapeKeyTargetVertices(bpy.types.Operator):
 
         distance_threshold = self.distance_threshold
 
-        obj_mesh = obj.data
+        obj_mesh: bpy.types.Mesh = obj.data
         shape_keys = obj_mesh.shape_keys
         key_block = shape_keys.key_blocks[obj.active_shape_key_index]
         relative_key_block = key_block.relative_key
 
         mesh = bmesh.from_edit_mesh(obj_mesh)  # pylint: disable=assignment-from-no-return
+        mesh.select_mode |= {'VERT'}
         bmesh_vertices = mesh.verts
         for i, (origin, morph) in enumerate(zip(relative_key_block.data, key_block.data)):
             if (origin.co - morph.co).length > distance_threshold:
                 bmesh_vertices[i].select_set(True)
 
-        mesh.select_mode |= {'VERT'}
         mesh.select_flush_mode()
 
         bmesh.update_edit_mesh(obj_mesh)

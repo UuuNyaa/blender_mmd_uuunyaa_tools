@@ -8,6 +8,7 @@ import math
 import re
 
 import bpy
+from mmd_uuunyaa_tools.m17n import _
 
 
 def to_int32(value: int) -> int:
@@ -69,7 +70,10 @@ def is_mmd_tools_installed() -> bool:
 
 
 def import_mmd_tools():
-    return importlib.import_module('mmd_tools')
+    try:
+        return importlib.import_module('mmd_tools')
+    except ImportError as exception:
+        raise RuntimeError(_("MMD Tools is not installed correctly. Please install MMD Tools using the correct steps, as UuuNyaa Tools depends on MMD Tools.")) from exception
 
 
 def label_multiline(layout, text='', width=0):
@@ -83,6 +87,10 @@ def label_multiline(layout, text='', width=0):
             layout.label(text=line[:space_index])
             line = line[space_index:].lstrip()
         layout.label(text=line)
+
+
+def raise_installation_error(base_from):
+    raise RuntimeError(_("MMD UuuNyaa Tools is not installed correctly. Please reinstall MMD UuuNyaa Tools using the correct steps.")) from base_from
 
 
 class MessageException(Exception):

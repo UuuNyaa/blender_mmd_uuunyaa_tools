@@ -5,6 +5,8 @@
 import os
 
 import bpy
+from mmd_uuunyaa_tools.utilities import raise_installation_error
+
 
 class ObjectMarker:
     def __init__(self, mark_id: str):
@@ -55,8 +57,12 @@ class ObjectAppender(ObjectMarker):
     def append_collection(self, collection_name: str):
         if collection_name not in bpy.data.collections:
             path = os.path.join(self.blend_filename)
-            with bpy.data.libraries.load(path, link=False) as (_, data_to):
-                data_to.collections = [collection_name]
+
+            try:
+                with bpy.data.libraries.load(path, link=False) as (_, data_to):
+                    data_to.collections = [collection_name]
+            except OSError as exception:
+                raise_installation_error(exception)
 
         return bpy.data.collections[collection_name]
 

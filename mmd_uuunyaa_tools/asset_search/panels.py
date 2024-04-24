@@ -3,12 +3,14 @@
 # This file is part of MMD UuuNyaa Tools.
 
 import functools
+import os
 import time
 from enum import Enum
 from typing import List, Optional, Tuple
 
 import bpy
 import bpy.utils.previews
+from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.asset_search.actions import ImportActionExecutor, MessageException
 from mmd_uuunyaa_tools.asset_search.assets import ASSETS, AssetDescription, AssetType
 from mmd_uuunyaa_tools.asset_search.cache import CONTENT_CACHE, Content, Task
@@ -80,6 +82,8 @@ class AssetSearch(bpy.types.Operator):
 
         global PREVIEWS  # pylint: disable=global-statement
         if asset.thumbnail_url not in PREVIEWS:
+            if content.filepath is None:
+                content.filepath = os.path.join(PACKAGE_PATH, 'thumbnails', 'ASSET_THUMBNAIL_EMPTY.png')
             PREVIEWS.load(asset.thumbnail_url, content.filepath, 'IMAGE')
 
         region.tag_redraw()

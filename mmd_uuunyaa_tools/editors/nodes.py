@@ -16,6 +16,7 @@ from bpy.types import (Node, NodeFrame, NodeGroup, NodeSocket, ShaderNode,
                        ShaderNodeVertexColor)
 from mmd_uuunyaa_tools import PACKAGE_PATH
 from mmd_uuunyaa_tools.m17n import _
+from mmd_uuunyaa_tools.utilities import raise_installation_error
 
 PATH_BLENDS_UUUNYAA_MATERIALS = os.path.join(PACKAGE_PATH, 'blends', 'UuuNyaa_Materials.blend')
 
@@ -42,8 +43,11 @@ class NodeEditor(ABC):
         if name in bpy.data.node_groups:
             return
 
-        with bpy.data.libraries.load(self._library_blend_file_path, link=False) as (_, data_to):
-            data_to.node_groups = [name]
+        try:
+            with bpy.data.libraries.load(self._library_blend_file_path, link=False) as (_, data_to):
+                data_to.node_groups = [name]
+        except OSError as exception:
+            raise_installation_error(exception)
 
     @abstractmethod
     def get_output_node(self) -> Node:
